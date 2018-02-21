@@ -4,7 +4,7 @@ set -eu
 
 [ -f ".travis.yml" ] || { echo >&2 "Please cd into the bundle before running this script."; exit 1; }
 
-echo docker --version;
+bash -c 'echo docker --version';
 
 #docker-machine create \
 #	--driver digitalocean \
