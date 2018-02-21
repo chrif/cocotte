@@ -9,7 +9,9 @@ before_install:
   - curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
   - sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
   - sudo apt-get update
-  - sudo apt-get -y install docker-ce
+  - sudo apt-get -y install docker-ce=17.12.0-ce
+  - curl -L https://github.com/docker/machine/releases/download/v0.13.0/docker-machine-`uname -s`-`uname -m` >/tmp/docker-machine
+  - sudo install /tmp/docker-machine /usr/local/bin/docker-machine
 
 script:
   - sh create-machine.sh
