@@ -7,3 +7,8 @@ services:
 
 script:
   - sh create-machine.sh
+
+addons:
+  apt:
+    packages:
+      - docker-ce
