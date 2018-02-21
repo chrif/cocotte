@@ -1,0 +1,9 @@
+language: generic
+
+sudo: required
+
+services:
+  - docker
+
+script:
+  - sh create-machine.sh
