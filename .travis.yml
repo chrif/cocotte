@@ -1,4 +1,6 @@
 language: generic
+sudo: required
+dist: trusty
 before_install:
   # install docker
   - curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
