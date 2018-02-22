@@ -4,7 +4,7 @@ set -eu
 
 [ -f ".travis.yml" ] || { echo >&2 "Please cd into the bundle before running this script."; exit 1; }
 
-docker-machine rm --force ${MACHINE_NAME};
+docker-machine rm -y ${MACHINE_NAME};
 
 docker-machine create \
 	--driver digitalocean \
@@ -14,6 +14,4 @@ docker-machine create \
 	--engine-opt log-opt="max-file=10" \
 	${MACHINE_NAME};
 
-docker-machine ls | grep "${MACHINE_NAME}     -        digitalocean   Running" >/dev/null 2>&1 || exit 1;
-
-docker-machine rm --force ${MACHINE_NAME};
+docker-machine rm -y ${MACHINE_NAME};
