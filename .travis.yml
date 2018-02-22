@@ -1,18 +1,20 @@
 language: generic
+sudo: false
+dist: trusty
 before_install:
   # install docker
-  - curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-  - sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
-  - sudo apt-get update
-  - sudo apt-get -y install docker-ce=17.12.0~ce-0~ubuntu
+  - curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
+  - add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+  - apt-get update
+  - apt-get -y install docker-ce=17.12.0~ce-0~ubuntu
   # install docker-machine
   - curl -L https://github.com/docker/machine/releases/download/v0.13.0/docker-machine-`uname -s`-`uname -m` >/tmp/docker-machine
-  - sudo install /tmp/docker-machine /usr/local/bin/docker-machine
-  - sudo rm /usr/local/bin/docker-compose
+  - install /tmp/docker-machine /usr/local/bin/docker-machine
+  - rm /usr/local/bin/docker-compose
   # install docker-compose
   - curl -L https://github.com/docker/compose/releases/download/1.18.0/docker-compose-`uname -s`-`uname -m` > docker-compose
   - chmod +x docker-compose
-  - sudo mv docker-compose /usr/local/bin
+  - mv docker-compose /usr/local/bin
 script:
   - sh create-machine.sh
   - sh remove-machine.sh
