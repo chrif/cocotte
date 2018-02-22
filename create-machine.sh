@@ -11,5 +11,3 @@ docker-machine create \
 	--engine-opt log-opt="max-size=1m" \
 	--engine-opt log-opt="max-file=10" \
 	${MACHINE_NAME};
-
-docker-machine rm -y ${MACHINE_NAME};
