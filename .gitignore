@@ -1,2 +1,6 @@
 .idea
 /.env
+/docker-compose.override.yml
+/.env-droplet
+/.env-override
+/.data/

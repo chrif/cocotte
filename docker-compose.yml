@@ -1,0 +1,91 @@
+version: '3'
+
+services:
+  mysql:
+    container_name: cocottemysql
+    build:
+      context: docker/mysql
+      args:
+        MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    volumes:
+      - "./.data/db:/var/lib/mysql"
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    ports:
+    - 3306:3306
+    depends_on:
+      - data
+
+  docker:
+    build: docker/docker
+    image: cocottedocker
+    restart: always
+    container_name: cocottedocker
+    volumes:
+      - src:/opt/app
+      - log:/opt/log
+      - /var/run/docker.sock:/var/run/docker.sock
+    depends_on:
+      - nginx
+      - php
+      - data
+      - mysql
+
+  nginx:
+    build: docker/nginx
+    image: cocottenginx
+    container_name: cocottenginx
+    restart: always
+    volumes:
+      - src:/opt/app
+      - log:/opt/log
+    labels:
+      - "traefik.enable=true"
+      - "traefik.frontend.rule=Host:${APP_HOSTS}"
+      - "traefik.port=80"
+      - "traefik.docker.network=traefik"
+    networks:
+      - traefik
+      - default
+    depends_on:
+      - php
+      - data
+
+  php:
+    build:
+      context: docker/php
+      args:
+        APP_ENV: "${APP_ENV}"
+    image: cocottephp
+    container_name: cocottephp
+    restart: always
+    volumes:
+      - src:/opt/app
+      - log:/opt/log
+    env_file:
+      - .env
+      - .env-droplet
+    depends_on:
+      - data
+      - mysql
+
+  data:
+    build: .
+    image: cocottedata
+    container_name: cocottedata
+    volumes:
+      - src:/opt/app
+      - log:/opt/log
+
+volumes:
+  src:
+  log:
+    external:
+      name: cocottelog
+
+networks:
+  traefik:
+    external: true

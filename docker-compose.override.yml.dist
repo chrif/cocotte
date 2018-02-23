@@ -1,0 +1,21 @@
+version: "3"
+
+services:
+  docker:
+    entrypoint: /bin/true
+    restart: "no"
+    volumes:
+      - .:/opt/app
+  nginx:
+    volumes:
+      - .:/opt/app
+  php:
+    volumes:
+      - .:/opt/app
+    env_file:
+      - .env
+      - .env-override
+      - .env-droplet
+  data:
+    volumes:
+      - .:/opt/app
