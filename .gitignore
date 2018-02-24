@@ -22,4 +22,5 @@
 /host/*
 !/host
 !/host/.gitignore
-
+/create-machine.sh
+/remove-machine.sh
