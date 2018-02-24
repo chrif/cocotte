@@ -20,8 +20,8 @@ before_install:
   - cp .env-droplet.dist .env-droplet
 install: docker-compose up -d app
 script:
-  - sh create-machine.sh
-  - sh remove-machine.sh
+  - sh tests/create-machine.sh
+  - sh tests/remove-machine.sh
 env:
   global:
     # DIGITAL_OCEAN_API_TOKEN is defined in repo settings on travis-ci.org
