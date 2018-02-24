@@ -1,24 +1,6 @@
 version: '3'
 
 services:
-  mysql:
-    container_name: cocottemysql
-    build:
-      context: docker/mysql
-      args:
-        MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-    volumes:
-      - "./.data/db:/var/lib/mysql"
-    environment:
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-      MYSQL_DATABASE: ${MYSQL_DATABASE}
-      MYSQL_USER: ${MYSQL_USER}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
-    ports:
-    - 3306:3306
-    depends_on:
-      - data
-
   docker:
     build: docker/docker
     image: cocottedocker
@@ -32,7 +14,6 @@ services:
       - nginx
       - php
       - data
-      - mysql
 
   nginx:
     build: docker/nginx
@@ -55,10 +36,7 @@ services:
       - data
 
   php:
-    build:
-      context: docker/php
-      args:
-        APP_ENV: "${APP_ENV}"
+    build: docker/php
     image: cocottephp
     container_name: cocottephp
     restart: always
@@ -70,10 +48,12 @@ services:
       - .env-droplet
     depends_on:
       - data
-      - mysql
 
   data:
-    build: .
+    build:
+      context: .
+      args:
+        - APP_LOG_DIR=${APP_LOG_DIR}
     image: cocottedata
     container_name: cocottedata
     volumes:
@@ -83,8 +63,6 @@ services:
 volumes:
   src:
   log:
-    external:
-      name: cocottelog
 
 networks:
   traefik:

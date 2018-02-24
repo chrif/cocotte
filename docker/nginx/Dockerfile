@@ -1,4 +1,4 @@
-FROM nginx:alpine
+FROM nginx:1.13-alpine
 
 WORKDIR /opt/app
 
