@@ -15,7 +15,9 @@ before_install:
   - curl -L https://github.com/docker/compose/releases/download/1.18.0/docker-compose-`uname -s`-`uname -m` > docker-compose
   - chmod +x docker-compose
   - sudo mv docker-compose /usr/local/bin
+  # copy .env
   - cp .env.travis .env
+install: docker-compose up -d app
 script:
   - sh create-machine.sh
   - sh remove-machine.sh
