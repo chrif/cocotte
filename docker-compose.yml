@@ -1,11 +1,11 @@
 version: '3'
 
 services:
-  docker:
-    build: docker/docker
-    image: cocottedocker
+  app:
+    build: docker/app
+    image: cocotteapp
     restart: always
-    container_name: cocottedocker
+    container_name: cocotteapp
     volumes:
       - src:/opt/app
       - log:/opt/log
