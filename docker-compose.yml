@@ -1,0 +1,60 @@
+version: '3'
+
+services:
+  app:
+    build: docker/app
+    image: cocotteapp
+    restart: always
+    container_name: cocotteapp
+    volumes:
+      - src:/opt/app
+      - log:/opt/log
+      - /var/run/docker.sock:/var/run/docker.sock
+    depends_on:
+      - nginx
+      - php
+      - data
+
+  nginx:
+    build: docker/nginx
+    image: cocottenginx
+    container_name: cocottenginx
+    restart: always
+    volumes:
+      - src:/opt/app
+      - log:/opt/log
+    ports:
+      - "8330:80"
+    depends_on:
+      - php
+      - data
+
+  php:
+    build: docker/php
+    image: cocottephp
+    container_name: cocottephp
+    restart: always
+    volumes:
+      - src:/opt/app
+      - log:/opt/log
+    env_file:
+      - .env
+      - .env-droplet
+    depends_on:
+      - data
+
+  data:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - APP_LOG_DIR=${APP_LOG_DIR}
+    image: cocottedata
+    container_name: cocottedata
+    volumes:
+      - src:/opt/app
+      - log:/opt/log
+
+volumes:
+  src:
+  log:

@@ -1,25 +1,32 @@
 language: generic
 sudo: required
-services:
-- docker
+dist: trusty
 before_install:
-- curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-- sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu
-  $(lsb_release -cs) stable"
-- sudo apt-get update
-- sudo apt-get -y install docker-ce=17.12.0~ce-0~ubuntu
-- curl -L https://github.com/docker/machine/releases/download/v0.13.0/docker-machine-`uname
-  -s`-`uname -m` >/tmp/docker-machine
-- sudo install /tmp/docker-machine /usr/local/bin/docker-machine
-- sudo rm /usr/local/bin/docker-compose
-- curl -L https://github.com/docker/compose/releases/download/1.18.0/docker-compose-`uname
-  -s`-`uname -m` > docker-compose
-- chmod +x docker-compose
-- sudo mv docker-compose /usr/local/bin
+  # install docker
+  - curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+  - sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+  - sudo apt-get update
+  - sudo apt-get -y install docker-ce=17.12.0~ce-0~ubuntu
+  # install docker-machine
+  - curl -L https://github.com/docker/machine/releases/download/v0.13.0/docker-machine-`uname -s`-`uname -m` >/tmp/docker-machine
+  - sudo install /tmp/docker-machine /usr/local/bin/docker-machine
+  - sudo rm /usr/local/bin/docker-compose
+  # install docker-compose
+  - curl -L https://github.com/docker/compose/releases/download/1.18.0/docker-compose-`uname -s`-`uname -m` > docker-compose
+  - chmod +x docker-compose
+  - sudo mv docker-compose /usr/local/bin
+  # copy .env
+  - cp .env.travis .env
+  - cp .env-droplet.dist .env-droplet
+install: docker-compose up -d app
 script:
-- sh create-machine.sh
-- sh remove-machine.sh
+  - docker-compose run --rm -v "$(pwd)":/opt/app/host php console app:machine:create
+  - sh create-machine.sh
 env:
   global:
-    - secure: oaxN5rqUPSMMK0j0QVsg2hHRLc3cyHasI9Sgjeo8yurvSykgqjdsAx8IPdkaPCVS5BVvF1tMHsLOb4d9VhP3c51DKtra7S2xfLza5mfDUhtc3BpbDg8sAhwIyr3FqxlRaFUf8txIQ9/WFW1eZXoeua2tIkj7fwDBBCkDvou1S5+dODMBPMdEpTdgmVtXN5ugTg3eQV+HVz1VoScjG47B/wf416THA71JTeTY+oGF6mYT7npjbQ+tB1s38IQyvy38rb1GjunAQ62aMt0ad96Dp1CDjWzyC1kGjpiMNd5PsoPU02Zq2vAI7vGkJDxwUPGchieQolmjLm41pFXCtOWwyjQPSevSpgwYgVOnUZCJiuZqPLpNqSj2UfuMk4woyCRdH00U/enC0132bpi53KhXAAjDNDNJZhyVJbmus5c2C3gp1kKcRI+t7sNNy+EUtfjv2mAttshl65dCIokt/pCA59BY1IsTMfzOV3VB9u/1wa193UVDPrne4J1LO+LxeTBaBsrCaoQvFrHtsS/p5bSF+iiJxPTCAwb9mKz+6zw5ARWNGIUd5w5NdJOFAJw8IDdR+b8WS7sFwdLoPqW7rJjtjnpUWPrIDzFNN1Xx0MmNB8CyjgPo8sTSbiFOGByw6U04A2pDxE3r08woD4BxVv4wQHMvRJ1IQFeM61FmbZkzy/s=
-    - MACHINE_NAME=cocotte-travis
+    # DIGITAL_OCEAN_API_TOKEN is defined in repo settings on travis-ci.org
+    # APP_SECRET
+    - secure: "HXN/utTPGVhmR071BpawVDinvgcVt6iVbojiOt+AHfQ8n3fz8fwNELLUXQFyclo5NapNRbFII62ZEkJjJOfZgI1UTZX0DFwf3kKLp5XkWPeERI4I9Qv30notnslT6oN0xJfJGMUjYyvDnFc0Wd4Y5l5fGb46IMCw5fKD4U55MRtGMne/23ID9Ve0oQKJwfxgtk+n43DGxG05FRBPUNW2DcnnvWD5BCaqAViI3zjPpEE3Mk0AmdNV+03M5ZhEXwgn8OYQV2wB5gY9jj28YUaL/+w2Yv/nfp3tE3c84UmWcbBGtEazyfhztItm+4bfYpJR7uw6jHCvnD2qqU3eHaUYqYKx/z6MrJLIS2AahIdXRJHXULzsimZlMtpMVbDEF+D8IEYsyMeAkprmaxS9Lo0TkPzvElGznSbFNrckIr2IZdXZ+pkbrnfn1t4rp69dOD4S+MTxWG/EPtKxbEseRG+DNKJflQnR6OYRW96DKlupaK9H7vhR2Fb0oICZH6PYxedzW3+qx7yFWKqzQ27KrPI/tcsN9U/3jrmJRVne1052NHJ1X8fFxEKQVIqHC9Xukblwe3BYIwmu6hyj6q+rK88dKTkGjTpHZhPgk578YHggY/vcYy1ulC/VS9HQlAB2YaSsOwD2MGANXng/BcjMEbHA7Yo9DWgzoXcjqG3yh5SDK3s="
+addons:
+  hosts:
+    - cocotte.travis.local

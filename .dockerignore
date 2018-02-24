@@ -1,0 +1,14 @@
+*
+!assets
+!bin
+!config
+!public
+!src
+!templates
+!translations
+!.env
+!.env-droplet
+!composer.json
+!composer.lock
+!package.json
+!symfony.lock
