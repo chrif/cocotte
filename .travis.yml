@@ -17,14 +17,14 @@ before_install:
   - sudo mv docker-compose /usr/local/bin
   # copy .env
   - cp .env.travis .env
-  - cp .env.droplet.dist .env.droplet
+  - cp .env-droplet.dist .env-droplet
 install: docker-compose up -d app
 script:
   - sh create-machine.sh
   - sh remove-machine.sh
 env:
   global:
-    # DIGITAL_OCEAN_API_TOKEN is defined in repo settings on travis-ci.com
+    # DIGITAL_OCEAN_API_TOKEN is defined in repo settings on travis-ci.org
     # APP_SECRET
     - secure: "HXN/utTPGVhmR071BpawVDinvgcVt6iVbojiOt+AHfQ8n3fz8fwNELLUXQFyclo5NapNRbFII62ZEkJjJOfZgI1UTZX0DFwf3kKLp5XkWPeERI4I9Qv30notnslT6oN0xJfJGMUjYyvDnFc0Wd4Y5l5fGb46IMCw5fKD4U55MRtGMne/23ID9Ve0oQKJwfxgtk+n43DGxG05FRBPUNW2DcnnvWD5BCaqAViI3zjPpEE3Mk0AmdNV+03M5ZhEXwgn8OYQV2wB5gY9jj28YUaL/+w2Yv/nfp3tE3c84UmWcbBGtEazyfhztItm+4bfYpJR7uw6jHCvnD2qqU3eHaUYqYKx/z6MrJLIS2AahIdXRJHXULzsimZlMtpMVbDEF+D8IEYsyMeAkprmaxS9Lo0TkPzvElGznSbFNrckIr2IZdXZ+pkbrnfn1t4rp69dOD4S+MTxWG/EPtKxbEseRG+DNKJflQnR6OYRW96DKlupaK9H7vhR2Fb0oICZH6PYxedzW3+qx7yFWKqzQ27KrPI/tcsN9U/3jrmJRVne1052NHJ1X8fFxEKQVIqHC9Xukblwe3BYIwmu6hyj6q+rK88dKTkGjTpHZhPgk578YHggY/vcYy1ulC/VS9HQlAB2YaSsOwD2MGANXng/BcjMEbHA7Yo9DWgzoXcjqG3yh5SDK3s="
 addons:
