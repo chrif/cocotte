@@ -17,6 +17,7 @@ before_install:
   - sudo mv docker-compose /usr/local/bin
   # copy .env
   - cp .env.travis .env
+  - cp .env.droplet.dist .env.droplet
 install: docker-compose up -d app
 script:
   - sh create-machine.sh
