@@ -24,3 +24,10 @@ services:
     env_file:
       - .env
       - .env-override
+
+  travis:
+    build: docker/travis
+    image: travis
+    container_name: travis
+    volumes:
+      - .:/opt/app
