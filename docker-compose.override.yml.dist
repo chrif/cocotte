@@ -19,6 +19,8 @@ services:
       - .env-override
       - .env-droplet
   data:
+    build:
+      dockerfile: Dockerfile-override
     volumes:
       - .:/opt/app
     env_file:

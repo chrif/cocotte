@@ -1,0 +1,10 @@
+FROM chrif/php:7.2-fpm-alpine
+
+RUN mkdir -p /opt/log/docker && \
+	mkdir -p /opt/log/nginx && \
+	mkdir -p /opt/log/php && \
+	mkdir -p /opt/log/symfony && \
+	chown www-data:www-data /opt/log/symfony && \
+	chmod g+s /opt/log/symfony
+
+ENTRYPOINT /bin/true

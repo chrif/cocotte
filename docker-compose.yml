@@ -23,14 +23,8 @@ services:
     volumes:
       - src:/opt/app
       - log:/opt/log
-    labels:
-      - "traefik.enable=true"
-      - "traefik.frontend.rule=Host:${APP_HOSTS}"
-      - "traefik.port=80"
-      - "traefik.docker.network=traefik"
-    networks:
-      - traefik
-      - default
+    ports:
+      - "8330:80"
     depends_on:
       - php
       - data
@@ -52,6 +46,7 @@ services:
   data:
     build:
       context: .
+      dockerfile: Dockerfile
       args:
         - APP_LOG_DIR=${APP_LOG_DIR}
     image: cocottedata
@@ -63,7 +58,3 @@ services:
 volumes:
   src:
   log:
-
-networks:
-  traefik:
-    external: true
