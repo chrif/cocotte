@@ -4,6 +4,8 @@ set -eu
 
 [ -f ".travis.yml" ] || { echo >&2 "Please cd into the bundle before running this script."; exit 1; }
 
+. ./.env
+
 docker-machine create \
 	--driver digitalocean \
 	--digitalocean-access-token ${DIGITAL_OCEAN_API_TOKEN} \
