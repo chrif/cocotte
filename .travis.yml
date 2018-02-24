@@ -18,12 +18,10 @@ before_install:
   # copy .env
   - cp .env.travis .env
   - cp .env-droplet.dist .env-droplet
-  - chmod +x tests/create-machine.sh
-  - chmod +x tests/remove-machine.sh
 install: docker-compose up -d app
 script:
-  - ./tests/create-machine.sh
-  - ./tests/remove-machine.sh
+  - docker-compose run --rm -v "$(pwd)":/opt/app/host php console app:machine:create
+  - sh create-machine.sh
 env:
   global:
     # DIGITAL_OCEAN_API_TOKEN is defined in repo settings on travis-ci.org
