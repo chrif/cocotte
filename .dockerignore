@@ -2,6 +2,7 @@
 !assets
 !bin
 !config
+!docker
 !public
 !src
 !templates

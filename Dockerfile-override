@@ -1,10 +1,32 @@
-FROM chrif/php:7.2-fpm-alpine
+FROM chrif/cocotte-base
 
-RUN mkdir -p /opt/log/docker && \
+WORKDIR /opt/app
+
+ARG APP_LOG_DIR
+ENV APP_LOG_DIR ${APP_LOG_DIR}
+
+COPY docker/php/php.ini /etc/php7/conf.d/zzz.ini
+COPY docker/php/php-fpm.conf /etc/php7/php-fpm.d/zzz-prod.conf
+COPY docker/nginx/default.conf /etc/nginx/conf.d/default.conf
+COPY docker/nginx/nginx.conf /etc/nginx/nginx.conf
+
+COPY composer.json composer.lock ./
+COPY . ./
+RUN chmod +x /opt/app/bin/console && \
+	mkdir -p /opt/log/docker && \
 	mkdir -p /opt/log/nginx && \
 	mkdir -p /opt/log/php && \
 	mkdir -p /opt/log/symfony && \
 	chown www-data:www-data /opt/log/symfony && \
-	chmod g+s /opt/log/symfony
+	chmod g+s /opt/log/symfony && \
+	# with APP_ENV=prod and APP_DEBUG=1, php-fpm needs write permissions on /opt/app/var/cache/prod
+	mkdir -p /opt/app/var/cache/prod && \
+	chown www-data:www-data /opt/app/var/cache/prod && \
+	chmod g+s /opt/app/var/cache/prod
 
-ENTRYPOINT /bin/true
+ENV ENV="/root/.ashrc"
+RUN ln -s /opt/app/bin/console /usr/local/bin/console && \
+	echo 'PATH=/opt/app/bin:/opt/app/vendor/bin:$PATH' >> /root/.ashrc && \
+	echo "alias c='console'" >> /root/.ashrc
+
+CMD ["nginx", "-g", "daemon off;"]

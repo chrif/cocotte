@@ -19,7 +19,7 @@
     "symfony/profiler-pack": "*"
   },
   "require": {
-    "php": "^7.1.3",
+    "php": "^7.1.14",
     "ext-iconv": "*",
     "beberlei/assert": "^2.7",
     "knplabs/github-api": "^2.5",

@@ -1,9 +1,14 @@
-FROM chrif/php:7.2-fpm-alpine
+FROM chrif/cocotte-base
 
 WORKDIR /opt/app
 
 ARG APP_LOG_DIR
 ENV APP_LOG_DIR ${APP_LOG_DIR}
+
+COPY docker/php/php.ini /etc/php7/php.ini
+COPY docker/php/php-fpm.conf /etc/php7/php-fpm.d/zzz.conf
+COPY docker/nginx/default.conf /etc/nginx/conf.d/default.conf
+COPY docker/nginx/nginx.conf /etc/nginx/nginx.conf
 
 COPY composer.json composer.lock ./
 RUN composer install --no-scripts --no-autoloader --no-dev
@@ -23,5 +28,11 @@ RUN chmod +x /opt/app/bin/console && \
 
 USER www-data
 RUN APP_ENV=prod bin/console cache:warmup
+USER root
 
-ENTRYPOINT /bin/true
+ENV ENV="/root/.ashrc"
+RUN ln -s /opt/app/bin/console /usr/local/bin/console && \
+	echo 'PATH=/opt/app/bin:/opt/app/vendor/bin:$PATH' >> /root/.ashrc && \
+	echo "alias c='console'" >> /root/.ashrc
+
+CMD ["nginx", "-g", "daemon off;"]
