@@ -6,7 +6,9 @@ services:
     build: installer
     image: "chrif/cocotte:${INSTALLER_VERSION:-latest}"
 
-  travis-cli:
-    build: docker/travis-cli
+  travis:
+    build: docker/travis
     volumes:
-      - .:/project
+      - .:/opt/project
+    environment:
+      TRAVIS_TOKEN: ${TRAVIS_TOKEN}
