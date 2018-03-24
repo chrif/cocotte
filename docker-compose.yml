@@ -1,0 +1,7 @@
+version: "3"
+
+services:
+
+  installer:
+    build: installer
+    image: "cocotte:${INSTALLER_VERSION:-latest}"
