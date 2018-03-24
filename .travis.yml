@@ -1,25 +1,32 @@
 language: generic
 sudo: required
-services:
-- docker
+dist: trusty
+
 before_install:
+  # install docker
 - curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
 - sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu
   $(lsb_release -cs) stable"
 - sudo apt-get update
 - sudo apt-get -y install docker-ce=17.12.0~ce-0~ubuntu
+  # install docker-machine
 - curl -L https://github.com/docker/machine/releases/download/v0.13.0/docker-machine-`uname
   -s`-`uname -m` >/tmp/docker-machine
 - sudo install /tmp/docker-machine /usr/local/bin/docker-machine
+  # install docker-compose
 - sudo rm /usr/local/bin/docker-compose
 - curl -L https://github.com/docker/compose/releases/download/1.18.0/docker-compose-`uname
   -s`-`uname -m` > docker-compose
 - chmod +x docker-compose
 - sudo mv docker-compose /usr/local/bin
+
+install:
+- docker-compose build installer
+
 script:
-- sh create-machine.sh
-- sh remove-machine.sh
+- sh cocotte.sh create
+- sh cocotte.sh remove
+
 env:
   global:
-    - secure: oaxN5rqUPSMMK0j0QVsg2hHRLc3cyHasI9Sgjeo8yurvSykgqjdsAx8IPdkaPCVS5BVvF1tMHsLOb4d9VhP3c51DKtra7S2xfLza5mfDUhtc3BpbDg8sAhwIyr3FqxlRaFUf8txIQ9/WFW1eZXoeua2tIkj7fwDBBCkDvou1S5+dODMBPMdEpTdgmVtXN5ugTg3eQV+HVz1VoScjG47B/wf416THA71JTeTY+oGF6mYT7npjbQ+tB1s38IQyvy38rb1GjunAQ62aMt0ad96Dp1CDjWzyC1kGjpiMNd5PsoPU02Zq2vAI7vGkJDxwUPGchieQolmjLm41pFXCtOWwyjQPSevSpgwYgVOnUZCJiuZqPLpNqSj2UfuMk4woyCRdH00U/enC0132bpi53KhXAAjDNDNJZhyVJbmus5c2C3gp1kKcRI+t7sNNy+EUtfjv2mAttshl65dCIokt/pCA59BY1IsTMfzOV3VB9u/1wa193UVDPrne4J1LO+LxeTBaBsrCaoQvFrHtsS/p5bSF+iiJxPTCAwb9mKz+6zw5ARWNGIUd5w5NdJOFAJw8IDdR+b8WS7sFwdLoPqW7rJjtjnpUWPrIDzFNN1Xx0MmNB8CyjgPo8sTSbiFOGByw6U04A2pDxE3r08woD4BxVv4wQHMvRJ1IQFeM61FmbZkzy/s=
-    - MACHINE_NAME=cocotte-travis
+    - MACHINE_NAME=cocotte-travis-${TRAVIS_BUILD_ID}
