@@ -5,3 +5,8 @@ services:
   installer:
     build: installer
     image: "cocotte:${INSTALLER_VERSION:-latest}"
+
+  travis-cli:
+    build: docker/travis-cli
+    volumes:
+      - .:/project

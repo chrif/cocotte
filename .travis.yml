@@ -1,6 +1,7 @@
 language: generic
 sudo: required
 dist: trusty
+
 before_install:
   # install docker
 - curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
@@ -18,9 +19,14 @@ before_install:
   -s`-`uname -m` > docker-compose
 - chmod +x docker-compose
 - sudo mv docker-compose /usr/local/bin
+
+install:
+- docker-compose build installer
+
 script:
-- (cd installer; sh create-machine.sh)
-- (cd installer; sh remove-machine.sh)
+- docker run --rm -e DIGITAL_OCEAN_API_TOKEN=$DIGITAL_OCEAN_API_TOKEN -e MACHINE_NAME=$MACHINE_NAME -v "$(pwd)":/host cocotte create
+- docker run --rm -e DIGITAL_OCEAN_API_TOKEN=$DIGITAL_OCEAN_API_TOKEN -e MACHINE_NAME=$MACHINE_NAME -v "$(pwd)":/host cocotte remove
+
 env:
   global:
     - MACHINE_NAME=cocotte-travis

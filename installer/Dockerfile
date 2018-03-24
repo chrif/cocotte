@@ -9,3 +9,9 @@ RUN sudo install /tmp/docker-machine /usr/local/bin/docker-machine
 
 WORKDIR /root
 COPY . ./
+
+ENTRYPOINT ["sh"]
+CMD ["create"]
+
+ENV MACHINE_NAME cocotte
+ENV MACHINE_STORAGE_PATH /host/machine
