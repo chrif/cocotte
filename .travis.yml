@@ -24,8 +24,8 @@ install:
 - docker-compose build installer
 
 script:
-- docker run --rm -e DIGITAL_OCEAN_API_TOKEN=$DIGITAL_OCEAN_API_TOKEN -e MACHINE_NAME=$MACHINE_NAME -v "$(pwd)":/host chrif/cocotte create
-- docker run --rm -e DIGITAL_OCEAN_API_TOKEN=$DIGITAL_OCEAN_API_TOKEN -e MACHINE_NAME=$MACHINE_NAME -v "$(pwd)":/host chrif/cocotte remove
+- sh cocotte.sh create
+- sh cocotte.sh remove
 
 env:
   global:
