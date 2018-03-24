@@ -7,7 +7,7 @@ services:
     image: "chrif/cocotte:${INSTALLER_VERSION:-latest}"
 
   travis:
-    build: docker/travis
+    image: chrif/travis-cli
     volumes:
       - .:/opt/project
     environment:
