@@ -12,9 +12,9 @@ WORKDIR /installer/php
 COPY ./php/composer.json ./
 COPY ./php/composer.lock ./
 # https://sentinelstand.com/article/composer-install-in-dockerfile-without-breaking-cache
-RUN composer install --no-scripts --no-autoloader --no-dev
+RUN composer install --no-scripts --no-autoloader
 COPY ./php ./
-RUN composer install --no-dev
+RUN composer install
 RUN chmod +x /installer/php/bin/console
 
 WORKDIR /usr/local/bin/
