@@ -1,0 +1,5 @@
+cocotte:
+  droplet:
+  app:
+    name: test
+    hosts: app1.cocotte.test

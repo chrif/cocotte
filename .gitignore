@@ -1,3 +1,5 @@
 .idea
 /.env
-/machine/
+/host/*
+!/host/.gitignore
+
