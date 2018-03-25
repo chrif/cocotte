@@ -26,10 +26,11 @@ install:
 script:
 - sh installer.sh phpunit --exclude-group=functional
 - sh installer.sh create
+- sh installer.sh phpunit --group=functional
 - sh installer.sh remove
 
 env:
   global:
     - MACHINE_NAME=cocotte-travis-${TRAVIS_BUILD_ID}
     - APP_NAME=app1
-    - APP_HOSTS=app1.cocotte-${TRAVIS_BUILD_ID}.test
+    - APP_HOSTS=app1.cocotte-travis-${TRAVIS_BUILD_ID}.test
