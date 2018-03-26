@@ -16,4 +16,4 @@ services:
     volumes:
       - .:/opt/project
     environment:
-      TRAVIS_TOKEN: ${TRAVIS_TOKEN}
+      TRAVIS_TOKEN: ${TRAVIS_TOKEN:-xxxxx}
