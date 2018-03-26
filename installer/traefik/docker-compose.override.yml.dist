@@ -1,0 +1,9 @@
+version: '3'
+
+services:
+  traefik:
+    volumes:
+      - .:/opt/app
+  data:
+    volumes:
+      - .:/opt/app

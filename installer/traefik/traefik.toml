@@ -1,0 +1,40 @@
+# https://docs.traefik.io/
+
+logLevel = "INFO"
+checkNewVersion = true
+defaultEntryPoints = ["http", "https"]
+sendAnonymousUsage = true
+
+[entryPoints]
+	[entryPoints.http]
+		address = ":80"
+		[entryPoints.http.redirect]
+			entryPoint = "https"
+	[entryPoints.https]
+		address = ":443"
+		[entryPoints.https.tls]
+
+[retry]
+
+[api]
+	[api.statistics]
+		RecentErrors = 30
+
+[docker]
+	endpoint = "unix:///var/run/docker.sock"
+	watch = true
+	exposedbydefault = false
+
+[acme]
+	entryPoint = "https"
+	OnHostRule = true
+
+	# prod
+	storage = "/opt/ssl/acme/acme.json"
+
+	# staging
+	# storage = "/opt/ssl/acme/acme-staging.json"
+	# caServer = "https://acme-staging.api.letsencrypt.org/directory"
+
+	[acme.httpChallenge]
+	entryPoint = "http"

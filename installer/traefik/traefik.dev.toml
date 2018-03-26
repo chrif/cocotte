@@ -1,0 +1,16 @@
+# https://docs.traefik.io/
+
+logLevel = "INFO"
+checkNewVersion = true
+defaultEntryPoints = ["http"]
+
+[retry]
+
+[api]
+	[api.statistics]
+		RecentErrors = 30
+
+[docker]
+	endpoint = "unix:///var/run/docker.sock"
+	watch = true
+	exposedbydefault = false
