@@ -8,4 +8,4 @@ docker-machine -s ${MACHINE_STORAGE_PATH} create \
 	--engine-opt log-driver="json-file" \
 	--engine-opt log-opt="max-size=1m" \
 	--engine-opt log-opt="max-file=10" \
-	${MACHINE_NAME};
+	${MACHINE_NAME} || exit 1;
