@@ -24,8 +24,10 @@ install:
 - docker-compose build installer
 
 script:
-- sh cocotte.sh create
-- sh cocotte.sh remove
+- sh installer.sh phpunit --exclude-group=functional
+- sh installer.sh create
+- sh installer.sh phpunit --group=functional
+- sh installer.sh remove
 
 env:
   global:

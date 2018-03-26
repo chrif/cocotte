@@ -1,0 +1,19 @@
+version: "3"
+
+services:
+
+  installer:
+    volumes:
+      - ./host:/host
+      - ./installer:/installer
+    environment:
+      DIGITAL_OCEAN_API_TOKEN: ${DIGITAL_OCEAN_API_TOKEN}
+      XDEBUG_CONFIG: "remote_enable=On remote_host=${HOST_IP}"
+      PHP_IDE_CONFIG: "serverName=cocotte"
+
+  travis:
+    image: chrif/travis-cli
+    volumes:
+      - .:/opt/project
+    environment:
+      TRAVIS_TOKEN: ${TRAVIS_TOKEN}

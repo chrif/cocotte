@@ -1,0 +1,39 @@
+parameters:
+  cocotte.resource: ~
+  api.adapter.class: DigitalOceanV2\Adapter\GuzzleHttpAdapter
+
+services:
+  _defaults:
+      autowire: true
+      public: true
+
+  # configuration
+  Chrif\Cocotte\CocotteConfiguration:
+    factory: ['Chrif\Cocotte\CocotteConfiguration', fromResource]
+    arguments: ["%cocotte.resource%"]
+  Chrif\Cocotte\Configuration\:
+    resource: '../src/Configuration/*'
+    tags: ['configuration']
+
+  # console
+  Symfony\Component\Console\Application:
+    class: Symfony\Component\Console\Application
+    public: true
+  Chrif\Cocotte\Command\:
+    resource: '../src/Command/*'
+    tags: ['console.command']
+
+  # api
+  Chrif\Cocotte\DigitalOcean\:
+    resource: '../src/DigitalOcean/*'
+  DigitalOceanV2\Adapter\AdapterInterface:
+    factory: 'Chrif\Cocotte\DigitalOcean\DigitalOceanFactory:adapter'
+    arguments: ["%api.adapter.class%"]
+  DigitalOceanV2\DigitalOceanV2: ~
+  DigitalOceanV2\Api\Droplet: ~
+  DigitalOceanV2\Api\Image: ~
+  DigitalOceanV2\Api\Region: ~
+  DigitalOceanV2\Api\Size: ~
+  DigitalOceanV2\Api\Key: ~
+  DigitalOceanV2\Api\Domain: ~
+  DigitalOceanV2\Api\DomainRecord: ~

@@ -1,0 +1,9 @@
+#!/usr/bin/env sh
+
+set -eu
+
+readonly running=$(docker-machine -s ${MACHINE_STORAGE_PATH} ls -q --filter "state=running" ${MACHINE_NAME})
+
+if [ "$running" = ${MACHINE_NAME} ]; then echo 1;
+else echo 0;
+fi
