@@ -22,10 +22,9 @@ COPY cocotte-entrypoint.sh ./
 RUN chmod +x cocotte-entrypoint.sh
 ENTRYPOINT ["cocotte-entrypoint.sh"]
 
+ENV DIGITAL_OCEAN_API_TOKEN xxxxx
 ENV MACHINE_NAME cocotte
 ENV MACHINE_STORAGE_PATH /host/machine
-ENV APP_NAME app1
-ENV APP_HOSTS app1.cocotte.changeme
 
 WORKDIR /installer/
 COPY create remove machine-ip ./
