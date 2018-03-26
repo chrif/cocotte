@@ -3,3 +3,4 @@
 /host/*
 !/host/.gitignore
 
+/composer.phar

@@ -28,5 +28,5 @@ ENV APP_NAME app1
 ENV APP_HOSTS app1.cocotte.changeme
 
 WORKDIR /installer/
-COPY create remove ./
+COPY create remove machine-ip ./
 CMD ["sh", "create"]

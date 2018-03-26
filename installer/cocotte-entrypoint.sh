@@ -1,8 +1,6 @@
-#!/usr/bin/env sh
+#!/bin/sh
 
 set -eu
-
-export MACHINE_IP=$(docker-machine -s ${MACHINE_STORAGE_PATH} inspect --format='{{.Driver.IPAddress}}' ${MACHINE_NAME} 2>/dev/null)
 
 if [ "$1" = 'create' ]; then exec sh create
 elif [ "$1" = 'remove' ]; then exec sh remove
