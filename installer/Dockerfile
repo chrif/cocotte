@@ -16,6 +16,7 @@ RUN composer install --no-scripts --no-autoloader
 COPY ./php ./
 RUN composer install
 RUN chmod +x /installer/php/bin/console
+COPY php.ini /usr/local/etc/php/php.ini
 
 WORKDIR /usr/local/bin/
 COPY cocotte-entrypoint.sh ./

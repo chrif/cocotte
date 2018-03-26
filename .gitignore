@@ -2,5 +2,5 @@
 /.env
 /host/*
 !/host/.gitignore
-
 /composer.phar
+/docker-compose.override.yml

@@ -5,15 +5,3 @@ services:
   installer:
     build: installer
     image: "chrif/cocotte:${INSTALLER_VERSION:-latest}"
-    volumes:
-      - ./host:/host
-      - ./installer:/installer
-    environment:
-      DIGITAL_OCEAN_API_TOKEN: ${DIGITAL_OCEAN_API_TOKEN}
-
-  travis:
-    image: chrif/travis-cli
-    volumes:
-      - .:/opt/project
-    environment:
-      TRAVIS_TOKEN: ${TRAVIS_TOKEN:-xxxxx}
