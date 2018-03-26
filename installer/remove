@@ -3,4 +3,4 @@
 set -eu
 
 docker-machine -s ${MACHINE_STORAGE_PATH} rm -y ${MACHINE_NAME};
-docker-machine -s ${MACHINE_STORAGE_PATH} rm -y ${MACHINE_NAME}a;
+docker-machine -s ${MACHINE_STORAGE_PATH} rm -y ${MACHINE_NAME}a || exit 1;
