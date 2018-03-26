@@ -30,7 +30,7 @@ class Application
         $container->addCompilerPass(new ConfigurationValuePass());
         $container->addCompilerPass(new ConsoleCommandPass());
 
-        $container->compile();
+        $container->compile(true);
 
         $this->container = $container;
     }

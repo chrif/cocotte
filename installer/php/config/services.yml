@@ -10,7 +10,7 @@ services:
   # configuration
   Chrif\Cocotte\CocotteConfiguration:
     factory: ['Chrif\Cocotte\CocotteConfiguration', fromResource]
-    arguments: [%cocotte.resource%]
+    arguments: ["%cocotte.resource%"]
   Chrif\Cocotte\Configuration\:
     resource: '../src/Configuration/*'
     tags: ['configuration']
@@ -28,7 +28,7 @@ services:
     resource: '../src/DigitalOcean/*'
   DigitalOceanV2\Adapter\AdapterInterface:
     factory: 'Chrif\Cocotte\DigitalOcean\DigitalOceanFactory:adapter'
-    arguments: [%api.adapter.class%]
+    arguments: ["%api.adapter.class%"]
   DigitalOceanV2\DigitalOceanV2: ~
   DigitalOceanV2\Api\Droplet: ~
   DigitalOceanV2\Api\Image: ~
