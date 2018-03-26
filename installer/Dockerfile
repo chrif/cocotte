@@ -1,11 +1,4 @@
-# docker run --rm  chrif/docker:17.12.0-ce cat /etc/alpine-release -> 3.7.0
-FROM chrif/docker:17.12.0-ce AS docker
-RUN apk del php7
-RUN curl -L https://github.com/docker/machine/releases/download/v0.13.0/docker-machine-`uname -s`-`uname -m` >/tmp/docker-machine && \
-    install /tmp/docker-machine /usr/local/bin/docker-machine
-RUN rm -rf /tmp/* /var/cache/apk/*
-
-# docker run --rm chrif/php:7.2.3-fpm-alpine3.7 cat /etc/alpine-release -> 3.7.0
+FROM chrif/docker:18.03.0-ce-alpine3.7 AS docker
 FROM chrif/php:7.2.3-fpm-alpine3.7
 COPY --from=docker / /
 WORKDIR /installer/php
