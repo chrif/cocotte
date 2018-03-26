@@ -4,8 +4,7 @@ declare(strict_types=1);
 
 namespace Chrif\Cocotte;
 
-use Chrif\Cocotte\Configuration\App\AppHost;
-use Chrif\Cocotte\Configuration\App\AppHostCollection;
+use Chrif\Cocotte\Configuration\Droplet\DropletName;
 use Chrif\Cocotte\DependencyInjection\Application;
 use Chrif\Cocotte\DigitalOcean\Domain;
 use Chrif\Cocotte\DigitalOcean\DomainRecord;
@@ -17,6 +16,13 @@ class TestCase extends \PHPUnit\Framework\TestCase
      * @var Application
      */
     private $application;
+
+    public static function setUpBeforeClass()
+    {
+        if (!exec("sh /installer/machine-is-running")) {
+            self::markTestSkipped("Test skipped because machine is not running");
+        }
+    }
 
     protected function application(): Application
     {
@@ -42,15 +48,10 @@ class TestCase extends \PHPUnit\Framework\TestCase
         return $this->application()->container()->get(DomainRecord::class);
     }
 
-    protected function appHostCollection(): AppHostCollection
+    protected function dropletName(): DropletName
     {
         /** @noinspection PhpIncompatibleReturnTypeInspection */
-        return $this->application()->container()->get(AppHostCollection::class);
-    }
-
-    protected function appHost(): AppHost
-    {
-        return $this->appHostCollection()->offsetGet(0);
+        return $this->application()->container()->get(DropletName::class);
     }
 
 }

@@ -6,27 +6,21 @@ namespace Chrif\Cocotte\Command;
 
 use Chrif\Cocotte\Configuration\App\AppHost;
 use Chrif\Cocotte\Configuration\App\AppHostCollection;
-use Chrif\Cocotte\Configuration\App\AppName;
 use Chrif\Cocotte\Configuration\Droplet\DropletIp;
 use Chrif\Cocotte\DigitalOcean\Domain;
 use Chrif\Cocotte\DigitalOcean\DomainRecord;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class ConfigureNetworking extends Command
 {
-
     /**
      * @var AppHostCollection|AppHost[]
      */
     private $hosts;
-
-    /**
-     * @var AppName
-     */
-    private $appName;
 
     /**
      * @var DomainRecord
@@ -44,14 +38,10 @@ class ConfigureNetworking extends Command
     private $dropletIp;
 
     public function __construct(
-        AppHostCollection $hosts,
-        AppName $appName,
         DomainRecord $domainRecord,
         Domain $domain,
         DropletIp $dropletIp
     ) {
-        $this->hosts = $hosts;
-        $this->appName = $appName;
         $this->domainRecord = $domainRecord;
         $this->domain = $domain;
         $this->dropletIp = $dropletIp;
@@ -63,14 +53,16 @@ class ConfigureNetworking extends Command
     {
         $this
             ->setName('cocotte:configure-networking')
-            ->setDescription('Configure networking of Digital Ocean for app')
-            ->addOption('remove', null, InputOption::VALUE_NONE, 'Remove networking for app')
+            ->setDescription('Configure networking of Digital Ocean')
+            ->addArgument('hosts', InputArgument::REQUIRED, 'Comma-separated list of hosts')
+            ->addOption('remove', null, InputOption::VALUE_NONE, 'Remove networking for hosts')
             ->setAliases(array('cn'));
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $output->writeln('Configuring networking for '.$this->appName->value());
+        $this->hosts = AppHostCollection::fromString($input->getArgument('hosts'));
+
         foreach ($this->hosts as $host) {
             $output->writeln('Configuring '.$host->value());
             if ($input->getOption('remove')) {

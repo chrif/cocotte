@@ -2,7 +2,6 @@
 
 namespace Chrif\Cocotte\Configuration\App;
 
-use Chrif\Cocotte\CocotteConfiguration;
 use PHPUnit\Framework\TestCase;
 
 class AppHostCollectionTest extends TestCase
@@ -39,14 +38,4 @@ class AppHostCollectionTest extends TestCase
         self::assertCount(3, $collection);
     }
 
-    public function testFromRoot()
-    {
-        $configuration = CocotteConfiguration::fixture();
-        $collection = AppHostCollection::fromRoot($configuration);
-        self::assertInstanceOf(AppHostCollection::class, $collection);
-        self::assertEquals(
-            AppHostCollection::fromString($configuration->value()['app']['hosts']),
-            $collection
-        );
-    }
 }

@@ -4,10 +4,7 @@ declare(strict_types=1);
 
 namespace Chrif\Cocotte\Configuration\App;
 
-use Chrif\Cocotte\CocotteConfiguration;
-use Chrif\Cocotte\Configuration\ConfigurationValue;
-
-class AppValues implements ConfigurationValue
+class AppValues
 {
 
     const APP = 'app';
@@ -34,11 +31,6 @@ class AppValues implements ConfigurationValue
             AppName::fromString($app[AppName::NAME]),
             AppHostCollection::fromString($app[AppHostCollection::HOSTS])
         );
-    }
-
-    public static function fromRoot(CocotteConfiguration $configuration): self
-    {
-        return self::fromArray($configuration->value()[self::APP]);
     }
 
     /**

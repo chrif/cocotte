@@ -4,8 +4,6 @@ require __DIR__.'/../vendor/autoload.php';
 
 use Chrif\Cocotte\DependencyInjection\Application;
 
-putenv('MACHINE_IP=' . exec("sh /installer/machine-ip"));
-
 $app = new Application(
     __DIR__.'/../config/services.yml',
     __DIR__.'/../config/cocotte.yml'

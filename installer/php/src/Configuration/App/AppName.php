@@ -4,10 +4,7 @@ declare(strict_types=1);
 
 namespace Chrif\Cocotte\Configuration\App;
 
-use Chrif\Cocotte\CocotteConfiguration;
-use Chrif\Cocotte\Configuration\ConfigurationValue;
-
-class AppName implements ConfigurationValue
+class AppName
 {
 
     const NAME = 'name';
@@ -25,11 +22,6 @@ class AppName implements ConfigurationValue
     public static function fromString(string $value): self
     {
         return new self($value);
-    }
-
-    public static function fromRoot(CocotteConfiguration $configuration): self
-    {
-        return self::fromString($configuration->value()[AppValues::APP][self::NAME]);
     }
 
     /**

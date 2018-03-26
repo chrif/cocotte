@@ -32,5 +32,3 @@ script:
 env:
   global:
     - MACHINE_NAME=cocotte-travis-${TRAVIS_BUILD_ID}
-    - APP_NAME=app1
-    - APP_HOSTS=app1.cocotte-travis-${TRAVIS_BUILD_ID}.test

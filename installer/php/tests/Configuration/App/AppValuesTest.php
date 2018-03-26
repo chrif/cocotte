@@ -2,7 +2,6 @@
 
 namespace Chrif\Cocotte\Configuration\App;
 
-use Chrif\Cocotte\CocotteConfiguration;
 use PHPUnit\Framework\TestCase;
 
 class AppValuesTest extends TestCase
@@ -31,16 +30,5 @@ class AppValuesTest extends TestCase
         );
 
         self::assertInstanceOf(AppValues::class, $values);
-    }
-
-    public function testFromRoot()
-    {
-        $configuration = CocotteConfiguration::fixture();
-
-        $values = AppValues::fromRoot($configuration);
-
-        self::assertInstanceOf(AppValues::class, $values);
-
-        self::assertEquals($configuration->value()['app'], $configuration->value()['app']);
     }
 }
