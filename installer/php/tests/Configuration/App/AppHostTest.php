@@ -104,7 +104,7 @@ class AppHostTest extends TestCase
 
     /**
      * @expectedException \Assert\AssertionFailedException
-     * @expectedExceptionMessage List does not contain exactly "3" elements.
+     * @expectedExceptionMessage List does not contain exactly 3 elements (2 given).
      */
     public function testFromDigitalOceanInvalidRootSyntax()
     {

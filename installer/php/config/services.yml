@@ -1,7 +1,7 @@
 parameters:
   cocotte.resource: ~
   api.class: DigitalOceanV2\DigitalOceanV2
-  api.adapter.class: DigitalOceanV2\Adapter\BuzzAdapter
+  api.adapter.class: DigitalOceanV2\Adapter\GuzzleHttpAdapter
 
 services:
   _defaults:

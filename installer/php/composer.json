@@ -13,8 +13,7 @@
     ]
   },
   "require-dev": {
-    "phpunit/phpunit": "^6.5",
-    "symfony/dotenv": "^4.0"
+    "phpunit/phpunit": "^6.5"
   },
   "require": {
     "toin0u/digitalocean-v2": "^2.2",
@@ -23,8 +22,6 @@
     "symfony/yaml": "^3.3",
     "beberlei/assert": "^2.7",
     "symfony/dependency-injection": "^3.3",
-    "kriswallsmith/buzz": "^0.15.0",
-    "knplabs/github-api": "^2.5",
-    "php-http/guzzle6-adapter": "^1.1"
+    "guzzlehttp/guzzle": "^6.3"
   }
 }
