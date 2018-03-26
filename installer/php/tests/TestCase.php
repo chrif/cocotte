@@ -20,7 +20,7 @@ class TestCase extends \PHPUnit\Framework\TestCase
     public static function setUpBeforeClass()
     {
         if (!exec("sh /installer/machine-is-running")) {
-            self::markTestSkipped("Test skipped because machine is not running");
+            self::fail("Machine is not running");
         }
     }
 
