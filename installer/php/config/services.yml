@@ -1,6 +1,5 @@
 parameters:
   cocotte.resource: ~
-  api.class: DigitalOceanV2\DigitalOceanV2
   api.adapter.class: DigitalOceanV2\Adapter\GuzzleHttpAdapter
 
 services:
@@ -30,8 +29,7 @@ services:
   DigitalOceanV2\Adapter\AdapterInterface:
     factory: 'Chrif\Cocotte\DigitalOcean\DigitalOceanFactory:adapter'
     arguments: [%api.adapter.class%]
-  DigitalOceanV2\DigitalOceanV2:
-    class: %api.class%
+  DigitalOceanV2\DigitalOceanV2: ~
   DigitalOceanV2\Api\Droplet: ~
   DigitalOceanV2\Api\Image: ~
   DigitalOceanV2\Api\Region: ~
