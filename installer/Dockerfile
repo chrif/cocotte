@@ -27,5 +27,5 @@ ENV MACHINE_NAME cocotte
 ENV MACHINE_STORAGE_PATH /host/machine
 
 WORKDIR /installer/
-COPY create remove machine-ip ./
+COPY create remove machine-ip machine-is-running ./
 CMD ["sh", "create"]
