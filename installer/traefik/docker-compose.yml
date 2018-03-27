@@ -21,7 +21,7 @@ services:
     - "traefik.enable=true"
     - "traefik.frontend.auth.basic=${APP_AUTH_BASIC}"
     - "traefik.frontend.rule=Host:${APP_HOSTS}"
-    - "traefik.port=8080"
+    - "traefik.port=8081"
     depends_on:
       - data
 

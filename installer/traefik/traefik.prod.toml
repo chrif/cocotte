@@ -13,10 +13,13 @@ sendAnonymousUsage = true
 	[entryPoints.https]
 		address = ":443"
 		[entryPoints.https.tls]
+	[entryPoints.api]
+		address = ":8080"
 
 [retry]
 
 [api]
+	entryPoint = "api"
 	[api.statistics]
 		RecentErrors = 30
 

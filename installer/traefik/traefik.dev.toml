@@ -4,9 +4,16 @@ logLevel = "INFO"
 checkNewVersion = true
 defaultEntryPoints = ["http"]
 
+[entryPoints]
+	[entryPoints.http]
+		address = ":80"
+	[entryPoints.api]
+		address = ":8080"
+
 [retry]
 
 [api]
+	entryPoint = "api"
 	[api.statistics]
 		RecentErrors = 30
 
