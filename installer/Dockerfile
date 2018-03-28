@@ -1,6 +1,6 @@
-FROM chrif/docker:18.03.0-ce-alpine3.7 AS docker
-FROM chrif/php:7.2.3-fpm-alpine3.7
-COPY --from=docker / /
+FROM chrif/cocotte-base
+
+# php
 WORKDIR /installer/php
 COPY ./php/composer.json ./
 COPY ./php/composer.lock ./
@@ -9,17 +9,20 @@ RUN composer install --no-scripts --no-autoloader
 COPY ./php ./
 RUN composer install
 RUN chmod +x /installer/php/bin/console
-COPY php.ini /usr/local/etc/php/php.ini
+COPY php.ini /etc/php7/conf.d/zzz-php.ini
 
+# entrypoint
 WORKDIR /usr/local/bin/
 COPY cocotte-entrypoint.sh ./
 RUN chmod +x cocotte-entrypoint.sh
 ENTRYPOINT ["cocotte-entrypoint.sh"]
 
+# default env
 ENV DIGITAL_OCEAN_API_TOKEN xxxxx
 ENV MACHINE_NAME cocotte
 ENV MACHINE_STORAGE_PATH /host/machine
 
+# commands
 WORKDIR /installer/
 COPY create remove machine-ip machine-is-running ./
 CMD ["sh", "create"]
