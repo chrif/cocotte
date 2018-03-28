@@ -3,7 +3,7 @@ version: '3'
 services:
   traefik:
     command: "
-              -c ${APP_TRAEFIK_CONFIG:-/opt/app/traefik.dev.toml}
+              -c /opt/app/traefik.dev.toml
               --docker.domain=${DOCKER_DOMAIN:-docker.localhost}
               "
     volumes:

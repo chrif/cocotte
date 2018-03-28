@@ -7,7 +7,7 @@ services:
     restart: always
     # http://yaml-multiline.info/
     command: "
-              -c ${APP_TRAEFIK_CONFIG:-/opt/app/traefik.prod.toml}
+              -c /opt/app/traefik.prod.toml
               --docker.domain=${DOCKER_DOMAIN:-docker.localhost}
               --acme.email=${ACME_EMAIL}
               --acme.storage=${ACME_STORAGE:-/opt/ssl/acme/acme.json}
