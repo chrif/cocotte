@@ -24,8 +24,6 @@ sendAnonymousUsage = true
 		RecentErrors = 30
 
 [docker]
-	endpoint = "unix:///var/run/docker.sock"
-	watch = true
 	exposedbydefault = false
 
 [acme]
