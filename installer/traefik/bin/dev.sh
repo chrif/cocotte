@@ -5,6 +5,6 @@ set -a
 . .env-override
 set +a
 
-sh docker/bin/rm.sh
-sh docker/bin/init.sh
+sh bin/rm.sh
+sh bin/init.sh
 docker-compose up -d --build traefik
