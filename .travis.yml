@@ -32,3 +32,4 @@ script:
 env:
   global:
     - MACHINE_NAME=cocotte-travis-${TRAVIS_BUILD_ID}
+    - GIT_COMMIT_ID=${TRAVIS_COMMIT}

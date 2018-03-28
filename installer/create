@@ -9,3 +9,16 @@ docker-machine -s ${MACHINE_STORAGE_PATH} create \
 	--engine-opt log-opt="max-size=1m" \
 	--engine-opt log-opt="max-file=10" \
 	${MACHINE_NAME} || exit 1;
+
+rsync -rq /installer/traefik /host
+
+rm -rf /host/traefik/.env \
+    /host/traefik/.env-override \
+    /host/traefik/docker-compose.override.yml \
+    /host/traefik/var/*
+
+cat << EOF > /host/traefik/.env
+APP_HOSTS=${TRAEFIK_UI_HOST}
+APP_AUTH_BASIC='${TRAEFIK_AUTH_BASIC}'
+ACME_EMAIL=${TRAEFIK_ACME_EMAIL}
+EOF

@@ -3,5 +3,8 @@ version: "3"
 services:
 
   installer:
-    build: installer
+    build:
+      context: installer
+      args:
+        GIT_COMMIT_ID:
     image: "chrif/cocotte:${INSTALLER_VERSION:-latest}"
