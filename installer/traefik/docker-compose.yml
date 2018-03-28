@@ -2,7 +2,8 @@ version: '3'
 
 services:
   traefik:
-    image: traefik:v1.5.4-alpine
+    build: .
+    image: traefik
     container_name: traefik
     restart: always
     # http://yaml-multiline.info/
@@ -28,16 +29,6 @@ services:
     - "traefik.frontend.auth.basic=${APP_AUTH_BASIC}"
     - "traefik.frontend.rule=Host:${APP_HOSTS}"
     - "traefik.port=8080"
-    depends_on:
-      - data
-
-  data:
-    build: .
-    image: traefikdata
-    container_name: traefikdata
-    volumes:
-      - src:/opt/app
-      - ssl:/opt/ssl
 
 volumes:
   src:

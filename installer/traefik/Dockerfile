@@ -1,11 +1,12 @@
-FROM alpine:3.7
+FROM traefik:v1.5.4-alpine
+
+RUN mkdir -p 	/opt/ssl/acme/ && \
+	touch 		/opt/ssl/acme/acme.json && \
+	touch 		/opt/ssl/acme/acme-staging.json && \
+	chmod 600 	/opt/ssl/acme/acme.json &&\
+	chmod 600 	/opt/ssl/acme/acme-staging.json && \
+	chmod 700 	/opt/ssl/acme
 
 ADD traefik.prod.toml /opt/app/traefik.prod.toml
-ADD acme/acme.json /opt/ssl/acme/acme.json
-ADD acme/acme-staging.json /opt/ssl/acme/acme-staging.json
-
-RUN chmod 700 /opt/ssl/acme && \
-	chmod 600 /opt/ssl/acme/acme.json && \
-	chmod 600 /opt/ssl/acme/acme-staging.json
 
 WORKDIR /opt

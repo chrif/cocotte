@@ -1,4 +1,2 @@
 *
-!acme/acme.json
-!acme/acme-staging.json
 !traefik.prod.toml
