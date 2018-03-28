@@ -1,7 +1,6 @@
 # https://docs.traefik.io/
 
 logLevel = "INFO"
-checkNewVersion = true
 defaultEntryPoints = ["http"]
 
 [entryPoints]
@@ -14,8 +13,6 @@ defaultEntryPoints = ["http"]
 
 [api]
 	entryPoint = "api"
-	[api.statistics]
-		RecentErrors = 30
 
 [docker]
 	exposedbydefault = false

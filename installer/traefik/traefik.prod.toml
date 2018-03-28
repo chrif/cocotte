@@ -29,13 +29,5 @@ sendAnonymousUsage = true
 [acme]
 	entryPoint = "https"
 	OnHostRule = true
-
-	# prod
-	storage = "/opt/ssl/acme/acme.json"
-
-	# staging
-	# storage = "/opt/ssl/acme/acme-staging.json"
-	# caServer = "https://acme-staging.api.letsencrypt.org/directory"
-
 	[acme.httpChallenge]
-	entryPoint = "http"
+    	entryPoint = "http"
