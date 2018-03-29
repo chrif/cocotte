@@ -31,5 +31,4 @@ EOF
 find /host/traefik -type f -print0 | xargs -0 sed -i "s/\${COCOTTE_MACHINE}/${COCOTTE_MACHINE}/g"
 find /host/traefik -type f -print0 | xargs -0 sed -i "s#\${MACHINE_STORAGE_PATH}#${MACHINE_STORAGE_PATH}#g"
 
-echo "$(sh machine-ip) ${TRAEFIK_UI_HOST}" >> /etc/hosts
 console cocotte:configure-networking ${TRAEFIK_UI_HOST}
