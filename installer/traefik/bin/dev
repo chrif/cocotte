@@ -2,6 +2,16 @@
 
 set -eu
 
+if ! [ -e "docker-compose.override.yml" ]; then
+	echo "Copy docker-compose.override.yml.dist to docker-compose.override.yml before deploying dev"
+	exit 1
+fi
+
+if ! [ -e ".env-override" ]; then
+	echo "Copy .env-override.dist to .env-override before deploying dev"
+	exit 1
+fi
+
 set -a
 . ./.env
 . ./.env-override
