@@ -81,10 +81,6 @@ class ConfigureNetworking extends Command
                 "{$host->toRoot()->value()} with ip ".$this->dropletIp->value()
             );
             $this->domain->create($host);
-        } else {
-            if (!$host->isRoot()) {
-                $this->configureDomainRecord($output, $host->toRoot());
-            }
         }
 
         $this->configureDomainRecord($output, $host);

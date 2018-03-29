@@ -9,6 +9,7 @@ RUN composer install --no-scripts --no-autoloader
 COPY ./php ./
 RUN composer install
 RUN chmod +x /installer/php/bin/console
+RUN ln -s /installer/php/bin/console /usr/local/bin/console
 COPY php.ini /etc/php7/conf.d/zzz-php.ini
 
 #traefik
