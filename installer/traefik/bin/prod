@@ -9,7 +9,7 @@ set +a
 eval $(docker-machine env ${MACHINE_NAME})
 
 # backup
-sh bin/backup.sh
+sh bin/backup
 
 # take down
 docker stop traefik || true
@@ -23,7 +23,7 @@ docker volume create traefikssl  || true
 docker-compose -f docker-compose.yml build
 
 # restore backup
-sh bin/restore.sh
+sh bin/restore
 
 # bring up
 docker-compose -f docker-compose.yml up -d traefik
