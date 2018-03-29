@@ -24,10 +24,10 @@ install:
 - docker-compose build installer
 
 script:
-- sh installer.sh phpunit --exclude-group=functional
-- sh installer.sh create
-- sh installer.sh phpunit --group=functional
-- sh installer.sh remove
+- sh bin/installer phpunit --exclude-group=functional
+- sh bin/installer create
+- sh bin/installer phpunit --group=functional
+- sh bin/installer remove
 
 env:
   global:
