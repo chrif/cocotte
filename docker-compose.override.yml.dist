@@ -6,10 +6,17 @@ services:
     volumes:
       - ./host:/host
       - ./installer:/installer
+      - ./installer/xdebug.ini:/etc/php7/conf.d/xdebug.ini
     environment:
       DIGITAL_OCEAN_API_TOKEN: ${DIGITAL_OCEAN_API_TOKEN}
-      XDEBUG_CONFIG: "remote_enable=On remote_host=${HOST_IP}"
+      XDEBUG_CONFIG: "remote_host=${HOST_IP}"
       PHP_IDE_CONFIG: "serverName=cocotte"
+      TRAEFIK_ACME_EMAIL: ${TRAEFIK_ACME_EMAIL}
+      TRAEFIK_AUTH_BASIC: ${TRAEFIK_AUTH_BASIC}
+      TRAEFIK_UI_HOST: ${TRAEFIK_UI_HOST}
+      MACHINE_STORAGE_PATH: /absolute/path/to/host/pwd/machine
+    entrypoint: ["sh", "/installer/cocotte-entrypoint.sh"]
+    command: ["sh", "create"]
 
   travis:
     image: chrif/travis-cli
