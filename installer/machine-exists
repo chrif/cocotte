@@ -1,0 +1,9 @@
+#!/usr/bin/env sh
+
+set -eu
+
+readonly exists=$(docker-machine -s ${MACHINE_STORAGE_PATH} ls -q ${MACHINE_NAME})
+
+if [ "$exists" = ${MACHINE_NAME} ]; then echo 1;
+else echo 0;
+fi

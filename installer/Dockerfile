@@ -11,6 +11,10 @@ RUN composer install
 RUN chmod +x /installer/php/bin/console
 COPY php.ini /etc/php7/conf.d/zzz-php.ini
 
+#traefik
+WORKDIR /installer/traefik
+COPY ./traefik ./
+
 # entrypoint
 WORKDIR /usr/local/bin/
 COPY cocotte-entrypoint.sh ./
@@ -18,8 +22,8 @@ RUN chmod +x cocotte-entrypoint.sh
 ENTRYPOINT ["cocotte-entrypoint.sh"]
 
 # commands
-WORKDIR /installer/
-COPY create remove machine-ip machine-is-running ./
+WORKDIR /installer
+COPY create remove machine-ip machine-is-running machine-exists ./
 CMD ["sh", "create"]
 
 # default env

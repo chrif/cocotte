@@ -2,6 +2,11 @@
 
 set -eu
 
+if sh machine-exists | grep 1 > /dev/null; then
+    >&2 echo "A machine named ${MACHINE_NAME} already exists. Remove it."
+    exit 1;
+fi
+
 docker-machine -s ${MACHINE_STORAGE_PATH} create \
 	--driver digitalocean \
 	--digitalocean-access-token ${DIGITAL_OCEAN_API_TOKEN} \
@@ -19,6 +24,6 @@ rm -rf /host/traefik/.env \
 
 cat << EOF > /host/traefik/.env
 APP_HOSTS=${TRAEFIK_UI_HOST}
-APP_AUTH_BASIC='${TRAEFIK_AUTH_BASIC}'
+APP_AUTH_BASIC=${TRAEFIK_AUTH_BASIC}
 ACME_EMAIL=${TRAEFIK_ACME_EMAIL}
 EOF
