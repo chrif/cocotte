@@ -72,7 +72,7 @@ class CocotteConfiguration
                 ->arrayNode(DropletValues::DROPLET)
                     ->isRequired()
                     ->children()
-                        ->scalarNode(DropletName::NAME)->defaultValue(getenv('MACHINE_NAME'))->cannotBeEmpty()->end()
+                        ->scalarNode(DropletName::NAME)->defaultValue(getenv('COCOTTE_MACHINE'))->cannotBeEmpty()->end()
                         ->scalarNode(DropletIp::IP)->defaultValue(exec("sh /installer/machine-ip"))->cannotBeEmpty()->end()
                     ->end()
                 ->end()

@@ -9,7 +9,7 @@ backup() {
 
 	cp var/acme/${file}.json "var/acme/${file}.json.$(date +"%Y_%m_%d_%I_%M_%p")" || exit 1
 
-	docker container create --name backup -v traefik_ssl:/opt/ssl alpine
+	docker container create --name backup -v traefikssl:/opt/ssl alpine:3.7
 
 	docker cp \
 		backup:/opt/ssl/acme/${file}.json \
@@ -19,8 +19,8 @@ backup() {
 
 }
 
-eval $(docker-machine env ${MACHINE_NAME})
-docker volume create traefik_ssl
+eval $(docker-machine env ${COCOTTE_MACHINE})
+docker volume create traefikssl
 backup "acme"
 backup "acme-staging"
 

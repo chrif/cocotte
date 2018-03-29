@@ -3,27 +3,20 @@
 set -eu
 
 set -a
-. .env
+. ./.env
 set +a
 
-eval $(docker-machine env ${MACHINE_NAME})
-
-# backup
-sh bin/backup
+eval $(docker-machine env ${COCOTTE_MACHINE})
 
 # take down
 docker stop traefik || true
 docker rm traefik || true
 docker-compose down -v --remove-orphans
-docker volume rm traefikssl || true
 
 # build
 docker network create traefik  || true
 docker volume create traefikssl  || true
 docker-compose -f docker-compose.yml build
-
-# restore backup
-sh bin/restore
 
 # bring up
 docker-compose -f docker-compose.yml up -d traefik

@@ -2,4 +2,4 @@
 
 set -eu
 
-docker-machine -s ${MACHINE_STORAGE_PATH} rm -y ${MACHINE_NAME} || exit 1;
+docker-machine -s ${MACHINE_STORAGE_PATH} rm -y ${COCOTTE_MACHINE} || exit 1;

@@ -30,8 +30,11 @@ CMD ["sh", "create"]
 ARG GIT_COMMIT_ID
 ENV DIGITAL_OCEAN_API_TOKEN xxxxx
 ENV GIT_COMMIT_ID ${GIT_COMMIT_ID}
-ENV MACHINE_NAME cocotte
+ENV COCOTTE_MACHINE cocotte
 ENV MACHINE_STORAGE_PATH /host/machine
 ENV TRAEFIK_ACME_EMAIL me@example.com
 ENV TRAEFIK_AUTH_BASIC \'username:\$password\'
 ENV TRAEFIK_UI_HOST traefik.mydomain.com
+
+# for detection to work in https://github.com/docker/machine/blob/3f20d202a2dad68f3c8d745f99f2439fb79454c9/commands/env.go#L223
+ENV SHELL /bin/sh

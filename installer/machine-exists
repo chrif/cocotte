@@ -2,8 +2,8 @@
 
 set -eu
 
-readonly exists=$(docker-machine -s ${MACHINE_STORAGE_PATH} ls -q ${MACHINE_NAME})
+readonly exists=$(docker-machine -s ${MACHINE_STORAGE_PATH} ls -q ${COCOTTE_MACHINE})
 
-if [ "$exists" = ${MACHINE_NAME} ]; then echo 1;
+if [ "$exists" = ${COCOTTE_MACHINE} ]; then echo 1;
 else echo 0;
 fi

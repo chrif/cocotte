@@ -1,10 +1,10 @@
 #!/usr/bin/env sh
 
-set -eux
+set -eu
 
 set -a
-. .env
-. .env-override
+. ./.env
+. ./.env-override
 set +a
 
 eval $(docker-machine env -u)
@@ -13,13 +13,12 @@ eval $(docker-machine env -u)
 docker stop traefik || true
 docker rm traefik || true
 docker-compose down -v --remove-orphans
-docker volume rm traefikssl || true
 
 # build
-docker volume create traefikssl
+docker network create traefik  || true
+docker volume create traefikssl  || true
 docker-compose -f docker-compose.yml build
 
 # bring up
-docker network create traefik || true
 docker-compose up -d traefik
 docker logs -f traefik

@@ -3,7 +3,7 @@
 set -eu
 
 if sh machine-exists | grep 1 > /dev/null; then
-    >&2 echo "A machine named ${MACHINE_NAME} already exists. Remove it."
+    >&2 echo "A machine named ${COCOTTE_MACHINE} already exists. Remove it."
     exit 1;
 fi
 
@@ -13,7 +13,7 @@ docker-machine -s ${MACHINE_STORAGE_PATH} create \
 	--engine-opt log-driver="json-file" \
 	--engine-opt log-opt="max-size=1m" \
 	--engine-opt log-opt="max-file=10" \
-	${MACHINE_NAME} || exit 1;
+	${COCOTTE_MACHINE} || exit 1;
 
 rsync -rq /installer/traefik /host
 
