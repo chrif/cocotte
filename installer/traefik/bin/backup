@@ -19,7 +19,7 @@ backup() {
 
 }
 
-eval $(docker-machine env ${COCOTTE_MACHINE})
+eval $(docker-machine -s "${MACHINE_STORAGE_PATH}" env ${COCOTTE_MACHINE})
 docker volume create traefikssl
 backup "acme"
 backup "acme-staging"

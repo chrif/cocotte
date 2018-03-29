@@ -27,3 +27,6 @@ APP_HOSTS=${TRAEFIK_UI_HOST}
 APP_AUTH_BASIC=${TRAEFIK_AUTH_BASIC}
 ACME_EMAIL=${TRAEFIK_ACME_EMAIL}
 EOF
+
+find /host/traefik -type f -print0 | xargs -0 sed -i "s/\${COCOTTE_MACHINE}/${COCOTTE_MACHINE}/g"
+find /host/traefik -type f -print0 | xargs -0 sed -i "s#\${MACHINE_STORAGE_PATH}#${MACHINE_STORAGE_PATH}#g"

@@ -6,7 +6,7 @@ set -a
 . ./.env
 set +a
 
-eval $(docker-machine env ${COCOTTE_MACHINE})
+eval $(docker-machine -s "${MACHINE_STORAGE_PATH}" env ${COCOTTE_MACHINE})
 
 # take down
 docker stop traefik || true

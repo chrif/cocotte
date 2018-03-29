@@ -3,7 +3,6 @@ version: '3'
 services:
   traefik:
     build: .
-    image: traefik
     container_name: traefik
     restart: always
     # http://yaml-multiline.info/
