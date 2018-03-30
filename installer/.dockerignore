@@ -1,0 +1,9 @@
+traefik/.env
+traefik/.env-override
+traefik/docker-compose.override.yml
+xdebug.ini
+traefik/var/
+!traefik/var/.gitignore
+php/vendor
+php/var
+!php/var/.gitkeep

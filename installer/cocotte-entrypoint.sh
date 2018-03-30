@@ -15,9 +15,7 @@ if [ "$MACHINE_STORAGE_PATH" != "/host/machine" ]; then
 
 fi
 
-if [ "$1" = 'create' ]; then exec sh create
-elif [ "$1" = 'remove' ]; then exec sh remove
-elif [ "$1" = 'console' ]; then shift; cd php; exec bin/console "$@";
-elif [ "$1" = 'phpunit' ]; then shift; cd php; exec vendor/bin/phpunit "$@";
-else exec "$@";
-fi
+# for mounted files in dev
+chmod +x /installer/bin/* /installer/php/bin/* /installer/php/vendor/bin/*
+
+exec "$@"

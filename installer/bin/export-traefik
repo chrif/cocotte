@@ -1,0 +1,29 @@
+#!/bin/sh
+
+set -eu
+
+if [ -d "/host/traefik" ]; then
+	mv /host/traefik /host/traefik.backup
+fi
+
+rm -rf /tmp/traefik
+
+rsync -rq /installer/traefik /tmp
+
+rm -rf /tmp/traefik/.env \
+    /tmp/traefik/.env-override \
+    /tmp/traefik/docker-compose.override.yml \
+    /tmp/traefik/var/*
+
+cat << EOF > /tmp/traefik/.env
+APP_HOSTS=${TRAEFIK_UI_HOST}
+APP_AUTH_BASIC='$(php -r 'echo trim(getenv("TRAEFIK_AUTH_BASIC"),"\x27");')'
+ACME_EMAIL=${TRAEFIK_ACME_EMAIL}
+EOF
+
+find /tmp/traefik -type f -print0 | xargs -0 sed -i "s/\${COCOTTE_MACHINE}/${COCOTTE_MACHINE}/g"
+find /tmp/traefik -type f -print0 | xargs -0 sed -i "s#\${MACHINE_STORAGE_PATH}#${MACHINE_STORAGE_PATH}#g"
+
+rsync -rq /tmp/traefik /host
+
+rm -rf /tmp/traefik

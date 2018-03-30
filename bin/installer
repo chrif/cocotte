@@ -10,11 +10,12 @@ if [ "$1" = 'test' ]; then
 fi
 
 docker run --rm \
-    -e COCOTTE_MACHINE=${COCOTTE_MACHINE} \
+    -e COCOTTE_MACHINE=${COCOTTE_MACHINE:-cocotte} \
     -e DIGITAL_OCEAN_API_TOKEN=${DIGITAL_OCEAN_API_TOKEN} \
     -e MACHINE_STORAGE_PATH=${MACHINE_STORAGE_PATH:-"$(pwd)/machine"} \
     -e TRAEFIK_ACME_EMAIL=${TRAEFIK_ACME_EMAIL} \
-    -e TRAEFIK_AUTH_BASIC='${TRAEFIK_AUTH_BASIC}' \
+    -e TRAEFIK_ACME_ENABLED=${TRAEFIK_ACME_ENABLED:-true} \
+    -e TRAEFIK_AUTH_BASIC=${TRAEFIK_AUTH_BASIC:-'traefik:$apr1$4/wEA.Q1$3WdUQDSH6L8NXHiYuKQaP.'} \
     -e TRAEFIK_UI_HOST=${TRAEFIK_UI_HOST} \
     -v "$(pwd)":/host \
     chrif/cocotte $@

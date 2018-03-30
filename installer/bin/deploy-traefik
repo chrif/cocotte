@@ -1,0 +1,6 @@
+#!/bin/sh
+
+set -eu
+
+console cocotte:configure-networking ${TRAEFIK_UI_HOST}
+(cd /host/traefik; ./bin/prod)

@@ -64,7 +64,7 @@ class ConfigureNetworking extends Command
         $this->hosts = AppHostCollection::fromString($input->getArgument('hosts'));
 
         foreach ($this->hosts as $host) {
-            $output->writeln('Configuring '.$host->value());
+            $output->writeln('Configuring networking for '.$host->value());
             if ($input->getOption('remove')) {
                 $this->removeDomainRecord($output, $host);
             } else {
@@ -77,7 +77,7 @@ class ConfigureNetworking extends Command
     {
         if (!$this->domain->exists($host)) {
             $output->writeln(
-                "Domain '{$host->domain()}' did not exist. Creating it and adding ".
+                "Domain '{$host->domain()}' does not exist. Creating it and adding ".
                 "{$host->toRoot()->value()} with ip ".$this->dropletIp->value()
             );
             $this->domain->create($host);
@@ -99,7 +99,7 @@ class ConfigureNetworking extends Command
             }
         } else {
             $output->writeln(
-                "Domain record '{$host->value()}' did not exist. Creating it with ip ".$this->dropletIp->value()
+                "Domain record '{$host->value()}' does not exist. Creating it with ip ".$this->dropletIp->value()
             );
             $this->domainRecord->create($host);
         }

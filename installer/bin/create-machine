@@ -1,0 +1,17 @@
+#!/bin/sh
+
+set -eu
+
+if machine-exists | grep 1 > /dev/null; then
+    >&2 echo "A machine named ${COCOTTE_MACHINE} already exists. Remove it."
+    exit 1;
+fi
+
+### Create cloud vm
+docker-machine -s ${MACHINE_STORAGE_PATH} create \
+	--driver digitalocean \
+	--digitalocean-access-token ${DIGITAL_OCEAN_API_TOKEN} \
+	--engine-opt log-driver="json-file" \
+	--engine-opt log-opt="max-size=1m" \
+	--engine-opt log-opt="max-file=10" \
+	${COCOTTE_MACHINE} || exit 1;
