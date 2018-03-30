@@ -12,7 +12,7 @@ services:
       XDEBUG_CONFIG: "remote_host=${HOST_IP}"
       PHP_IDE_CONFIG: "serverName=cocotte"
       TRAEFIK_ACME_EMAIL: ${TRAEFIK_ACME_EMAIL}
-      TRAEFIK_AUTH_BASIC: 'username:$password'
+      TRAEFIK_AUTH_BASIC: '${TRAEFIK_AUTH_BASIC}'
       TRAEFIK_UI_HOST: ${TRAEFIK_UI_HOST}
       MACHINE_STORAGE_PATH: /absolute/path/to/host/pwd/machine
     entrypoint: ["sh", "/installer/cocotte-entrypoint.sh"]

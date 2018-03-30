@@ -25,7 +25,9 @@ install:
 
 script:
 - sh bin/installer phpunit --exclude-group=functional
+- echo -en 'travis_fold:start:create\\r'
 - sh bin/installer create
+- echo -en 'travis_fold:end:create\\r'
 - sh bin/installer phpunit --group=functional
 - if [ -z "${KEEP_MACHINE_AFTER-}" ]; then sh bin/installer remove; else true; fi
 
