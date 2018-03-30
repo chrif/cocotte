@@ -32,3 +32,5 @@ find /host/traefik -type f -print0 | xargs -0 sed -i "s/\${COCOTTE_MACHINE}/${CO
 find /host/traefik -type f -print0 | xargs -0 sed -i "s#\${MACHINE_STORAGE_PATH}#${MACHINE_STORAGE_PATH}#g"
 
 console cocotte:configure-networking ${TRAEFIK_UI_HOST}
+
+(cd /host/traefik; ./bin/prod)
