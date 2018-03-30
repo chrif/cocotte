@@ -27,7 +27,7 @@ script:
 - sh bin/installer phpunit --exclude-group=functional
 - sh bin/installer create
 - sh bin/installer phpunit --group=functional
-- sh bin/installer remove
+#- sh bin/installer remove
 
 env:
   global:
