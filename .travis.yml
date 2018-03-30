@@ -25,14 +25,16 @@ install:
 
 script:
 - sh bin/installer phpunit --exclude-group=functional
-- echo -en 'travis_fold:start:create\\r'
+- echo "${FOLD_START}:create"
 - sh bin/installer create
-- echo -en 'travis_fold:end:create\\r'
+- echo "${FOLD_END}:create"
 - sh bin/installer phpunit --group=functional
 - if [ -z "${KEEP_MACHINE_AFTER-}" ]; then sh bin/installer remove; else true; fi
 
 env:
   global:
+    - FOLD_START=travis_fold:start
+    - FOLD_END=travis_fold:end
     - COCOTTE_MACHINE=cocotte-travis-${TRAVIS_BUILD_ID}
     # DIGITAL_OCEAN_API_TOKEN (set in in repo settings)
     - GIT_COMMIT_ID=${TRAVIS_COMMIT}
