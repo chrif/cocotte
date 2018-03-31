@@ -56,7 +56,7 @@ class ConfigureNetworking extends Command
             ->setDescription('Configure networking of Digital Ocean')
             ->addArgument('hosts', InputArgument::REQUIRED, 'Comma-separated list of hosts')
             ->addOption('remove', null, InputOption::VALUE_NONE, 'Remove networking for hosts')
-            ->setAliases(array('cn'));
+            ->setAliases(['cn']);
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)

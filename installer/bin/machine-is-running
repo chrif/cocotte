@@ -1,8 +1,8 @@
-#!/usr/bin/env sh
+#!/bin/sh
 
 set -eu
 
-readonly running=$(docker-machine -s ${MACHINE_STORAGE_PATH} ls -q --filter "state=running" ${COCOTTE_MACHINE})
+readonly running=$(docker-machine -s ${MACHINE_STORAGE_PATH} ls -q --filter="state=running" ${COCOTTE_MACHINE})
 
 if [ "$running" = ${COCOTTE_MACHINE} ]; then echo 1;
 else echo 0;

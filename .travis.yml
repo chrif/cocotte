@@ -37,7 +37,6 @@ env:
     # DIGITAL_OCEAN_API_TOKEN (set in in repo settings)
     - GIT_COMMIT_ID=${TRAVIS_COMMIT}
     # TRAEFIK_ACME_EMAIL (set in in repo settings)
-    # TRAEFIK_ACME_ENABLED (set in in repo settings)
     # TRAEFIK_AUTH_BASIC
     - secure: "n2xnNiw8n6+hXydZdLhHgBAwf7fQIGclnZ7puCjE/quEZ4RMcO6DE/x+QkTjJviky1Gr5g2vFpvENQQkEehtWVJhOyka1oDcQqkCSlExrtAWO3EM3dswh1jrDwZ04R1RnKjV51M2aUQRa8fv8ol9B+VpUg/Ye9JwLX22nHridEG883gNQzboFWHgWwtxpO39bX2X/if9u3KOZ020vcI8kPNKhIv4/SzGawB9IeKzhsA6uXkDzK1FcsYUdgyoRCnUki+4OFJWm1VcUqfI1Qdb8oOmAn3D4/mYhQwF+YjHU5qOcWbc/YNeXKb3iQ15e4lBfjX6uUV2apU0lhhd/WvZ5dQChOEu0H9U5mg/zKQmTu+pG/lg9uzcGEd6FDVV+QnTAszzbeuhnIlgFRRjwoQQj9t75Nz46GzV57jQqmTAbHwwHh5lPyq3Lw7W8JdCCgb+ujbIr2wF3wjGQdUqjaScmCtokKEk6pzt0tf3PY4Gx4hE0mNH4Gp4YtgmZo9t87ogLyHkc2L2dlAuPSMi4hdanQKlxOSjzA17nwGs6uRu27BY0ei5zlmFKZuh3Ix4JHlpyjCR+EC8+e4bgHNaL/AO3VZ2Iij57H+cE8s5vw150hJy4pK9av2rwBSCzr17ZZeRr+i5GcFxWn49V9uiUP032SGJsjSlDMgcRpBLjT4+vio="
     # TRAEFIK_UI_HOST (set in in repo settings)

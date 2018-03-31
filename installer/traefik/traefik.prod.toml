@@ -25,9 +25,3 @@ sendAnonymousUsage = true
 
 [docker]
 	exposedbydefault = false
-
-[acme]
-	entryPoint = "https"
-	OnHostRule = true
-	[acme.httpChallenge]
-    	entryPoint = "http"

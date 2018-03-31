@@ -9,9 +9,7 @@ services:
     command: "
               -c /opt/app/traefik.prod.toml
               --docker.domain=${DOCKER_DOMAIN:-docker.localhost}
-              --acme.email=${ACME_EMAIL}
-              --acme.storage=${ACME_STORAGE:-/opt/ssl/acme/acme.json}
-              ${ACME_CASERVER:-}
+              ${ACME_CONFIG:-}
               "
     networks:
       - traefik

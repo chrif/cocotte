@@ -3,7 +3,8 @@
 set -eu
 
 if [ -d "/host/traefik" ]; then
-	mv /host/traefik /host/traefik.backup
+	echo "Backing up old traefik folder on host"
+	mv -v /host/traefik /host/traefik.backup.$(date +"%Y%m%d%H%M%S")
 fi
 
 rm -rf /tmp/traefik
