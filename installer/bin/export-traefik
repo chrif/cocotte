@@ -17,9 +17,9 @@ rm -rf /tmp/traefik/.env \
     /tmp/traefik/var/*
 
 cat << EOF > /tmp/traefik/.env
-APP_HOSTS=${TRAEFIK_UI_HOST}
-APP_AUTH_BASIC='$(php -r 'echo trim(getenv("TRAEFIK_AUTH_BASIC"),"\x27");')'
-ACME_EMAIL=${TRAEFIK_ACME_EMAIL}
+APP_HOSTS="${TRAEFIK_UI_HOST}"
+APP_AUTH_BASIC='$(htpasswd -bn "${TRAEFIK_UI_USERNAME}" "${TRAEFIK_UI_PASSWORD}")'
+ACME_EMAIL="${TRAEFIK_ACME_EMAIL}"
 EOF
 
 find /tmp/traefik -type f -print0 | xargs -0 sed -i "s/\${COCOTTE_MACHINE}/${COCOTTE_MACHINE}/g"

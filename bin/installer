@@ -15,7 +15,8 @@ docker run --rm \
     -e DIGITAL_OCEAN_API_TOKEN="${DIGITAL_OCEAN_API_TOKEN}" \
     -e MACHINE_STORAGE_PATH="${MACHINE_STORAGE_PATH:-"$(pwd)/machine"}" \
     -e TRAEFIK_ACME_EMAIL="${TRAEFIK_ACME_EMAIL}" \
-    -e TRAEFIK_AUTH_BASIC=\'${TRAEFIK_AUTH_BASIC:-'traefik:$apr1$4/wEA.Q1$3WdUQDSH6L8NXHiYuKQaP.'}\' \
     -e TRAEFIK_UI_HOST="${TRAEFIK_UI_HOST}" \
+    -e TRAEFIK_UI_PASSWORD="${TRAEFIK_UI_PASSWORD}" \
+    -e TRAEFIK_UI_USERNAME="${TRAEFIK_UI_USERNAME}" \
     -v "$(pwd)":/host \
     chrif/cocotte $@
