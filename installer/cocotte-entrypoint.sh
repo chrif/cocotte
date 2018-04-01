@@ -13,7 +13,7 @@ if ! [ -e "$MACHINE_STORAGE_PATH" ]; then
 		exit 1
 	fi
 	mkdir -p $(dirname "$MACHINE_STORAGE_PATH")
-	mkdir -p /host/machine
+	mkdir -p /host/machine/certs
 	ln -sfn /host/machine "${MACHINE_STORAGE_PATH}"
 elif ! [ -L "$MACHINE_STORAGE_PATH" ]; then
 	>&2 echo "Error: cannot symlink MACHINE_STORAGE_PATH to '$MACHINE_STORAGE_PATH' because it is a real path on installer. Start installer from a different directory on your computer."
