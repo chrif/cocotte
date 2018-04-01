@@ -23,6 +23,6 @@ fi
 # for mounted files in dev (does nothing in prod, they are already executable)
 chmod +x /installer/bin/* /installer/php/bin/* /installer/php/vendor/bin/*
 
-if [ "$1" = 'phpunit' ]; then shift; cd php; phpunit "$@"
+if [ "$1" = 'phpunit' ]; then shift; cd php; exec phpunit "$@"
 else exec "$@"
 fi
