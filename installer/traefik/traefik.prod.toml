@@ -19,9 +19,7 @@ sendAnonymousUsage = true
 [ping]
 
 [api]
-
-[metrics]
-	[metrics.statistics]
+	[api.statistics]
 		recentErrors = 30
 
 [docker]
