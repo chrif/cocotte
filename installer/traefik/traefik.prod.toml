@@ -13,15 +13,16 @@ sendAnonymousUsage = true
 	[entryPoints.https]
 		address = ":443"
 		[entryPoints.https.tls]
-	[entryPoints.api]
-		address = ":8080"
 
 [retry]
 
+[ping]
+
 [api]
-	entryPoint = "api"
-	[api.statistics]
-		RecentErrors = 30
+
+[metrics]
+	[metrics.statistics]
+		recentErrors = 30
 
 [docker]
 	exposedbydefault = false

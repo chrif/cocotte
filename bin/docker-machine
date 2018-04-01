@@ -1,0 +1,5 @@
+#!/bin/sh
+
+set -eu
+
+docker-machine -s host/machine "$@"

@@ -8,7 +8,6 @@ services:
     # http://yaml-multiline.info/
     command: "
               -c /opt/app/traefik.prod.toml
-              --docker.domain=${DOCKER_DOMAIN:-docker.localhost}
               ${ACME_CONFIG:-}
               "
     networks:

@@ -29,7 +29,7 @@ script:
 - sh bin/installer phpunit --group=functional
 - sh bin/installer export-traefik
 - sh bin/installer deploy-traefik
-- if [ -z "${KEEP_MACHINE_AFTER-}" ]; then sh bin/installer uninstall; else true; fi
+- if [ -z "${KEEP_MACHINE_AFTER-}" ]; then sh bin/installer uninstall; else echo "Machine not removed."; fi
 
 env:
   global:
