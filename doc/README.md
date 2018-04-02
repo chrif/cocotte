@@ -36,11 +36,11 @@ The 5$ a month cost is for the cheapest cloud machine, assuming all these apps c
 
 ## In details
 
-Specifically, Cocotte is a free cloud installer for hosting multiple containerized applications, each accessible through https with a different hostname, but all hosted on one cloud machine at 5$ a month. This is the only cost for the infrastructure that Cocotte puts in place.
+Cocotte is a free cloud installer for hosting multiple containerized applications, each accessible through https with a different hostname, but all hosted on one cloud machine at 5$ a month. This is the only cost for the infrastructure that Cocotte puts in place.
 
 This is just an installer though. Eventually, you will have to learn how it works, but as opposed to a solution that would lock you in, you are in control once the cloud machine is provisioned, and you don't need Cocotte anymore. 
 
-Optionally, and in the hope to get you started even faster, Cocotte has a template feature for adding a new Docker application to your infrastructure. It generates deployment scripts for a https web server, in a folder ready for source control. Two templates are available, a simple web server with a "Hello world" page, and a Symfony 4 application. The intended way of developing and deploying with these application models is documented.
+Optionally, and in the hope to get you started even faster, Cocotte has a template feature for adding a new Docker application to your infrastructure. It generates deployment scripts for a https web server, in a folder ready for source control. Two templates are available, a simple web server with a "Hello world" page, and a Symfony 4 application. The intended way of developing and deploying with these application models is <a href="#Documentation">documented</a>.
 
 Cocotte is fully tested on [Travis CI](https://travis-ci.org/chrif/cocotte), so there is no surprises with tutorials that used to work when they were written but are now outdated. The build itself is the tutorial, and if it passes, you can be confident that Cocotte works.
 
@@ -50,20 +50,20 @@ Trying out Cocotte is completely free if you don't have a Digital Ocean account 
 
 If you already have a Digital Ocean account, then you probably know about cloud pricing. For those that don't, you are charged $0.007/hour by Digital Ocean for the machine that Cocotte creates. So just trying out Cocotte and then destroying the machine costs less than 1 cent. Keeping the machine online for a month costs 5$. 
 
-[Read Digital Ocean pricing](https://www.digitalocean.com/pricing/).
+[Read about Digital Ocean pricing](https://www.digitalocean.com/pricing/).
 
 ## Requirements
 
-* A Mac or Linux operating system
-* Docker Community Edition (including Docker Compose and Docker Machine)
-* A Digital Ocean account
-* A domain name using the name servers of Digital Ocean
+* A Mac or Linux operating system.
+* Docker Community Edition (including Docker Compose and Docker Machine).
+* A Digital Ocean account.
+* A domain name using the name servers of Digital Ocean.
 
 ## Installation
 
-* Install [Docker Community Edition](https://www.docker.com/community-edition) (including Docker Compose and Docker Machine)
+* Install [Docker Community Edition](https://www.docker.com/community-edition) (including Docker Compose and Docker Machine).
 * If you don't have a Digital Ocean account, create one with [this link](https://m.do.co/c/c25ed78e51c5) and you will get a 10$ credit, allowing you to try Cocotte for free.
-* Generate a [Digital Ocean API token](https://cloud.digitalocean.com/settings/api/tokens)
+* Generate a [Digital Ocean API token](https://cloud.digitalocean.com/settings/api/tokens).
 * Make sur you have a domain whose name servers are set to:
 	 * ns1.digitalocean.com
 	 * ns2.digitalocean.com
@@ -71,9 +71,8 @@ If you already have a Digital Ocean account, then you probably know about cloud 
 
 ## Usage
 
-* Run 
 ```
-docker run --rm chrif/cocotte 
+$ docker run --rm chrif/cocotte 
 ```
 
 ## Documentation
