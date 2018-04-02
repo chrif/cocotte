@@ -1,6 +1,6 @@
 # Cocotte
 
-Cocotte aims at easing the learning curve for web developers starting with cloud hosting and application containerization. You get a basic and affordable installation, allowing you to focus on your project(s) first, and learn about your infrastructure later.
+Cocotte aims at easing the learning curve for web developers starting with cloud hosting and application containerization. You get a basic and affordable installation, allowing you to focus on your project(s) first, and learn about your infrastructure later:
 
 * [Docker](https://www.docker.com/) containers for all processes (free).
 * [Digital Ocean](https://www.digitalocean.com/) as the cloud provider (5$ a month).
@@ -40,7 +40,7 @@ Specifically, Cocotte is a free cloud installer for hosting multiple containeriz
 
 This is just an installer though. Eventually, you will have to learn how it works, but as opposed to a solution that would lock you in, you are in control once the cloud machine is provisioned, and you don't need Cocotte anymore. 
 
-Optionally, in the hope to get you started even faster, Cocotte has a template feature for adding a new Docker application to your infrastructure. It generates deployment scripts for a https web server, in a folder ready for source control. Two templates are available, a simple web server with a "Hello world" page, and a Symfony 4 application. The intended way of developing and deploying with these application models is documented.
+Optionally, and in the hope to get you started even faster, Cocotte has a template feature for adding a new Docker application to your infrastructure. It generates deployment scripts for a https web server, in a folder ready for source control. Two templates are available, a simple web server with a "Hello world" page, and a Symfony 4 application. The intended way of developing and deploying with these application models is documented.
 
 Cocotte is fully tested on [Travis CI](https://travis-ci.org/chrif/cocotte), so there is no surprises with tutorials that used to work when they were written but are now outdated. The build itself is the tutorial, and if it passes, you can be confident that Cocotte works.
 
