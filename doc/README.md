@@ -32,15 +32,22 @@ These applications/websites are:
  * each using a valid SSL certificate
  * each running on a different operating system
 
-The 5$ a month cost is for the cheapest cloud machine, assuming all these apps can share 1GB memory and 20GB disk, which they can, thanks to application containerization.
+The cost for all this is only 5$ a month, assuming the cheapest cloud machine, and that all these apps can share 1GB memory and 20GB disk, which they can, thanks to application containerization.
 
 ## In details
+
+When learning about cloud hosting and containers, one has let's say 3 options:
+* Read the manuals which is the best but can be time consuming.
+* Read blog posts/tutorials that are often outdated or incomplete.
+* Use a third-party management solution where you end up not learning much and potentially locked in.
+
+Meet Cocotte, a 4th option.
 
 Cocotte is a free cloud installer for hosting multiple containerized applications, each accessible through https with a different hostname, but all hosted on one cloud machine at 5$ a month. This is the only cost for the infrastructure that Cocotte puts in place.
 
 This is just an installer though. Eventually, you will have to learn how it works, but as opposed to a solution that would lock you in, you are in control once the cloud machine is provisioned, and you don't need Cocotte anymore. 
 
-Optionally, and in the hope to get you started even faster, Cocotte has a template feature for adding a new Docker application to your infrastructure. It generates deployment scripts for a https web server, in a folder ready for source control. Two templates are available, a simple web server with a "Hello world" page, and a Symfony 4 application. The intended way of developing and deploying with these application models is <a href="#documentation">documented</a>.
+Optionally, and in the hope to get you started even faster, Cocotte has a template feature for adding new Docker applications to your infrastructure. It generates deployment scripts for a https web server, in a folder ready for source control. Two templates are available, a simple web server with a "Hello world" page, and a Symfony 4 application. The intended way of developing and deploying with these application models is <a href="#documentation">documented</a>.
 
 Cocotte is fully tested on [Travis CI](https://travis-ci.org/chrif/cocotte), so there is no surprises with tutorials that used to work when they were written but are now outdated. The build itself is the tutorial, and if it passes, you can be confident that Cocotte works.
 
