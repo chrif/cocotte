@@ -29,7 +29,9 @@ script:
 - sh bin/installer phpunit --group=functional
 - sh bin/installer export-traefik
 - sh bin/installer deploy-traefik
-- if [ -z "${KEEP_MACHINE_AFTER-}" ]; then sh bin/installer uninstall; else echo "Machine not removed."; fi
+- sh bin/installer ping-traefik
+- if [ "${ACME_ENABLED:-true}" = true ]; then sh bin/installer check-certificate ${TRAEFIK_UI_HOST}; else echo "Skipping SSL verification"; fi
+- if [ "${KEEP_MACHINE_AFTER:-false}" = false ]; then sh bin/installer uninstall; else echo "Machine not removed."; fi
 
 env:
   global:

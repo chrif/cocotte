@@ -1,0 +1,28 @@
+#!/usr/bin/env php
+<?php
+
+function certIsValid($host)
+{
+    exec(
+        "curl --cert-status --silent -S --stderr /dev/stdout https://$host",
+        $out,
+        $ret
+    );
+
+    if ($ret === 91) {
+        return true;
+    } else {
+        fwrite(STDERR, implode("\n", $out));
+        return false;
+    }
+}
+
+$host = $argv[1];
+
+if (certIsValid($host)) {
+    echo "SSL Certificate for $host is valid.\n";
+    exit(0);
+} else {
+    echo "\nError: SSL Certificate for $host is invalid.\n";
+    exit(1);
+}
