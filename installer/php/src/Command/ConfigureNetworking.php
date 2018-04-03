@@ -56,7 +56,7 @@ class ConfigureNetworking extends Command
             ->setDescription('Configure networking of Digital Ocean')
             ->addArgument('hosts', InputArgument::REQUIRED, 'Comma-separated list of hosts')
             ->addOption('remove', null, InputOption::VALUE_NONE, 'Remove networking for hosts')
-            ->setAliases(array('cn'));
+            ->setAliases(['cn']);
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -64,7 +64,7 @@ class ConfigureNetworking extends Command
         $this->hosts = AppHostCollection::fromString($input->getArgument('hosts'));
 
         foreach ($this->hosts as $host) {
-            $output->writeln('Configuring '.$host->value());
+            $output->writeln('Configuring networking for '.$host->value());
             if ($input->getOption('remove')) {
                 $this->removeDomainRecord($output, $host);
             } else {
@@ -77,14 +77,10 @@ class ConfigureNetworking extends Command
     {
         if (!$this->domain->exists($host)) {
             $output->writeln(
-                "Domain '{$host->domain()}' did not exist. Creating it and adding ".
+                "Domain '{$host->domain()}' does not exist. Creating it and adding ".
                 "{$host->toRoot()->value()} with ip ".$this->dropletIp->value()
             );
             $this->domain->create($host);
-        } else {
-            if (!$host->isRoot()) {
-                $this->configureDomainRecord($output, $host->toRoot());
-            }
         }
 
         $this->configureDomainRecord($output, $host);
@@ -103,7 +99,7 @@ class ConfigureNetworking extends Command
             }
         } else {
             $output->writeln(
-                "Domain record '{$host->value()}' did not exist. Creating it with ip ".$this->dropletIp->value()
+                "Domain record '{$host->value()}' does not exist. Creating it with ip ".$this->dropletIp->value()
             );
             $this->domainRecord->create($host);
         }

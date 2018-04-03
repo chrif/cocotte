@@ -1,0 +1,26 @@
+# https://docs.traefik.io/
+
+logLevel = "INFO"
+checkNewVersion = true
+defaultEntryPoints = ["http", "https"]
+sendAnonymousUsage = true
+
+[entryPoints]
+	[entryPoints.http]
+		address = ":80"
+		[entryPoints.http.redirect]
+			entryPoint = "https"
+	[entryPoints.https]
+		address = ":443"
+		[entryPoints.https.tls]
+
+[retry]
+
+[ping]
+
+[api]
+	[api.statistics]
+		recentErrors = 30
+
+[docker]
+	exposedbydefault = false

@@ -1,5 +1,0 @@
-#!/usr/bin/env sh
-
-set -eu
-
-docker-machine -s ${MACHINE_STORAGE_PATH} inspect --format='{{.Driver.IPAddress}}' ${MACHINE_NAME} 2>&1

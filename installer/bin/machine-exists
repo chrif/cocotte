@@ -1,0 +1,9 @@
+#!/bin/sh
+
+set -eu
+
+readonly exists=$(docker-machine -s ${MACHINE_STORAGE_PATH} ls -q ${COCOTTE_MACHINE})
+
+if [ "$exists" = ${COCOTTE_MACHINE} ]; then echo 1;
+else echo 0;
+fi

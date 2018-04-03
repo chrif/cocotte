@@ -12,7 +12,6 @@ use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\Yaml\Yaml;
 
-
 class CocotteConfiguration
 {
 
@@ -73,8 +72,8 @@ class CocotteConfiguration
                 ->arrayNode(DropletValues::DROPLET)
                     ->isRequired()
                     ->children()
-                        ->scalarNode(DropletName::NAME)->defaultValue(getenv('MACHINE_NAME'))->cannotBeEmpty()->end()
-                        ->scalarNode(DropletIp::IP)->defaultValue(exec("sh /installer/machine-ip"))->cannotBeEmpty()->end()
+                        ->scalarNode(DropletName::NAME)->defaultValue(getenv('COCOTTE_MACHINE'))->cannotBeEmpty()->end()
+                        ->scalarNode(DropletIp::IP)->defaultValue(exec("machine-ip"))->cannotBeEmpty()->end()
                     ->end()
                 ->end()
             ->end();

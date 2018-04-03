@@ -1,0 +1,6 @@
+#!/bin/sh
+
+set -eu
+
+console cocotte:configure-networking --remove ${TRAEFIK_UI_HOST}
+docker-machine -s ${MACHINE_STORAGE_PATH} rm -y ${COCOTTE_MACHINE} || exit 1;

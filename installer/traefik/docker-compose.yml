@@ -1,0 +1,37 @@
+version: '3'
+
+services:
+  traefik:
+    build: .
+    container_name: traefik
+    restart: always
+    # http://yaml-multiline.info/
+    command: "
+              -c /opt/app/traefik.prod.toml
+              ${ACME_CONFIG:-}
+              "
+    networks:
+      - traefik
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - src:/opt/app
+      - ssl:/opt/ssl
+    labels:
+    - "traefik.docker.network=traefik"
+    - "traefik.enable=true"
+    - "traefik.frontend.auth.basic=${APP_AUTH_BASIC}"
+    - "traefik.frontend.rule=Host:${APP_HOSTS}"
+    - "traefik.port=8080"
+
+volumes:
+  src:
+  ssl:
+    external:
+      name: traefikssl
+
+networks:
+  traefik:
+    external: true

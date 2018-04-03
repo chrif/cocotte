@@ -1,0 +1,18 @@
+# https://docs.traefik.io/
+
+logLevel = "INFO"
+defaultEntryPoints = ["http"]
+
+[entryPoints]
+	[entryPoints.http]
+		address = ":80"
+	[entryPoints.api]
+		address = ":8080"
+
+[retry]
+
+[api]
+	entryPoint = "api"
+
+[docker]
+	exposedbydefault = false

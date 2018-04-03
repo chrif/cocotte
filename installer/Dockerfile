@@ -1,13 +1,9 @@
-# docker run --rm  chrif/docker:17.12.0-ce cat /etc/alpine-release -> 3.7.0
-FROM chrif/docker:17.12.0-ce AS docker
-RUN apk del php7
-RUN curl -L https://github.com/docker/machine/releases/download/v0.13.0/docker-machine-`uname -s`-`uname -m` >/tmp/docker-machine && \
-    install /tmp/docker-machine /usr/local/bin/docker-machine
-RUN rm -rf /tmp/* /var/cache/apk/*
+FROM chrif/cocotte-base
 
-# docker run --rm chrif/php:7.2.3-fpm-alpine3.7 cat /etc/alpine-release -> 3.7.0
-FROM chrif/php:7.2.3-fpm-alpine3.7
-COPY --from=docker / /
+# for detection to work in https://github.com/docker/machine/blob/3f20d202a2dad68f3c8d745f99f2439fb79454c9/commands/env.go#L223
+ENV SHELL /bin/sh
+
+# php
 WORKDIR /installer/php
 COPY ./php/composer.json ./
 COPY ./php/composer.lock ./
@@ -15,18 +11,28 @@ COPY ./php/composer.lock ./
 RUN composer install --no-scripts --no-autoloader
 COPY ./php ./
 RUN composer install
-RUN chmod +x /installer/php/bin/console
-COPY php.ini /usr/local/etc/php/php.ini
+COPY php.ini /etc/php7/conf.d/zzz-php.ini
 
+#traefik
+WORKDIR /installer/traefik
+COPY ./traefik ./
+
+# entrypoint
 WORKDIR /usr/local/bin/
 COPY cocotte-entrypoint.sh ./
 RUN chmod +x cocotte-entrypoint.sh
 ENTRYPOINT ["cocotte-entrypoint.sh"]
 
-ENV DIGITAL_OCEAN_API_TOKEN xxxxx
-ENV MACHINE_NAME cocotte
-ENV MACHINE_STORAGE_PATH /host/machine
+# commands
+WORKDIR /installer/bin
+COPY ./bin ./
+CMD ["install"]
 
-WORKDIR /installer/
-COPY create remove machine-ip machine-is-running ./
-CMD ["sh", "create"]
+# setup executables
+RUN chmod +x /installer/bin/* /installer/php/bin/* /installer/php/vendor/bin/*
+ENV PATH="/installer/bin:/installer/php/bin:/installer/php/vendor/bin:${PATH}"
+
+ARG GIT_COMMIT_ID
+ENV GIT_COMMIT_ID ${GIT_COMMIT_ID}
+
+WORKDIR /installer

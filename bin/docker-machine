@@ -1,0 +1,6 @@
+#!/bin/sh
+
+set -eu
+
+# eval $(./bin/docker-machine env)
+docker-machine -s host/machine "$@"
