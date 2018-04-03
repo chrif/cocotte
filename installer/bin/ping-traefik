@@ -14,7 +14,7 @@ function traefikIsReady()
     return $ret === 0 && $httpStatus == 200;
 }
 
-for ($i = 0; $i < 12; $i++) {
+for ($i = 0; $i < 6; $i++) {
     if (traefikIsReady()) {
         echo "\n";
         exit(0);

@@ -12,21 +12,23 @@ function certIsValid($host)
     if ($ret === 91) {
         return true;
     } else {
-        fwrite(STDERR, implode("\n", $out));
+        fwrite(STDERR, implode("\n", $out)."\n");
+
         return false;
     }
 }
 
 $host = $argv[1];
+$try = $argv[2] ?? 1;
 
-for ($i = 0; $i < 12; $i++) {
+for ($i = 0; $i < $try; $i++) {
     if (certIsValid($host)) {
         echo "SSL Certificate for $host is valid.\n";
         exit(0);
+    } elseif (($i + 1) == $try) {
+        fwrite(STDERR, "Error: SSL Certificate for $host is invalid.\n");
+        exit(1);
     } else {
         sleep(5);
     }
 }
-
-fwrite(STDERR, "\nError: SSL Certificate for $host is invalid.\n");
-exit(1);

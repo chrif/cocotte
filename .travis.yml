@@ -30,7 +30,8 @@ script:
 - sh bin/installer export-traefik
 - sh bin/installer deploy-traefik
 - sh bin/installer ping-traefik
-- if [ "${ACME_ENABLED:-true}" = true ]; then sh bin/installer check-certificate ${TRAEFIK_UI_HOST}; else echo "Skipping SSL verification"; fi
+- if [ "${ACME_ENABLED:-true}" = true ]; then sh bin/installer check-certificate ${TRAEFIK_UI_HOST} 6; else echo "Skipping SSL verification"; fi
+- sh bin/installer machine-ssh docker logs -t traefik
 - if [ "${KEEP_MACHINE_AFTER:-false}" = false ]; then sh bin/installer uninstall; else echo "Machine not removed."; fi
 
 env:
