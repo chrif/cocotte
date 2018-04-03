@@ -1,4 +1,4 @@
-# Cocotte
+# Cocotte [![Build Status](https://travis-ci.org/chrif/cocotte.svg?branch=master)](https://travis-ci.org/chrif/cocotte)
 
 Cocotte aims at easing the learning curve for web developers starting with cloud hosting and application containerization. You get a basic and affordable installation, allowing you to focus on your project(s) first, and learn about your infrastructure later:
 
@@ -11,10 +11,10 @@ Cocotte aims at easing the learning curve for web developers starting with cloud
 
 ```
 $ cocotte install
-$ cocotte add --name="my-symfony-app" --hostname="app1.mydomain.com"
-$ cocotte add --name="my-static-website" --hostname="app2.mydomain.com"
-$ cocotte add --name="my-drupal-site" --hostname="app3.mydomain.com"
-$ cocotte add --name="my-nodejs-app" --hostname="app4.mydomain.com"
+$ cocotte add --name="my-symfony-app" --host="app1.mydomain.com"
+$ cocotte add --name="my-static-website" --host="app2.mydomain.com"
+$ cocotte add --name="my-drupal-site" --host="app3.mydomain.com"
+$ cocotte add --name="my-nodejs-app" --host="app4.mydomain.com"
 
 $ curl https://app1.mydomain.com
 Served by Nginx
@@ -27,10 +27,10 @@ Served by Node.js
 ```
 
 These applications/websites are:
- * all on the same virtual machine in the cloud
- * all listening on the port 80 and 443 
- * each using a valid SSL certificate
- * each running on a different operating system
+* all on the same virtual machine in the cloud
+* all listening to the same ports
+* each using a valid SSL certificate
+* each running on a different operating system
 
 The cost for all this is only 5$ a month, assuming the cheapest cloud machine, and that all these apps can share 1GB memory and 20GB disk, which they can, thanks to application containerization.
 
@@ -45,7 +45,7 @@ Meet Cocotte, a 4th option.
 
 Cocotte is a free cloud installer for hosting multiple containerized applications, each accessible through https with a different hostname, but all hosted on one cloud machine at 5$ a month. This is the only cost for the infrastructure that Cocotte puts in place.
 
-Cocotte is just an installer though. Eventually, you will have to learn how it works, but as opposed to a solution that would lock you in, you are in control once the cloud machine is provisioned, and you don't need Cocotte anymore. 
+As opposed to a solution that would lock you in for further maintenance, Cocotte is just an one-time installer. Once the cloud machine is provisioned, you don't need Cocotte anymore. So you will have to RTFM eventually, but when you do, you will have full control over every aspect of your installation.
 
 Optionally, and in the hope to get you started even faster, Cocotte has a template feature for adding new Docker applications to your infrastructure. It generates deployment scripts for a https web server, in a folder ready for source control. Two templates are available, a simple web server with a "Hello world" page, and a Symfony 4 application. The intended way of developing and deploying with these application models is <a href="#documentation">documented</a>.
 
