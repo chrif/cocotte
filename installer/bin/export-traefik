@@ -9,7 +9,7 @@ fi
 
 rm -rf /tmp/traefik
 
-rsync -rq /installer/traefik /tmp
+rsync -rq /installer/template/traefik /tmp
 
 rm -rf /tmp/traefik/.env \
     /tmp/traefik/.env-override \
