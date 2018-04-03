@@ -19,10 +19,14 @@ function certIsValid($host)
 
 $host = $argv[1];
 
-if (certIsValid($host)) {
-    echo "SSL Certificate for $host is valid.\n";
-    exit(0);
-} else {
-    echo "\nError: SSL Certificate for $host is invalid.\n";
-    exit(1);
+for ($i = 0; $i < 12; $i++) {
+    if (certIsValid($host)) {
+        echo "SSL Certificate for $host is valid.\n";
+        exit(0);
+    } else {
+        sleep(5);
+    }
 }
+
+fwrite(STDERR, "\nError: SSL Certificate for $host is invalid.\n");
+exit(1);
