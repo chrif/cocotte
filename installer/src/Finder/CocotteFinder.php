@@ -8,7 +8,7 @@ final class CocotteFinder extends \Symfony\Component\Finder\Finder implements Fi
     {
         $search = new \SplFileInfo($realPath);
 
-        return CocotteFinder::create()->in($search->getPath())->filter(
+        return $this->in($search->getPath())->filter(
             function (\SplFileInfo $found) use ($search) {
                 return $search->getRealPath() === $found->getRealPath();
             }
