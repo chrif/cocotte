@@ -1,15 +1,13 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 namespace Chrif\Cocotte\DigitalOcean;
 
-use Chrif\Cocotte\Configuration\App\AppHost;
-use Chrif\Cocotte\Configuration\Droplet\DropletIp;
+use Chrif\Cocotte\Configuration\AppHost;
+use Chrif\Cocotte\Configuration\MachineIp;
 use DigitalOceanV2\Api;
 use DigitalOceanV2\Entity;
 
-class Domain
+final class Domain
 {
 
     /**
@@ -18,32 +16,32 @@ class Domain
     private $domainApi;
 
     /**
-     * @var DropletIp
+     * @var MachineIp
      */
-    private $dropletIp;
+    private $machineIp;
 
     /**
      * @param Api\Domain $domainApi
-     * @param DropletIp $dropletIp
+     * @param MachineIp $machineIp
      */
-    public function __construct(Api\Domain $domainApi, DropletIp $dropletIp)
+    public function __construct(Api\Domain $domainApi, MachineIp $machineIp)
     {
         $this->domainApi = $domainApi;
-        $this->dropletIp = $dropletIp;
+        $this->machineIp = $machineIp;
     }
 
     public function create(AppHost $host): Entity\Domain
     {
         return $this->domainApi->create(
-            $host->domain(),
-            $this->dropletIp->value()
+            $host->domainName(),
+            $this->machineIp->value()
         );
     }
 
     public function delete(AppHost $host): void
     {
         $this->domainApi->delete(
-            $host->domain()
+            $host->domainName()
         );
     }
 
@@ -52,7 +50,7 @@ class Domain
         $domains = $this->domainApi->getAll();
 
         foreach ($domains as $domain) {
-            if ($domain->name === $host->domain()) {
+            if ($domain->name === $host->domainName()) {
                 return true;
             }
         }

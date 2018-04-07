@@ -6,6 +6,9 @@ set -a
 . ./.env
 set +a
 
+# enforce that variables are set
+docker-machine -s "${MACHINE_STORAGE_PATH}" env ${COCOTTE_MACHINE} > /dev/null
+
 eval $(docker-machine -s "${MACHINE_STORAGE_PATH}" env ${COCOTTE_MACHINE})
 
 [ "${ACME_ENABLED:-true}" = true ] && export ACME_CONFIG=$(cat <<END

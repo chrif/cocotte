@@ -2,6 +2,7 @@
 
 namespace Chrif\Cocotte\Configuration\App;
 
+use Chrif\Cocotte\Configuration\AppName;
 use PHPUnit\Framework\TestCase;
 
 class AppNameTest extends TestCase

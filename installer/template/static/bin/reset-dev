@@ -1,0 +1,6 @@
+#!/bin/sh
+
+set -eu
+
+eval $(docker-machine env -u)
+docker-compose down -v --remove-orphans

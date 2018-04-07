@@ -1,15 +1,12 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 namespace Chrif\Cocotte\Configuration;
 
-use Chrif\Cocotte\CocotteConfiguration;
+use Assert\Assertion;
 
-class ApiToken implements ConfigurationValue
+final class ApiToken implements EnvironmentValue
 {
-
-    const API_TOKEN = 'api_token';
+    const DIGITAL_OCEAN_API_TOKEN = 'DIGITAL_OCEAN_API_TOKEN';
 
     /**
      * @var string
@@ -18,12 +15,13 @@ class ApiToken implements ConfigurationValue
 
     public function __construct(string $value)
     {
+        Assertion::notEmpty($value);
         $this->value = $value;
     }
 
-    public static function fromRoot(CocotteConfiguration $configuration): self
+    public static function fromEnv()
     {
-        return new self($configuration->value()[self::API_TOKEN]);
+        return new self(getenv(self::DIGITAL_OCEAN_API_TOKEN));
     }
 
     public function value(): string

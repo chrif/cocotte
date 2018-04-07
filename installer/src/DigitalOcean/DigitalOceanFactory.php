@@ -1,6 +1,4 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 namespace Chrif\Cocotte\DigitalOcean;
 
@@ -8,7 +6,7 @@ use Assert\Assertion;
 use Chrif\Cocotte\Configuration\ApiToken;
 use DigitalOceanV2\Adapter\AdapterInterface;
 
-class DigitalOceanFactory
+final class DigitalOceanFactory
 {
 
     public function adapter(string $adapterClass, ApiToken $token): AdapterInterface

@@ -32,6 +32,7 @@ for ($i = 0; $i < $try; $i++) {
         fwrite(STDERR, "Error: SSL Certificate for $host is invalid.\n");
         exit(1);
     } else {
+        echo "Waiting 5 seconds before trying again\n";
         sleep(5);
     }
 }

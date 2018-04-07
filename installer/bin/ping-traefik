@@ -14,7 +14,7 @@ function traefikIsReady()
     return $ret === 0 && $httpStatus == 200;
 }
 
-$try = $argv[1] ?? 6;
+$try = $argv[1] ?? 1;
 
 for ($i = 0; $i < $try; $i++) {
     if (traefikIsReady()) {
@@ -24,6 +24,7 @@ for ($i = 0; $i < $try; $i++) {
         fwrite(STDERR, "Error: timeout waiting for traefik.\n");
         exit(1);
     } else {
+        echo "Waiting 5 seconds before trying again\n";
         sleep(5);
     }
 }

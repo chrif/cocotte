@@ -8,15 +8,21 @@ COPY ./composer.json ./
 COPY ./composer.lock ./
 # https://sentinelstand.com/article/composer-install-in-dockerfile-without-breaking-cache
 RUN composer install --no-scripts --no-autoloader
-COPY . ./
+COPY ./bin ./bin
+COPY ./config ./config
+COPY ./phpunit.xml.dist ./
+COPY ./src ./src
+COPY ./template ./template
+COPY ./tests ./tests
+COPY ./var ./var
+COPY ./etc/php.ini /etc/php7/conf.d/zzz-php.ini
 RUN composer install
-COPY etc/php.ini /etc/php7/conf.d/zzz-php.ini
 
 # setup executables
 RUN chmod +x /installer/bin/* /installer/vendor/bin/*
 ENV PATH="/installer/bin:/installer/vendor/bin:${PATH}"
 
-ARG GIT_COMMIT_ID
+ARG GIT_COMMIT_ID=dev
 ENV GIT_COMMIT_ID ${GIT_COMMIT_ID}
 
 ENTRYPOINT ["cocotte-entrypoint"]

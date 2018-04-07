@@ -1,6 +1,6 @@
 parameters:
-  cocotte.resource: ~
   api.adapter.class: DigitalOceanV2\Adapter\GuzzleHttpAdapter
+  console.output.verbosity: !php/const Symfony\Component\Console\Output\OutputInterface::VERBOSITY_NORMAL
 
 services:
   _defaults:
@@ -8,20 +8,40 @@ services:
       public: true
 
   # configuration
-  Chrif\Cocotte\CocotteConfiguration:
-    factory: ['Chrif\Cocotte\CocotteConfiguration', fromResource]
-    arguments: ["%cocotte.resource%"]
   Chrif\Cocotte\Configuration\:
     resource: '../src/Configuration/*'
     tags: ['configuration']
 
   # console
+  Symfony\Component\Console\Input\InputInterface:
+    class: Symfony\Component\Console\Input\ArgvInput
+  Symfony\Component\Console\Output\OutputInterface:
+    class: Symfony\Component\Console\Output\ConsoleOutput
+    arguments:
+      - '%console.output.verbosity%'
+  Chrif\Cocotte\Console\Style:
+    class: Chrif\Cocotte\Console\CocotteStyle
   Symfony\Component\Console\Application:
     class: Symfony\Component\Console\Application
-    public: true
   Chrif\Cocotte\Command\:
     resource: '../src/Command/*'
     tags: ['console.command']
+
+  # filesystem
+  Chrif\Cocotte\Filesystem\Filesystem:
+    class: Chrif\Cocotte\Filesystem\CocotteFilesystem
+
+  # finder
+  Chrif\Cocotte\Finder\Finder:
+    class: Chrif\Cocotte\Finder\CocotteFinder
+
+  # shell
+  Chrif\Cocotte\Shell\ProcessRunner: ~
+  Chrif\Cocotte\Shell\VariableReplacer: ~
+  Chrif\Cocotte\Shell\EnvironmentSubstitution\SubstitutionFactory: ~
+
+  # template
+  Chrif\Cocotte\Template\StaticTemplateExporter: ~
 
   # api
   Chrif\Cocotte\DigitalOcean\:

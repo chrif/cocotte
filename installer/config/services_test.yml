@@ -1,0 +1,5 @@
+imports:
+  - { resource: 'services.yml' }
+
+parameters:
+  console.output.verbosity: !php/const Symfony\Component\Console\Output\OutputInterface::VERBOSITY_QUIET

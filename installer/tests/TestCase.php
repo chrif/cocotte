@@ -1,17 +1,14 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 namespace Chrif\Cocotte;
 
-use Chrif\Cocotte\Configuration\Droplet\DropletName;
+use Chrif\Cocotte\Configuration\MachineName;
 use Chrif\Cocotte\DependencyInjection\Application;
 use Chrif\Cocotte\DigitalOcean\Domain;
 use Chrif\Cocotte\DigitalOcean\DomainRecord;
 
 class TestCase extends \PHPUnit\Framework\TestCase
 {
-
     /**
      * @var Application
      */
@@ -28,8 +25,7 @@ class TestCase extends \PHPUnit\Framework\TestCase
     {
         if (!$this->application) {
             $this->application = new Application(
-                __DIR__.'/../config/services.yml',
-                __DIR__.'/../config/cocotte_test.yml'
+                __DIR__.'/../config/services_test.yml'
             );
         }
 
@@ -48,10 +44,10 @@ class TestCase extends \PHPUnit\Framework\TestCase
         return $this->application()->container()->get(DomainRecord::class);
     }
 
-    protected function dropletName(): DropletName
+    protected function machineName(): MachineName
     {
         /** @noinspection PhpIncompatibleReturnTypeInspection */
-        return $this->application()->container()->get(DropletName::class);
+        return $this->application()->container()->get(MachineName::class);
     }
 
 }

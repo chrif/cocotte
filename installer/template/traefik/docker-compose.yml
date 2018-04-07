@@ -5,7 +5,6 @@ services:
     build: .
     container_name: traefik
     restart: always
-    # http://yaml-multiline.info/
     command: "
               -c /opt/app/traefik.prod.toml
               ${ACME_CONFIG:-}

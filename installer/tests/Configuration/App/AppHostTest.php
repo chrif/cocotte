@@ -2,7 +2,7 @@
 
 namespace Chrif\Cocotte\Configuration\App;
 
-use DigitalOceanV2\Entity\Domain;
+use Chrif\Cocotte\Configuration\AppHost;
 use DigitalOceanV2\Entity\DomainRecord;
 use PHPUnit\Framework\TestCase;
 
@@ -11,94 +11,73 @@ class AppHostTest extends TestCase
 
     public function testDomain()
     {
-        $host = AppHost::fromRegularSyntax("foo.bar.org");
-        self::assertSame("bar.org", $host->domain());
+        $host = AppHost::parse("foo.bar.org");
+        self::assertSame("bar.org", $host->domainName());
 
-        $host = AppHost::fromRegularSyntax("bar.org");
-        self::assertSame("bar.org", $host->domain());
+        $host = AppHost::parse("bar.org");
+        self::assertSame("bar.org", $host->domainName());
 
-        $host = AppHost::fromRegularSyntax("www.bar.org");
-        self::assertSame("bar.org", $host->domain());
+        $host = AppHost::parse("www.bar.org");
+        self::assertSame("bar.org", $host->domainName());
     }
 
     public function testSubDomain()
     {
-        $host = AppHost::fromRegularSyntax("foo.bar.org");
-        self::assertSame("foo", $host->subDomain());
+        $host = AppHost::parse("foo.bar.org");
+        self::assertSame("foo", $host->recordName());
 
-        $host = AppHost::fromRegularSyntax("bar.org");
-        self::assertSame(AppHost::ROOT, $host->subDomain());
+        $host = AppHost::parse("bar.org");
+        self::assertSame(AppHost::DIGITAL_OCEAN_ROOT_RECORD, $host->recordName());
 
-        $host = AppHost::fromRegularSyntax("www.bar.org");
-        self::assertSame("www", $host->subDomain());
+        $host = AppHost::parse("www.bar.org");
+        self::assertSame("www", $host->recordName());
     }
 
     public function testValue()
     {
-        $host = AppHost::fromRegularSyntax("foo.bar.org");
-        self::assertSame("foo.bar.org", $host->value());
+        $host = AppHost::parse("foo.bar.org");
+        self::assertSame("foo.bar.org", $host->toString());
 
-        $host = AppHost::fromRegularSyntax("bar.org");
-        self::assertSame(AppHost::ROOT.".bar.org", $host->value());
+        $host = AppHost::parse("bar.org");
+        self::assertSame("bar.org", $host->toString());
 
-        $host = AppHost::fromRegularSyntax("www.bar.org");
-        self::assertSame("www.bar.org", $host->value());
-    }
-
-    public function testMatchDomain()
-    {
-        $host = AppHost::fromRegularSyntax("foo.bar.org");
-        self::assertTrue($host->matchDomain(new Domain(['name' => "bar.org"])));
-
-        $host = AppHost::fromRegularSyntax("bar.org");
-        self::assertTrue($host->matchDomain(new Domain(['name' => "bar.org"])));
-
-        $host = AppHost::fromRegularSyntax("www.bar.org");
-        self::assertTrue($host->matchDomain(new Domain(['name' => "bar.org"])));
+        $host = AppHost::parse("www.bar.org");
+        self::assertSame("www.bar.org", $host->toString());
     }
 
     public function testMatchDomainRecord()
     {
-        $host = AppHost::fromRegularSyntax("foo.bar.org");
+        $host = AppHost::parse("foo.bar.org");
         self::assertTrue($host->matchDomainRecord(new DomainRecord(['name' => "foo"])));
 
-        $host = AppHost::fromRegularSyntax("bar.org");
-        self::assertTrue($host->matchDomainRecord(new DomainRecord(['name' => AppHost::ROOT])));
+        $host = AppHost::parse("bar.org");
+        self::assertTrue($host->matchDomainRecord(new DomainRecord(['name' => AppHost::DIGITAL_OCEAN_ROOT_RECORD])));
 
-        $host = AppHost::fromRegularSyntax("www.bar.org");
+        $host = AppHost::parse("www.bar.org");
         self::assertTrue($host->matchDomainRecord(new DomainRecord(['name' => "www"])));
 
-        $host = AppHost::fromRegularSyntax("www.bar.org");
+        $host = AppHost::parse("www.bar.org");
         self::assertFalse($host->matchDomainRecord(new DomainRecord(['name' => "foo"])));
-    }
-
-    public function testEquals()
-    {
-        $host = AppHost::fromRegularSyntax("foo.bar.org");
-        self::assertTrue($host->equals(AppHost::fromRegularSyntax("foo.bar.org")));
-
-        $host = AppHost::fromRegularSyntax("foo.bar.org");
-        self::assertFalse($host->equals(AppHost::fromRegularSyntax("www.bar.org")));
     }
 
     public function testToRoot()
     {
-        $host = AppHost::fromRegularSyntax("foo.bar.org");
-        self::assertEquals(AppHost::fromRegularSyntax("bar.org"), $host->toRoot());
+        $host = AppHost::parse("foo.bar.org");
+        self::assertEquals(AppHost::parse("bar.org"), $host->toRoot());
 
-        $host = AppHost::fromRegularSyntax("bar.org");
-        self::assertEquals(AppHost::fromRegularSyntax("bar.org"), $host->toRoot());
+        $host = AppHost::parse("bar.org");
+        self::assertEquals(AppHost::parse("bar.org"), $host->toRoot());
 
-        $host = AppHost::fromRegularSyntax("foo.org");
-        self::assertNotEquals(AppHost::fromRegularSyntax("bar.org"), $host->toRoot());
+        $host = AppHost::parse("foo.org");
+        self::assertNotEquals(AppHost::parse("bar.org"), $host->toRoot());
     }
 
     public function testIsRoot()
     {
-        $host = AppHost::fromRegularSyntax("foo.bar.org");
+        $host = AppHost::parse("foo.bar.org");
         self::assertFalse($host->isRoot());
 
-        $host = AppHost::fromRegularSyntax("bar.org");
+        $host = AppHost::parse("bar.org");
         self::assertTrue($host->isRoot());
     }
 
@@ -106,14 +85,28 @@ class AppHostTest extends TestCase
      * @expectedException \Assert\AssertionFailedException
      * @expectedExceptionMessage List does not contain exactly 3 elements (2 given).
      */
-    public function testFromDigitalOceanInvalidRootSyntax()
+    public function testFromStringInvalidRootSyntax()
     {
-        AppHost::fromDigitalOceanSyntax("bar.org");
+        AppHost::fromString("bar.org");
     }
 
-    public function testFromDigitalOceanSyntax()
+    public function testFromStringSyntax()
     {
-        $host = AppHost::fromDigitalOceanSyntax("@.bar.org");
-        self::assertSame("@.bar.org", $host->value());
+        $host = AppHost::fromString("@.bar.org");
+        self::assertTrue($host->isRoot());
+        self::assertSame("@.bar.org", $host->rawValue());
     }
+
+    public function testToLocal()
+    {
+        $host = AppHost::parse("foo.bar.org");
+        $local = $host->toLocal();
+        self::assertSame('foo.bar.local', $local->toString());
+
+        $host = AppHost::parse("bar.org");
+        $local = $host->toLocal();
+        self::assertSame('bar.local', $local->toString());
+    }
+
+
 }

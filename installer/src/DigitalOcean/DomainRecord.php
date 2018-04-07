@@ -1,15 +1,13 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 namespace Chrif\Cocotte\DigitalOcean;
 
-use Chrif\Cocotte\Configuration\App\AppHost;
-use Chrif\Cocotte\Configuration\Droplet\DropletIp;
+use Chrif\Cocotte\Configuration\AppHost;
+use Chrif\Cocotte\Configuration\MachineIp;
 use DigitalOceanV2\Api;
 use DigitalOceanV2\Entity;
 
-class DomainRecord
+final class DomainRecord
 {
 
     const A = 'A';
@@ -25,20 +23,20 @@ class DomainRecord
     private $domain;
 
     /**
-     * @var DropletIp
+     * @var MachineIp
      */
-    private $dropletIp;
+    private $machineIp;
 
     /**
      * @param Api\DomainRecord $domainRecordApi
      * @param Domain $domain
-     * @param DropletIp $dropletIp
+     * @param MachineIp $machineIp
      */
-    public function __construct(Api\DomainRecord $domainRecordApi, Domain $domain, DropletIp $dropletIp)
+    public function __construct(Api\DomainRecord $domainRecordApi, Domain $domain, MachineIp $machineIp)
     {
         $this->domainRecordApi = $domainRecordApi;
         $this->domain = $domain;
-        $this->dropletIp = $dropletIp;
+        $this->machineIp = $machineIp;
     }
 
     public function update(AppHost $host): Entity\DomainRecord
@@ -46,19 +44,19 @@ class DomainRecord
         $record = $this->get($host);
 
         return $this->domainRecordApi->updateData(
-            $host->domain(),
+            $host->domainName(),
             $record->id,
-            $this->dropletIp->value()
+            $this->machineIp->value()
         );
     }
 
     public function create(AppHost $host): Entity\DomainRecord
     {
         return $this->domainRecordApi->create(
-            $host->domain(),
+            $host->domainName(),
             self::A,
-            $host->subDomain(),
-            $this->dropletIp->value()
+            $host->recordName(),
+            $this->machineIp->value()
         );
     }
 
@@ -67,14 +65,14 @@ class DomainRecord
         $record = $this->get($host);
 
         $this->domainRecordApi->delete(
-            $host->domain(),
+            $host->domainName(),
             $record->id
         );
     }
 
     public function get(AppHost $host): Entity\DomainRecord
     {
-        $records = $this->domainRecordApi->getAll($host->domain());
+        $records = $this->domainRecordApi->getAll($host->domainName());
 
         foreach ($records as $record) {
             if (!$this->isTypeARecord($record)) {
@@ -90,7 +88,7 @@ class DomainRecord
 
     public function exists(AppHost $host): bool
     {
-        $records = $this->domainRecordApi->getAll($host->domain());
+        $records = $this->domainRecordApi->getAll($host->domainName());
 
         foreach ($records as $record) {
             if (!$this->isTypeARecord($record)) {
@@ -106,7 +104,7 @@ class DomainRecord
 
     public function isUpToDate(AppHost $host): bool
     {
-        return $this->get($host)->data === $this->dropletIp->value();
+        return $this->get($host)->data === $this->machineIp->value();
     }
 
     private function isTypeARecord($record): bool
