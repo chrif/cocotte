@@ -4,7 +4,7 @@ namespace Chrif\Cocotte\Finder;
 
 final class CocotteFinder extends \Symfony\Component\Finder\Finder implements Finder
 {
-    public function exactFile(string $realPath): CocotteFinder
+    public function exactFile(string $realPath): Finder
     {
         $search = new \SplFileInfo($realPath);
 
