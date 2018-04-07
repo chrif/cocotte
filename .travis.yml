@@ -36,8 +36,8 @@ script:
 - ./bin/installer static-template test ${STATIC_TEST_HOST}
 - ./bin/installer check-online ${STATIC_TEST_HOST} 6
 - if [ "${ACME_ENABLED:-true}" = true ]; then ./bin/installer check-certificate ${STATIC_TEST_HOST} 6; else echo "Skipping SSL verification"; fi
-- if [ "${KEEP_MACHINE_AFTER:-false}" = false ]; then ./bin/installer uninstall; else echo "Machine not removed."; fi
 - if [ "${KEEP_MACHINE_AFTER:-false}" = false ]; then ./bin/installer configure-networking --remove ${STATIC_TEST_HOST}; else true; fi
+- if [ "${KEEP_MACHINE_AFTER:-false}" = false ]; then ./bin/installer uninstall; else echo "Machine not removed."; fi
 
 env:
   global:
