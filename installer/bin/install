@@ -3,5 +3,5 @@
 set -eu
 
 create-machine || exit 1
-export-traefik-template || exit 1
+export-traefik || exit 1
 deploy-traefik || exit 1
