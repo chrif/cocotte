@@ -1,3 +1,5 @@
+!/template/traefik/var/.gitignore
+!/var/.gitkeep
 /.dockerignore
 /.gitignore
 /Dockerfile
@@ -8,8 +10,6 @@
 /template/traefik/.env
 /template/traefik/.env-override
 /template/traefik/docker-compose.override.yml
-/template/traefik/var/
-/var
+/template/traefik/var/*
+/var/*
 /vendor
-!/template/traefik/var/.gitignore
-!/var/.gitkeep
