@@ -1,0 +1,37 @@
+#!/bin/sh
+
+set -eu
+
+set -a
+. ./.env
+set +a
+
+restore() {
+	local file=${1:-}
+
+	docker container create --name restore -v traefikssl:/opt/ssl alpine:3.7
+	docker cp \
+		var/acme/${file}.json \
+		restore:/opt/ssl/acme/${file}.json || exit 1
+
+	docker run --rm \
+		-v traefikssl:/opt/ssl \
+		--workdir=/opt/ssl \
+		alpine:3.7 \
+		sh -c "chmod 600 acme/${file}.json" || exit 1
+
+	docker rm restore
+}
+
+# enforce that variables are set
+docker-machine -s "${MACHINE_STORAGE_PATH}" env ${COCOTTE_MACHINE} > /dev/null
+
+eval $(docker-machine -s "${MACHINE_STORAGE_PATH}" env ${COCOTTE_MACHINE})
+docker volume create traefikssl
+docker run --rm \
+	-v traefikssl:/opt/ssl \
+	--workdir=/opt/ssl \
+	alpine:3.7 \
+	sh -c "mkdir -p acme && chmod 700 acme"
+restore "acme"
+restore "acme-staging"

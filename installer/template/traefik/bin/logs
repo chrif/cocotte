@@ -1,0 +1,13 @@
+#!/bin/sh
+
+set -eu
+
+set -a
+. ./.env
+set +a
+
+# enforce that variables are set
+docker-machine -s "${MACHINE_STORAGE_PATH}" env ${COCOTTE_MACHINE} > /dev/null
+
+eval $(docker-machine -s "${MACHINE_STORAGE_PATH}" env ${COCOTTE_MACHINE})
+docker logs -f traefik

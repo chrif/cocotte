@@ -9,12 +9,11 @@ fi
 
 rm -rf /tmp/traefik
 
-rsync -rq /installer/traefik /tmp
+rsync -rq /installer/template/traefik /tmp
 
 rm -rf /tmp/traefik/.env \
     /tmp/traefik/.env-override \
-    /tmp/traefik/docker-compose.override.yml \
-    /tmp/traefik/var/*
+    /tmp/traefik/docker-compose.override.yml
 
 cp /tmp/traefik/docker-compose.override.yml.dist /tmp/traefik/docker-compose.override.yml
 
@@ -22,10 +21,9 @@ cat << EOF > /tmp/traefik/.env
 APP_HOSTS=${TRAEFIK_UI_HOST}
 APP_AUTH_BASIC='$(htpasswd -bn ${TRAEFIK_UI_USERNAME} ${TRAEFIK_UI_PASSWORD})'
 ACME_EMAIL=${TRAEFIK_ACME_EMAIL}
+COCOTTE_MACHINE=${COCOTTE_MACHINE}
+MACHINE_STORAGE_PATH=${MACHINE_STORAGE_PATH}
 EOF
-
-find /tmp/traefik -type f -print0 | xargs -0 sed -i "s/\${COCOTTE_MACHINE}/${COCOTTE_MACHINE}/g"
-find /tmp/traefik -type f -print0 | xargs -0 sed -i "s#\${MACHINE_STORAGE_PATH}#${MACHINE_STORAGE_PATH}#g"
 
 rsync -rq /tmp/traefik /host
 

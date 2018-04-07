@@ -1,0 +1,9 @@
+version: '3'
+
+services:
+  traefik:
+    command: "
+              -c /opt/app/traefik.dev.toml
+              "
+    volumes:
+      - .:/opt/app

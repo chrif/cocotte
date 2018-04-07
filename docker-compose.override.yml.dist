@@ -6,15 +6,14 @@ services:
     volumes:
       - ./host:/host
       - ./installer:/installer
-      - ./installer/xdebug.ini:/etc/php7/conf.d/xdebug.ini
+      - ./installer/etc/xdebug.ini:/etc/php7/conf.d/xdebug.ini
+      - ./installer/etc/php.ini:/etc/php7/conf.d/zzz-php.ini
     environment:
       XDEBUG_CONFIG: "remote_host=${HOST_IP}"
       PHP_IDE_CONFIG: "serverName=cocotte"
       MACHINE_STORAGE_PATH: /absolute/path/to/host/pwd/machine
     env_file:
       .env
-    entrypoint: ["sh", "/installer/cocotte-entrypoint.sh"]
-    command: ["install"]
 
   travis:
     image: chrif/travis-cli

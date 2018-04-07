@@ -1,0 +1,31 @@
+#!/bin/sh
+
+set -eu
+
+if ! [ -e "docker-compose.override.yml" ]; then
+	echo "Copy docker-compose.override.yml.dist to docker-compose.override.yml before deploying dev"
+	exit 1
+fi
+
+if ! [ -e ".env-override" ]; then
+	echo "Copy .env-override.dist to .env-override before deploying dev"
+	exit 1
+fi
+
+set -a
+. ./.env
+. ./.env-override
+set +a
+
+eval $(docker-machine env -u)
+
+# take down
+docker-compose down -v --remove-orphans
+
+# build
+docker network create traefik  || true
+docker-compose -f docker-compose.yml build
+
+# bring up
+docker-compose up -d nginx
+docker logs -f ${APP_NAME}nginx

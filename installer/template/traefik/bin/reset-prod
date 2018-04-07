@@ -1,0 +1,18 @@
+#!/bin/sh
+
+set -eu
+
+set -a
+. ./.env
+set +a
+
+# enforce that variables are set
+docker-machine -s "${MACHINE_STORAGE_PATH}" env ${COCOTTE_MACHINE} > /dev/null
+
+eval $(docker-machine -s "${MACHINE_STORAGE_PATH}" env ${COCOTTE_MACHINE})
+sh bin/backup
+docker stop traefik || true
+docker rm traefik || true
+docker-compose down -v --remove-orphans
+docker volume rm traefikssl || true
+docker network rm traefik || true

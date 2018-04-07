@@ -3,6 +3,7 @@
 
 function certIsValid($host)
 {
+    echo "Requesting certificate\n";
     exec(
         "curl --cert-status --silent -S --stderr /dev/stdout https://$host",
         $out,
@@ -21,6 +22,8 @@ function certIsValid($host)
 $host = $argv[1];
 $try = $argv[2] ?? 1;
 
+echo "Trying up to $try times\n";
+
 for ($i = 0; $i < $try; $i++) {
     if (certIsValid($host)) {
         echo "SSL Certificate for $host is valid.\n";
@@ -29,6 +32,7 @@ for ($i = 0; $i < $try; $i++) {
         fwrite(STDERR, "Error: SSL Certificate for $host is invalid.\n");
         exit(1);
     } else {
+        echo "Waiting 5 seconds before trying again\n";
         sleep(5);
     }
 }

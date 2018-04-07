@@ -21,24 +21,30 @@ before_install:
 - sudo mv docker-compose /usr/local/bin
 
 install:
+- chmod +x bin/*
 - docker-compose build installer
 
 script:
-- sh bin/installer phpunit --exclude-group=functional
-- sh bin/installer create-machine
-- sh bin/installer phpunit --group=functional
-- sh bin/installer export-traefik
-- sh bin/installer deploy-traefik
-- sh bin/installer ping-traefik
-- if [ "${ACME_ENABLED:-true}" = true ]; then sh bin/installer check-certificate ${TRAEFIK_UI_HOST} 6; else echo "Skipping SSL verification"; fi
-- sh bin/installer machine-ssh docker logs -t traefik
-- if [ "${KEEP_MACHINE_AFTER:-false}" = false ]; then sh bin/installer uninstall; else echo "Machine not removed."; fi
+- ./bin/installer phpunit --exclude-group=functional
+- ./bin/installer create-machine
+- ./bin/installer phpunit --group=functional
+- ./bin/installer export-traefik
+- ./bin/installer deploy-traefik
+- ./bin/installer ping-traefik 6
+- if [ "${ACME_ENABLED:-true}" = true ]; then ./bin/installer check-certificate ${TRAEFIK_UI_HOST} 6; else echo "Skipping SSL verification"; fi
+- ./bin/installer machine-ssh docker logs -t traefik
+- ./bin/installer static-template test ${STATIC_TEST_HOST}
+- ./bin/installer check-online ${STATIC_TEST_HOST} 6
+- if [ "${ACME_ENABLED:-true}" = true ]; then ./bin/installer check-certificate ${STATIC_TEST_HOST} 6; else echo "Skipping SSL verification"; fi
+- if [ "${KEEP_MACHINE_AFTER:-false}" = false ]; then ./bin/installer configure-networking --remove ${STATIC_TEST_HOST}; else true; fi
+- if [ "${KEEP_MACHINE_AFTER:-false}" = false ]; then ./bin/installer uninstall; else echo "Machine not removed."; fi
 
 env:
   global:
     - COCOTTE_MACHINE=cocotte-travis-${TRAVIS_BUILD_ID}
     # DIGITAL_OCEAN_API_TOKEN (set in in repo settings)
     - GIT_COMMIT_ID=${TRAVIS_COMMIT}
+    # STATIC_TEST_HOST (set in in repo settings)
     # TRAEFIK_ACME_EMAIL (set in in repo settings)
     # TRAEFIK_UI_HOST (set in in repo settings)
     # TRAEFIK_UI_PASSWORD

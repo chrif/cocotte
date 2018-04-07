@@ -14,14 +14,17 @@ function traefikIsReady()
     return $ret === 0 && $httpStatus == 200;
 }
 
-for ($i = 0; $i < 6; $i++) {
+$try = $argv[1] ?? 1;
+
+for ($i = 0; $i < $try; $i++) {
     if (traefikIsReady()) {
         echo "\n";
         exit(0);
+    } elseif (($i + 1) == $try) {
+        fwrite(STDERR, "Error: timeout waiting for traefik.\n");
+        exit(1);
     } else {
+        echo "Waiting 5 seconds before trying again\n";
         sleep(5);
     }
 }
-
-fwrite(STDERR, "\nError: timeout waiting for traefik.\n");
-exit(1);

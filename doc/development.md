@@ -5,9 +5,9 @@
 1. Configure these dist files with 
 	* .env.dist
 	* docker-compose.override.yml.dist
-	* installer/traefik/docker-compose.override.yml.dist
-	* installer/traefik/.env-override.dist
-	* installer/traefik/.env.dist
+	* installer/template/traefik/docker-compose.override.yml.dist
+	* installer/template/traefik/.env-override.dist
+	* installer/template/traefik/.env.dist
 1. Build installer
 	```
 	docker-compose build installer
@@ -21,7 +21,7 @@
 	```
 * with `docker run` (no mount, like prod)
 	```
-	(cd host; sh ../bin/installer test)
+	(cd host; ../bin/installer test)
 	```
 ### Remove machine and networking for traefik
 * with `docker-compose.override.yml` (with bind mount)
@@ -30,7 +30,7 @@
 	```
 * with `docker run` (no mount, like prod)
 	```
-	(cd host; sh ../bin/installer test remove)
+	(cd host; ../bin/installer test remove)
 	```
 ### Run PHP test suite
 ```

@@ -1,0 +1,33 @@
+#!/bin/sh
+
+set -eu
+
+set -a
+. ./.env
+set +a
+
+backup() {
+	local file=${1:-}
+
+	touch var/acme/${file}.json
+
+	cp var/acme/${file}.json "var/acme/${file}.json.$(date +"%Y_%m_%d_%I_%M_%p")" || exit 1
+
+	docker container create --name backup -v traefikssl:/opt/ssl alpine:3.7
+
+	docker cp \
+		backup:/opt/ssl/acme/${file}.json \
+		var/acme/${file}.json || exit 1
+
+	docker rm backup;
+
+}
+
+# enforce that variables are set
+docker-machine -s "${MACHINE_STORAGE_PATH}" env ${COCOTTE_MACHINE} > /dev/null
+
+eval $(docker-machine -s "${MACHINE_STORAGE_PATH}" env ${COCOTTE_MACHINE})
+docker volume create traefikssl
+backup "acme"
+backup "acme-staging"
+

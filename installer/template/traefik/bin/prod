@@ -1,0 +1,35 @@
+#!/bin/sh
+
+set -eu
+
+set -a
+. ./.env
+set +a
+
+# enforce that variables are set
+docker-machine -s "${MACHINE_STORAGE_PATH}" env ${COCOTTE_MACHINE} > /dev/null
+
+eval $(docker-machine -s "${MACHINE_STORAGE_PATH}" env ${COCOTTE_MACHINE})
+
+[ "${ACME_ENABLED:-true}" = true ] && export ACME_CONFIG=$(cat <<END
+	--acme.email=${ACME_EMAIL}
+	--acme.entrypoint=https
+	--acme.httpchallenge.entrypoint=http
+	--acme.onhostrule=true
+	--acme.storage=${ACME_STORAGE:-/opt/ssl/acme/acme.json}
+	${ACME_CASERVER:-}
+END
+)
+
+# take down
+docker stop traefik || true
+docker rm traefik || true
+docker-compose down -v --remove-orphans
+
+# build
+docker network create traefik  || true
+docker volume create traefikssl  || true
+docker-compose -f docker-compose.yml build
+
+# bring up
+docker-compose -f docker-compose.yml up -d traefik
