@@ -1,5 +1,3 @@
-!/template/traefik/var/.gitignore
-!/var/.gitkeep
 /.dockerignore
 /.gitignore
 /Dockerfile
@@ -13,3 +11,5 @@
 /template/traefik/var/
 /var
 /vendor
+!/template/traefik/var/.gitignore
+!/var/.gitkeep
