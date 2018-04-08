@@ -8,12 +8,12 @@
 	* installer/template/traefik/docker-compose.override.yml.dist
 	* installer/template/traefik/.env-override.dist
 	* installer/template/traefik/.env.dist
-1. Build installer
+1. Build Cocotte
 	```
-	docker-compose build installer
+	docker-compose build cocotte
 	```
 
-## Run the installer
+## Running the installer
 ### Create machine and deploy traefik
 * with `docker-compose.override.yml` (with bind mount)
 	```
@@ -44,3 +44,12 @@ docker-compose run --rm installer console
 ```
 docker-compose run --rm installer ash
 ```
+## Running the wizard
+* with `docker-compose.override.yml` (with bind mount)
+	```
+	docker-compose run --rm wizard
+	```
+* with `docker run` (no mount, like prod)
+	```
+	./bin/wizard
+	```

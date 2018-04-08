@@ -3,6 +3,7 @@
 namespace Chrif\Cocotte\Console;
 
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Question\Question;
 use Symfony\Component\Console\Style\StyleInterface;
 
 interface Style extends OutputInterface, StyleInterface
@@ -18,4 +19,17 @@ interface Style extends OutputInterface, StyleInterface
      * @param bool $escape Whether to escape the message
      */
     public function block($messages, $type = null, $style = null, $prefix = ' ', $padding = false, $escape = true);
+
+    /**
+     * @param Question $question
+     * @return mixed
+     */
+    public function askQuestion(Question $question);
+
+    /**
+     * Formats a command comment.
+     *
+     * @param string|array $message
+     */
+    public function comment($message);
 }

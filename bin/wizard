@@ -1,0 +1,5 @@
+#!/bin/sh
+
+set -eu
+
+docker run --rm -it chrif/cocotte wizard
