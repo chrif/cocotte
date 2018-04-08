@@ -2,7 +2,9 @@
 
 namespace Chrif\Cocotte\Wizard;
 
+use Chrif\Cocotte\Configuration\AppHost;
 use Chrif\Cocotte\Console\Style;
+use Chrif\Cocotte\DigitalOcean\DnsValidator;
 use Chrif\Cocotte\Filesystem\Filesystem;
 use DigitalOceanV2\Adapter\GuzzleHttpAdapter;
 use DigitalOceanV2\DigitalOceanV2;
@@ -44,20 +46,63 @@ final class WizardCommand extends Command
         $this->help(
             [
                 "This wizard helps you get started with Cocotte.",
+                "It assumes that you own a domain name and can change its name servers.",
                 "It does not save the information it collects.",
                 "Visit https://github.com/chrif/cocotte for Cocotte documentation.",
                 "Press CTRL+D at any moment to quit.",
             ]
         );
         $this->style->ask("Press Enter to continue");
+
+        // required
         $token = $this->getToken();
         $projectPath = $this->getProjectPath();
-        $acmeEmail = $this->getAcmeEmail();
+        $traefikUiHost = $this->getTraefikUiHost();
     }
 
-    private function getAcmeEmail()
+    private function getTraefikUiHost()
     {
+        $this->style->section("Traefik UI domain");
+        $this->help(
+            [
+                "This the fully qualified domain name for your Traefik UI.",
+                "The nameservers of the domain must point to Digital Ocean. How to:",
+                "www.digitalocean.com/community/tutorials/how-to-point-to-digitalocean-nameservers-from-common-domain-registrars",
+            ]
+        );
 
+        return $this->style->askQuestion(
+            (new Question(
+                "Enter Traefik UI domain (e.g., traefik.mydomain.com)"
+            ))
+                ->setNormalizer(
+                    function ($answer): string {
+                        return trim((string)$answer);
+                    }
+                )
+                ->setValidator(
+                    function (string $answer): string {
+                        if (!$answer) {
+                            throw new \Exception('No answer given. Try again.');
+                        }
+
+                        $host = AppHost::parse($answer);
+
+                        try {
+                            $dnsValidator = new DnsValidator();
+                            $dnsValidator->validate($host);
+                        } catch (\Exception $e) {
+                            throw new \Exception(
+                                "Failed to validate name servers of '$host' with message:\n".$e->getMessage()
+                            );
+                        }
+
+                        $this->style->success("Traefik UI domain '$host' is valid.");
+
+                        return $host->toString();
+                    }
+                )
+        );
     }
 
     private function getToken()
@@ -76,12 +121,12 @@ final class WizardCommand extends Command
                 "Enter your Digital Ocean API token"
             ))
                 ->setNormalizer(
-                    function ($answer) {
+                    function ($answer): string {
                         return trim((string)$answer);
                     }
                 )
                 ->setValidator(
-                    function ($answer) {
+                    function (string $answer): string {
                         if (!$answer) {
                             throw new \Exception('No answer given. Try again.');
                         }
@@ -119,12 +164,12 @@ final class WizardCommand extends Command
                 "Enter the absolute path to your new Cocotte project (e.g., /home/joe/dev/cocotte)"
             ))
                 ->setNormalizer(
-                    function ($answer) {
+                    function ($answer): string {
                         return trim((string)$answer);
                     }
                 )
                 ->setValidator(
-                    function ($answer) {
+                    function (string $answer): string {
                         if (!$answer) {
                             throw new \Exception('No answer given. Try again.');
                         }

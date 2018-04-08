@@ -9,7 +9,7 @@ use PHPUnit\Framework\TestCase;
 class AppHostTest extends TestCase
 {
 
-    public function testDomain()
+    public function test_domain()
     {
         $host = AppHost::parse("foo.bar.org");
         self::assertSame("bar.org", $host->domainName());
@@ -21,7 +21,7 @@ class AppHostTest extends TestCase
         self::assertSame("bar.org", $host->domainName());
     }
 
-    public function testSubDomain()
+    public function test_sub_domain()
     {
         $host = AppHost::parse("foo.bar.org");
         self::assertSame("foo", $host->recordName());
@@ -33,7 +33,7 @@ class AppHostTest extends TestCase
         self::assertSame("www", $host->recordName());
     }
 
-    public function testValue()
+    public function test_value()
     {
         $host = AppHost::parse("foo.bar.org");
         self::assertSame("foo.bar.org", $host->toString());
@@ -45,7 +45,7 @@ class AppHostTest extends TestCase
         self::assertSame("www.bar.org", $host->toString());
     }
 
-    public function testMatchDomainRecord()
+    public function test_match_domain_record()
     {
         $host = AppHost::parse("foo.bar.org");
         self::assertTrue($host->matchDomainRecord(new DomainRecord(['name' => "foo"])));
@@ -60,7 +60,7 @@ class AppHostTest extends TestCase
         self::assertFalse($host->matchDomainRecord(new DomainRecord(['name' => "foo"])));
     }
 
-    public function testToRoot()
+    public function test_to_root()
     {
         $host = AppHost::parse("foo.bar.org");
         self::assertEquals(AppHost::parse("bar.org"), $host->toRoot());
@@ -72,7 +72,7 @@ class AppHostTest extends TestCase
         self::assertNotEquals(AppHost::parse("bar.org"), $host->toRoot());
     }
 
-    public function testIsRoot()
+    public function test_is_root()
     {
         $host = AppHost::parse("foo.bar.org");
         self::assertFalse($host->isRoot());
@@ -85,19 +85,19 @@ class AppHostTest extends TestCase
      * @expectedException \Assert\AssertionFailedException
      * @expectedExceptionMessage List does not contain exactly 3 elements (2 given).
      */
-    public function testFromStringInvalidRootSyntax()
+    public function test_from_string_invalid_root_syntax()
     {
         AppHost::fromString("bar.org");
     }
 
-    public function testFromStringSyntax()
+    public function test_from_string_syntax()
     {
         $host = AppHost::fromString("@.bar.org");
         self::assertTrue($host->isRoot());
         self::assertSame("@.bar.org", $host->rawValue());
     }
 
-    public function testToLocal()
+    public function test_to_local()
     {
         $host = AppHost::parse("foo.bar.org");
         $local = $host->toLocal();
@@ -108,5 +108,22 @@ class AppHostTest extends TestCase
         self::assertSame('bar.local', $local->toString());
     }
 
+    /**
+     * @expectedException \Exception
+     * @expectedExceptionMessage 'org' does not have a first and second level domains
+     */
+    public function test_exception_on_less_than_2_levels()
+    {
+        AppHost::parse("org");
+    }
+
+    /**
+     * @expectedException \Exception
+     * @expectedExceptionMessage 'a.b.c.d' is a domain with more than 3 levels.
+     */
+    public function test_exception_on_more_than_3_levels()
+    {
+        AppHost::parse("a.b.c.d");
+    }
 
 }

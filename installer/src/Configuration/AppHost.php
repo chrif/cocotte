@@ -4,6 +4,7 @@ namespace Chrif\Cocotte\Configuration;
 
 use Assert\Assertion;
 use DigitalOceanV2\Entity;
+use Exception;
 
 final class AppHost
 {
@@ -46,6 +47,14 @@ final class AppHost
     public static function parse(string $value): self
     {
         $domains = explode('.', $value);
+
+        if (count($domains) < 2) {
+            throw new \Exception("'$value' does not have a first and second level domains");
+        }
+        if (count($domains) > 3) {
+            throw new \Exception("'$value' is a domain with more than 3 levels.");
+        }
+
         if (2 === count($domains)) {
             array_unshift($domains, self::DIGITAL_OCEAN_ROOT_RECORD);
         }
