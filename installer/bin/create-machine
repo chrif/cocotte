@@ -3,14 +3,14 @@
 set -eu
 
 if machine-exists | grep 1 > /dev/null; then
-    >&2 echo "Error: a machine named ${COCOTTE_MACHINE} already exists. Remove it or choose a different machine name."
+    >&2 echo "Error: a machine named ${COCOTTE_MACHINE} already exists. Remove it or choose a different machine name. Run the uninstall command to remove it."
     exit 1;
 fi
 
-docker-machine -s ${MACHINE_STORAGE_PATH} create \
+docker-machine -s "${MACHINE_STORAGE_PATH}" create \
 	--driver digitalocean \
-	--digitalocean-access-token ${DIGITAL_OCEAN_API_TOKEN} \
+	--digitalocean-access-token "${DIGITAL_OCEAN_API_TOKEN}" \
 	--engine-opt log-driver="json-file" \
 	--engine-opt log-opt="max-size=1m" \
 	--engine-opt log-opt="max-file=10" \
-	${COCOTTE_MACHINE} || exit 1;
+	"${COCOTTE_MACHINE}" || exit 1;

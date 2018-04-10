@@ -25,6 +25,7 @@
     "guzzlehttp/guzzle": "^6.3",
     "symfony/process": "^4.0",
     "symfony/finder": "^4.0",
-    "symfony/filesystem": "^4.0"
+    "symfony/filesystem": "^4.0",
+    "io-developer/php-whois": "^2.3"
   }
 }

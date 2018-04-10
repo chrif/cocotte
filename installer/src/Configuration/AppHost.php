@@ -4,7 +4,6 @@ namespace Chrif\Cocotte\Configuration;
 
 use Assert\Assertion;
 use DigitalOceanV2\Entity;
-use Exception;
 
 final class AppHost
 {

@@ -23,3 +23,8 @@ services:
   # filesystem
   Chrif\Cocotte\Filesystem\Filesystem:
     class: Chrif\Cocotte\Filesystem\CocotteFilesystem
+
+  # dns validation
+  Chrif\Cocotte\DigitalOcean\DnsValidator: ~
+  Iodev\Whois\Whois:
+    factory: 'Iodev\Whois\Whois::create'

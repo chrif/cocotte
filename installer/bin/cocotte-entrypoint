@@ -2,6 +2,6 @@
 
 set -eu
 
-sh /installer/bin/bootstrap-container
+php /installer/bin/bootstrap-container
 
 exec "$@"

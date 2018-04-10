@@ -25,10 +25,16 @@ final class WizardCommand extends Command
      */
     private $filesystem;
 
-    public function __construct(Style $style, Filesystem $filesystem)
+    /**
+     * @var DnsValidator
+     */
+    private $dnsValidator;
+
+    public function __construct(Style $style, Filesystem $filesystem, DnsValidator $dsnValidator)
     {
         $this->style = $style;
         $this->filesystem = $filesystem;
+        $this->dnsValidator = $dsnValidator;
         parent::__construct();
     }
 
@@ -36,7 +42,7 @@ final class WizardCommand extends Command
     {
         $this
             ->setName('wizard')
-            ->setDescription('Interactively build the command to run Cocotte');
+            ->setDescription('Interactively build a simple command to run Cocotte');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -47,26 +53,96 @@ final class WizardCommand extends Command
             [
                 "This wizard helps you get started with Cocotte.",
                 "It assumes that you own a domain name and can change its name servers.",
-                "It does not save the information it collects.",
                 "Visit https://github.com/chrif/cocotte for Cocotte documentation.",
                 "Press CTRL+D at any moment to quit.",
             ]
         );
         $this->style->ask("Press Enter to continue");
 
-        // required
         $token = $this->getToken();
         $projectPath = $this->getProjectPath();
         $traefikUiHost = $this->getTraefikUiHost();
+        $traefikUiUsername = $this->getTraefikUiUsername();
+        $traefikUiPassword = $this->getTraefikUiPassword();
+
+        $projectPath = str_replace(" ", "\ ", $projectPath);
+        $this->style->writeln(
+            <<<EOF
+Run this command to let Cocotte create a cloud machine for you:
+---------------------------------------------------------------
+mkdir -p $projectPath && cd $projectPath && docker run -it --rm \
+-e DIGITAL_OCEAN_API_TOKEN="$token" \
+-e MACHINE_STORAGE_PATH="$(pwd)/machine" \
+-e TRAEFIK_UI_HOST="$traefikUiHost" \
+-e TRAEFIK_UI_PASSWORD="$traefikUiPassword" \
+-e TRAEFIK_UI_USERNAME="$traefikUiUsername" \
+-v "$(pwd)":/host \
+chrif/cocotte install;
+---------------------------------------------------------------
+EOF
+        );
     }
 
-    private function getTraefikUiHost()
+    private function getTraefikUiUsername(): string
+    {
+        $this->style->section("Traefik UI username");
+
+        return $this->style->askQuestion(
+            (new Question(
+                "Choose a username for your Traefik UI",
+                "admin"
+            ))
+                ->setNormalizer(
+                    function ($answer): string {
+                        return trim((string)$answer);
+                    }
+                )
+                ->setValidator(
+                    function (string $answer): string {
+                        if (!$answer) {
+                            throw new \Exception('No answer given. Try again.');
+                        }
+
+                        return $answer;
+                    }
+                )
+        );
+    }
+
+    private function getTraefikUiPassword(): string
+    {
+        $this->style->section("Traefik UI password");
+
+        return $this->style->askQuestion(
+            (new Question(
+                "Choose a password for your Traefik UI"
+            ))
+                ->setNormalizer(
+                    function ($answer): string {
+                        return trim((string)$answer);
+                    }
+                )
+                ->setValidator(
+                    function (string $answer): string {
+                        if (!$answer) {
+                            throw new \Exception('No answer given. Try again.');
+                        }
+
+                        return $answer;
+                    }
+                )
+        );
+    }
+
+    private function getTraefikUiHost(): string
     {
         $this->style->section("Traefik UI domain");
         $this->help(
             [
                 "This the fully qualified domain name for your Traefik UI.",
-                "The nameservers of the domain must point to Digital Ocean. How to:",
+                "It has to be with a subdomain like in 'traefik.mydomain.com', in which case 'mydomain.com' must point to ".
+                "the nameservers of Digital Ocean, and Cocotte will create and configure the 'traefik' subdomain for you.",
+                "How to point to Digital Ocean name servers:\n".
                 "www.digitalocean.com/community/tutorials/how-to-point-to-digitalocean-nameservers-from-common-domain-registrars",
             ]
         );
@@ -88,14 +164,7 @@ final class WizardCommand extends Command
 
                         $host = AppHost::parse($answer);
 
-                        try {
-                            $dnsValidator = new DnsValidator();
-                            $dnsValidator->validate($host);
-                        } catch (\Exception $e) {
-                            throw new \Exception(
-                                "Failed to validate name servers of '$host' with message:\n".$e->getMessage()
-                            );
-                        }
+                        $this->dnsValidator->validateHost($host);
 
                         $this->style->success("Traefik UI domain '$host' is valid.");
 
@@ -105,7 +174,7 @@ final class WizardCommand extends Command
         );
     }
 
-    private function getToken()
+    private function getToken(): string
     {
         $this->style->section("Digital Ocean API Token");
         $this->help(
@@ -138,8 +207,7 @@ final class WizardCommand extends Command
                             $this->style->success("Token is valid");
                         } else {
                             throw new \Exception(
-                                "Token works but is associated to an account with status '{$account->status}'. ".
-                                "Account email is ".$account->email
+                                "Token works but is associated to an account with status '{$account->status}'."
                             );
                         }
 
@@ -149,13 +217,15 @@ final class WizardCommand extends Command
         );
     }
 
-    private function getProjectPath()
+    private function getProjectPath(): string
     {
         $this->style->section("New project location");
         $this->help(
             [
                 "Enter an absolute path on your computer from where to run Cocotte.",
-                "It should be an empty directory where you usually put project code.",
+                "It should be an empty directory where you usually put new project code.",
+                "The path cannot contain single quotes, double quotes or dollar ".
+                "signs. You should also avoid spaces but they're supposed to work.",
             ]
         );
 
@@ -172,6 +242,9 @@ final class WizardCommand extends Command
                     function (string $answer): string {
                         if (!$answer) {
                             throw new \Exception('No answer given. Try again.');
+                        }
+                        if (preg_match('/[\'"$]/', $answer)) {
+                            throw new \Exception("'$answer' contains single quotes, double quotes or dollar signs");
                         }
                         if (!$this->filesystem->isAbsolutePath($answer)) {
                             throw new \Exception("'$answer' is not an absolute path.");

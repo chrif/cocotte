@@ -57,3 +57,5 @@ services:
   DigitalOceanV2\Api\Key: ~
   DigitalOceanV2\Api\Domain: ~
   DigitalOceanV2\Api\DomainRecord: ~
+  Iodev\Whois\Whois:
+    factory: 'Iodev\Whois\Whois::create'

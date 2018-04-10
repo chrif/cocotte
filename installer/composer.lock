@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "eae9c7b7853372552b4dda242a0cd234",
+    "content-hash": "ac5bc749567302603a7beca2c352b1f7",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -241,6 +241,66 @@
                 "url"
             ],
             "time": "2017-03-20T17:10:46+00:00"
+        },
+        {
+            "name": "io-developer/php-whois",
+            "version": "2.3.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/io-developer/php-whois.git",
+                "reference": "b1a12ae9dff569feb43abbee1165337ff790c651"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/io-developer/php-whois/zipball/b1a12ae9dff569feb43abbee1165337ff790c651",
+                "reference": "b1a12ae9dff569feb43abbee1165337ff790c651",
+                "shasum": ""
+            },
+            "require": {
+                "ext-intl": "*",
+                "php": ">=5.4"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^4.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Iodev\\": "src/Iodev/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Sergey Sedyshev",
+                    "email": "i.o.developer@gmail.com",
+                    "homepage": "https://github.com/io-developer"
+                }
+            ],
+            "description": "PHP WHOIS client implementation. Provides raw-text and parsed answers. Allows easy check domain availability or expiration date. Sends WHOIS queries to real service via port 43",
+            "homepage": "https://github.com/io-developer/php-whois",
+            "keywords": [
+                "availability",
+                "client",
+                "domain",
+                "expiration",
+                "expiry",
+                "idna",
+                "information",
+                "lookup",
+                "parser",
+                "php",
+                "punnycode",
+                "pure",
+                "registrant",
+                "registrar",
+                "unicode",
+                "whois"
+            ],
+            "time": "2017-11-26T20:41:56+00:00"
         },
         {
             "name": "psr/container",

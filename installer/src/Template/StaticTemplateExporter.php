@@ -80,7 +80,7 @@ final class StaticTemplateExporter
                     'mv',
                     '-v',
                     $this->config->hostAppPath(),
-                    $this->config->hostAppPath().date("YmdHis"),
+                    $this->config->hostAppPath().'.'.date("YmdHis"),
                 ]
             );
         } else {
@@ -144,10 +144,10 @@ final class StaticTemplateExporter
                     $this->config->tmpAppPath().'/.env',
                     EnvironmentSubstitution::formatEnvFile(
                         [
-                            'APP_NAME=${APP_NAME}',
-                            'APP_HOSTS=${APP_HOSTS}',
-                            'COCOTTE_MACHINE=${COCOTTE_MACHINE}',
-                            'MACHINE_STORAGE_PATH=${MACHINE_STORAGE_PATH}',
+                            'APP_NAME="${APP_NAME}"',
+                            'APP_HOSTS="${APP_HOSTS}"',
+                            'COCOTTE_MACHINE="${COCOTTE_MACHINE}"',
+                            'MACHINE_STORAGE_PATH="${MACHINE_STORAGE_PATH}"',
                         ]
                     )
                 )
@@ -162,7 +162,7 @@ final class StaticTemplateExporter
                     $this->config->tmpAppPath().'/.env-override',
                     EnvironmentSubstitution::formatEnvFile(
                         [
-                            'APP_HOSTS=${APP_HOSTS}',
+                            'APP_HOSTS="${APP_HOSTS}"',
                         ]
                     )
                 )
