@@ -48,10 +48,10 @@ final class WizardCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $input->setInteractive(true);
-        $this->style->title("Cocotte Wizard");
+        $this->style->title("Welcome to Cocotte Wizard");
         $this->help(
             [
-                "This wizard helps you get started with Cocotte.",
+                "This wizard helps you get started by interactively building a simple command to run Cocotte.",
                 "It assumes that you own a domain name and can change its name servers.",
                 "Visit https://github.com/chrif/cocotte for Cocotte documentation.",
                 "Press CTRL+D at any moment to quit.",
@@ -64,6 +64,22 @@ final class WizardCommand extends Command
         $traefikUiHost = $this->getTraefikUiHost();
         $traefikUiUsername = $this->getTraefikUiUsername();
         $traefikUiPassword = $this->getTraefikUiPassword();
+
+        $this->style->block(
+            [
+                "A command will be printed to the terminal. The command first creates the directory '$projectPath' ".
+                "if it does not exist and then starts Cocotte from this location.",
+                "Afterwards, two directories will be created: one named 'machine' that you must leave there ".
+                "and never edit (it is used by Docker Machine to login to your cloud machine), and one named 'traefik' ".
+                "that you can edit all you want and which is ready for Git version control.".
+                "Thank you for trying Cocotte!",
+            ],
+            'COMPLETE',
+            'fg=black;bg=green',
+            ' ',
+            true
+        );
+        $this->style->ask("Press Enter to continue");
 
         $projectPath = str_replace(" ", "\ ", $projectPath);
         $this->style->writeln(
@@ -87,6 +103,13 @@ EOF
     {
         $this->style->section("Traefik UI username");
 
+        $this->help(
+            [
+                "The password cannot contain single quotes, double quotes, dollar ".
+                "signs or spaces.",
+            ]
+        );
+
         return $this->style->askQuestion(
             (new Question(
                 "Choose a username for your Traefik UI",
@@ -103,6 +126,12 @@ EOF
                             throw new \Exception('No answer given. Try again.');
                         }
 
+                        if (preg_match('/[\'"$\s]/', $answer)) {
+                            throw new \Exception(
+                                "'$answer' contains single quotes, double quotes, dollar signs or spaces."
+                            );
+                        }
+
                         return $answer;
                     }
                 )
@@ -112,6 +141,13 @@ EOF
     private function getTraefikUiPassword(): string
     {
         $this->style->section("Traefik UI password");
+
+        $this->help(
+            [
+                "The password cannot contain single quotes, double quotes, dollar ".
+                "signs or spaces.",
+            ]
+        );
 
         return $this->style->askQuestion(
             (new Question(
@@ -127,6 +163,11 @@ EOF
                         if (!$answer) {
                             throw new \Exception('No answer given. Try again.');
                         }
+                        if (preg_match('/[\'"$\s]/', $answer)) {
+                            throw new \Exception(
+                                "'$answer' contains single quotes, double quotes, dollar signs or spaces."
+                            );
+                        }
 
                         return $answer;
                     }
@@ -141,9 +182,13 @@ EOF
             [
                 "This the fully qualified domain name for your Traefik UI.",
                 "It has to be with a subdomain like in 'traefik.mydomain.com', in which case 'mydomain.com' must point to ".
-                "the nameservers of Digital Ocean, and Cocotte will create and configure the 'traefik' subdomain for you.",
+                "the name servers of Digital Ocean, and Cocotte will create and configure the 'traefik' subdomain for you.",
+                "Cocotte Wizard validates that the name servers of the domain you enter are Digital Ocean's.",
                 "How to point to Digital Ocean name servers:\n".
                 "www.digitalocean.com/community/tutorials/how-to-point-to-digitalocean-nameservers-from-common-domain-registrars",
+                "Please note that when a domain is newly registered, or the name servers are changed, you can expect ".
+                "a propagation time up to 24 hours. This is because it takes time for the DNS to take effect across ".
+                "the internet. The actual time of propagation may vary in some locations based on your network setup.",
             ]
         );
 
@@ -182,6 +227,7 @@ EOF
                 "You must provide a Digital Ocean API Token to Cocotte.",
                 "If you don't have a Digital Ocean account yet, get one with a 10$ credit at https://m.do.co/c/c25ed78e51c5",
                 "Then generate a token at https://cloud.digitalocean.com/settings/api/tokens",
+                "Cocotte Wizard will make a call to Digital Ocean's API to validate the token.",
             ]
         );
 
@@ -223,7 +269,8 @@ EOF
         $this->help(
             [
                 "Enter an absolute path on your computer from where to run Cocotte.",
-                "It should be an empty directory where you usually put new project code.",
+                "If it does not exist, Cocotte will create it. It should be an empty directory where you usually ".
+                "put new project code.",
                 "The path cannot contain single quotes, double quotes or dollar ".
                 "signs. You should also avoid spaces but they're supposed to work.",
             ]
@@ -235,7 +282,7 @@ EOF
             ))
                 ->setNormalizer(
                     function ($answer): string {
-                        return trim((string)$answer);
+                        return rtrim(trim((string)$answer), '/');
                     }
                 )
                 ->setValidator(
