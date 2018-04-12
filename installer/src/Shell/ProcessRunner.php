@@ -20,7 +20,11 @@ final class ProcessRunner
     public function mustRun(Process $process)
     {
         $this->style->block($process->getCommandLine());
-        $process->mustRun();
-        $this->style->success($process->getOutput());
+        $process->mustRun(
+            function ($type, $buffer) {
+                $this->style->write($buffer);
+            }
+        );
+        $this->style->writeln("OK");
     }
 }

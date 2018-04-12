@@ -1,0 +1,19 @@
+#!/bin/sh
+
+set -eu
+
+if [ "$1" = 'test' ]; then
+    set -a
+    . ../.env
+    set +a
+    shift
+fi
+
+docker run -it --rm \
+    -v "$(pwd)":/host \
+	chrif/cocotte uninstall \
+	--digital-ocean-api-token="${DIGITAL_OCEAN_API_TOKEN}" \
+	--machine-name="${COCOTTE_MACHINE:-cocotte}" \
+	--machine-storage-path="${MACHINE_STORAGE_PATH:-"$(pwd)/machine"}" \
+	--traefik-ui-host="${TRAEFIK_UI_HOST}"
+

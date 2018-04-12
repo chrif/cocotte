@@ -26,6 +26,8 @@
     "symfony/process": "^4.0",
     "symfony/finder": "^4.0",
     "symfony/filesystem": "^4.0",
-    "io-developer/php-whois": "^2.3"
+    "io-developer/php-whois": "^2.3",
+    "symfony/proxy-manager-bridge": "^4.0",
+    "ocramius/proxy-manager": "^2.1"
   }
 }

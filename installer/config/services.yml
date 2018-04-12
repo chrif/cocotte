@@ -7,10 +7,18 @@ services:
       autowire: true
       public: true
 
-  # configuration
-  Chrif\Cocotte\Configuration\:
-    resource: '../src/Configuration/*'
-    tags: ['configuration']
+  # environment
+  Chrif\Cocotte\Environment\EnvironmentManager: ~
+
+  # machine
+  Chrif\Cocotte\Machine\MachineCreator: ~
+  Chrif\Cocotte\Machine\MachineIp:
+    tags: ['environment']
+  Chrif\Cocotte\Machine\MachineName:
+    tags: ['environment']
+  Chrif\Cocotte\Machine\MachineState: ~
+  Chrif\Cocotte\Machine\MachineStoragePath:
+    tags: ['environment']
 
   # console
   Symfony\Component\Console\Input\InputInterface:
@@ -23,6 +31,8 @@ services:
     class: Chrif\Cocotte\Console\CocotteStyle
   Symfony\Component\Console\Application:
     class: Symfony\Component\Console\Application
+    arguments:
+      - "Cocotte Console"
   Chrif\Cocotte\Command\:
     resource: '../src/Command/*'
     tags: ['console.command']
@@ -41,14 +51,28 @@ services:
   Chrif\Cocotte\Shell\EnvironmentSubstitution\SubstitutionFactory: ~
 
   # template
-  Chrif\Cocotte\Template\StaticTemplateExporter: ~
+  Chrif\Cocotte\Template\StaticSite\StaticTemplateExporter: ~
+  Chrif\Cocotte\Template\Traefik\TraefikUiHost:
+    tags: ['environment']
+  Chrif\Cocotte\Template\Traefik\TraefikUiPassword:
+    tags: ['environment']
+  Chrif\Cocotte\Template\Traefik\TraefikUiUsername:
+    tags: ['environment']
 
-  # api
-  Chrif\Cocotte\DigitalOcean\:
-    resource: '../src/DigitalOcean/*'
+  # digital ocean
+  Chrif\Cocotte\DigitalOcean\ApiToken:
+    tags: ['environment']
+  Chrif\Cocotte\DigitalOcean\DigitalOceanFactory: ~
+  Iodev\Whois\Whois:
+    factory: 'Iodev\Whois\Whois::create'
+  Chrif\Cocotte\DigitalOcean\DnsValidator: ~
+  Chrif\Cocotte\DigitalOcean\Domain: ~
+  Chrif\Cocotte\DigitalOcean\DomainRecord: ~
+  Chrif\Cocotte\DigitalOcean\NetworkingConfigurator: ~
   DigitalOceanV2\Adapter\AdapterInterface:
     factory: 'Chrif\Cocotte\DigitalOcean\DigitalOceanFactory:adapter'
     arguments: ["%api.adapter.class%"]
+    lazy: true
   DigitalOceanV2\DigitalOceanV2: ~
   DigitalOceanV2\Api\Droplet: ~
   DigitalOceanV2\Api\Image: ~
@@ -57,5 +81,3 @@ services:
   DigitalOceanV2\Api\Key: ~
   DigitalOceanV2\Api\Domain: ~
   DigitalOceanV2\Api\DomainRecord: ~
-  Iodev\Whois\Whois:
-    factory: 'Iodev\Whois\Whois::create'

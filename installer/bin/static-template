@@ -1,5 +1,0 @@
-#!/bin/sh
-
-set -eu
-
-console cocotte:template:static "$@"

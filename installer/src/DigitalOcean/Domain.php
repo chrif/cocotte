@@ -2,8 +2,8 @@
 
 namespace Chrif\Cocotte\DigitalOcean;
 
-use Chrif\Cocotte\Configuration\AppHost;
-use Chrif\Cocotte\Configuration\MachineIp;
+use Chrif\Cocotte\Machine\MachineIp;
+use Chrif\Cocotte\Template\AppHost;
 use DigitalOceanV2\Api;
 use DigitalOceanV2\Entity;
 

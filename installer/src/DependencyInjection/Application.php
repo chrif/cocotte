@@ -2,6 +2,7 @@
 
 namespace Chrif\Cocotte\DependencyInjection;
 
+use Symfony\Bridge\ProxyManager\LazyProxy\Instantiator\RuntimeInstantiator;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Console\Application as Console;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -18,6 +19,7 @@ final class Application
     public function __construct(string $serviceResource)
     {
         $container = new ContainerBuilder();
+        $container->setProxyInstantiator(new RuntimeInstantiator());
 
         $loader = new YamlFileLoader($container, new FileLocator());
         $loader->load($serviceResource);

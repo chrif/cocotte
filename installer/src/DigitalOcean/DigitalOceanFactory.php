@@ -3,7 +3,6 @@
 namespace Chrif\Cocotte\DigitalOcean;
 
 use Assert\Assertion;
-use Chrif\Cocotte\Configuration\ApiToken;
 use DigitalOceanV2\Adapter\AdapterInterface;
 
 final class DigitalOceanFactory

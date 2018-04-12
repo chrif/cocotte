@@ -4,4 +4,9 @@ set -eu
 
 php /installer/bin/bootstrap-container
 
-exec "$@"
+if 	[ "$1" = "install" ] || [ "$1" = "wizard" ] || [ "$1" = "uninstall" ] || \
+	[ "$1" = "add-site" ] || [ "$1" = "help" ]; then
+	exec console "$@"
+else
+	exec "$@"
+fi
