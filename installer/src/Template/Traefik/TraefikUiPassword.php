@@ -21,7 +21,8 @@ class TraefikUiPassword implements ImportableValue, ExportableValue, InputOption
 
     public function __construct(string $value)
     {
-        Assertion::notEmpty($value);
+        Assertion::notEmpty($value, "The Traefik Ui password is empty");
+        Assertion::regex($value, '/^[a-zA-Z0-9_-@#%?&*+=!]+$/', "The Traefik Ui password does not contain only alphanumeric characters and _-@#%?&*+=!");
         $this->value = $value;
     }
 
@@ -38,7 +39,7 @@ class TraefikUiPassword implements ImportableValue, ExportableValue, InputOption
         return new self(Env::get(self::TRAEFIK_UI_PASSWORD));
     }
 
-    public static function toEnv($value)
+    public static function toEnv($value): void
     {
         Env::put(self::TRAEFIK_UI_PASSWORD, $value);
     }
@@ -49,7 +50,7 @@ class TraefikUiPassword implements ImportableValue, ExportableValue, InputOption
             self::INPUT_OPTION,
             null,
             InputOption::VALUE_REQUIRED,
-            'Traefik Ui Host',
+            'Traefik Ui password. Allowed characters are alphanumeric characters and _-@#%?&*+=!',
             Env::get(self::TRAEFIK_UI_PASSWORD)
         );
     }

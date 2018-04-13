@@ -4,5 +4,5 @@ namespace Chrif\Cocotte\Environment;
 
 interface ExportableValue
 {
-    public static function toEnv($value);
+    public static function toEnv($value): void;
 }

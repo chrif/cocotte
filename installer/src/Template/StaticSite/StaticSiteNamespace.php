@@ -9,10 +9,10 @@ use Chrif\Cocotte\Environment\InputOptionValue;
 use Chrif\Cocotte\Shell\Env;
 use Symfony\Component\Console\Input\InputOption;
 
-class StaticSiteName implements ImportableValue, ExportableValue, InputOptionValue
+class StaticSiteNamespace implements ImportableValue, ExportableValue, InputOptionValue
 {
-    const STATIC_SITE_NAME = 'STATIC_SITE_NAME';
-    const INPUT_OPTION = 'app-name';
+    const STATIC_SITE_NAMESPACE = 'STATIC_SITE_NAMESPACE';
+    const INPUT_OPTION = 'site-namespace';
 
     /**
      * @var string
@@ -21,7 +21,8 @@ class StaticSiteName implements ImportableValue, ExportableValue, InputOptionVal
 
     public function __construct(string $value)
     {
-        Assertion::notEmpty($value);
+        Assertion::notEmpty($value, "The site namespace is empty");
+        Assertion::regex($value, '/^[a-z0-9-]+$/', "The site namespace does not contain only lowercase letters, digits and -");
         $this->value = $value;
     }
 
@@ -35,12 +36,12 @@ class StaticSiteName implements ImportableValue, ExportableValue, InputOptionVal
      */
     public static function fromEnv(): ImportableValue
     {
-        return new self(Env::get(self::STATIC_SITE_NAME));
+        return new self(Env::get(self::STATIC_SITE_NAMESPACE));
     }
 
-    public static function toEnv($value)
+    public static function toEnv($value): void
     {
-        Env::put(self::STATIC_SITE_NAME, $value);
+        Env::put(self::STATIC_SITE_NAMESPACE, $value);
     }
 
     public static function inputOption(): InputOption
@@ -49,8 +50,8 @@ class StaticSiteName implements ImportableValue, ExportableValue, InputOptionVal
             self::INPUT_OPTION,
             null,
             InputOption::VALUE_REQUIRED,
-            'Name for the exported website. Must be a valid directory name on the host.',
-            Env::get(self::STATIC_SITE_NAME)
+            'Namespace for the site. Allowed characters are lowercase letters, digits and -',
+            Env::get(self::STATIC_SITE_NAMESPACE)
         );
     }
 
@@ -59,14 +60,14 @@ class StaticSiteName implements ImportableValue, ExportableValue, InputOptionVal
         return self::INPUT_OPTION;
     }
 
-    public function value(): string
+    public function toString(): string
     {
         return $this->value;
     }
 
     public function __toString()
     {
-        return $this->value();
+        return $this->toString();
     }
 
 }

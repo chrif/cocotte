@@ -30,7 +30,7 @@ class ApiToken implements ImportableValue, ExportableValue, InputOptionValue
         return new self(Env::get(self::DIGITAL_OCEAN_API_TOKEN));
     }
 
-    public static function toEnv($value)
+    public static function toEnv($value): void
     {
         Env::put(self::DIGITAL_OCEAN_API_TOKEN, $value);
     }

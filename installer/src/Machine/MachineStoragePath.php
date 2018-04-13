@@ -41,7 +41,7 @@ class MachineStoragePath implements ImportableValue, ExportableValue, InputOptio
         return $machineStoragePath;
     }
 
-    public static function toEnv($value)
+    public static function toEnv($value): void
     {
         Env::put(self::MACHINE_STORAGE_PATH, $value);
     }

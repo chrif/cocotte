@@ -58,7 +58,7 @@ final class MachineCreator
 
     public function create()
     {
-        $this->style->title("Creating a Docker machine on Digital Ocean maned '{$this->machineName}'");
+        $this->style->title("Creating a Docker machine on Digital Ocean named '{$this->machineName}'");
 
         if ($this->machineState->exists()) {
             throw new \Exception(

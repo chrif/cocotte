@@ -37,7 +37,7 @@ class TraefikUiHost implements ImportableValue, ExportableValue, InputOptionValu
         return new self(AppHostCollection::fromString(Env::get(self::TRAEFIK_UI_HOST)));
     }
 
-    public static function toEnv($value)
+    public static function toEnv($value): void
     {
         Env::put(self::TRAEFIK_UI_HOST, $value);
     }

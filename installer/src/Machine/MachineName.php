@@ -38,7 +38,7 @@ class MachineName implements ImportableValue, ExportableValue, InputOptionValue
         return new self(Env::get(self::COCOTTE_MACHINE));
     }
 
-    public static function toEnv($value)
+    public static function toEnv($value): void
     {
         Env::put(self::COCOTTE_MACHINE, $value);
     }

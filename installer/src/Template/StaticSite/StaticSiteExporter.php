@@ -44,9 +44,9 @@ final class StaticSiteExporter
     private $substitutionFactory;
 
     /**
-     * @var StaticSiteName
+     * @var StaticSiteNamespace
      */
-    private $staticSiteName;
+    private $staticSiteNamespace;
 
     /**
      * @var StaticSiteHost
@@ -59,7 +59,7 @@ final class StaticSiteExporter
         Finder $finder,
         Filesystem $filesystem,
         SubstitutionFactory $substitutionFactory,
-        StaticSiteName $staticSiteName,
+        StaticSiteNamespace $staticSiteName,
         StaticSiteHost $staticSiteHost
     ) {
         $this->style = $style;
@@ -67,7 +67,7 @@ final class StaticSiteExporter
         $this->finder = $finder;
         $this->filesystem = $filesystem;
         $this->substitutionFactory = $substitutionFactory;
-        $this->staticSiteName = $staticSiteName;
+        $this->staticSiteNamespace = $staticSiteName;
         $this->staticSiteHost = $staticSiteHost;
     }
 
@@ -85,14 +85,14 @@ final class StaticSiteExporter
 
     public function hostAppPath(): string
     {
-        return "/host/{$this->staticSiteName}";
+        return "/host/{$this->staticSiteNamespace}";
     }
 
     private function backup(): void
     {
         $this->style->section('Backup');
         if ($this->filesystem->exists($this->hostAppPath())) {
-            $this->style->warning("Backing up old '{$this->staticSiteName}' folder on host");
+            $this->style->warning("Backing up old '{$this->staticSiteNamespace}' folder on host");
             $this->mustRun(
                 [
                     'mv',
@@ -154,7 +154,7 @@ final class StaticSiteExporter
         EnvironmentSubstitution::withDefaults()
             ->export(
                 [
-                    'APP_NAME' => $this->staticSiteName->value(),
+                    'APP_NAME' => $this->staticSiteNamespace->toString(),
                     'APP_HOSTS' => $this->staticSiteHost->toString(),
                 ]
             )->substitute(
@@ -193,7 +193,7 @@ final class StaticSiteExporter
         EnvironmentSubstitution::withDefaults()
             ->export(
                 [
-                    'APP_NAME' => $this->staticSiteName->value(),
+                    'APP_NAME' => $this->staticSiteNamespace->toString(),
                 ]
             )
             ->restrict(['APP_NAME'])
@@ -233,7 +233,7 @@ final class StaticSiteExporter
 
     private function tmpAppPath(): string
     {
-        return "/tmp/{$this->staticSiteName}";
+        return "/tmp/{$this->staticSiteNamespace}";
     }
 
     private function tmpTemplatePath(): string

@@ -11,7 +11,7 @@ use Chrif\Cocotte\Machine\MachineStoragePath;
 use Chrif\Cocotte\Shell\ProcessRunner;
 use Chrif\Cocotte\Template\StaticSite\StaticSiteExporter;
 use Chrif\Cocotte\Template\StaticSite\StaticSiteHost;
-use Chrif\Cocotte\Template\StaticSite\StaticSiteName;
+use Chrif\Cocotte\Template\StaticSite\StaticSiteNamespace;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -98,7 +98,7 @@ final class StaticSiteCommand extends Command
             ->setDescription('Create a static website and deploy it to your Docker Machine.')
             ->getDefinition()->addOptions(
                 [
-                    StaticSiteName::inputOption(),
+                    StaticSiteNamespace::inputOption(),
                     StaticSiteHost::inputOption(),
                     ApiToken::inputOption(),
                     MachineStoragePath::inputOption(),

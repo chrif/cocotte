@@ -37,7 +37,7 @@ class StaticSiteHost implements ImportableValue, ExportableValue, InputOptionVal
         return new self(AppHostCollection::fromString(Env::get(self::STATIC_SITE_HOST)));
     }
 
-    public static function toEnv($value)
+    public static function toEnv($value): void
     {
         Env::put(self::STATIC_SITE_HOST, $value);
     }

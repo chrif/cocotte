@@ -21,7 +21,8 @@ class TraefikUiUsername implements ImportableValue, ExportableValue, InputOption
 
     public function __construct(string $value)
     {
-        Assertion::notEmpty($value);
+        Assertion::notEmpty($value, "The Traefik Ui username is empty");
+        Assertion::regex($value, '/^[a-zA-Z0-9]+$/', "The Traefik Ui username does not contain only alphanumeric characters.");
         $this->value = $value;
     }
 
@@ -38,7 +39,7 @@ class TraefikUiUsername implements ImportableValue, ExportableValue, InputOption
         return new self(Env::get(self::TRAEFIK_UI_USERNAME));
     }
 
-    public static function toEnv($value)
+    public static function toEnv($value): void
     {
         Env::put(self::TRAEFIK_UI_USERNAME, $value);
     }
@@ -49,7 +50,7 @@ class TraefikUiUsername implements ImportableValue, ExportableValue, InputOption
             self::INPUT_OPTION,
             null,
             InputOption::VALUE_REQUIRED,
-            'Traefik Ui Host',
+            'Traefik Ui username.  Allowed characters are alphanumeric characters.',
             Env::get(self::TRAEFIK_UI_USERNAME)
         );
     }
