@@ -2,6 +2,7 @@
 
 namespace Chrif\Cocotte\Command;
 
+use Chrif\Cocotte\Console\Style;
 use Chrif\Cocotte\DigitalOcean\ApiToken;
 use Chrif\Cocotte\Environment\EnvironmentManager;
 use Chrif\Cocotte\Machine\MachineCreator;
@@ -9,7 +10,7 @@ use Chrif\Cocotte\Machine\MachineName;
 use Chrif\Cocotte\Machine\MachineState;
 use Chrif\Cocotte\Machine\MachineStoragePath;
 use Chrif\Cocotte\Shell\ProcessRunner;
-use Chrif\Cocotte\Template\StaticSite\TraefikExporter;
+use Chrif\Cocotte\Template\Traefik\TraefikExporter;
 use Chrif\Cocotte\Template\Traefik\TraefikUiHost;
 use Chrif\Cocotte\Template\Traefik\TraefikUiPassword;
 use Chrif\Cocotte\Template\Traefik\TraefikUiUsername;
@@ -55,13 +56,20 @@ final class InstallCommand extends Command
      */
     private $traefikExporter;
 
+    /**
+     * @var Style
+     */
+    private $style;
+
     public function __construct(
         ApiToken $token,
         MachineStoragePath $machineStoragePath,
         EnvironmentManager $environmentManager,
         MachineCreator $machineCreator,
         ProcessRunner $processRunner,
-        MachineState $machineState
+        MachineState $machineState,
+        TraefikExporter $traefikExporter,
+        Style $style
     ) {
         $this->token = $token;
         $this->machineStoragePath = $machineStoragePath;
@@ -69,6 +77,8 @@ final class InstallCommand extends Command
         $this->machineCreator = $machineCreator;
         $this->processRunner = $processRunner;
         $this->machineState = $machineState;
+        $this->traefikExporter = $traefikExporter;
+        $this->style = $style;
         parent::__construct();
     }
 
@@ -81,7 +91,7 @@ final class InstallCommand extends Command
     {
         $this
             ->setName('install')
-            ->setDescription('Create a Docker Machine on Digital Ocean and install the Traefik reverse proxy.')
+            ->setDescription('Create a Docker Machine on Digital Ocean and install the Traefik reverse proxy on it')
             ->getDefinition()->addOptions(
                 [
                     ApiToken::inputOption(),
@@ -96,13 +106,11 @@ final class InstallCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-
         $this->environmentManager->exportFromInput($input);
         $this->machineCreator->create();
-
         $this->traefikExporter->export();
-
-        $this->processRunner->mustRun(new Process('deploy-traefik'));
+        $this->style->title('Deploying exported site to cloud machine');
+        $this->processRunner->mustRun(new Process('./bin/prod', $this->traefikExporter->hostAppPath()));
     }
 
 }

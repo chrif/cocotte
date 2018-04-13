@@ -3,9 +3,9 @@
 namespace Chrif\Cocotte\Command;
 
 use Chrif\Cocotte\Console\Style;
+use Chrif\Cocotte\DigitalOcean\AppHost;
 use Chrif\Cocotte\DigitalOcean\DnsValidator;
 use Chrif\Cocotte\Filesystem\Filesystem;
-use Chrif\Cocotte\Template\AppHost;
 use DigitalOceanV2\Adapter\GuzzleHttpAdapter;
 use DigitalOceanV2\DigitalOceanV2;
 use Symfony\Component\Console\Command\Command;
@@ -51,7 +51,7 @@ final class WizardCommand extends Command
         $this->style->title("Welcome to Cocotte Wizard");
         $this->help(
             [
-                "This wizard helps you get started by interactively building a simple command to run Cocotte.",
+                "This wizard helps you get started by interactively building a simple install command for Cocotte.",
                 "It assumes that you own a domain name and can change its name servers.",
                 "Visit https://github.com/chrif/cocotte for Cocotte documentation.",
                 "Press CTRL+D at any moment to quit.",
@@ -71,7 +71,7 @@ final class WizardCommand extends Command
                 "if it does not exist and then starts Cocotte from this location.",
                 "Afterwards, two directories will be created: one named 'machine' that you must leave there ".
                 "and never edit (it is used by Docker Machine to login to your cloud machine), and one named 'traefik' ".
-                "that you can edit all you want and which is ready for Git version control.".
+                "that you can edit all you want and which is ready for Git version control.",
                 "Thank you for trying Cocotte!",
             ],
             'COMPLETE',
@@ -177,7 +177,7 @@ EOF
 
     private function getTraefikUiHost(): string
     {
-        $this->style->section("Traefik UI domain");
+        $this->style->section("Traefik UI hostname");
         $this->help(
             [
                 "This the fully qualified domain name for your Traefik UI.",
@@ -194,7 +194,7 @@ EOF
 
         return $this->style->askQuestion(
             (new Question(
-                "Enter Traefik UI domain (e.g., traefik.mydomain.com)"
+                "Enter Traefik UI hostname (e.g., traefik.mydomain.com)"
             ))
                 ->setNormalizer(
                     function ($answer): string {
@@ -211,7 +211,8 @@ EOF
 
                         $this->dnsValidator->validateHost($host);
 
-                        $this->style->success("Traefik UI domain '$host' is valid.");
+                        $this->style->success("Traefik UI hostname '$host' is valid.");
+                        $this->style->ask("Press Enter to continue");
 
                         return $host->toString();
                     }
@@ -251,6 +252,7 @@ EOF
                         $account = $digitalOceanV2->account()->getUserInformation();
                         if ($account->status === 'active') {
                             $this->style->success("Token is valid");
+                            $this->style->ask("Press Enter to continue");
                         } else {
                             throw new \Exception(
                                 "Token works but is associated to an account with status '{$account->status}'."

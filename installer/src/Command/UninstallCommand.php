@@ -3,6 +3,7 @@
 namespace Chrif\Cocotte\Command;
 
 use Chrif\Cocotte\DigitalOcean\ApiToken;
+use Chrif\Cocotte\DigitalOcean\AppHostCollection;
 use Chrif\Cocotte\DigitalOcean\NetworkingConfigurator;
 use Chrif\Cocotte\Environment\EnvironmentManager;
 use Chrif\Cocotte\Machine\MachineCreator;
@@ -10,7 +11,6 @@ use Chrif\Cocotte\Machine\MachineName;
 use Chrif\Cocotte\Machine\MachineState;
 use Chrif\Cocotte\Machine\MachineStoragePath;
 use Chrif\Cocotte\Shell\ProcessRunner;
-use Chrif\Cocotte\Template\AppHostCollection;
 use Chrif\Cocotte\Template\Traefik\TraefikUiHost;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;

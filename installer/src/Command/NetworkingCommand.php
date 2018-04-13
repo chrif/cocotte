@@ -3,10 +3,10 @@
 namespace Chrif\Cocotte\Command;
 
 use Chrif\Cocotte\DigitalOcean\ApiToken;
+use Chrif\Cocotte\DigitalOcean\AppHostCollection;
 use Chrif\Cocotte\DigitalOcean\NetworkingConfigurator;
 use Chrif\Cocotte\Environment\EnvironmentManager;
 use Chrif\Cocotte\Machine\MachineStoragePath;
-use Chrif\Cocotte\Template\AppHostCollection;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;

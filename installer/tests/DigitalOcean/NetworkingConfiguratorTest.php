@@ -2,9 +2,9 @@
 
 namespace Chrif\Cocotte\Tests\DigitalOcean;
 
+use Chrif\Cocotte\DigitalOcean\AppHost;
+use Chrif\Cocotte\DigitalOcean\AppHostCollection;
 use Chrif\Cocotte\DigitalOcean\NetworkingConfigurator;
-use Chrif\Cocotte\Template\AppHost;
-use Chrif\Cocotte\Template\AppHostCollection;
 use Chrif\Cocotte\TestCase;
 
 /**

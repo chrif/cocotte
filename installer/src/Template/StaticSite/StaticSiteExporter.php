@@ -10,8 +10,13 @@ use Chrif\Cocotte\Shell\EnvironmentSubstitution\SubstitutionFactory;
 use Chrif\Cocotte\Shell\ProcessRunner;
 use Symfony\Component\Process\Process;
 
-final class StaticExporter
+final class StaticSiteExporter
 {
+
+    /**
+     * @var string
+     */
+    private static $tmpTemplatePath;
 
     /**
      * @var Style
@@ -39,28 +44,36 @@ final class StaticExporter
     private $substitutionFactory;
 
     /**
-     * @var StaticExporterConfiguration
+     * @var StaticSiteName
      */
-    private $config;
+    private $staticSiteName;
+
+    /**
+     * @var StaticSiteHost
+     */
+    private $staticSiteHost;
 
     public function __construct(
         Style $style,
         ProcessRunner $processRunner,
         Finder $finder,
         Filesystem $filesystem,
-        SubstitutionFactory $substitutionFactory
+        SubstitutionFactory $substitutionFactory,
+        StaticSiteName $staticSiteName,
+        StaticSiteHost $staticSiteHost
     ) {
         $this->style = $style;
         $this->processRunner = $processRunner;
         $this->finder = $finder;
         $this->filesystem = $filesystem;
         $this->substitutionFactory = $substitutionFactory;
+        $this->staticSiteName = $staticSiteName;
+        $this->staticSiteHost = $staticSiteHost;
     }
 
-    public function export(StaticExporterConfiguration $config)
+    public function export()
     {
-        $this->config = $config;
-        $this->style->title('Exporting static template to host');
+        $this->style->title('Exporting a new static site to the host filesystem');
         $this->backup();
         $this->copyTemplateToTmp();
         $this->removeIgnoredFiles();
@@ -70,17 +83,22 @@ final class StaticExporter
         $this->copyTmpToHost();
     }
 
+    public function hostAppPath(): string
+    {
+        return "/host/{$this->staticSiteName}";
+    }
+
     private function backup(): void
     {
         $this->style->section('Backup');
-        if ($this->filesystem->exists($this->config->hostAppPath())) {
-            $this->style->warning("Backing up old '{$this->config->appName()}' folder on host");
+        if ($this->filesystem->exists($this->hostAppPath())) {
+            $this->style->warning("Backing up old '{$this->staticSiteName}' folder on host");
             $this->mustRun(
                 [
                     'mv',
                     '-v',
-                    $this->config->hostAppPath(),
-                    $this->config->hostAppPath().'.'.date("YmdHis"),
+                    $this->hostAppPath(),
+                    $this->hostAppPath().'.'.date("YmdHis"),
                 ]
             );
         } else {
@@ -96,11 +114,11 @@ final class StaticExporter
             [
                 'rsync',
                 '-rv',
-                $this->config->installerTemplatePath().'/',
-                $this->config->tmpTemplatePath(),
+                $this->installerTemplatePath().'/',
+                $this->tmpTemplatePath(),
             ]
         );
-        $this->mustRun(['mv', '-v', $this->config->tmpTemplatePath(), $this->config->tmpAppPath()]);
+        $this->mustRun(['mv', '-v', $this->tmpTemplatePath(), $this->tmpAppPath()]);
     }
 
     private function removeIgnoredFiles(): void
@@ -110,9 +128,9 @@ final class StaticExporter
             [
                 'rm',
                 '-fv',
-                $this->config->tmpAppPath()."/.env",
-                $this->config->tmpAppPath()."/.env-override",
-                $this->config->tmpAppPath()."/docker-compose.override.yml",
+                $this->tmpAppPath()."/.env",
+                $this->tmpAppPath()."/.env-override",
+                $this->tmpAppPath()."/docker-compose.override.yml",
             ]
         );
     }
@@ -124,8 +142,8 @@ final class StaticExporter
             [
                 'cp',
                 '-v',
-                $this->config->tmpAppPath()."/docker-compose.override.yml.dist",
-                $this->config->tmpAppPath()."/docker-compose.override.yml",
+                $this->tmpAppPath()."/docker-compose.override.yml.dist",
+                $this->tmpAppPath()."/docker-compose.override.yml",
             ]
         );
     }
@@ -136,12 +154,12 @@ final class StaticExporter
         EnvironmentSubstitution::withDefaults()
             ->export(
                 [
-                    'APP_NAME' => $this->config->appName()->value(),
-                    'APP_HOSTS' => $this->config->appHosts()->toString(),
+                    'APP_NAME' => $this->staticSiteName->value(),
+                    'APP_HOSTS' => $this->staticSiteHost->toString(),
                 ]
             )->substitute(
                 $this->substitutionFactory->dumpFile(
-                    $this->config->tmpAppPath().'/.env',
+                    $this->tmpAppPath().'/.env',
                     EnvironmentSubstitution::formatEnvFile(
                         [
                             'APP_NAME="${APP_NAME}"',
@@ -155,11 +173,11 @@ final class StaticExporter
         EnvironmentSubstitution::withDefaults()
             ->export(
                 [
-                    'APP_HOSTS' => $this->config->appHosts()->toLocal()->toString(),
+                    'APP_HOSTS' => $this->staticSiteHost->toLocalHostCollection()->toString(),
                 ]
             )->substitute(
                 $this->substitutionFactory->dumpFile(
-                    $this->config->tmpAppPath().'/.env-override',
+                    $this->tmpAppPath().'/.env-override',
                     EnvironmentSubstitution::formatEnvFile(
                         [
                             'APP_HOSTS="${APP_HOSTS}"',
@@ -175,14 +193,14 @@ final class StaticExporter
         EnvironmentSubstitution::withDefaults()
             ->export(
                 [
-                    'APP_NAME' => $this->config->appName()->value(),
+                    'APP_NAME' => $this->staticSiteName->value(),
                 ]
             )
             ->restrict(['APP_NAME'])
             ->substitute(
                 $this->substitutionFactory->inPlace(
                     $this->finder->exactFile(
-                        $this->config->tmpAppPath().'/web/index.html'
+                        $this->tmpAppPath().'/web/index.html'
                     )
                 )
             );
@@ -195,22 +213,40 @@ final class StaticExporter
             [
                 'rsync',
                 '-rv',
-                $this->config->tmpAppPath(),
+                $this->tmpAppPath(),
                 '/host',
             ]
         );
         $this->cleanUpTmp();
     }
 
-    private function mustRun($command)
+    private function mustRun($command): void
     {
         $this->processRunner->mustRun(new Process($command));
     }
 
     private function cleanUpTmp(): void
     {
-        $this->mustRun(['rm', '-rfv', $this->config->tmpAppPath()]);
-        $this->mustRun(['rm', '-rfv', $this->config->tmpTemplatePath()]);
+        $this->mustRun(['rm', '-rfv', $this->tmpAppPath()]);
+        $this->mustRun(['rm', '-rfv', $this->tmpTemplatePath()]);
     }
 
+    private function tmpAppPath(): string
+    {
+        return "/tmp/{$this->staticSiteName}";
+    }
+
+    private function tmpTemplatePath(): string
+    {
+        if (null === self::$tmpTemplatePath) {
+            self::$tmpTemplatePath = "/tmp/".uniqid('static-');
+        }
+
+        return self::$tmpTemplatePath;
+    }
+
+    private function installerTemplatePath(): string
+    {
+        return "/installer/template/static";
+    }
 }

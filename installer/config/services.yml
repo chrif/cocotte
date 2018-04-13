@@ -49,9 +49,15 @@ services:
   Chrif\Cocotte\Shell\ProcessRunner: ~
   Chrif\Cocotte\Shell\VariableReplacer: ~
   Chrif\Cocotte\Shell\EnvironmentSubstitution\SubstitutionFactory: ~
+  Chrif\Cocotte\Shell\BasicAuth: ~
 
   # template
-  Chrif\Cocotte\Template\StaticSite\StaticTemplateExporter: ~
+  Chrif\Cocotte\Template\StaticSite\StaticSiteExporter: ~
+  Chrif\Cocotte\Template\StaticSite\StaticSiteHost:
+    tags: ['environment']
+  Chrif\Cocotte\Template\StaticSite\StaticSiteName:
+    tags: ['environment']
+  Chrif\Cocotte\Template\Traefik\TraefikExporter: ~
   Chrif\Cocotte\Template\Traefik\TraefikUiHost:
     tags: ['environment']
   Chrif\Cocotte\Template\Traefik\TraefikUiPassword:

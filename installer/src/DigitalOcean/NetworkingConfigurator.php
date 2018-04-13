@@ -4,8 +4,6 @@ namespace Chrif\Cocotte\DigitalOcean;
 
 use Chrif\Cocotte\Console\Style;
 use Chrif\Cocotte\Machine\MachineIp;
-use Chrif\Cocotte\Template\AppHost;
-use Chrif\Cocotte\Template\AppHostCollection;
 
 final class NetworkingConfigurator
 {

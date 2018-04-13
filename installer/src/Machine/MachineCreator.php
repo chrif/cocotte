@@ -2,6 +2,7 @@
 
 namespace Chrif\Cocotte\Machine;
 
+use Chrif\Cocotte\Console\Style;
 use Chrif\Cocotte\DigitalOcean\ApiToken;
 use Chrif\Cocotte\Shell\ProcessRunner;
 use Symfony\Component\Process\Process;
@@ -34,22 +35,31 @@ final class MachineCreator
      */
     private $token;
 
+    /**
+     * @var Style
+     */
+    private $style;
+
     public function __construct(
         ProcessRunner $processRunner,
         MachineState $machineState,
         MachineName $machineName,
         MachineStoragePath $machineStoragePath,
-        ApiToken $token
+        ApiToken $token,
+        Style $style
     ) {
         $this->processRunner = $processRunner;
         $this->machineState = $machineState;
         $this->machineName = $machineName;
         $this->machineStoragePath = $machineStoragePath;
         $this->token = $token;
+        $this->style = $style;
     }
 
     public function create()
     {
+        $this->style->title("Creating a Docker machine on Digital Ocean maned '{$this->machineName}'");
+
         if ($this->machineState->exists()) {
             throw new \Exception(
                 "Error: a machine named {$this->machineName} already exists. Remove it or choose a ".

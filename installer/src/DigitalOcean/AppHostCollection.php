@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Chrif\Cocotte\Template;
+namespace Chrif\Cocotte\DigitalOcean;
 
 use Chrif\Cocotte\Collection\GenericCollection;
 

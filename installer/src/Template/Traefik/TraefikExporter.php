@@ -1,10 +1,11 @@
 <?php declare(strict_types=1);
 
-namespace Chrif\Cocotte\Template\StaticSite;
+namespace Chrif\Cocotte\Template\Traefik;
 
 use Chrif\Cocotte\Console\Style;
 use Chrif\Cocotte\Filesystem\Filesystem;
 use Chrif\Cocotte\Finder\Finder;
+use Chrif\Cocotte\Shell\BasicAuth;
 use Chrif\Cocotte\Shell\EnvironmentSubstitution\EnvironmentSubstitution;
 use Chrif\Cocotte\Shell\EnvironmentSubstitution\SubstitutionFactory;
 use Chrif\Cocotte\Shell\ProcessRunner;
@@ -12,6 +13,11 @@ use Symfony\Component\Process\Process;
 
 final class TraefikExporter
 {
+
+    /**
+     * @var string
+     */
+    private static $tmpTemplatePath;
 
     /**
      * @var Style
@@ -39,22 +45,45 @@ final class TraefikExporter
     private $substitutionFactory;
 
     /**
-     * @var TraefikExporterConfiguration
+     * @var TraefikUiHost
      */
-    private $config;
+    private $traefikUiHost;
+
+    /**
+     * @var TraefikUiPassword
+     */
+    private $traefikUiPassword;
+
+    /**
+     * @var TraefikUiUsername
+     */
+    private $traefikUiUsername;
+
+    /**
+     * @var \Chrif\Cocotte\Shell\BasicAuth
+     */
+    private $basicAuth;
 
     public function __construct(
         Style $style,
         ProcessRunner $processRunner,
         Finder $finder,
         Filesystem $filesystem,
-        SubstitutionFactory $substitutionFactory
+        SubstitutionFactory $substitutionFactory,
+        TraefikUiHost $traefikUiHost,
+        TraefikUiPassword $traefikUiPassword,
+        TraefikUiUsername $traefikUiUsername,
+        BasicAuth $basicAuth
     ) {
         $this->style = $style;
         $this->processRunner = $processRunner;
         $this->finder = $finder;
         $this->filesystem = $filesystem;
         $this->substitutionFactory = $substitutionFactory;
+        $this->traefikUiHost = $traefikUiHost;
+        $this->traefikUiPassword = $traefikUiPassword;
+        $this->traefikUiUsername = $traefikUiUsername;
+        $this->basicAuth = $basicAuth;
     }
 
     public function export()
@@ -65,21 +94,25 @@ final class TraefikExporter
         $this->removeIgnoredFiles();
         $this->createDockerComposeOverride();
         $this->createDotEnv();
-        $this->substituteEnvInIndexHtml();
         $this->copyTmpToHost();
+    }
+
+    public function hostAppPath(): string
+    {
+        return "/host/traefik";
     }
 
     private function backup(): void
     {
         $this->style->section('Backup');
-        if ($this->filesystem->exists($this->config->hostAppPath())) {
-            $this->style->warning("Backing up old '{$this->config->appName()}' folder on host");
+        if ($this->filesystem->exists($this->hostAppPath())) {
+            $this->style->warning("Backing up old 'traefik' folder on host");
             $this->mustRun(
                 [
                     'mv',
                     '-v',
-                    $this->config->hostAppPath(),
-                    $this->config->hostAppPath().'.'.date("YmdHis"),
+                    $this->hostAppPath(),
+                    $this->hostAppPath().'.'.date("YmdHis"),
                 ]
             );
         } else {
@@ -95,11 +128,11 @@ final class TraefikExporter
             [
                 'rsync',
                 '-rv',
-                $this->config->installerTemplatePath().'/',
-                $this->config->tmpTemplatePath(),
+                $this->installerTemplatePath().'/',
+                $this->tmpTemplatePath(),
             ]
         );
-        $this->mustRun(['mv', '-v', $this->config->tmpTemplatePath(), $this->config->tmpAppPath()]);
+        $this->mustRun(['mv', '-v', $this->tmpTemplatePath(), $this->tmpAppPath()]);
     }
 
     private function removeIgnoredFiles(): void
@@ -109,9 +142,9 @@ final class TraefikExporter
             [
                 'rm',
                 '-fv',
-                $this->config->tmpAppPath()."/.env",
-                $this->config->tmpAppPath()."/.env-override",
-                $this->config->tmpAppPath()."/docker-compose.override.yml",
+                $this->tmpAppPath()."/.env",
+                $this->tmpAppPath()."/.env-override",
+                $this->tmpAppPath()."/docker-compose.override.yml",
             ]
         );
     }
@@ -123,8 +156,8 @@ final class TraefikExporter
             [
                 'cp',
                 '-v',
-                $this->config->tmpAppPath()."/docker-compose.override.yml.dist",
-                $this->config->tmpAppPath()."/docker-compose.override.yml",
+                $this->tmpAppPath()."/docker-compose.override.yml.dist",
+                $this->tmpAppPath()."/docker-compose.override.yml",
             ]
         );
     }
@@ -132,19 +165,25 @@ final class TraefikExporter
     private function createDotEnv(): void
     {
         $this->style->section("Create '.env' and '.env-override' from command options + env");
+
+        $basicAuth = $this->basicAuth->generate(
+            $this->traefikUiUsername->value(),
+            $this->traefikUiPassword->value()
+        );
+
         EnvironmentSubstitution::withDefaults()
             ->export(
                 [
-                    'APP_NAME' => $this->config->appName()->value(),
-                    'APP_HOSTS' => $this->config->appHosts()->toString(),
+                    'APP_HOSTS' => $this->traefikUiHost->toString(),
                 ]
             )->substitute(
                 $this->substitutionFactory->dumpFile(
-                    $this->config->tmpAppPath().'/.env',
+                    $this->tmpAppPath().'/.env',
                     EnvironmentSubstitution::formatEnvFile(
                         [
-                            'APP_NAME="${APP_NAME}"',
-                            'APP_HOSTS="${APP_HOSTS}"',
+                            'APP_HOSTS="${TRAEFIK_UI_HOST}"',
+                            "APP_AUTH_BASIC='{$basicAuth}'",
+                            'ACME_EMAIL="${TRAEFIK_ACME_EMAIL:-}"',
                             'COCOTTE_MACHINE="${COCOTTE_MACHINE}"',
                             'MACHINE_STORAGE_PATH="${MACHINE_STORAGE_PATH}"',
                         ]
@@ -154,34 +193,15 @@ final class TraefikExporter
         EnvironmentSubstitution::withDefaults()
             ->export(
                 [
-                    'APP_HOSTS' => $this->config->appHosts()->toLocal()->toString(),
+                    'APP_HOSTS' => $this->traefikUiHost->toLocalHostCollection()->toString(),
                 ]
             )->substitute(
                 $this->substitutionFactory->dumpFile(
-                    $this->config->tmpAppPath().'/.env-override',
+                    $this->tmpAppPath().'/.env-override',
                     EnvironmentSubstitution::formatEnvFile(
                         [
                             'APP_HOSTS="${APP_HOSTS}"',
                         ]
-                    )
-                )
-            );
-    }
-
-    private function substituteEnvInIndexHtml(): void
-    {
-        $this->style->section('Substitute appName in template index.html');
-        EnvironmentSubstitution::withDefaults()
-            ->export(
-                [
-                    'APP_NAME' => $this->config->appName()->value(),
-                ]
-            )
-            ->restrict(['APP_NAME'])
-            ->substitute(
-                $this->substitutionFactory->inPlace(
-                    $this->finder->exactFile(
-                        $this->config->tmpAppPath().'/web/index.html'
                     )
                 )
             );
@@ -194,7 +214,7 @@ final class TraefikExporter
             [
                 'rsync',
                 '-rv',
-                $this->config->tmpAppPath(),
+                $this->tmpAppPath(),
                 '/host',
             ]
         );
@@ -208,7 +228,26 @@ final class TraefikExporter
 
     private function cleanUpTmp(): void
     {
-        $this->mustRun(['rm', '-rfv', $this->config->tmpAppPath()]);
-        $this->mustRun(['rm', '-rfv', $this->config->tmpTemplatePath()]);
+        $this->mustRun(['rm', '-rfv', $this->tmpAppPath()]);
+        $this->mustRun(['rm', '-rfv', $this->tmpTemplatePath()]);
+    }
+
+    private function tmpAppPath(): string
+    {
+        return "/tmp/traefik";
+    }
+
+    private function tmpTemplatePath(): string
+    {
+        if (null === self::$tmpTemplatePath) {
+            self::$tmpTemplatePath = "/tmp/".uniqid('traefik-');
+        }
+
+        return self::$tmpTemplatePath;
+    }
+
+    private function installerTemplatePath(): string
+    {
+        return "/installer/template/traefik";
     }
 }

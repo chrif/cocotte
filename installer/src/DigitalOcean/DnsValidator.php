@@ -3,7 +3,6 @@
 namespace Chrif\Cocotte\DigitalOcean;
 
 use Assert\Assertion;
-use Chrif\Cocotte\Template\AppHost;
 use Iodev\Whois\Whois;
 
 final class DnsValidator

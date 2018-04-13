@@ -2,39 +2,33 @@
 
 namespace Chrif\Cocotte\Command;
 
+use Chrif\Cocotte\Console\Style;
 use Chrif\Cocotte\DigitalOcean\ApiToken;
 use Chrif\Cocotte\DigitalOcean\NetworkingConfigurator;
 use Chrif\Cocotte\Environment\EnvironmentManager;
 use Chrif\Cocotte\Machine\MachineState;
 use Chrif\Cocotte\Machine\MachineStoragePath;
 use Chrif\Cocotte\Shell\ProcessRunner;
-use Chrif\Cocotte\Template\AppHostCollection;
-use Chrif\Cocotte\Template\AppName;
-use Chrif\Cocotte\Template\StaticSite\StaticExporter;
-use Chrif\Cocotte\Template\StaticSite\StaticExporterConfiguration;
+use Chrif\Cocotte\Template\StaticSite\StaticSiteExporter;
+use Chrif\Cocotte\Template\StaticSite\StaticSiteHost;
+use Chrif\Cocotte\Template\StaticSite\StaticSiteName;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Process;
 
-final class AddSiteCommand extends Command
+final class StaticSiteCommand extends Command
 {
     /**
-     * @var StaticExporter
+     * @var StaticSiteExporter
      */
-    private $staticExporter;
+    private $staticSiteExporter;
 
     /**
      * @var NetworkingConfigurator
      */
     private $networkingConfigurator;
-
-    /**
-     * @var ProcessRunner
-     */
-    private $processRunner;
 
     /**
      * @var EnvironmentManager
@@ -46,18 +40,37 @@ final class AddSiteCommand extends Command
      */
     private $machineState;
 
+    /**
+     * @var StaticSiteHost
+     */
+    private $staticSiteHost;
+
+    /**
+     * @var Style
+     */
+    private $style;
+
+    /**
+     * @var ProcessRunner
+     */
+    private $processRunner;
+
     public function __construct(
-        StaticExporter $staticTemplateExporter,
+        StaticSiteExporter $staticSiteExporter,
         NetworkingConfigurator $networkingConfigurator,
-        ProcessRunner $processRunner,
         EnvironmentManager $environmentManager,
-        MachineState $machineState
+        MachineState $machineState,
+        StaticSiteHost $staticSiteHost,
+        Style $style,
+        ProcessRunner $processRunner
     ) {
-        $this->staticExporter = $staticTemplateExporter;
+        $this->staticSiteExporter = $staticSiteExporter;
         $this->networkingConfigurator = $networkingConfigurator;
-        $this->processRunner = $processRunner;
         $this->environmentManager = $environmentManager;
         $this->machineState = $machineState;
+        $this->staticSiteHost = $staticSiteHost;
+        $this->style = $style;
+        $this->processRunner = $processRunner;
         parent::__construct();
     }
 
@@ -69,17 +82,7 @@ final class AddSiteCommand extends Command
     protected function configure()
     {
         $this
-            ->setName('add-site')
-            ->addArgument(
-                'app-name',
-                InputArgument::REQUIRED,
-                'Name for the exported website. Must be a valid directory name on the host.'
-            )
-            ->addArgument(
-                'app-hosts',
-                InputArgument::REQUIRED,
-                'Comma-separated list of host(s) for the deployed website.'
-            )
+            ->setName('static-site')
             ->addOption(
                 'skip-networking',
                 null,
@@ -92,10 +95,15 @@ final class AddSiteCommand extends Command
                 InputOption::VALUE_NONE,
                 'Deploy to prod after exportation'
             )
-            ->setDescription('Create a static website and deploy it to your Docker Machine.');
-
-        $this->getDefinition()->addOption(ApiToken::inputOption());
-        $this->getDefinition()->addOption(MachineStoragePath::inputOption());
+            ->setDescription('Create a static website and deploy it to your Docker Machine.')
+            ->getDefinition()->addOptions(
+                [
+                    StaticSiteName::inputOption(),
+                    StaticSiteHost::inputOption(),
+                    ApiToken::inputOption(),
+                    MachineStoragePath::inputOption(),
+                ]
+            );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -109,19 +117,15 @@ final class AddSiteCommand extends Command
             throw new \Exception("Cannot skip networking when deploying");
         }
 
-        $config = StaticExporterConfiguration::forApp(
-            AppName::fromString($input->getArgument('app-name')),
-            AppHostCollection::fromString($input->getArgument('app-hosts'))
-        );
-
-        $this->staticExporter->export($config);
+        $this->staticSiteExporter->export();
 
         if (!$skipNetworking) {
-            $this->networkingConfigurator->configure($config->appHosts());
+            $this->networkingConfigurator->configure($this->staticSiteHost->toHostCollection());
         }
 
         if (!$skipDeploy) {
-            $this->processRunner->mustRun(new Process('./bin/prod', $config->hostAppPath()));
+            $this->style->title('Deploying exported site to cloud machine');
+            $this->processRunner->mustRun(new Process('./bin/prod', $this->staticSiteExporter->hostAppPath()));
         }
     }
 }

@@ -1,8 +1,8 @@
 <?php
 
-namespace Chrif\Cocotte\Tests\App;
+namespace Chrif\Cocotte\Tests\DigitalOcean;
 
-use Chrif\Cocotte\Template\AppHost;
+use Chrif\Cocotte\DigitalOcean\AppHost;
 use DigitalOceanV2\Entity\DomainRecord;
 use PHPUnit\Framework\TestCase;
 

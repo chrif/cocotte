@@ -1,9 +1,9 @@
 <?php
 
-namespace Chrif\Cocotte\Tests\App;
+namespace Chrif\Cocotte\Tests\DigitalOcean;
 
-use Chrif\Cocotte\Template\AppHost;
-use Chrif\Cocotte\Template\AppHostCollection;
+use Chrif\Cocotte\DigitalOcean\AppHost;
+use Chrif\Cocotte\DigitalOcean\AppHostCollection;
 use PHPUnit\Framework\TestCase;
 
 class AppHostCollectionTest extends TestCase

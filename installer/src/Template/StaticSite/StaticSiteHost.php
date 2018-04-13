@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Chrif\Cocotte\Template\Traefik;
+namespace Chrif\Cocotte\Template\StaticSite;
 
 use Chrif\Cocotte\DigitalOcean\AppHostCollection;
 use Chrif\Cocotte\Environment\ExportableValue;
@@ -9,10 +9,10 @@ use Chrif\Cocotte\Environment\InputOptionValue;
 use Chrif\Cocotte\Shell\Env;
 use Symfony\Component\Console\Input\InputOption;
 
-class TraefikUiHost implements ImportableValue, ExportableValue, InputOptionValue
+class StaticSiteHost implements ImportableValue, ExportableValue, InputOptionValue
 {
-    const TRAEFIK_UI_HOST = 'TRAEFIK_UI_HOST';
-    const INPUT_OPTION = 'traefik-ui-hostname';
+    const STATIC_SITE_HOST = 'STATIC_SITE_HOST';
+    const INPUT_OPTION = 'hostname';
 
     /**
      * @var AppHostCollection
@@ -34,12 +34,12 @@ class TraefikUiHost implements ImportableValue, ExportableValue, InputOptionValu
      */
     public static function fromEnv(): ImportableValue
     {
-        return new self(AppHostCollection::fromString(Env::get(self::TRAEFIK_UI_HOST)));
+        return new self(AppHostCollection::fromString(Env::get(self::STATIC_SITE_HOST)));
     }
 
     public static function toEnv($value)
     {
-        Env::put(self::TRAEFIK_UI_HOST, $value);
+        Env::put(self::STATIC_SITE_HOST, $value);
     }
 
     public static function inputOption(): InputOption
@@ -48,8 +48,8 @@ class TraefikUiHost implements ImportableValue, ExportableValue, InputOptionValu
             self::INPUT_OPTION,
             null,
             InputOption::VALUE_REQUIRED,
-            'Traefik Ui hostname',
-            Env::get(self::TRAEFIK_UI_HOST)
+            'Comma-separated list of host(s) for the deployed website.',
+            Env::get(self::STATIC_SITE_HOST)
         );
     }
 
@@ -77,4 +77,5 @@ class TraefikUiHost implements ImportableValue, ExportableValue, InputOptionValu
     {
         return $this->appHostCollection;
     }
+
 }
