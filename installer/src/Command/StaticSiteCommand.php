@@ -10,7 +10,7 @@ use Chrif\Cocotte\Machine\MachineState;
 use Chrif\Cocotte\Machine\MachineStoragePath;
 use Chrif\Cocotte\Shell\ProcessRunner;
 use Chrif\Cocotte\Template\StaticSite\StaticSiteExporter;
-use Chrif\Cocotte\Template\StaticSite\StaticSiteHost;
+use Chrif\Cocotte\Template\StaticSite\StaticSiteHostname;
 use Chrif\Cocotte\Template\StaticSite\StaticSiteNamespace;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -41,9 +41,9 @@ final class StaticSiteCommand extends Command
     private $machineState;
 
     /**
-     * @var StaticSiteHost
+     * @var StaticSiteHostname
      */
-    private $staticSiteHost;
+    private $staticSiteHostname;
 
     /**
      * @var Style
@@ -60,7 +60,7 @@ final class StaticSiteCommand extends Command
         NetworkingConfigurator $networkingConfigurator,
         EnvironmentManager $environmentManager,
         MachineState $machineState,
-        StaticSiteHost $staticSiteHost,
+        StaticSiteHostname $staticSiteHostname,
         Style $style,
         ProcessRunner $processRunner
     ) {
@@ -68,7 +68,7 @@ final class StaticSiteCommand extends Command
         $this->networkingConfigurator = $networkingConfigurator;
         $this->environmentManager = $environmentManager;
         $this->machineState = $machineState;
-        $this->staticSiteHost = $staticSiteHost;
+        $this->staticSiteHostname = $staticSiteHostname;
         $this->style = $style;
         $this->processRunner = $processRunner;
         parent::__construct();
@@ -99,7 +99,7 @@ final class StaticSiteCommand extends Command
             ->getDefinition()->addOptions(
                 [
                     StaticSiteNamespace::inputOption(),
-                    StaticSiteHost::inputOption(),
+                    StaticSiteHostname::inputOption(),
                     ApiToken::inputOption(),
                     MachineStoragePath::inputOption(),
                 ]
@@ -120,7 +120,7 @@ final class StaticSiteCommand extends Command
         $this->staticSiteExporter->export();
 
         if (!$skipNetworking) {
-            $this->networkingConfigurator->configure($this->staticSiteHost->toHostCollection());
+            $this->networkingConfigurator->configure($this->staticSiteHostname->toHostCollection());
         }
 
         if (!$skipDeploy) {

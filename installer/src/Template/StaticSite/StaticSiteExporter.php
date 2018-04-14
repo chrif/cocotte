@@ -49,9 +49,9 @@ final class StaticSiteExporter
     private $staticSiteNamespace;
 
     /**
-     * @var StaticSiteHost
+     * @var StaticSiteHostname
      */
-    private $staticSiteHost;
+    private $staticSiteHostname;
 
     public function __construct(
         Style $style,
@@ -60,7 +60,7 @@ final class StaticSiteExporter
         Filesystem $filesystem,
         SubstitutionFactory $substitutionFactory,
         StaticSiteNamespace $staticSiteName,
-        StaticSiteHost $staticSiteHost
+        StaticSiteHostname $staticSiteHostname
     ) {
         $this->style = $style;
         $this->processRunner = $processRunner;
@@ -68,7 +68,7 @@ final class StaticSiteExporter
         $this->filesystem = $filesystem;
         $this->substitutionFactory = $substitutionFactory;
         $this->staticSiteNamespace = $staticSiteName;
-        $this->staticSiteHost = $staticSiteHost;
+        $this->staticSiteHostname = $staticSiteHostname;
     }
 
     public function export()
@@ -155,7 +155,7 @@ final class StaticSiteExporter
             ->export(
                 [
                     'APP_NAME' => $this->staticSiteNamespace->toString(),
-                    'APP_HOSTS' => $this->staticSiteHost->toString(),
+                    'APP_HOSTS' => $this->staticSiteHostname->toString(),
                 ]
             )->substitute(
                 $this->substitutionFactory->dumpFile(
@@ -173,7 +173,7 @@ final class StaticSiteExporter
         EnvironmentSubstitution::withDefaults()
             ->export(
                 [
-                    'APP_HOSTS' => $this->staticSiteHost->toLocalHostCollection()->toString(),
+                    'APP_HOSTS' => $this->staticSiteHostname->toLocalHostCollection()->toString(),
                 ]
             )->substitute(
                 $this->substitutionFactory->dumpFile(

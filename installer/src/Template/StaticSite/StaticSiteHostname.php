@@ -9,7 +9,7 @@ use Chrif\Cocotte\Environment\InputOptionValue;
 use Chrif\Cocotte\Shell\Env;
 use Symfony\Component\Console\Input\InputOption;
 
-class StaticSiteHost implements ImportableValue, ExportableValue, InputOptionValue
+class StaticSiteHostname implements ImportableValue, ExportableValue, InputOptionValue
 {
     const STATIC_SITE_HOST = 'STATIC_SITE_HOST';
     const INPUT_OPTION = 'hostname';
