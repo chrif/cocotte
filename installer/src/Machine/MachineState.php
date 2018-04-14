@@ -23,7 +23,7 @@ final class MachineState
 
     public function exists(): bool
     {
-        $process = new Process('docker-machine -s "${MACHINE_STORAGE_PATH}" ls -q "${COCOTTE_MACHINE}"');
+        $process = new Process('docker-machine -s "${MACHINE_STORAGE_PATH}" ls -q "${MACHINE_NAME}"');
         $process->run();
         if ($process->isSuccessful()) {
             return $this->machineName->value() === trim($process->getOutput());
@@ -35,7 +35,7 @@ final class MachineState
     public function isRunning(): bool
     {
         $process = new Process(
-            'docker-machine -s "${MACHINE_STORAGE_PATH}" ls -q --filter="state=running" "${COCOTTE_MACHINE}"'
+            'docker-machine -s "${MACHINE_STORAGE_PATH}" ls -q --filter="state=running" "${MACHINE_NAME}"'
         );
         $process->run();
         if ($process->isSuccessful()) {

@@ -103,7 +103,7 @@ final class UninstallCommand extends Command
         );
         $this->processRunner->mustRun(
             new Process(
-                'docker-machine -s "${MACHINE_STORAGE_PATH}" rm -y "${COCOTTE_MACHINE}"'
+                'docker-machine -s "${MACHINE_STORAGE_PATH}" rm -y "${MACHINE_NAME}"'
             )
         );
     }

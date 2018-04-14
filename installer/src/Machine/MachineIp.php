@@ -34,7 +34,7 @@ class MachineIp implements ImportableValue
                 '"${MACHINE_STORAGE_PATH}"',
                 'inspect',
                 "--format='{{.Driver.IPAddress}}'",
-                '"${COCOTTE_MACHINE}"',
+                '"${MACHINE_NAME}"',
             ]
         );
         $process->mustRun();

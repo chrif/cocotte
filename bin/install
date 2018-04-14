@@ -15,7 +15,7 @@ docker run -it --rm \
     -v "$(pwd)":/host \
 	chrif/cocotte install \
 	--digital-ocean-api-token="${DIGITAL_OCEAN_API_TOKEN}" \
-	--machine-name="${COCOTTE_MACHINE:-cocotte}" \
+	--machine-name="${MACHINE_NAME:-cocotte}" \
 	--machine-storage-path="${MACHINE_STORAGE_PATH:-"$(pwd)/machine"}" \
 	--traefik-ui-hostname="${TRAEFIK_UI_HOSTNAME}" \
 	--traefik-ui-password="${TRAEFIK_UI_PASSWORD}" \

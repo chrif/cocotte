@@ -11,7 +11,7 @@ use Symfony\Component\Console\Input\InputOption;
 
 class MachineName implements ImportableValue, ExportableValue, InputOptionValue
 {
-    const COCOTTE_MACHINE = 'COCOTTE_MACHINE';
+    const MACHINE_NAME = 'MACHINE_NAME';
     const INPUT_OPTION = 'machine-name';
 
     /**
@@ -35,12 +35,12 @@ class MachineName implements ImportableValue, ExportableValue, InputOptionValue
      */
     public static function fromEnv(): ImportableValue
     {
-        return new self(Env::get(self::COCOTTE_MACHINE));
+        return new self(Env::get(self::MACHINE_NAME));
     }
 
     public static function toEnv($value): void
     {
-        Env::put(self::COCOTTE_MACHINE, $value);
+        Env::put(self::MACHINE_NAME, $value);
     }
 
     public static function inputOption(): InputOption
@@ -50,7 +50,7 @@ class MachineName implements ImportableValue, ExportableValue, InputOptionValue
             null,
             InputOption::VALUE_REQUIRED,
             'Machine Name',
-            Env::get(self::COCOTTE_MACHINE)
+            Env::get(self::MACHINE_NAME)
         );
     }
 

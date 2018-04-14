@@ -164,7 +164,7 @@ final class StaticSiteExporter
                         [
                             'APP_NAME="${APP_NAME}"',
                             'APP_HOSTS="${APP_HOSTS}"',
-                            'COCOTTE_MACHINE="${COCOTTE_MACHINE}"',
+                            'MACHINE_NAME="${MACHINE_NAME}"',
                             'MACHINE_STORAGE_PATH="${MACHINE_STORAGE_PATH}"',
                         ]
                     )

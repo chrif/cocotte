@@ -12,7 +12,7 @@ use Symfony\Component\Console\Input\InputOption;
 class StaticSiteNamespace implements ImportableValue, ExportableValue, InputOptionValue
 {
     const STATIC_SITE_NAMESPACE = 'STATIC_SITE_NAMESPACE';
-    const INPUT_OPTION = 'site-namespace';
+    const INPUT_OPTION = 'namespace';
 
     /**
      * @var string

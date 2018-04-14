@@ -74,7 +74,7 @@ final class MachineCreator
                 --engine-opt log-driver="json-file" \
                 --engine-opt log-opt="max-size=1m" \
                 --engine-opt log-opt="max-file=10" \
-                "${COCOTTE_MACHINE}"'
+                "${MACHINE_NAME}"'
         );
 
         $process->setTimeout(300);

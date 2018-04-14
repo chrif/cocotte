@@ -184,7 +184,7 @@ final class TraefikExporter
                             'APP_HOSTS="${TRAEFIK_UI_HOSTNAME}"',
                             "APP_AUTH_BASIC='{$basicAuth}'",
                             'ACME_EMAIL="${TRAEFIK_ACME_EMAIL:-}"',
-                            'COCOTTE_MACHINE="${COCOTTE_MACHINE}"',
+                            'MACHINE_NAME="${MACHINE_NAME}"',
                             'MACHINE_STORAGE_PATH="${MACHINE_STORAGE_PATH}"',
                         ]
                     )

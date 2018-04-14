@@ -11,74 +11,74 @@ class AppHostTest extends TestCase
 
     public function test_domain()
     {
-        $host = Hostname::parse("foo.bar.org");
-        self::assertSame("bar.org", $host->domainName());
+        $hostname = Hostname::parse("foo.bar.org");
+        self::assertSame("bar.org", $hostname->domainName());
 
-        $host = Hostname::parse("bar.org");
-        self::assertSame("bar.org", $host->domainName());
+        $hostname = Hostname::parse("bar.org");
+        self::assertSame("bar.org", $hostname->domainName());
 
-        $host = Hostname::parse("www.bar.org");
-        self::assertSame("bar.org", $host->domainName());
+        $hostname = Hostname::parse("www.bar.org");
+        self::assertSame("bar.org", $hostname->domainName());
     }
 
     public function test_sub_domain()
     {
-        $host = Hostname::parse("foo.bar.org");
-        self::assertSame("foo", $host->recordName());
+        $hostname = Hostname::parse("foo.bar.org");
+        self::assertSame("foo", $hostname->recordName());
 
-        $host = Hostname::parse("bar.org");
-        self::assertSame(Hostname::DIGITAL_OCEAN_ROOT_RECORD, $host->recordName());
+        $hostname = Hostname::parse("bar.org");
+        self::assertSame(Hostname::DIGITAL_OCEAN_ROOT_RECORD, $hostname->recordName());
 
-        $host = Hostname::parse("www.bar.org");
-        self::assertSame("www", $host->recordName());
+        $hostname = Hostname::parse("www.bar.org");
+        self::assertSame("www", $hostname->recordName());
     }
 
     public function test_value()
     {
-        $host = Hostname::parse("foo.bar.org");
-        self::assertSame("foo.bar.org", $host->toString());
+        $hostname = Hostname::parse("foo.bar.org");
+        self::assertSame("foo.bar.org", $hostname->toString());
 
-        $host = Hostname::parse("bar.org");
-        self::assertSame("bar.org", $host->toString());
+        $hostname = Hostname::parse("bar.org");
+        self::assertSame("bar.org", $hostname->toString());
 
-        $host = Hostname::parse("www.bar.org");
-        self::assertSame("www.bar.org", $host->toString());
+        $hostname = Hostname::parse("www.bar.org");
+        self::assertSame("www.bar.org", $hostname->toString());
     }
 
     public function test_match_domain_record()
     {
-        $host = Hostname::parse("foo.bar.org");
-        self::assertTrue($host->matchDomainRecord(new DomainRecord(['name' => "foo"])));
+        $hostname = Hostname::parse("foo.bar.org");
+        self::assertTrue($hostname->matchDomainRecord(new DomainRecord(['name' => "foo"])));
 
-        $host = Hostname::parse("bar.org");
-        self::assertTrue($host->matchDomainRecord(new DomainRecord(['name' => Hostname::DIGITAL_OCEAN_ROOT_RECORD])));
+        $hostname = Hostname::parse("bar.org");
+        self::assertTrue($hostname->matchDomainRecord(new DomainRecord(['name' => Hostname::DIGITAL_OCEAN_ROOT_RECORD])));
 
-        $host = Hostname::parse("www.bar.org");
-        self::assertTrue($host->matchDomainRecord(new DomainRecord(['name' => "www"])));
+        $hostname = Hostname::parse("www.bar.org");
+        self::assertTrue($hostname->matchDomainRecord(new DomainRecord(['name' => "www"])));
 
-        $host = Hostname::parse("www.bar.org");
-        self::assertFalse($host->matchDomainRecord(new DomainRecord(['name' => "foo"])));
+        $hostname = Hostname::parse("www.bar.org");
+        self::assertFalse($hostname->matchDomainRecord(new DomainRecord(['name' => "foo"])));
     }
 
     public function test_to_root()
     {
-        $host = Hostname::parse("foo.bar.org");
-        self::assertEquals(Hostname::parse("bar.org"), $host->toRoot());
+        $hostname = Hostname::parse("foo.bar.org");
+        self::assertEquals(Hostname::parse("bar.org"), $hostname->toRoot());
 
-        $host = Hostname::parse("bar.org");
-        self::assertEquals(Hostname::parse("bar.org"), $host->toRoot());
+        $hostname = Hostname::parse("bar.org");
+        self::assertEquals(Hostname::parse("bar.org"), $hostname->toRoot());
 
-        $host = Hostname::parse("foo.org");
-        self::assertNotEquals(Hostname::parse("bar.org"), $host->toRoot());
+        $hostname = Hostname::parse("foo.org");
+        self::assertNotEquals(Hostname::parse("bar.org"), $hostname->toRoot());
     }
 
     public function test_is_root()
     {
-        $host = Hostname::parse("foo.bar.org");
-        self::assertFalse($host->isRoot());
+        $hostname = Hostname::parse("foo.bar.org");
+        self::assertFalse($hostname->isRoot());
 
-        $host = Hostname::parse("bar.org");
-        self::assertTrue($host->isRoot());
+        $hostname = Hostname::parse("bar.org");
+        self::assertTrue($hostname->isRoot());
     }
 
     /**
@@ -92,19 +92,19 @@ class AppHostTest extends TestCase
 
     public function test_from_string_syntax()
     {
-        $host = Hostname::fromString("@.bar.org");
-        self::assertTrue($host->isRoot());
-        self::assertSame("@.bar.org", $host->rawValue());
+        $hostname = Hostname::fromString("@.bar.org");
+        self::assertTrue($hostname->isRoot());
+        self::assertSame("@.bar.org", $hostname->rawValue());
     }
 
     public function test_to_local()
     {
-        $host = Hostname::parse("foo.bar.org");
-        $local = $host->toLocal();
+        $hostname = Hostname::parse("foo.bar.org");
+        $local = $hostname->toLocal();
         self::assertSame('foo.bar.local', $local->toString());
 
-        $host = Hostname::parse("bar.org");
-        $local = $host->toLocal();
+        $hostname = Hostname::parse("bar.org");
+        $local = $hostname->toLocal();
         self::assertSame('bar.local', $local->toString());
     }
 
