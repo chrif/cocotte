@@ -17,9 +17,9 @@ final class DnsValidator
         $this->whois = $whois;
     }
 
-    public function validateNameServers(AppHost $host)
+    public function validateNameServers(Hostname $hostname)
     {
-        $info = $this->whois->loadDomainInfo($host->domainName());
+        $info = $this->whois->loadDomainInfo($hostname->domainName());
         $nameServers = $info->getNameServers();
         Assertion::isArray(
             $nameServers,
@@ -31,18 +31,18 @@ final class DnsValidator
             "Expected 1 or more name servers. Got ".count($nameServers)
         );
         foreach ($nameServers as $nameServer) {
-            $nameServer = AppHost::parse($nameServer);
+            $nameServer = Hostname::parse($nameServer);
             Assertion::eq($nameServer->domainName(), "digitalocean.com");
             Assertion::regex($nameServer->recordName(), "/ns\d/");
         }
     }
 
-    public function validateHost(AppHost $host)
+    public function validateHost(Hostname $hostname)
     {
         try {
-            $this->validateNameServers($host->toRoot());
+            $this->validateNameServers($hostname->toRoot());
         } catch (\Exception $domainException) {
-            $message[] = "Failed to validate name servers for '$host':";
+            $message[] = "Failed to validate name servers for '$hostname':";
             $message[] = $domainException->getMessage();
             throw new \Exception(implode("\n", $message));
         }

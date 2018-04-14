@@ -120,7 +120,7 @@ final class StaticSiteCommand extends Command
         $this->staticSiteExporter->export();
 
         if (!$skipNetworking) {
-            $this->networkingConfigurator->configure($this->staticSiteHostname->toHostCollection());
+            $this->networkingConfigurator->configure($this->staticSiteHostname->toHostnameCollection());
         }
 
         if (!$skipDeploy) {

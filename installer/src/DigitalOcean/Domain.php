@@ -29,27 +29,27 @@ final class Domain
         $this->machineIp = $machineIp;
     }
 
-    public function create(AppHost $host): Entity\Domain
+    public function create(Hostname $hostname): Entity\Domain
     {
         return $this->domainApi->create(
-            $host->domainName(),
+            $hostname->domainName(),
             $this->machineIp->value()
         );
     }
 
-    public function delete(AppHost $host): void
+    public function delete(Hostname $hostname): void
     {
         $this->domainApi->delete(
-            $host->domainName()
+            $hostname->domainName()
         );
     }
 
-    public function exists(AppHost $host): bool
+    public function exists(Hostname $hostname): bool
     {
         $domains = $this->domainApi->getAll();
 
         foreach ($domains as $domain) {
-            if ($domain->name === $host->domainName()) {
+            if ($domain->name === $hostname->domainName()) {
                 return true;
             }
         }

@@ -3,7 +3,7 @@
 namespace Chrif\Cocotte\Command;
 
 use Chrif\Cocotte\DigitalOcean\ApiToken;
-use Chrif\Cocotte\DigitalOcean\AppHostCollection;
+use Chrif\Cocotte\DigitalOcean\HostnameCollection;
 use Chrif\Cocotte\DigitalOcean\NetworkingConfigurator;
 use Chrif\Cocotte\Environment\EnvironmentManager;
 use Chrif\Cocotte\Machine\MachineCreator;
@@ -98,7 +98,7 @@ final class UninstallCommand extends Command
     {
         $this->environmentManager->exportFromInput($input);
         $this->networkingConfigurator->configure(
-            AppHostCollection::fromString($input->getOption('traefik-ui-hostname')),
+            HostnameCollection::fromString($input->getOption('traefik-ui-hostname')),
             true
         );
         $this->processRunner->mustRun(

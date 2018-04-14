@@ -5,7 +5,7 @@ namespace Chrif\Cocotte\DigitalOcean;
 use Assert\Assertion;
 use DigitalOceanV2\Entity;
 
-final class AppHost
+final class Hostname
 {
 
     const DIGITAL_OCEAN_ROOT_RECORD = '@';
@@ -66,7 +66,7 @@ final class AppHost
      */
     public static function fixture(): self
     {
-        return self::parse(uniqid('host-').'.org');
+        return self::parse(uniqid('hostname-').'.org');
     }
 
     public function domainName(): string
@@ -127,7 +127,7 @@ final class AppHost
         return self::LOCAL_TOP_LEVEL_DOMAIN === $this->topLevelDomain;
     }
 
-    public function toLocal(): AppHost
+    public function toLocal(): Hostname
     {
         if ($this->isLocal()) {
             return $this;

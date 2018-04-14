@@ -36,14 +36,14 @@ final class NetworkingConfigurator
     }
 
     /**
-     * @param AppHostCollection|AppHost[] $appHostCollection
+     * @param HostnameCollection|Hostname[] $hostnames
      * @param bool $remove
      */
-    public function configure(AppHostCollection $appHostCollection, $remove = false)
+    public function configure(HostnameCollection $hostnames, $remove = false)
     {
-        $this->style->title('Configuring networking for all the hosts supplied: ');
-        $this->style->listing($appHostCollection->toArray());
-        foreach ($appHostCollection as $host) {
+        $this->style->title('Configuring networking for all the hostnames supplied: ');
+        $this->style->listing($hostnames->toArray());
+        foreach ($hostnames as $host) {
             $this->style->section($host);
             if ($remove) {
                 $this->removeDomainRecord($host);
@@ -54,45 +54,45 @@ final class NetworkingConfigurator
         $this->style->success("");
     }
 
-    private function configureDomain(AppHost $host): void
+    private function configureDomain(Hostname $hostname): void
     {
-        if (!$this->domain->exists($host)) {
+        if (!$this->domain->exists($hostname)) {
             $this->style->writeln(
-                "Domain '{$host->toRoot()}' does not exist. Creating it and adding ".
-                "{$host->toRoot()} with ip ".$this->machineIp->value()
+                "Domain '{$hostname->toRoot()}' does not exist. Creating it and adding ".
+                "{$hostname->toRoot()} with ip ".$this->machineIp->value()
             );
-            $this->domain->create($host);
+            $this->domain->create($hostname);
         }
 
-        $this->configureDomainRecord($host);
+        $this->configureDomainRecord($hostname);
     }
 
-    private function configureDomainRecord(AppHost $host): void
+    private function configureDomainRecord(Hostname $hostname): void
     {
-        if ($this->domainRecord->exists($host)) {
-            if (!$this->domainRecord->isUpToDate($host)) {
+        if ($this->domainRecord->exists($hostname)) {
+            if (!$this->domainRecord->isUpToDate($hostname)) {
                 $this->style->writeln(
-                    "Domain record '{$host}' exists. Updating its ip to ".$this->machineIp->value()
+                    "Domain record '{$hostname}' exists. Updating its ip to ".$this->machineIp->value()
                 );
-                $this->domainRecord->update($host);
+                $this->domainRecord->update($hostname);
             } else {
-                $this->style->writeln("Domain record '{$host}' exists and its ip is up-to-date.");
+                $this->style->writeln("Domain record '{$hostname}' exists and its ip is up-to-date.");
             }
         } else {
             $this->style->writeln(
-                "Domain record '{$host}' does not exist. Creating it with ip ".$this->machineIp->value()
+                "Domain record '{$hostname}' does not exist. Creating it with ip ".$this->machineIp->value()
             );
-            $this->domainRecord->create($host);
+            $this->domainRecord->create($hostname);
         }
     }
 
-    private function removeDomainRecord(AppHost $host): void
+    private function removeDomainRecord(Hostname $hostname): void
     {
-        if ($this->domainRecord->exists($host)) {
-            $this->style->writeln("Removing domain record '{$host}'");
-            $this->domainRecord->delete($host);
+        if ($this->domainRecord->exists($hostname)) {
+            $this->style->writeln("Removing domain record '{$hostname}'");
+            $this->domainRecord->delete($hostname);
         } else {
-            $this->style->writeln("Domain record '{$host}' was already removed");
+            $this->style->writeln("Domain record '{$hostname}' was already removed");
         }
     }
 

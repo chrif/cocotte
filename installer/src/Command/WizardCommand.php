@@ -3,7 +3,7 @@
 namespace Chrif\Cocotte\Command;
 
 use Chrif\Cocotte\Console\Style;
-use Chrif\Cocotte\DigitalOcean\AppHost;
+use Chrif\Cocotte\DigitalOcean\Hostname;
 use Chrif\Cocotte\DigitalOcean\DnsValidator;
 use Chrif\Cocotte\Filesystem\Filesystem;
 use DigitalOceanV2\Adapter\GuzzleHttpAdapter;
@@ -207,14 +207,14 @@ EOF
                             throw new \Exception('No answer given. Try again.');
                         }
 
-                        $host = AppHost::parse($answer);
+                        $hostname = Hostname::parse($answer);
 
-                        $this->dnsValidator->validateHost($host);
+                        $this->dnsValidator->validateHost($hostname);
 
-                        $this->style->success("Traefik UI hostname '$host' is valid.");
+                        $this->style->success("Traefik UI hostname '$hostname' is valid.");
                         $this->style->ask("Press Enter to continue");
 
-                        return $host->toString();
+                        return $hostname->toString();
                     }
                 )
         );

@@ -2,7 +2,7 @@
 
 namespace Chrif\Cocotte\Template\StaticSite;
 
-use Chrif\Cocotte\DigitalOcean\AppHostCollection;
+use Chrif\Cocotte\DigitalOcean\HostnameCollection;
 use Chrif\Cocotte\Environment\ExportableValue;
 use Chrif\Cocotte\Environment\ImportableValue;
 use Chrif\Cocotte\Environment\InputOptionValue;
@@ -11,22 +11,22 @@ use Symfony\Component\Console\Input\InputOption;
 
 class StaticSiteHostname implements ImportableValue, ExportableValue, InputOptionValue
 {
-    const STATIC_SITE_HOST = 'STATIC_SITE_HOST';
+    const STATIC_SITE_HOSTNAME = 'STATIC_SITE_HOSTNAME';
     const INPUT_OPTION = 'hostname';
 
     /**
-     * @var AppHostCollection
+     * @var HostnameCollection
      */
-    private $appHostCollection;
+    private $hostnameCollection;
 
-    public function __construct(AppHostCollection $appHostCollection)
+    public function __construct(HostnameCollection $hostnameCollection)
     {
-        $this->appHostCollection = $appHostCollection;
+        $this->hostnameCollection = $hostnameCollection;
     }
 
     public static function fromString(string $value): self
     {
-        return new self(AppHostCollection::fromString($value));
+        return new self(HostnameCollection::fromString($value));
     }
 
     /**
@@ -34,12 +34,12 @@ class StaticSiteHostname implements ImportableValue, ExportableValue, InputOptio
      */
     public static function fromEnv(): ImportableValue
     {
-        return new self(AppHostCollection::fromString(Env::get(self::STATIC_SITE_HOST)));
+        return new self(HostnameCollection::fromString(Env::get(self::STATIC_SITE_HOSTNAME)));
     }
 
     public static function toEnv($value): void
     {
-        Env::put(self::STATIC_SITE_HOST, $value);
+        Env::put(self::STATIC_SITE_HOSTNAME, $value);
     }
 
     public static function inputOption(): InputOption
@@ -48,8 +48,8 @@ class StaticSiteHostname implements ImportableValue, ExportableValue, InputOptio
             self::INPUT_OPTION,
             null,
             InputOption::VALUE_REQUIRED,
-            'Comma-separated list of host(s) for the deployed website.',
-            Env::get(self::STATIC_SITE_HOST)
+            'Comma-separated list of hostname(s) for the deployed website.',
+            Env::get(self::STATIC_SITE_HOSTNAME)
         );
     }
 
@@ -58,9 +58,9 @@ class StaticSiteHostname implements ImportableValue, ExportableValue, InputOptio
         return self::INPUT_OPTION;
     }
 
-    public function toLocalHostCollection(): AppHostCollection
+    public function toLocalHostnameCollection(): HostnameCollection
     {
-        return $this->appHostCollection->toLocal();
+        return $this->hostnameCollection->toLocal();
     }
 
     public function __toString()
@@ -70,12 +70,12 @@ class StaticSiteHostname implements ImportableValue, ExportableValue, InputOptio
 
     public function toString()
     {
-        return $this->appHostCollection->toString();
+        return $this->hostnameCollection->toString();
     }
 
-    public function toHostCollection(): AppHostCollection
+    public function toHostnameCollection(): HostnameCollection
     {
-        return $this->appHostCollection;
+        return $this->hostnameCollection;
     }
 
 }

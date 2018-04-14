@@ -92,7 +92,7 @@ final class StaticSiteExporter
     {
         $this->style->section('Backup');
         if ($this->filesystem->exists($this->hostAppPath())) {
-            $this->style->warning("Backing up old '{$this->staticSiteNamespace}' folder on host");
+            $this->style->warning("Backing up old '{$this->staticSiteNamespace}' folder on host filesystem");
             $this->mustRun(
                 [
                     'mv',
@@ -173,7 +173,7 @@ final class StaticSiteExporter
         EnvironmentSubstitution::withDefaults()
             ->export(
                 [
-                    'APP_HOSTS' => $this->staticSiteHostname->toLocalHostCollection()->toString(),
+                    'APP_HOSTS' => $this->staticSiteHostname->toLocalHostnameCollection()->toString(),
                 ]
             )->substitute(
                 $this->substitutionFactory->dumpFile(
@@ -208,7 +208,7 @@ final class StaticSiteExporter
 
     private function copyTmpToHost(): void
     {
-        $this->style->section('Copy tmp to host');
+        $this->style->section('Copy tmp to host filesystem');
         $this->mustRun(
             [
                 'rsync',

@@ -4,13 +4,13 @@ namespace Chrif\Cocotte\DigitalOcean;
 
 use Chrif\Cocotte\Collection\GenericCollection;
 
-final class AppHostCollection extends GenericCollection
+final class HostnameCollection extends GenericCollection
 {
     protected $values;
 
-    public function __construct(AppHost ...$appHosts)
+    public function __construct(Hostname ...$hostnames)
     {
-        $this->values = $appHosts;
+        $this->values = $hostnames;
     }
 
     public static function fromScalarArray(array $value): self
@@ -18,7 +18,7 @@ final class AppHostCollection extends GenericCollection
         return self::fromArray(
             array_map(
                 function (string $host) {
-                    return AppHost::parse($host);
+                    return Hostname::parse($host);
                 },
                 $value
             )
@@ -35,7 +35,7 @@ final class AppHostCollection extends GenericCollection
      */
     public static function fixture(): self
     {
-        return new self(AppHost::fixture());
+        return new self(Hostname::fixture());
     }
 
     public function toString(): string
@@ -48,7 +48,7 @@ final class AppHostCollection extends GenericCollection
         return $this->toString();
     }
 
-    public function toLocal(): AppHostCollection
+    public function toLocal(): HostnameCollection
     {
         $localHosts = [];
         foreach ($this->values as $value) {

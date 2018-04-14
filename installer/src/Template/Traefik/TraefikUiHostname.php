@@ -2,7 +2,7 @@
 
 namespace Chrif\Cocotte\Template\Traefik;
 
-use Chrif\Cocotte\DigitalOcean\AppHostCollection;
+use Chrif\Cocotte\DigitalOcean\HostnameCollection;
 use Chrif\Cocotte\Environment\ExportableValue;
 use Chrif\Cocotte\Environment\ImportableValue;
 use Chrif\Cocotte\Environment\InputOptionValue;
@@ -15,18 +15,18 @@ class TraefikUiHostname implements ImportableValue, ExportableValue, InputOption
     const INPUT_OPTION = 'traefik-ui-hostname';
 
     /**
-     * @var AppHostCollection
+     * @var HostnameCollection
      */
-    private $appHostCollection;
+    private $hostnameCollection;
 
-    public function __construct(AppHostCollection $appHostCollection)
+    public function __construct(HostnameCollection $hostnameCollection)
     {
-        $this->appHostCollection = $appHostCollection;
+        $this->hostnameCollection = $hostnameCollection;
     }
 
     public static function fromString(string $value): self
     {
-        return new self(AppHostCollection::fromString($value));
+        return new self(HostnameCollection::fromString($value));
     }
 
     /**
@@ -34,7 +34,7 @@ class TraefikUiHostname implements ImportableValue, ExportableValue, InputOption
      */
     public static function fromEnv(): ImportableValue
     {
-        return new self(AppHostCollection::fromString(Env::get(self::TRAEFIK_UI_HOSTNAME)));
+        return new self(HostnameCollection::fromString(Env::get(self::TRAEFIK_UI_HOSTNAME)));
     }
 
     public static function toEnv($value): void
@@ -58,9 +58,9 @@ class TraefikUiHostname implements ImportableValue, ExportableValue, InputOption
         return self::INPUT_OPTION;
     }
 
-    public function toLocalHostCollection(): AppHostCollection
+    public function toLocalHostnameCollection(): HostnameCollection
     {
-        return $this->appHostCollection->toLocal();
+        return $this->hostnameCollection->toLocal();
     }
 
     public function __toString()
@@ -70,11 +70,11 @@ class TraefikUiHostname implements ImportableValue, ExportableValue, InputOption
 
     public function toString()
     {
-        return $this->appHostCollection->toString();
+        return $this->hostnameCollection->toString();
     }
 
-    public function toHostCollection(): AppHostCollection
+    public function toHostnameCollection(): HostnameCollection
     {
-        return $this->appHostCollection;
+        return $this->hostnameCollection;
     }
 }

@@ -88,7 +88,7 @@ final class TraefikExporter
 
     public function export()
     {
-        $this->style->title('Exporting traefik template to host');
+        $this->style->title('Exporting traefik template to host filesystem');
         $this->backup();
         $this->copyTemplateToTmp();
         $this->removeIgnoredFiles();
@@ -106,7 +106,7 @@ final class TraefikExporter
     {
         $this->style->section('Backup');
         if ($this->filesystem->exists($this->hostAppPath())) {
-            $this->style->warning("Backing up old 'traefik' folder on host");
+            $this->style->warning("Backing up old 'traefik' folder on host filesystem");
             $this->mustRun(
                 [
                     'mv',
@@ -193,7 +193,7 @@ final class TraefikExporter
         EnvironmentSubstitution::withDefaults()
             ->export(
                 [
-                    'APP_HOSTS' => $this->traefikUiHostname->toLocalHostCollection()->toString(),
+                    'APP_HOSTS' => $this->traefikUiHostname->toLocalHostnameCollection()->toString(),
                 ]
             )->substitute(
                 $this->substitutionFactory->dumpFile(
@@ -209,7 +209,7 @@ final class TraefikExporter
 
     private function copyTmpToHost(): void
     {
-        $this->style->section('Copy tmp to host');
+        $this->style->section('Copy tmp to host filesystem');
         $this->mustRun(
             [
                 'rsync',

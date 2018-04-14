@@ -3,7 +3,7 @@
 namespace Chrif\Cocotte\Command;
 
 use Chrif\Cocotte\DigitalOcean\ApiToken;
-use Chrif\Cocotte\DigitalOcean\AppHostCollection;
+use Chrif\Cocotte\DigitalOcean\HostnameCollection;
 use Chrif\Cocotte\DigitalOcean\NetworkingConfigurator;
 use Chrif\Cocotte\Environment\EnvironmentManager;
 use Chrif\Cocotte\Machine\MachineStoragePath;
@@ -42,8 +42,8 @@ final class NetworkingCommand extends Command
         $this
             ->setName('networking')
             ->setDescription('Configure networking of Digital Ocean')
-            ->addArgument('hosts', InputArgument::REQUIRED, 'Comma-separated list of hosts')
-            ->addOption('remove', null, InputOption::VALUE_NONE, 'Remove networking for hosts');
+            ->addArgument('hostnames', InputArgument::REQUIRED, 'Comma-separated list of hostnames')
+            ->addOption('remove', null, InputOption::VALUE_NONE, 'Remove networking for hostnames');
 
         $this->getDefinition()->addOption(ApiToken::inputOption());
         $this->getDefinition()->addOption(MachineStoragePath::inputOption());
@@ -53,7 +53,7 @@ final class NetworkingCommand extends Command
     {
         $this->environmentManager->exportFromInput($input);
         $this->networkingConfigurator->configure(
-            AppHostCollection::fromString($input->getArgument('hosts')),
+            HostnameCollection::fromString($input->getArgument('hostnames')),
             $input->getOption('remove')
         );
     }

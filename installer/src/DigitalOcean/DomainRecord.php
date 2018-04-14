@@ -38,46 +38,46 @@ final class DomainRecord
         $this->machineIp = $machineIp;
     }
 
-    public function update(AppHost $host): Entity\DomainRecord
+    public function update(Hostname $hostname): Entity\DomainRecord
     {
-        $record = $this->get($host);
+        $record = $this->get($hostname);
 
         return $this->domainRecordApi->updateData(
-            $host->domainName(),
+            $hostname->domainName(),
             $record->id,
             $this->machineIp->value()
         );
     }
 
-    public function create(AppHost $host): Entity\DomainRecord
+    public function create(Hostname $hostname): Entity\DomainRecord
     {
         return $this->domainRecordApi->create(
-            $host->domainName(),
+            $hostname->domainName(),
             self::A,
-            $host->recordName(),
+            $hostname->recordName(),
             $this->machineIp->value()
         );
     }
 
-    public function delete(AppHost $host): void
+    public function delete(Hostname $hostname): void
     {
-        $record = $this->get($host);
+        $record = $this->get($hostname);
 
         $this->domainRecordApi->delete(
-            $host->domainName(),
+            $hostname->domainName(),
             $record->id
         );
     }
 
-    public function get(AppHost $host): Entity\DomainRecord
+    public function get(Hostname $hostname): Entity\DomainRecord
     {
-        $records = $this->domainRecordApi->getAll($host->domainName());
+        $records = $this->domainRecordApi->getAll($hostname->domainName());
 
         foreach ($records as $record) {
             if (!$this->isTypeARecord($record)) {
                 continue;
             }
-            if ($host->matchDomainRecord($record)) {
+            if ($hostname->matchDomainRecord($record)) {
                 return $record;
             }
         }
@@ -85,15 +85,15 @@ final class DomainRecord
         throw new \Exception('record does not exist');
     }
 
-    public function exists(AppHost $host): bool
+    public function exists(Hostname $hostname): bool
     {
-        $records = $this->domainRecordApi->getAll($host->domainName());
+        $records = $this->domainRecordApi->getAll($hostname->domainName());
 
         foreach ($records as $record) {
             if (!$this->isTypeARecord($record)) {
                 continue;
             }
-            if ($host->matchDomainRecord($record)) {
+            if ($hostname->matchDomainRecord($record)) {
                 return true;
             }
         }
@@ -101,9 +101,9 @@ final class DomainRecord
         return false;
     }
 
-    public function isUpToDate(AppHost $host): bool
+    public function isUpToDate(Hostname $hostname): bool
     {
-        return $this->get($host)->data === $this->machineIp->value();
+        return $this->get($hostname)->data === $this->machineIp->value();
     }
 
     private function isTypeARecord($record): bool
