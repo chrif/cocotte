@@ -45,9 +45,9 @@ final class TraefikExporter
     private $substitutionFactory;
 
     /**
-     * @var TraefikUiHost
+     * @var TraefikUiHostname
      */
-    private $traefikUiHost;
+    private $traefikUiHostname;
 
     /**
      * @var TraefikUiPassword
@@ -70,7 +70,7 @@ final class TraefikExporter
         Finder $finder,
         Filesystem $filesystem,
         SubstitutionFactory $substitutionFactory,
-        TraefikUiHost $traefikUiHost,
+        TraefikUiHostname $traefikUiHostname,
         TraefikUiPassword $traefikUiPassword,
         TraefikUiUsername $traefikUiUsername,
         BasicAuth $basicAuth
@@ -80,7 +80,7 @@ final class TraefikExporter
         $this->finder = $finder;
         $this->filesystem = $filesystem;
         $this->substitutionFactory = $substitutionFactory;
-        $this->traefikUiHost = $traefikUiHost;
+        $this->traefikUiHostname = $traefikUiHostname;
         $this->traefikUiPassword = $traefikUiPassword;
         $this->traefikUiUsername = $traefikUiUsername;
         $this->basicAuth = $basicAuth;
@@ -174,14 +174,14 @@ final class TraefikExporter
         EnvironmentSubstitution::withDefaults()
             ->export(
                 [
-                    'APP_HOSTS' => $this->traefikUiHost->toString(),
+                    'APP_HOSTS' => $this->traefikUiHostname->toString(),
                 ]
             )->substitute(
                 $this->substitutionFactory->dumpFile(
                     $this->tmpAppPath().'/.env',
                     EnvironmentSubstitution::formatEnvFile(
                         [
-                            'APP_HOSTS="${TRAEFIK_UI_HOST}"',
+                            'APP_HOSTS="${TRAEFIK_UI_HOSTNAME}"',
                             "APP_AUTH_BASIC='{$basicAuth}'",
                             'ACME_EMAIL="${TRAEFIK_ACME_EMAIL:-}"',
                             'COCOTTE_MACHINE="${COCOTTE_MACHINE}"',
@@ -193,7 +193,7 @@ final class TraefikExporter
         EnvironmentSubstitution::withDefaults()
             ->export(
                 [
-                    'APP_HOSTS' => $this->traefikUiHost->toLocalHostCollection()->toString(),
+                    'APP_HOSTS' => $this->traefikUiHostname->toLocalHostCollection()->toString(),
                 ]
             )->substitute(
                 $this->substitutionFactory->dumpFile(

@@ -11,7 +11,7 @@ use Chrif\Cocotte\Machine\MachineName;
 use Chrif\Cocotte\Machine\MachineState;
 use Chrif\Cocotte\Machine\MachineStoragePath;
 use Chrif\Cocotte\Shell\ProcessRunner;
-use Chrif\Cocotte\Template\Traefik\TraefikUiHost;
+use Chrif\Cocotte\Template\Traefik\TraefikUiHostname;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -86,7 +86,7 @@ final class UninstallCommand extends Command
             ->getDefinition()
             ->addOptions(
                 [
-                    TraefikUiHost::inputOption(),
+                    TraefikUiHostname::inputOption(),
                     ApiToken::inputOption(),
                     MachineStoragePath::inputOption(),
                     MachineName::inputOption(),
@@ -98,7 +98,7 @@ final class UninstallCommand extends Command
     {
         $this->environmentManager->exportFromInput($input);
         $this->networkingConfigurator->configure(
-            AppHostCollection::fromString($input->getOption('traefik-ui-host')),
+            AppHostCollection::fromString($input->getOption('traefik-ui-hostname')),
             true
         );
         $this->processRunner->mustRun(

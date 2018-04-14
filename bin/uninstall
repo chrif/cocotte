@@ -15,5 +15,5 @@ docker run -it --rm \
 	--digital-ocean-api-token="${DIGITAL_OCEAN_API_TOKEN}" \
 	--machine-name="${COCOTTE_MACHINE:-cocotte}" \
 	--machine-storage-path="${MACHINE_STORAGE_PATH:-"$(pwd)/machine"}" \
-	--traefik-ui-host="${TRAEFIK_UI_HOST}"
+	--traefik-ui-hostname="${TRAEFIK_UI_HOSTNAME}"
 

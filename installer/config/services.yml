@@ -58,7 +58,7 @@ services:
   Chrif\Cocotte\Template\StaticSite\StaticSiteNamespace:
     tags: ['environment']
   Chrif\Cocotte\Template\Traefik\TraefikExporter: ~
-  Chrif\Cocotte\Template\Traefik\TraefikUiHost:
+  Chrif\Cocotte\Template\Traefik\TraefikUiHostname:
     tags: ['environment']
   Chrif\Cocotte\Template\Traefik\TraefikUiPassword:
     tags: ['environment']

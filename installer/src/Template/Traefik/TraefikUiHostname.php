@@ -9,9 +9,9 @@ use Chrif\Cocotte\Environment\InputOptionValue;
 use Chrif\Cocotte\Shell\Env;
 use Symfony\Component\Console\Input\InputOption;
 
-class TraefikUiHost implements ImportableValue, ExportableValue, InputOptionValue
+class TraefikUiHostname implements ImportableValue, ExportableValue, InputOptionValue
 {
-    const TRAEFIK_UI_HOST = 'TRAEFIK_UI_HOST';
+    const TRAEFIK_UI_HOSTNAME = 'TRAEFIK_UI_HOSTNAME';
     const INPUT_OPTION = 'traefik-ui-hostname';
 
     /**
@@ -34,12 +34,12 @@ class TraefikUiHost implements ImportableValue, ExportableValue, InputOptionValu
      */
     public static function fromEnv(): ImportableValue
     {
-        return new self(AppHostCollection::fromString(Env::get(self::TRAEFIK_UI_HOST)));
+        return new self(AppHostCollection::fromString(Env::get(self::TRAEFIK_UI_HOSTNAME)));
     }
 
     public static function toEnv($value): void
     {
-        Env::put(self::TRAEFIK_UI_HOST, $value);
+        Env::put(self::TRAEFIK_UI_HOSTNAME, $value);
     }
 
     public static function inputOption(): InputOption
@@ -49,7 +49,7 @@ class TraefikUiHost implements ImportableValue, ExportableValue, InputOptionValu
             null,
             InputOption::VALUE_REQUIRED,
             'Traefik Ui hostname',
-            Env::get(self::TRAEFIK_UI_HOST)
+            Env::get(self::TRAEFIK_UI_HOSTNAME)
         );
     }
 

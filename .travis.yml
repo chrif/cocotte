@@ -31,7 +31,7 @@ script:
 - ./bin/installer export-traefik
 - ./bin/installer deploy-traefik
 - ./bin/installer ping-traefik 6
-- if [ "${ACME_ENABLED:-true}" = true ]; then ./bin/installer check-certificate ${TRAEFIK_UI_HOST} 6; else echo "Skipping SSL verification"; fi
+- if [ "${ACME_ENABLED:-true}" = true ]; then ./bin/installer check-certificate ${TRAEFIK_UI_HOSTNAME} 6; else echo "Skipping SSL verification"; fi
 - ./bin/installer machine-ssh docker logs -t traefik
 - ./bin/installer static-template test ${STATIC_TEST_HOST}
 - ./bin/installer check-online ${STATIC_TEST_HOST} 6
@@ -45,7 +45,7 @@ env:
     # DIGITAL_OCEAN_API_TOKEN (set in in repo settings)
     - GIT_COMMIT_ID=${TRAVIS_COMMIT}
     # STATIC_TEST_HOST (set in in repo settings)
-    # TRAEFIK_UI_HOST (set in in repo settings)
+    # TRAEFIK_UI_HOSTNAME (set in in repo settings)
     # TRAEFIK_UI_PASSWORD
     - secure: "vDD7Z8hwwiVC8ervHXFoLQt4SPP1mTqHt2E/SchSxGIqk2WszsvL9NYfgu+cB/6JrxjL/25LcXgqH4qJPXs66I/p0Kx/ALj1RvD/6Pkh3OeDH3fWc6Bgoe90+uiGg5kaP/XtyEiD4lthug7vxOXsW/3W+CEC06jEb9bxvSW54xa38AmbSkZ5LcT+gWMOk2I48HfdmsGS2K6zFacjAexJ2P3TVz46ttDzwE2hB7vWiuhtpPv8BfhvGTKhNgquWOQUdPm2vA+Rx9pY733yl1XXJr/OYlaxrKu5JjimmQV3wMgZMZe4PqrRYIpZo1q7dVdlePwAhU5H57zjkuHMzUDgu0rfCW7S1+cooybrO2BGM0n/Bee5HN549GkFjGhNlvaV/uk0Wu03L9xkwria8OFM9mRLnOuSDHa2GK9TvYZ1RAVB1QsjcApIEIpLS7R5PFxPzVFIaBvPgD1OFhL+CU0BfVtWeGZLV93zxiWkm3fbzP+dMDnzl/Mx+mHe+yBTkGheMelzlHYGGSwY/DDWJ2/i8fc3wgvp0fLV8fhSY3HmAwt3lKnEMjMURt+2zI2/fOMk9WtJF1oxxlMhTYaY2/Dc9OsVpV1rIdjDXY2CmwA7ZxPwmrpxvLFRD7CIAn9HdVHpDpgTkQv/3u7F/7h4/qIiKXmRQjIS4j5Jjykj/NBWHSA="
     - TRAEFIK_UI_USERNAME=admin

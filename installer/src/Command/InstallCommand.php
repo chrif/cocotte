@@ -11,7 +11,7 @@ use Chrif\Cocotte\Machine\MachineState;
 use Chrif\Cocotte\Machine\MachineStoragePath;
 use Chrif\Cocotte\Shell\ProcessRunner;
 use Chrif\Cocotte\Template\Traefik\TraefikExporter;
-use Chrif\Cocotte\Template\Traefik\TraefikUiHost;
+use Chrif\Cocotte\Template\Traefik\TraefikUiHostname;
 use Chrif\Cocotte\Template\Traefik\TraefikUiPassword;
 use Chrif\Cocotte\Template\Traefik\TraefikUiUsername;
 use Symfony\Component\Console\Command\Command;
@@ -97,7 +97,7 @@ final class InstallCommand extends Command
                     ApiToken::inputOption(),
                     MachineStoragePath::inputOption(),
                     MachineName::inputOption(),
-                    TraefikUiHost::inputOption(),
+                    TraefikUiHostname::inputOption(),
                     TraefikUiPassword::inputOption(),
                     TraefikUiUsername::inputOption(),
                 ]

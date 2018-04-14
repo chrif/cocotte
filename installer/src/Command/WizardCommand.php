@@ -61,7 +61,7 @@ final class WizardCommand extends Command
 
         $token = $this->getToken();
         $projectPath = $this->getProjectPath();
-        $traefikUiHost = $this->getTraefikUiHost();
+        $traefikUiHostname = $this->getTraefikUiHostname();
         $traefikUiUsername = $this->getTraefikUiUsername();
         $traefikUiPassword = $this->getTraefikUiPassword();
 
@@ -91,7 +91,7 @@ mkdir -p $projectPath && cd $projectPath && docker run -it --rm \
 chrif/cocotte install \
 --digital-ocean-api-token="$token" \
 --machine-storage-path="$(pwd)/machine" \
---traefik-ui-host="$traefikUiHost" \
+--traefik-ui-hostname="$traefikUiHostname" \
 --traefik-ui-password="$traefikUiPassword" \
 --traefik-ui-username="$traefikUiUsername";
 ---------------------------------------------------------------
@@ -175,7 +175,7 @@ EOF
         );
     }
 
-    private function getTraefikUiHost(): string
+    private function getTraefikUiHostname(): string
     {
         $this->style->section("Traefik UI hostname");
         $this->help(
