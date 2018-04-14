@@ -53,7 +53,7 @@ services:
 
   # template
   Chrif\Cocotte\Template\StaticSite\StaticSiteExporter: ~
-  Chrif\Cocotte\Template\StaticSite\StaticSiteHost:
+  Chrif\Cocotte\Template\StaticSite\StaticSiteHostname:
     tags: ['environment']
   Chrif\Cocotte\Template\StaticSite\StaticSiteNamespace:
     tags: ['environment']
