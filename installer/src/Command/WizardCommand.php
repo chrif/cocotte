@@ -91,6 +91,7 @@ Run this command to let Cocotte create a cloud machine for you:
 ---------------------------------------------------------------
 mkdir -p $projectPath && cd $projectPath && docker run -it --rm \
 -v "$(pwd)":/host \
+-v /var/run/docker.sock:/var/run/docker.sock:ro \
 chrif/cocotte install \
 --digital-ocean-api-token="$token" \
 --machine-storage-path="$(pwd)/machine" \

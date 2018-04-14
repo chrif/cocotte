@@ -172,18 +172,20 @@ final class TraefikExporter
         );
 
         EnvironmentSubstitution::withDefaults()
-            ->export(
-                [
-                    'APP_HOSTS' => $this->traefikUiHostname->toString(),
-                ]
-            )->substitute(
+            ->restrict([
+                'TRAEFIK_UI_HOSTNAME',
+                'TRAEFIK_ACME_EMAIL',
+                'MACHINE_NAME',
+                'MACHINE_STORAGE_PATH',
+            ])
+            ->substitute(
                 $this->substitutionFactory->dumpFile(
                     $this->tmpAppPath().'/.env',
                     EnvironmentSubstitution::formatEnvFile(
                         [
                             'APP_HOSTS="${TRAEFIK_UI_HOSTNAME}"',
                             "APP_AUTH_BASIC='{$basicAuth}'",
-                            'ACME_EMAIL="${TRAEFIK_ACME_EMAIL:-}"',
+                            'ACME_EMAIL="${TRAEFIK_ACME_EMAIL}"',
                             'MACHINE_NAME="${MACHINE_NAME}"',
                             'MACHINE_STORAGE_PATH="${MACHINE_STORAGE_PATH}"',
                         ]

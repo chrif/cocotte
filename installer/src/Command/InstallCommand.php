@@ -4,7 +4,9 @@ namespace Chrif\Cocotte\Command;
 
 use Chrif\Cocotte\Console\Style;
 use Chrif\Cocotte\DigitalOcean\ApiToken;
+use Chrif\Cocotte\DigitalOcean\NetworkingConfigurator;
 use Chrif\Cocotte\Environment\EnvironmentManager;
+use Chrif\Cocotte\Host\HostMount;
 use Chrif\Cocotte\Machine\MachineCreator;
 use Chrif\Cocotte\Machine\MachineName;
 use Chrif\Cocotte\Machine\MachineState;
@@ -61,6 +63,21 @@ final class InstallCommand extends Command
      */
     private $style;
 
+    /**
+     * @var HostMount
+     */
+    private $hostMount;
+
+    /**
+     * @var NetworkingConfigurator
+     */
+    private $networkingConfigurator;
+
+    /**
+     * @var TraefikUiHostname
+     */
+    private $traefikUiHostname;
+
     public function __construct(
         ApiToken $token,
         MachineStoragePath $machineStoragePath,
@@ -69,7 +86,10 @@ final class InstallCommand extends Command
         ProcessRunner $processRunner,
         MachineState $machineState,
         TraefikExporter $traefikExporter,
-        Style $style
+        Style $style,
+        HostMount $hostMount,
+        NetworkingConfigurator $networkingConfigurator,
+        TraefikUiHostname $traefikUiHostname
     ) {
         $this->token = $token;
         $this->machineStoragePath = $machineStoragePath;
@@ -79,6 +99,9 @@ final class InstallCommand extends Command
         $this->machineState = $machineState;
         $this->traefikExporter = $traefikExporter;
         $this->style = $style;
+        $this->hostMount = $hostMount;
+        $this->networkingConfigurator = $networkingConfigurator;
+        $this->traefikUiHostname = $traefikUiHostname;
         parent::__construct();
     }
 
@@ -106,9 +129,14 @@ final class InstallCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $this->style->confirm(
+            "You are about to create a Docker Machine on Digital Ocean and install the Traefik reverse proxy on it"
+        );
+        $this->hostMount->assertMounted();
         $this->environmentManager->exportFromInput($input);
         $this->machineCreator->create();
         $this->traefikExporter->export();
+        $this->networkingConfigurator->configure($this->traefikUiHostname->toHostnameCollection());
         $this->style->title('Deploying exported site to cloud machine');
         $this->processRunner->mustRun(new Process('./bin/prod', $this->traefikExporter->hostAppPath()));
     }

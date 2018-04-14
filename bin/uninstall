@@ -11,9 +11,10 @@ fi
 
 docker run -it --rm \
     -v "$(pwd)":/host \
-	chrif/cocotte uninstall \
-	--digital-ocean-api-token="${DIGITAL_OCEAN_API_TOKEN}" \
-	--machine-name="${MACHINE_NAME:-cocotte}" \
-	--machine-storage-path="${MACHINE_STORAGE_PATH:-"$(pwd)/machine"}" \
-	--traefik-ui-hostname="${TRAEFIK_UI_HOSTNAME}"
+    -v /var/run/docker.sock:/var/run/docker.sock:ro \
+    chrif/cocotte uninstall \
+    --digital-ocean-api-token="${DIGITAL_OCEAN_API_TOKEN}" \
+    --machine-name="${MACHINE_NAME:-cocotte}" \
+    --machine-storage-path="${MACHINE_STORAGE_PATH:-"$(pwd)/machine"}" \
+    --traefik-ui-hostname="${TRAEFIK_UI_HOSTNAME}"
 

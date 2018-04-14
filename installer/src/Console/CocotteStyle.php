@@ -7,4 +7,9 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 final class CocotteStyle extends SymfonyStyle implements Style
 {
 
+    public function ok($message)
+    {
+        $this->block($message, 'OK', null, ' ', true);
+    }
+
 }

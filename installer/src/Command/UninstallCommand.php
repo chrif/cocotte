@@ -54,6 +54,11 @@ final class UninstallCommand extends Command
      */
     private $machineState;
 
+    /**
+     * @var TraefikUiHostname
+     */
+    private $traefikUiHostname;
+
     public function __construct(
         ApiToken $token,
         MachineStoragePath $machineStoragePath,
@@ -61,7 +66,8 @@ final class UninstallCommand extends Command
         MachineCreator $machineCreator,
         ProcessRunner $processRunner,
         NetworkingConfigurator $networkingConfigurator,
-        MachineState $machineState
+        MachineState $machineState,
+        TraefikUiHostname $traefikUiHostname
     ) {
         $this->token = $token;
         $this->machineStoragePath = $machineStoragePath;
@@ -70,6 +76,7 @@ final class UninstallCommand extends Command
         $this->processRunner = $processRunner;
         $this->networkingConfigurator = $networkingConfigurator;
         $this->machineState = $machineState;
+        $this->traefikUiHostname = $traefikUiHostname;
         parent::__construct();
     }
 
@@ -96,9 +103,13 @@ final class UninstallCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $this->style->confirm(
+            "You are about to uninstall a Docker Machine on Digital Ocean and remove domain record of " .
+            $this->traefikUiHostname->toString()
+        );
         $this->environmentManager->exportFromInput($input);
         $this->networkingConfigurator->configure(
-            HostnameCollection::fromString($input->getOption('traefik-ui-hostname')),
+            $this->traefikUiHostname->toHostnameCollection(),
             true
         );
         $this->processRunner->mustRun(

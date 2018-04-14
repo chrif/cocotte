@@ -45,6 +45,9 @@ services:
   Chrif\Cocotte\Finder\Finder:
     class: Chrif\Cocotte\Finder\CocotteFinder
 
+  Chrif\Cocotte\Host\HostMount: ~
+  Chrif\Cocotte\Host\Mounts: ~
+
   # shell
   Chrif\Cocotte\Shell\ProcessRunner: ~
   Chrif\Cocotte\Shell\VariableReplacer: ~

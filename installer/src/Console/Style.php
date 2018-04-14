@@ -32,4 +32,6 @@ interface Style extends OutputInterface, StyleInterface
      * @param string|array $message
      */
     public function comment($message);
+
+    public function ok($message);
 }
