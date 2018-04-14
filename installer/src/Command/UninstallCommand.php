@@ -2,8 +2,8 @@
 
 namespace Chrif\Cocotte\Command;
 
+use Chrif\Cocotte\Console\Style;
 use Chrif\Cocotte\DigitalOcean\ApiToken;
-use Chrif\Cocotte\DigitalOcean\HostnameCollection;
 use Chrif\Cocotte\DigitalOcean\NetworkingConfigurator;
 use Chrif\Cocotte\Environment\EnvironmentManager;
 use Chrif\Cocotte\Machine\MachineCreator;
@@ -19,16 +19,6 @@ use Symfony\Component\Process\Process;
 
 final class UninstallCommand extends Command
 {
-    /**
-     * @var \Chrif\Cocotte\DigitalOcean\ApiToken
-     */
-    private $token;
-
-    /**
-     * @var MachineStoragePath
-     */
-    private $machineStoragePath;
-
     /**
      * @var EnvironmentManager
      */
@@ -59,24 +49,34 @@ final class UninstallCommand extends Command
      */
     private $traefikUiHostname;
 
+    /**
+     * @var Style
+     */
+    private $style;
+
+    /**
+     * @var MachineName
+     */
+    private $machineName;
+
     public function __construct(
-        ApiToken $token,
-        MachineStoragePath $machineStoragePath,
         EnvironmentManager $environmentManager,
         MachineCreator $machineCreator,
         ProcessRunner $processRunner,
         NetworkingConfigurator $networkingConfigurator,
         MachineState $machineState,
-        TraefikUiHostname $traefikUiHostname
+        TraefikUiHostname $traefikUiHostname,
+        Style $style,
+        MachineName $machineName
     ) {
-        $this->token = $token;
-        $this->machineStoragePath = $machineStoragePath;
         $this->environmentManager = $environmentManager;
         $this->machineCreator = $machineCreator;
         $this->processRunner = $processRunner;
         $this->networkingConfigurator = $networkingConfigurator;
         $this->machineState = $machineState;
         $this->traefikUiHostname = $traefikUiHostname;
+        $this->style = $style;
+        $this->machineName = $machineName;
         parent::__construct();
     }
 
@@ -103,19 +103,24 @@ final class UninstallCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->style->confirm(
-            "You are about to uninstall a Docker Machine on Digital Ocean and remove domain record of " .
-            $this->traefikUiHostname->toString()
+        $uninstall = $input->getOption('no-interaction') || $this->style->confirm(
+            "You are about to uninstall a Docker Machine named '{$this->machineName}' on Digital Ocean and ".
+            "remove the domain record '{$this->traefikUiHostname}' associated with this machine.",
+            false
         );
-        $this->environmentManager->exportFromInput($input);
-        $this->networkingConfigurator->configure(
-            $this->traefikUiHostname->toHostnameCollection(),
-            true
-        );
-        $this->processRunner->mustRun(
-            new Process(
-                'docker-machine rm -y "${MACHINE_NAME}"'
-            )
-        );
+        if ($uninstall) {
+            $this->environmentManager->exportFromInput($input);
+            $this->networkingConfigurator->configure(
+                $this->traefikUiHostname->toHostnameCollection(),
+                true
+            );
+            $this->processRunner->mustRun(
+                new Process(
+                    'docker-machine rm -y "${MACHINE_NAME}"'
+                )
+            );
+        } else {
+            $this->style->writeln('Cancelled');
+        }
     }
 }
