@@ -43,10 +43,11 @@ final class NetworkingCommand extends Command
             ->setName('networking')
             ->setDescription('Configure networking of Digital Ocean')
             ->addArgument('hostnames', InputArgument::REQUIRED, 'Comma-separated list of hostnames')
-            ->addOption('remove', null, InputOption::VALUE_NONE, 'Remove networking for hostnames');
-
-        $this->getDefinition()->addOption(ApiToken::inputOption());
-        $this->getDefinition()->addOption(MachineStoragePath::inputOption());
+            ->addOption('remove', null, InputOption::VALUE_NONE, 'Remove networking for hostnames')
+            ->getDefinition()->addOptions([
+                ApiToken::inputOption(),
+                MachineStoragePath::inputOption()
+            ]);
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)

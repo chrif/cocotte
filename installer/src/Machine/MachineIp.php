@@ -28,7 +28,7 @@ class MachineIp implements ImportableValue
 
     public static function fromEnv(): ImportableValue
     {
-        $process = new Process('docker-machine -s "${MACHINE_STORAGE_PATH}" inspect ' .
+        $process = new Process('docker-machine inspect ' .
             '--format=\'{{.Driver.IPAddress}}\' "${MACHINE_NAME}"');
 
         $process->mustRun();

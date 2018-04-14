@@ -139,7 +139,8 @@ final class InstallCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $this->style->confirm(
-            "You are about to create a Docker Machine on Digital Ocean and install the Traefik reverse proxy on it"
+            "You are about to create a Docker Machine on Digital Ocean and install the Traefik reverse proxy on it. " .
+            "This action may take a few minutes."
         );
         $this->hostMount->assertMounted();
         $this->environmentManager->exportFromInput($input);

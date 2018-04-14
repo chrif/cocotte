@@ -51,7 +51,7 @@ final class NetworkingConfigurator
                 $this->configureDomain($host);
             }
         }
-        $this->style->success("");
+        $this->style->ok("");
     }
 
     private function configureDomain(Hostname $hostname): void
