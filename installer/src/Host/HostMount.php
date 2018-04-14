@@ -29,7 +29,7 @@ final class HostMount
         foreach ($this->mounts->toArray() as $mount) {
             if ('bind' === $mount['Type'] && '/host' === $mount['Destination']) {
                 Assertion::true($mount['RW'], "Volume /host must be writable");
-                $this->style->ok("A writable bind mount exists for the destination '/host");
+                $this->style->ok("A writable bind mount exists for the destination '/host'");
                 return;
             }
         }

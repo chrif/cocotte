@@ -6,7 +6,6 @@ use Assert\Assertion;
 use Chrif\Cocotte\Environment\ExportableValue;
 use Chrif\Cocotte\Environment\ImportableValue;
 use Chrif\Cocotte\Environment\InputOptionValue;
-use Chrif\Cocotte\Filesystem\CocotteFilesystem;
 use Chrif\Cocotte\Filesystem\Filesystem;
 use Chrif\Cocotte\Shell\Env;
 use Symfony\Component\Console\Input\InputOption;
@@ -23,7 +22,12 @@ class MachineStoragePath implements ImportableValue, ExportableValue, InputOptio
 
     public function __construct(string $value)
     {
-        Assertion::notEmpty($value);
+        Assertion::notEmpty($value, "The machine storage path is empty.");
+        Assertion::regex(
+            $value,
+            '/^[^$"\']+$/',
+            'The machine storage path contains dollar signs, single quotes or double quotes.'
+        );
         $this->value = $value;
     }
 
