@@ -3,9 +3,12 @@
 namespace Chrif\Cocotte\Command;
 
 use Chrif\Cocotte\Console\Style;
+use Chrif\Cocotte\DigitalOcean\ApiToken;
 use Chrif\Cocotte\DigitalOcean\Hostname;
 use Chrif\Cocotte\DigitalOcean\DnsValidator;
 use Chrif\Cocotte\Filesystem\Filesystem;
+use Chrif\Cocotte\Template\Traefik\TraefikUiPassword;
+use Chrif\Cocotte\Template\Traefik\TraefikUiUsername;
 use DigitalOceanV2\Adapter\GuzzleHttpAdapter;
 use DigitalOceanV2\DigitalOceanV2;
 use Symfony\Component\Console\Command\Command;
@@ -105,8 +108,7 @@ EOF
 
         $this->help(
             [
-                "The password cannot contain single quotes, double quotes, dollar ".
-                "signs or spaces.",
+                TraefikUiUsername::HELP,
             ]
         );
 
@@ -126,13 +128,7 @@ EOF
                             throw new \Exception('No answer given. Try again.');
                         }
 
-                        if (preg_match('/[\'"$\s]/', $answer)) {
-                            throw new \Exception(
-                                "'$answer' contains single quotes, double quotes, dollar signs or spaces."
-                            );
-                        }
-
-                        return $answer;
+                        return TraefikUiUsername::fromString($answer)->value();
                     }
                 )
         );
@@ -144,8 +140,7 @@ EOF
 
         $this->help(
             [
-                "The password cannot contain single quotes, double quotes, dollar ".
-                "signs or spaces.",
+                TraefikUiPassword::HELP
             ]
         );
 
@@ -163,13 +158,7 @@ EOF
                         if (!$answer) {
                             throw new \Exception('No answer given. Try again.');
                         }
-                        if (preg_match('/[\'"$\s]/', $answer)) {
-                            throw new \Exception(
-                                "'$answer' contains single quotes, double quotes, dollar signs or spaces."
-                            );
-                        }
-
-                        return $answer;
+                        return TraefikUiPassword::fromString($answer)->value();
                     }
                 )
         );
@@ -247,19 +236,13 @@ EOF
                             throw new \Exception('No answer given. Try again.');
                         }
 
-                        $adapter = new GuzzleHttpAdapter($answer);
-                        $digitalOceanV2 = new DigitalOceanV2($adapter);
-                        $account = $digitalOceanV2->account()->getUserInformation();
-                        if ($account->status === 'active') {
-                            $this->style->success("Token is valid");
-                            $this->style->ask("Press Enter to continue");
-                        } else {
-                            throw new \Exception(
-                                "Token works but is associated to an account with status '{$account->status}'."
-                            );
-                        }
+                        $token = new ApiToken($answer);
+                        $token->assertTokenIsValid();
 
-                        return $answer;
+                        $this->style->success("Token is valid");
+                        $this->style->ask("Press Enter to continue");
+
+                        return $token->value();
                     }
                 )
         );

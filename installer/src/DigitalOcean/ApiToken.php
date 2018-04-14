@@ -7,6 +7,8 @@ use Chrif\Cocotte\Environment\ExportableValue;
 use Chrif\Cocotte\Environment\ImportableValue;
 use Chrif\Cocotte\Environment\InputOptionValue;
 use Chrif\Cocotte\Shell\Env;
+use DigitalOceanV2\Adapter\GuzzleHttpAdapter;
+use DigitalOceanV2\DigitalOceanV2;
 use Symfony\Component\Console\Input\InputOption;
 
 class ApiToken implements ImportableValue, ExportableValue, InputOptionValue
@@ -56,4 +58,15 @@ class ApiToken implements ImportableValue, ExportableValue, InputOptionValue
         return $this->value;
     }
 
+    public function assertTokenIsValid()
+    {
+        $adapter = new GuzzleHttpAdapter($this->value());
+        $digitalOceanV2 = new DigitalOceanV2($adapter);
+        $account = $digitalOceanV2->account()->getUserInformation();
+        if ($account->status !== 'active') {
+            throw new \Exception(
+                "Token is associated to an account with status '{$account->status}'."
+            );
+        }
+    }
 }

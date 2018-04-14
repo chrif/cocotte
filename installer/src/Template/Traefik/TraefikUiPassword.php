@@ -13,6 +13,8 @@ class TraefikUiPassword implements ImportableValue, ExportableValue, InputOption
 {
     const TRAEFIK_UI_PASSWORD = 'TRAEFIK_UI_PASSWORD';
     const INPUT_OPTION = 'traefik-ui-password';
+    const HELP = 'Only alphanumeric characters and the specified special characters are allowed. '.self::REGEX;
+    const REGEX = '/^[a-zA-Z0-9_@#%?&*+=!-]+$/';
 
     /**
      * @var string
@@ -22,7 +24,11 @@ class TraefikUiPassword implements ImportableValue, ExportableValue, InputOption
     public function __construct(string $value)
     {
         Assertion::notEmpty($value, "The Traefik Ui password is empty");
-        Assertion::regex($value, '/^[a-zA-Z0-9_-@#%?&*+=!]+$/', "The Traefik Ui password does not contain only alphanumeric characters and _-@#%?&*+=!");
+        Assertion::regex(
+            $value,
+            self::REGEX,
+            "The Traefik Ui password does not contain only alphanumeric characters and _@#%?&*+=!-"
+        );
         $this->value = $value;
     }
 
@@ -50,7 +56,7 @@ class TraefikUiPassword implements ImportableValue, ExportableValue, InputOption
             self::INPUT_OPTION,
             null,
             InputOption::VALUE_REQUIRED,
-            'Traefik Ui password. Allowed characters are alphanumeric characters and _-@#%?&*+=!',
+            'Traefik Ui password. '.self::HELP,
             Env::get(self::TRAEFIK_UI_PASSWORD)
         );
     }
