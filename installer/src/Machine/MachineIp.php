@@ -3,7 +3,9 @@
 namespace Chrif\Cocotte\Machine;
 
 use Assert\Assertion;
+use Chrif\Cocotte\Console\CocotteStyle;
 use Chrif\Cocotte\Environment\ImportableValue;
+use Chrif\Cocotte\Shell\ProcessRunner;
 use Symfony\Component\Process\Process;
 
 class MachineIp implements ImportableValue
@@ -26,17 +28,9 @@ class MachineIp implements ImportableValue
 
     public static function fromEnv(): ImportableValue
     {
-        // todo use docker machine ip instead now that we connect a lot anyway?
-        $process = new Process(
-            [
-                'docker-machine',
-                '-s',
-                '"${MACHINE_STORAGE_PATH}"',
-                'inspect',
-                "--format='{{.Driver.IPAddress}}'",
-                '"${MACHINE_NAME}"',
-            ]
-        );
+        $process = new Process('docker-machine -s "${MACHINE_STORAGE_PATH}" inspect ' .
+            '--format=\'{{.Driver.IPAddress}}\' "${MACHINE_NAME}"');
+
         $process->mustRun();
 
         return new self(trim($process->getOutput()));

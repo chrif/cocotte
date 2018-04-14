@@ -6,6 +6,8 @@ use Chrif\Cocotte\Console\Style;
 use Chrif\Cocotte\DigitalOcean\ApiToken;
 use Chrif\Cocotte\DigitalOcean\NetworkingConfigurator;
 use Chrif\Cocotte\Environment\EnvironmentManager;
+use Chrif\Cocotte\Filesystem\CocotteFilesystem;
+use Chrif\Cocotte\Filesystem\Filesystem;
 use Chrif\Cocotte\Host\HostMount;
 use Chrif\Cocotte\Machine\MachineCreator;
 use Chrif\Cocotte\Machine\MachineName;
@@ -78,6 +80,11 @@ final class InstallCommand extends Command
      */
     private $traefikUiHostname;
 
+    /**
+     * @var Filesystem
+     */
+    private $filesystem;
+
     public function __construct(
         ApiToken $token,
         MachineStoragePath $machineStoragePath,
@@ -89,7 +96,8 @@ final class InstallCommand extends Command
         Style $style,
         HostMount $hostMount,
         NetworkingConfigurator $networkingConfigurator,
-        TraefikUiHostname $traefikUiHostname
+        TraefikUiHostname $traefikUiHostname,
+        Filesystem $filesystem
     ) {
         $this->token = $token;
         $this->machineStoragePath = $machineStoragePath;
@@ -102,6 +110,7 @@ final class InstallCommand extends Command
         $this->hostMount = $hostMount;
         $this->networkingConfigurator = $networkingConfigurator;
         $this->traefikUiHostname = $traefikUiHostname;
+        $this->filesystem = $filesystem;
         parent::__construct();
     }
 
@@ -134,6 +143,7 @@ final class InstallCommand extends Command
         );
         $this->hostMount->assertMounted();
         $this->environmentManager->exportFromInput($input);
+        $this->machineStoragePath->symLink($this->filesystem);
         $this->machineCreator->create();
         $this->traefikExporter->export();
         $this->networkingConfigurator->configure($this->traefikUiHostname->toHostnameCollection());

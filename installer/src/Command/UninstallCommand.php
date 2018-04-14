@@ -6,6 +6,8 @@ use Chrif\Cocotte\Console\Style;
 use Chrif\Cocotte\DigitalOcean\ApiToken;
 use Chrif\Cocotte\DigitalOcean\NetworkingConfigurator;
 use Chrif\Cocotte\Environment\EnvironmentManager;
+use Chrif\Cocotte\Filesystem\Filesystem;
+use Chrif\Cocotte\Host\HostMount;
 use Chrif\Cocotte\Machine\MachineCreator;
 use Chrif\Cocotte\Machine\MachineName;
 use Chrif\Cocotte\Machine\MachineState;
@@ -59,6 +61,21 @@ final class UninstallCommand extends Command
      */
     private $machineName;
 
+    /**
+     * @var MachineStoragePath
+     */
+    private $machineStoragePath;
+
+    /**
+     * @var HostMount
+     */
+    private $hostMount;
+
+    /**
+     * @var Filesystem
+     */
+    private $filesystem;
+
     public function __construct(
         EnvironmentManager $environmentManager,
         MachineCreator $machineCreator,
@@ -67,7 +84,10 @@ final class UninstallCommand extends Command
         MachineState $machineState,
         TraefikUiHostname $traefikUiHostname,
         Style $style,
-        MachineName $machineName
+        MachineName $machineName,
+        MachineStoragePath $machineStoragePath,
+        HostMount $hostMount,
+        Filesystem $filesystem
     ) {
         $this->environmentManager = $environmentManager;
         $this->machineCreator = $machineCreator;
@@ -77,6 +97,9 @@ final class UninstallCommand extends Command
         $this->traefikUiHostname = $traefikUiHostname;
         $this->style = $style;
         $this->machineName = $machineName;
+        $this->machineStoragePath = $machineStoragePath;
+        $this->hostMount = $hostMount;
+        $this->filesystem = $filesystem;
         parent::__construct();
     }
 
@@ -104,19 +127,21 @@ final class UninstallCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $uninstall = $input->getOption('no-interaction') || $this->style->confirm(
-            "You are about to uninstall a Docker Machine named '{$this->machineName}' on Digital Ocean and ".
-            "remove the domain record '{$this->traefikUiHostname}' associated with this machine.",
-            false
-        );
+                "You are about to uninstall a Docker Machine named '{$this->machineName}' on Digital Ocean and ".
+                "remove the domain record '{$this->traefikUiHostname}' associated with this machine.",
+                false
+            );
         if ($uninstall) {
+            $this->hostMount->assertMounted();
             $this->environmentManager->exportFromInput($input);
+            $this->machineStoragePath->symLink($this->filesystem);
             $this->networkingConfigurator->configure(
                 $this->traefikUiHostname->toHostnameCollection(),
                 true
             );
             $this->processRunner->mustRun(
                 new Process(
-                    'docker-machine rm -y "${MACHINE_NAME}"'
+                    'docker-machine -s "${MACHINE_STORAGE_PATH}" rm -y "${MACHINE_NAME}"'
                 )
             );
         } else {

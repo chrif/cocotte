@@ -59,19 +59,19 @@ class MachineName implements ImportableValue, ExportableValue, InputOptionValue
         return self::INPUT_OPTION;
     }
 
-    public function value(): string
+    public function toString(): string
     {
         return $this->value;
     }
 
     public function equals(MachineName $key): bool
     {
-        return $this->value() === $key->value();
+        return $this->toString() === $key->toString();
     }
 
     public function __toString()
     {
-        return $this->value();
+        return $this->toString();
     }
 
 }

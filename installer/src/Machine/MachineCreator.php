@@ -68,7 +68,7 @@ final class MachineCreator
         }
 
         $process = new Process(
-            'docker-machine create \
+            'docker-machine -s "${MACHINE_STORAGE_PATH}" create \
                 --driver digitalocean \
                 --digitalocean-access-token "${DIGITAL_OCEAN_API_TOKEN}" \
                 --engine-opt log-driver="json-file" \

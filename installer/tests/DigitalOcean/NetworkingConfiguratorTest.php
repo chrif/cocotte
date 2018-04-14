@@ -26,7 +26,7 @@ class NetworkingConfiguratorTest extends TestCase
 
     public function test_it_creates_and_removes_domain_record()
     {
-        $hostname = Hostname::parse($this->machineName()->value().'.cocotte.test');
+        $hostname = Hostname::parse($this->machineName()->toString().'.cocotte.test');
         $hostnameCollection = HostnameCollection::fromArray([$hostname]);
         $domain = $this->domainApi();
         $domainRecord = $this->domainRecordApi();
@@ -53,7 +53,7 @@ class NetworkingConfiguratorTest extends TestCase
 
     public function test_it_handles_root_record_correctly()
     {
-        $hostname = Hostname::parse($this->machineName()->value().'.test');
+        $hostname = Hostname::parse($this->machineName()->toString().'.test');
         $hostCollection = HostnameCollection::fromArray([$hostname]);
         $domain = $this->domainApi();
         $domainRecord = $this->domainRecordApi();

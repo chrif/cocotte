@@ -2,4 +2,4 @@
 
 set -eu
 
-docker-machine ssh ${MACHINE_NAME} "$@"
+docker-machine -s "${MACHINE_STORAGE_PATH}" ssh ${MACHINE_NAME} "$@"

@@ -32,13 +32,12 @@ class MachineStoragePath implements ImportableValue, ExportableValue, InputOptio
         return new self($value);
     }
 
+    /**
+     * @return ImportableValue|MachineStoragePath
+     */
     public static function fromEnv(): ImportableValue
     {
-        $machineStoragePath = new self(Env::get(self::MACHINE_STORAGE_PATH));
-
-        $machineStoragePath->symLink(new CocotteFilesystem());
-
-        return $machineStoragePath;
+        return new self(Env::get(self::MACHINE_STORAGE_PATH));
     }
 
     public static function toEnv($value): void
@@ -62,14 +61,14 @@ class MachineStoragePath implements ImportableValue, ExportableValue, InputOptio
         return self::INPUT_OPTION;
     }
 
-    public function value(): string
+    public function toString(): string
     {
         return $this->value;
     }
 
     public function equals(MachineName $key): bool
     {
-        return $this->value() === $key->value();
+        return $this->toString() === $key->toString();
     }
 
     /**
@@ -85,7 +84,7 @@ class MachineStoragePath implements ImportableValue, ExportableValue, InputOptio
      */
     public function symLink(Filesystem $filesystem)
     {
-        $userSuppliedMachinePath = $this->value();
+        $userSuppliedMachinePath = $this->toString();
         $defaultMachinePath = "/host/machine";
 
         if ($defaultMachinePath !== $userSuppliedMachinePath) {
@@ -115,7 +114,7 @@ class MachineStoragePath implements ImportableValue, ExportableValue, InputOptio
 
     public function __toString()
     {
-        return $this->value();
+        return $this->toString();
     }
 
 }

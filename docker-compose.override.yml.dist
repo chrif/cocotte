@@ -13,7 +13,7 @@ services:
     environment:
       XDEBUG_CONFIG: "remote_host=${HOST_IP}"
       PHP_IDE_CONFIG: "serverName=cocotte"
-      MACHINE_STORAGE_PATH: /absolute/path/to/host/pwd/machine
+      MACHINE_STORAGE_PATH: "${PWD}/host/machine"
     env_file:
       .env
 
