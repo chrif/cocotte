@@ -167,17 +167,19 @@ final class TraefikExporter
         $this->style->section("Create '.env' and '.env-override' from command options + env");
 
         $basicAuth = $this->basicAuth->generate(
-            $this->traefikUiUsername->value(),
-            $this->traefikUiPassword->value()
+            $this->traefikUiUsername->toString(),
+            $this->traefikUiPassword->toString()
         );
 
         EnvironmentSubstitution::withDefaults()
-            ->restrict([
-                'TRAEFIK_UI_HOSTNAME',
-                'TRAEFIK_ACME_EMAIL',
-                'MACHINE_NAME',
-                'MACHINE_STORAGE_PATH',
-            ])
+            ->restrict(
+                [
+                    'TRAEFIK_UI_HOSTNAME',
+                    'TRAEFIK_ACME_EMAIL',
+                    'MACHINE_NAME',
+                    'MACHINE_STORAGE_PATH',
+                ]
+            )
             ->substitute(
                 $this->substitutionFactory->dumpFile(
                     $this->tmpAppPath().'/.env',

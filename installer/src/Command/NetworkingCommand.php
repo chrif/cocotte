@@ -6,7 +6,6 @@ use Chrif\Cocotte\DigitalOcean\ApiToken;
 use Chrif\Cocotte\DigitalOcean\HostnameCollection;
 use Chrif\Cocotte\DigitalOcean\NetworkingConfigurator;
 use Chrif\Cocotte\Environment\EnvironmentManager;
-use Chrif\Cocotte\Machine\MachineStoragePath;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -44,10 +43,11 @@ final class NetworkingCommand extends Command
             ->setDescription('Configure networking of Digital Ocean')
             ->addArgument('hostnames', InputArgument::REQUIRED, 'Comma-separated list of hostnames')
             ->addOption('remove', null, InputOption::VALUE_NONE, 'Remove networking for hostnames')
-            ->getDefinition()->addOptions([
-                ApiToken::inputOption(),
-                MachineStoragePath::inputOption()
-            ]);
+            ->getDefinition()->addOptions(
+                [
+                    ApiToken::inputOption(),
+                ]
+            );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)

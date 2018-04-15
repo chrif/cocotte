@@ -6,7 +6,6 @@ use Chrif\Cocotte\Console\Style;
 use Chrif\Cocotte\DigitalOcean\ApiToken;
 use Chrif\Cocotte\DigitalOcean\NetworkingConfigurator;
 use Chrif\Cocotte\Environment\EnvironmentManager;
-use Chrif\Cocotte\Filesystem\Filesystem;
 use Chrif\Cocotte\Host\HostMount;
 use Chrif\Cocotte\Machine\MachineCreator;
 use Chrif\Cocotte\Machine\MachineName;
@@ -71,11 +70,6 @@ final class UninstallCommand extends Command
      */
     private $hostMount;
 
-    /**
-     * @var Filesystem
-     */
-    private $filesystem;
-
     public function __construct(
         EnvironmentManager $environmentManager,
         MachineCreator $machineCreator,
@@ -86,8 +80,7 @@ final class UninstallCommand extends Command
         Style $style,
         MachineName $machineName,
         MachineStoragePath $machineStoragePath,
-        HostMount $hostMount,
-        Filesystem $filesystem
+        HostMount $hostMount
     ) {
         $this->environmentManager = $environmentManager;
         $this->machineCreator = $machineCreator;
@@ -99,7 +92,6 @@ final class UninstallCommand extends Command
         $this->machineName = $machineName;
         $this->machineStoragePath = $machineStoragePath;
         $this->hostMount = $hostMount;
-        $this->filesystem = $filesystem;
         parent::__construct();
     }
 
@@ -118,7 +110,6 @@ final class UninstallCommand extends Command
                 [
                     TraefikUiHostname::inputOption(),
                     ApiToken::inputOption(),
-                    MachineStoragePath::inputOption(),
                     MachineName::inputOption(),
                 ]
             );
@@ -132,9 +123,8 @@ final class UninstallCommand extends Command
                 false
             );
         if ($uninstall) {
-            $this->hostMount->assertMounted();
             $this->environmentManager->exportFromInput($input);
-            $this->machineStoragePath->symLink($this->filesystem);
+            $this->machineStoragePath->export();
             $this->networkingConfigurator->configure(
                 $this->traefikUiHostname->toHostnameCollection(),
                 true

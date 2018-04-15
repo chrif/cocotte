@@ -9,6 +9,7 @@ final class Env
 
     public static function put(string $name, string $value)
     {
+        global $_SERVER;
         Assertion::true(putenv($name.'='.$value), "Could not put env with name '$name' and value '$value'.");
         Assertion::same(
             $value,
@@ -16,6 +17,7 @@ final class Env
             "Failed asserting that value '$value' for env with name '$name' has been preserved when putting it. ".
             "Retrieved value was '$retrieved'."
         );
+        $_SERVER[$name] = $value; // for \Symfony\Component\Process\Process::getDefaultEnv
     }
 
     public static function get(string $name): ?string

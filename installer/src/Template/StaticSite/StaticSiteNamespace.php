@@ -22,7 +22,11 @@ class StaticSiteNamespace implements ImportableValue, ExportableValue, InputOpti
     public function __construct(string $value)
     {
         Assertion::notEmpty($value, "The site namespace is empty");
-        Assertion::regex($value, '/^[a-z0-9-]+$/', "The site namespace does not contain only lowercase letters, digits and -");
+        Assertion::regex(
+            $value,
+            '/^[a-z0-9-]+$/',
+            "The site namespace does not contain only lowercase letters, digits and -"
+        );
         $this->value = $value;
     }
 

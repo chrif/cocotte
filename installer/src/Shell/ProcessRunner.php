@@ -21,7 +21,11 @@ final class ProcessRunner
     {
         $this->style->block($process->getCommandLine(), 'COMMAND');
         $process->mustRun(
-            function ($type, $buffer) {
+            function (
+                /** @noinspection PhpUnusedParameterInspection */
+                $type,
+                $buffer
+            ) {
                 $this->style->write($buffer);
             }
         );

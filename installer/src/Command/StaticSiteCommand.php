@@ -7,7 +7,6 @@ use Chrif\Cocotte\DigitalOcean\ApiToken;
 use Chrif\Cocotte\DigitalOcean\NetworkingConfigurator;
 use Chrif\Cocotte\Environment\EnvironmentManager;
 use Chrif\Cocotte\Machine\MachineState;
-use Chrif\Cocotte\Machine\MachineStoragePath;
 use Chrif\Cocotte\Shell\ProcessRunner;
 use Chrif\Cocotte\Template\StaticSite\StaticSiteExporter;
 use Chrif\Cocotte\Template\StaticSite\StaticSiteHostname;
@@ -101,7 +100,6 @@ final class StaticSiteCommand extends Command
                     StaticSiteNamespace::inputOption(),
                     StaticSiteHostname::inputOption(),
                     ApiToken::inputOption(),
-                    MachineStoragePath::inputOption(),
                 ]
             );
     }

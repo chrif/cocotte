@@ -26,11 +26,6 @@ final class MachineCreator
     private $machineName;
 
     /**
-     * @var MachineStoragePath
-     */
-    private $machineStoragePath;
-
-    /**
      * @var ApiToken
      */
     private $token;
@@ -44,14 +39,12 @@ final class MachineCreator
         ProcessRunner $processRunner,
         MachineState $machineState,
         MachineName $machineName,
-        MachineStoragePath $machineStoragePath,
         ApiToken $token,
         Style $style
     ) {
         $this->processRunner = $processRunner;
         $this->machineState = $machineState;
         $this->machineName = $machineName;
-        $this->machineStoragePath = $machineStoragePath;
         $this->token = $token;
         $this->style = $style;
     }

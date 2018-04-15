@@ -4,13 +4,11 @@ namespace Chrif\Cocotte\Command;
 
 use Chrif\Cocotte\Console\Style;
 use Chrif\Cocotte\DigitalOcean\ApiToken;
-use Chrif\Cocotte\DigitalOcean\Hostname;
 use Chrif\Cocotte\DigitalOcean\DnsValidator;
+use Chrif\Cocotte\DigitalOcean\Hostname;
 use Chrif\Cocotte\Filesystem\Filesystem;
 use Chrif\Cocotte\Template\Traefik\TraefikUiPassword;
 use Chrif\Cocotte\Template\Traefik\TraefikUiUsername;
-use DigitalOceanV2\Adapter\GuzzleHttpAdapter;
-use DigitalOceanV2\DigitalOceanV2;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -129,7 +127,7 @@ EOF
                             throw new \Exception('No answer given. Try again.');
                         }
 
-                        return TraefikUiUsername::fromString($answer)->value();
+                        return TraefikUiUsername::fromString($answer)->toString();
                     }
                 )
         );
@@ -141,7 +139,7 @@ EOF
 
         $this->help(
             [
-                TraefikUiPassword::HELP
+                TraefikUiPassword::HELP,
             ]
         );
 
@@ -159,7 +157,8 @@ EOF
                         if (!$answer) {
                             throw new \Exception('No answer given. Try again.');
                         }
-                        return TraefikUiPassword::fromString($answer)->value();
+
+                        return TraefikUiPassword::fromString($answer)->toString();
                     }
                 )
         );

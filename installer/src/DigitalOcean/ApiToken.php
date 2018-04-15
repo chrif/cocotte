@@ -69,4 +69,5 @@ class ApiToken implements ImportableValue, ExportableValue, InputOptionValue
             );
         }
     }
+
 }

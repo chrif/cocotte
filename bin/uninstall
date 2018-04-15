@@ -15,6 +15,5 @@ docker run -it --rm \
     chrif/cocotte uninstall \
     --digital-ocean-api-token="${DIGITAL_OCEAN_API_TOKEN}" \
     --machine-name="${MACHINE_NAME:-cocotte}" \
-    --machine-storage-path="${MACHINE_STORAGE_PATH:-"$(pwd)/machine"}" \
     --traefik-ui-hostname="${TRAEFIK_UI_HOSTNAME}"
 

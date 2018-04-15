@@ -3,18 +3,34 @@
 namespace Chrif\Cocotte\Host;
 
 use Assert\Assertion;
+use Chrif\Cocotte\Environment\ImportableValue;
 use Symfony\Component\Process\Process;
 
-final class Mounts
+class Mounts implements ImportableValue
 {
     /**
      * @var array
      */
-    private $mounts;
+    private static $mounts;
 
-    public function toArray(): array
+    /**
+     * @var array
+     */
+    private $value;
+
+    public function __construct(array $value)
     {
-        if (null === $this->mounts) {
+        Assertion::greaterOrEqualThan(count($value), 1);
+        $this->value = $value;
+    }
+
+    /**
+     * @return self|ImportableValue
+     * @throws \Exception
+     */
+    public static function fromEnv(): ImportableValue
+    {
+        if (null === self::$mounts) {
             $process = new Process('docker inspect --format="{{json .Mounts}}" $HOSTNAME');
             $process->run();
             if (!$process->isSuccessful()) {
@@ -23,13 +39,15 @@ final class Mounts
                     "socket with a volume like this:\n-v /var/run/docker.sock:/var/run/docker.sock:ro"
                 );
             }
-            $mounts = json_decode($process->getOutput(), true);
-            Assertion::isArray($mounts);
-            Assertion::greaterOrEqualThan(count($mounts), 1);
-            $this->mounts = $mounts;
+            self::$mounts = json_decode($process->getOutput(), true);
         }
 
-        return $this->mounts;
+        return new self(self::$mounts);
+    }
+
+    public function toArray(): array
+    {
+        return $this->value;
     }
 
 }

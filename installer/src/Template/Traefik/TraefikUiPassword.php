@@ -66,14 +66,13 @@ class TraefikUiPassword implements ImportableValue, ExportableValue, InputOption
         return self::INPUT_OPTION;
     }
 
-    public function value(): string
+    public function toString(): string
     {
         return $this->value;
     }
 
     public function __toString()
     {
-        return $this->value();
+        return $this->toString();
     }
-
 }

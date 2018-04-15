@@ -45,8 +45,10 @@ services:
   Chrif\Cocotte\Finder\Finder:
     class: Chrif\Cocotte\Finder\CocotteFinder
 
-  Chrif\Cocotte\Host\HostMount: ~
-  Chrif\Cocotte\Host\Mounts: ~
+  Chrif\Cocotte\Host\HostMount:
+    tags: ['environment']
+  Chrif\Cocotte\Host\Mounts:
+    tags: ['environment']
 
   # shell
   Chrif\Cocotte\Shell\ProcessRunner: ~
