@@ -7,12 +7,15 @@ use Chrif\Cocotte\Environment\ExportableValue;
 use Chrif\Cocotte\Environment\ImportableValue;
 use Chrif\Cocotte\Environment\InputOptionValue;
 use Chrif\Cocotte\Shell\Env;
-use Symfony\Component\Console\Input\InputOption;
 
 class MachineName implements ImportableValue, ExportableValue, InputOptionValue
 {
     const MACHINE_NAME = 'MACHINE_NAME';
-    const INPUT_OPTION = 'machine-name';
+    const OPTION_NAME = 'machine-name';
+    /**
+     * https://github.com/docker/machine/blob/v0.14.0/libmachine/host/host.go#L24
+     */
+    const REGEX = '/^[a-zA-Z0-9][a-zA-Z0-9\-\.]*$/';
 
     /**
      * @var string
@@ -21,7 +24,8 @@ class MachineName implements ImportableValue, ExportableValue, InputOptionValue
 
     public function __construct(string $value)
     {
-        Assertion::notEmpty($value);
+        Assertion::notEmpty($value, "The machine name is empty");
+        Assertion::regex($value, self::REGEX, "The machine name does not match ".self::REGEX);
         $this->value = $value;
     }
 
@@ -43,30 +47,14 @@ class MachineName implements ImportableValue, ExportableValue, InputOptionValue
         Env::put(self::MACHINE_NAME, $value);
     }
 
-    public static function inputOption(): InputOption
-    {
-        return new InputOption(
-            self::INPUT_OPTION,
-            null,
-            InputOption::VALUE_REQUIRED,
-            'Machine Name',
-            Env::get(self::MACHINE_NAME)
-        );
-    }
-
     public static function inputOptionName(): string
     {
-        return self::INPUT_OPTION;
+        return self::OPTION_NAME;
     }
 
     public function toString(): string
     {
         return $this->value;
-    }
-
-    public function equals(MachineName $key): bool
-    {
-        return $this->toString() === $key->toString();
     }
 
     public function __toString()

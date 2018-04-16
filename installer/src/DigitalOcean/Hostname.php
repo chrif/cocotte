@@ -26,7 +26,7 @@ final class Hostname
      */
     private $topLevelDomain;
 
-    public function __construct(string $lowerLevelDomains, string $secondLevelDomain, string $topLevelDomain)
+    private function __construct(string $lowerLevelDomains, string $secondLevelDomain, string $topLevelDomain)
     {
         $this->lowerLevelDomains = $lowerLevelDomains;
         $this->secondLevelDomain = $secondLevelDomain;
@@ -38,6 +38,7 @@ final class Hostname
         $domains = explode('.', $value);
         Assertion::count($domains, 3);
         Assertion::allString($domains);
+        Assertion::allNotEmpty($domains);
         list($lowerLevelDomains, $secondLevelDomain, $topLevelDomain) = $domains;
 
         return new self($lowerLevelDomains, $secondLevelDomain, $topLevelDomain);
@@ -45,10 +46,12 @@ final class Hostname
 
     public static function parse(string $value): self
     {
+        Assertion::notEmpty($value, "The hostname is empty");
+
         $domains = explode('.', $value);
 
         if (count($domains) < 2) {
-            throw new \Exception("'$value' does not have a first and second level domains");
+            throw new \Exception("'$value' is does not have a first and second level domains");
         }
         if (count($domains) > 3) {
             throw new \Exception("'$value' is a domain with more than 3 levels.");

@@ -7,15 +7,12 @@ use Chrif\Cocotte\Environment\ExportableValue;
 use Chrif\Cocotte\Environment\ImportableValue;
 use Chrif\Cocotte\Environment\InputOptionValue;
 use Chrif\Cocotte\Shell\Env;
-use Symfony\Component\Console\Input\InputOption;
 
-class TraefikUiPassword implements ImportableValue, ExportableValue, InputOptionValue
+class TraefikPassword implements ImportableValue, ExportableValue, InputOptionValue
 {
     const TRAEFIK_UI_PASSWORD = 'TRAEFIK_UI_PASSWORD';
-    const INPUT_OPTION = 'traefik-ui-password';
-    const HELP = 'Only alphanumeric characters and the specified special characters are allowed. '.self::REGEX;
+    const OPTION_NAME = 'traefik-ui-password';
     const REGEX = '/^[a-zA-Z0-9_@#%?&*+=!-]+$/';
-
     /**
      * @var string
      */
@@ -50,20 +47,9 @@ class TraefikUiPassword implements ImportableValue, ExportableValue, InputOption
         Env::put(self::TRAEFIK_UI_PASSWORD, $value);
     }
 
-    public static function inputOption(): InputOption
-    {
-        return new InputOption(
-            self::INPUT_OPTION,
-            null,
-            InputOption::VALUE_REQUIRED,
-            'Traefik Ui password. '.self::HELP,
-            Env::get(self::TRAEFIK_UI_PASSWORD)
-        );
-    }
-
     public static function inputOptionName(): string
     {
-        return self::INPUT_OPTION;
+        return self::OPTION_NAME;
     }
 
     public function toString(): string

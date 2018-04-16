@@ -12,7 +12,7 @@ final class DigitalOceanFactory
     {
         Assertion::implementsInterface($adapterClass, AdapterInterface::class);
 
-        return new $adapterClass($token->value());
+        return new $adapterClass($token->toString());
     }
 
 }

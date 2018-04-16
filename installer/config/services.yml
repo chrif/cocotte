@@ -10,16 +10,6 @@ services:
   # environment
   Chrif\Cocotte\Environment\EnvironmentManager: ~
 
-  # machine
-  Chrif\Cocotte\Machine\MachineCreator: ~
-  Chrif\Cocotte\Machine\MachineIp:
-    tags: ['environment']
-  Chrif\Cocotte\Machine\MachineName:
-    tags: ['environment']
-  Chrif\Cocotte\Machine\MachineState: ~
-  Chrif\Cocotte\Machine\MachineStoragePath:
-    tags: ['environment']
-
   # console
   Symfony\Component\Console\Input\InputInterface:
     class: Symfony\Component\Console\Input\ArgvInput
@@ -36,43 +26,12 @@ services:
   Chrif\Cocotte\Command\:
     resource: '../src/Command/*'
     tags: ['console.command']
-
-  # filesystem
-  Chrif\Cocotte\Filesystem\Filesystem:
-    class: Chrif\Cocotte\Filesystem\CocotteFilesystem
-
-  # finder
-  Chrif\Cocotte\Finder\Finder:
-    class: Chrif\Cocotte\Finder\CocotteFinder
-
-  Chrif\Cocotte\Host\HostMount:
-    tags: ['environment']
-  Chrif\Cocotte\Host\Mounts:
-    tags: ['environment']
-
-  # shell
-  Chrif\Cocotte\Shell\ProcessRunner: ~
-  Chrif\Cocotte\Shell\VariableReplacer: ~
-  Chrif\Cocotte\Shell\EnvironmentSubstitution\SubstitutionFactory: ~
-  Chrif\Cocotte\Shell\BasicAuth: ~
-
-  # template
-  Chrif\Cocotte\Template\StaticSite\StaticSiteExporter: ~
-  Chrif\Cocotte\Template\StaticSite\StaticSiteHostname:
-    tags: ['environment']
-  Chrif\Cocotte\Template\StaticSite\StaticSiteNamespace:
-    tags: ['environment']
-  Chrif\Cocotte\Template\Traefik\TraefikExporter: ~
-  Chrif\Cocotte\Template\Traefik\TraefikUiHostname:
-    tags: ['environment']
-  Chrif\Cocotte\Template\Traefik\TraefikUiPassword:
-    tags: ['environment']
-  Chrif\Cocotte\Template\Traefik\TraefikUiUsername:
-    tags: ['environment']
+  Chrif\Cocotte\Console\InteractionOperator: ~
 
   # digital ocean
   Chrif\Cocotte\DigitalOcean\ApiToken:
     tags: ['environment']
+  Chrif\Cocotte\DigitalOcean\ApiTokenInteraction: ~
   Chrif\Cocotte\DigitalOcean\DigitalOceanFactory: ~
   Iodev\Whois\Whois:
     factory: 'Iodev\Whois\Whois::create'
@@ -92,3 +51,50 @@ services:
   DigitalOceanV2\Api\Key: ~
   DigitalOceanV2\Api\Domain: ~
   DigitalOceanV2\Api\DomainRecord: ~
+
+  # filesystem
+  Chrif\Cocotte\Filesystem\Filesystem:
+    class: Chrif\Cocotte\Filesystem\CocotteFilesystem
+
+  # finder
+  Chrif\Cocotte\Finder\Finder:
+    class: Chrif\Cocotte\Finder\CocotteFinder
+
+  Chrif\Cocotte\Host\HostMount:
+    tags: ['environment']
+  Chrif\Cocotte\Host\Mounts:
+    tags: ['environment']
+
+  # machine
+  Chrif\Cocotte\Machine\MachineCreator: ~
+  Chrif\Cocotte\Machine\MachineIp:
+    tags: ['environment']
+  Chrif\Cocotte\Machine\MachineName:
+    tags: ['environment']
+  Chrif\Cocotte\Machine\MachineNameInteraction: ~
+  Chrif\Cocotte\Machine\MachineState: ~
+  Chrif\Cocotte\Machine\MachineStoragePath:
+    tags: ['environment']
+
+  # shell
+  Chrif\Cocotte\Shell\ProcessRunner: ~
+  Chrif\Cocotte\Shell\VariableReplacer: ~
+  Chrif\Cocotte\Shell\EnvironmentSubstitution\SubstitutionFactory: ~
+  Chrif\Cocotte\Shell\BasicAuth: ~
+
+  # template
+  Chrif\Cocotte\Template\StaticSite\StaticSiteExporter: ~
+  Chrif\Cocotte\Template\StaticSite\StaticSiteHostname:
+    tags: ['environment']
+  Chrif\Cocotte\Template\StaticSite\StaticSiteNamespace:
+    tags: ['environment']
+  Chrif\Cocotte\Template\Traefik\TraefikExporter: ~
+  Chrif\Cocotte\Template\Traefik\TraefikHostname:
+    tags: ['environment']
+  Chrif\Cocotte\Template\Traefik\TraefikHostnameInteraction: ~
+  Chrif\Cocotte\Template\Traefik\TraefikPassword:
+    tags: ['environment']
+  Chrif\Cocotte\Template\Traefik\TraefikPasswordInteraction: ~
+  Chrif\Cocotte\Template\Traefik\TraefikUsername:
+    tags: ['environment']
+  Chrif\Cocotte\Template\Traefik\TraefikUsernameInteraction: ~

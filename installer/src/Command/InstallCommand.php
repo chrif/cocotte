@@ -3,19 +3,20 @@
 namespace Chrif\Cocotte\Command;
 
 use Chrif\Cocotte\Console\Style;
-use Chrif\Cocotte\DigitalOcean\ApiToken;
+use Chrif\Cocotte\DigitalOcean\ApiTokenInteraction;
 use Chrif\Cocotte\DigitalOcean\NetworkingConfigurator;
 use Chrif\Cocotte\Environment\EnvironmentManager;
-use Chrif\Cocotte\Host\HostMount;
 use Chrif\Cocotte\Machine\MachineCreator;
 use Chrif\Cocotte\Machine\MachineName;
+use Chrif\Cocotte\Machine\MachineNameInteraction;
 use Chrif\Cocotte\Machine\MachineState;
 use Chrif\Cocotte\Machine\MachineStoragePath;
 use Chrif\Cocotte\Shell\ProcessRunner;
 use Chrif\Cocotte\Template\Traefik\TraefikExporter;
-use Chrif\Cocotte\Template\Traefik\TraefikUiHostname;
-use Chrif\Cocotte\Template\Traefik\TraefikUiPassword;
-use Chrif\Cocotte\Template\Traefik\TraefikUiUsername;
+use Chrif\Cocotte\Template\Traefik\TraefikHostname;
+use Chrif\Cocotte\Template\Traefik\TraefikHostnameInteraction;
+use Chrif\Cocotte\Template\Traefik\TraefikPasswordInteraction;
+use Chrif\Cocotte\Template\Traefik\TraefikUsernameInteraction;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -23,11 +24,6 @@ use Symfony\Component\Process\Process;
 
 final class InstallCommand extends Command
 {
-    /**
-     * @var \Chrif\Cocotte\DigitalOcean\ApiToken
-     */
-    private $token;
-
     /**
      * @var MachineStoragePath
      */
@@ -64,22 +60,46 @@ final class InstallCommand extends Command
     private $style;
 
     /**
-     * @var HostMount
-     */
-    private $hostMount;
-
-    /**
      * @var NetworkingConfigurator
      */
     private $networkingConfigurator;
 
     /**
-     * @var TraefikUiHostname
+     * @var MachineName
      */
-    private $traefikUiHostname;
+    private $machineName;
+
+    /**
+     * @var TraefikHostname
+     */
+    private $traefikHostname;
+
+    /**
+     * @var TraefikPasswordInteraction
+     */
+    private $traefikPasswordInteraction;
+
+    /**
+     * @var TraefikHostnameInteraction
+     */
+    private $traefikHostnameInteraction;
+
+    /**
+     * @var TraefikUsernameInteraction
+     */
+    private $traefikUsernameInteraction;
+
+    /**
+     * @var ApiTokenInteraction
+     */
+    private $apiTokenInteraction;
+
+    /**
+     * @var MachineNameInteraction
+     */
+    private $machineNameInteraction;
 
     public function __construct(
-        ApiToken $token,
         MachineStoragePath $machineStoragePath,
         EnvironmentManager $environmentManager,
         MachineCreator $machineCreator,
@@ -87,11 +107,14 @@ final class InstallCommand extends Command
         MachineState $machineState,
         TraefikExporter $traefikExporter,
         Style $style,
-        HostMount $hostMount,
         NetworkingConfigurator $networkingConfigurator,
-        TraefikUiHostname $traefikUiHostname
+        TraefikHostname $traefikHostname,
+        TraefikPasswordInteraction $traefikPasswordInteraction,
+        TraefikHostnameInteraction $traefikHostnameInteraction,
+        TraefikUsernameInteraction $traefikUsernameInteraction,
+        ApiTokenInteraction $apiTokenInteraction,
+        MachineNameInteraction $machineNameInteraction
     ) {
-        $this->token = $token;
         $this->machineStoragePath = $machineStoragePath;
         $this->environmentManager = $environmentManager;
         $this->machineCreator = $machineCreator;
@@ -99,46 +122,58 @@ final class InstallCommand extends Command
         $this->machineState = $machineState;
         $this->traefikExporter = $traefikExporter;
         $this->style = $style;
-        $this->hostMount = $hostMount;
         $this->networkingConfigurator = $networkingConfigurator;
-        $this->traefikUiHostname = $traefikUiHostname;
+        $this->traefikHostname = $traefikHostname;
+        $this->traefikPasswordInteraction = $traefikPasswordInteraction;
+        $this->traefikHostnameInteraction = $traefikHostnameInteraction;
+        $this->traefikUsernameInteraction = $traefikUsernameInteraction;
+        $this->apiTokenInteraction = $apiTokenInteraction;
+        $this->machineNameInteraction = $machineNameInteraction;
         parent::__construct();
     }
 
-    public function isEnabled()
+    protected function interact(InputInterface $input, OutputInterface $output)
     {
-        return !$this->machineState->exists();
+        $this->apiTokenInteraction->interact($input);
+        $this->machineNameInteraction->interact($input);
+        $this->traefikHostnameInteraction->interact($input);
+        $this->traefikUsernameInteraction->interact($input);
+        $this->traefikPasswordInteraction->interact($input);
     }
 
     protected function configure()
     {
         $this
             ->setName('install')
-            ->setDescription('Create a Docker Machine on Digital Ocean and install the Traefik reverse proxy on it')
+            ->setDescription('Create a Docker Machine on Digital Ocean and install the Traefik reverse proxy on it.')
             ->getDefinition()->addOptions(
                 [
-                    ApiToken::inputOption(),
-                    MachineName::inputOption(),
-                    TraefikUiHostname::inputOption(),
-                    TraefikUiPassword::inputOption(),
-                    TraefikUiUsername::inputOption(),
+                    $this->apiTokenInteraction->option(),
+                    $this->traefikHostnameInteraction->option(),
+                    $this->traefikUsernameInteraction->option(),
+                    $this->traefikPasswordInteraction->option(),
+                    $this->machineNameInteraction->option(),
                 ]
             );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->style->confirm(
-            "You are about to create a Docker Machine on Digital Ocean and install the Traefik reverse proxy on it. ".
-            "This action may take a few minutes."
-        );
         $this->environmentManager->exportFromInput($input);
         $this->machineStoragePath->export();
-        $this->machineCreator->create();
-        $this->traefikExporter->export();
-        $this->networkingConfigurator->configure($this->traefikUiHostname->toHostnameCollection());
-        $this->style->title('Deploying exported site to cloud machine');
-        $this->processRunner->mustRun(new Process('./bin/prod', $this->traefikExporter->hostAppPath()));
-    }
 
+        $install = $input->getOption('no-interaction') || $this->style->confirm(
+                "You are about to create a Docker Machine named '{$this->machineName}' on Digital Ocean ".
+                "and install the Traefik reverse proxy on it with hostname '{$this->traefikHostname}'".
+                "This action may take a few minutes."
+            );
+
+        if ($install) {
+            $this->machineCreator->create();
+            $this->traefikExporter->export();
+            $this->networkingConfigurator->configure($this->traefikHostname->toHostnameCollection());
+            $this->style->title('Deploying exported site to cloud machine');
+            $this->processRunner->mustRun(new Process('./bin/prod', $this->traefikExporter->hostAppPath()));
+        }
+    }
 }

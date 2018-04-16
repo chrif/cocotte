@@ -45,19 +45,19 @@ final class TraefikExporter
     private $substitutionFactory;
 
     /**
-     * @var TraefikUiHostname
+     * @var TraefikHostname
      */
-    private $traefikUiHostname;
+    private $traefikHostname;
 
     /**
-     * @var TraefikUiPassword
+     * @var TraefikPassword
      */
-    private $traefikUiPassword;
+    private $traefikPassword;
 
     /**
-     * @var TraefikUiUsername
+     * @var TraefikUsername
      */
-    private $traefikUiUsername;
+    private $traefikUsername;
 
     /**
      * @var \Chrif\Cocotte\Shell\BasicAuth
@@ -70,9 +70,9 @@ final class TraefikExporter
         Finder $finder,
         Filesystem $filesystem,
         SubstitutionFactory $substitutionFactory,
-        TraefikUiHostname $traefikUiHostname,
-        TraefikUiPassword $traefikUiPassword,
-        TraefikUiUsername $traefikUiUsername,
+        TraefikHostname $traefikHostname,
+        TraefikPassword $traefikPassword,
+        TraefikUsername $traefikUsername,
         BasicAuth $basicAuth
     ) {
         $this->style = $style;
@@ -80,9 +80,9 @@ final class TraefikExporter
         $this->finder = $finder;
         $this->filesystem = $filesystem;
         $this->substitutionFactory = $substitutionFactory;
-        $this->traefikUiHostname = $traefikUiHostname;
-        $this->traefikUiPassword = $traefikUiPassword;
-        $this->traefikUiUsername = $traefikUiUsername;
+        $this->traefikHostname = $traefikHostname;
+        $this->traefikPassword = $traefikPassword;
+        $this->traefikUsername = $traefikUsername;
         $this->basicAuth = $basicAuth;
     }
 
@@ -167,8 +167,8 @@ final class TraefikExporter
         $this->style->section("Create '.env' and '.env-override' from command options + env");
 
         $basicAuth = $this->basicAuth->generate(
-            $this->traefikUiUsername->toString(),
-            $this->traefikUiPassword->toString()
+            $this->traefikUsername->toString(),
+            $this->traefikPassword->toString()
         );
 
         EnvironmentSubstitution::withDefaults()
@@ -197,7 +197,7 @@ final class TraefikExporter
         EnvironmentSubstitution::withDefaults()
             ->export(
                 [
-                    'APP_HOSTS' => $this->traefikUiHostname->toLocalHostnameCollection()->toString(),
+                    'APP_HOSTS' => $this->traefikHostname->toLocalHostnameCollection()->toString(),
                 ]
             )->substitute(
                 $this->substitutionFactory->dumpFile(

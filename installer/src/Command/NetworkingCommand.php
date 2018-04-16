@@ -2,7 +2,7 @@
 
 namespace Chrif\Cocotte\Command;
 
-use Chrif\Cocotte\DigitalOcean\ApiToken;
+use Chrif\Cocotte\DigitalOcean\ApiTokenInteraction;
 use Chrif\Cocotte\DigitalOcean\HostnameCollection;
 use Chrif\Cocotte\DigitalOcean\NetworkingConfigurator;
 use Chrif\Cocotte\Environment\EnvironmentManager;
@@ -24,10 +24,19 @@ final class NetworkingCommand extends Command
      */
     private $environmentManager;
 
-    public function __construct(NetworkingConfigurator $networkingConfigurator, EnvironmentManager $environmentManager)
-    {
+    /**
+     * @var ApiTokenInteraction
+     */
+    private $apiTokenInteraction;
+
+    public function __construct(
+        NetworkingConfigurator $networkingConfigurator,
+        EnvironmentManager $environmentManager,
+        ApiTokenInteraction $apiTokenInteraction
+    ) {
         $this->networkingConfigurator = $networkingConfigurator;
         $this->environmentManager = $environmentManager;
+        $this->apiTokenInteraction = $apiTokenInteraction;
         parent::__construct();
     }
 
@@ -45,7 +54,7 @@ final class NetworkingCommand extends Command
             ->addOption('remove', null, InputOption::VALUE_NONE, 'Remove networking for hostnames')
             ->getDefinition()->addOptions(
                 [
-                    ApiToken::inputOption(),
+                    $this->apiTokenInteraction->option(),
                 ]
             );
     }

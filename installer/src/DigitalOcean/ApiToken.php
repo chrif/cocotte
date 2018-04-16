@@ -9,12 +9,11 @@ use Chrif\Cocotte\Environment\InputOptionValue;
 use Chrif\Cocotte\Shell\Env;
 use DigitalOceanV2\Adapter\GuzzleHttpAdapter;
 use DigitalOceanV2\DigitalOceanV2;
-use Symfony\Component\Console\Input\InputOption;
 
 class ApiToken implements ImportableValue, ExportableValue, InputOptionValue
 {
     const DIGITAL_OCEAN_API_TOKEN = 'DIGITAL_OCEAN_API_TOKEN';
-    const INPUT_OPTION = 'digital-ocean-api-token';
+    const OPTION_NAME = 'digital-ocean-api-token';
 
     /**
      * @var string
@@ -23,7 +22,7 @@ class ApiToken implements ImportableValue, ExportableValue, InputOptionValue
 
     public function __construct(string $value)
     {
-        Assertion::notEmpty($value);
+        Assertion::notEmpty($value, "The API token is empty.");
         $this->value = $value;
     }
 
@@ -37,30 +36,24 @@ class ApiToken implements ImportableValue, ExportableValue, InputOptionValue
         Env::put(self::DIGITAL_OCEAN_API_TOKEN, $value);
     }
 
-    public static function inputOption(): InputOption
-    {
-        return new InputOption(
-            self::INPUT_OPTION,
-            null,
-            InputOption::VALUE_REQUIRED,
-            'Digital Ocean Api token',
-            Env::get(self::DIGITAL_OCEAN_API_TOKEN)
-        );
-    }
-
     public static function inputOptionName(): string
     {
-        return self::INPUT_OPTION;
+        return self::OPTION_NAME;
     }
 
-    public function value(): string
+    public function toString(): string
     {
         return $this->value;
     }
 
-    public function assertTokenIsValid()
+    public function __toString()
     {
-        $adapter = new GuzzleHttpAdapter($this->value());
+        return $this->toString();
+    }
+
+    public function assertAccountIsActive()
+    {
+        $adapter = new GuzzleHttpAdapter($this->toString());
         $digitalOceanV2 = new DigitalOceanV2($adapter);
         $account = $digitalOceanV2->account()->getUserInformation();
         if ($account->status !== 'active') {

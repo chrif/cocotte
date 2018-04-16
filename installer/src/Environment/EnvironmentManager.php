@@ -3,6 +3,7 @@
 namespace Chrif\Cocotte\Environment;
 
 use Chrif\Cocotte\Console\Style;
+use ProxyManager\Proxy\LazyLoadingInterface;
 use Symfony\Component\Console\Input\InputInterface;
 
 final class EnvironmentManager
@@ -43,6 +44,12 @@ final class EnvironmentManager
         foreach ($this->exportableValues as $exportableValue) {
             if ($exportableValue instanceof InputOptionValue) {
                 $inputOptionName = $exportableValue::inputOptionName();
+                if ($exportableValue instanceof LazyLoadingInterface && $exportableValue->isProxyInitialized()) {
+                    throw new \Exception(
+                        "Tried exporting environment from input but found an exportable value ".
+                        "named '{$inputOptionName}' which is already initialized."
+                    );
+                }
                 if ($input->hasOption($inputOptionName)) {
                     $value = $input->getOption($inputOptionName);
                     if (null !== $value) {

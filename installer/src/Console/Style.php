@@ -34,4 +34,14 @@ interface Style extends OutputInterface, StyleInterface
     public function comment($message);
 
     public function ok($message);
+
+    public function help($message);
+
+    public function pause();
+
+    public function optionHelp(string $title, array $message): string;
+
+    public function quittableQuestion($message): string;
+
+    public function link(string $url): string;
 }

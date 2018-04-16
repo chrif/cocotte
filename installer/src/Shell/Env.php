@@ -20,13 +20,13 @@ final class Env
         $_SERVER[$name] = $value; // for \Symfony\Component\Process\Process::getDefaultEnv
     }
 
-    public static function get(string $name): ?string
+    public static function get(string $name, $default = null): ?string
     {
         $value = getenv($name);
         if (false !== $value) {
             return $value;
         }
 
-        return null;
+        return $default;
     }
 }

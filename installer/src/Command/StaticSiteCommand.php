@@ -3,7 +3,7 @@
 namespace Chrif\Cocotte\Command;
 
 use Chrif\Cocotte\Console\Style;
-use Chrif\Cocotte\DigitalOcean\ApiToken;
+use Chrif\Cocotte\DigitalOcean\ApiTokenInteraction;
 use Chrif\Cocotte\DigitalOcean\NetworkingConfigurator;
 use Chrif\Cocotte\Environment\EnvironmentManager;
 use Chrif\Cocotte\Machine\MachineState;
@@ -54,6 +54,11 @@ final class StaticSiteCommand extends Command
      */
     private $processRunner;
 
+    /**
+     * @var ApiTokenInteraction
+     */
+    private $apiTokenInteraction;
+
     public function __construct(
         StaticSiteExporter $staticSiteExporter,
         NetworkingConfigurator $networkingConfigurator,
@@ -61,7 +66,8 @@ final class StaticSiteCommand extends Command
         MachineState $machineState,
         StaticSiteHostname $staticSiteHostname,
         Style $style,
-        ProcessRunner $processRunner
+        ProcessRunner $processRunner,
+        ApiTokenInteraction $apiTokenInteraction
     ) {
         $this->staticSiteExporter = $staticSiteExporter;
         $this->networkingConfigurator = $networkingConfigurator;
@@ -70,12 +76,8 @@ final class StaticSiteCommand extends Command
         $this->staticSiteHostname = $staticSiteHostname;
         $this->style = $style;
         $this->processRunner = $processRunner;
+        $this->apiTokenInteraction = $apiTokenInteraction;
         parent::__construct();
-    }
-
-    public function isEnabled()
-    {
-        return $this->machineState->exists();
     }
 
     protected function configure()
@@ -99,7 +101,7 @@ final class StaticSiteCommand extends Command
                 [
                     StaticSiteNamespace::inputOption(),
                     StaticSiteHostname::inputOption(),
-                    ApiToken::inputOption(),
+                    $this->apiTokenInteraction->option(),
                 ]
             );
     }
