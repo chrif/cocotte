@@ -3,12 +3,11 @@
 namespace Chrif\Cocotte\Template\Traefik;
 
 use Assert\Assertion;
-use Chrif\Cocotte\Environment\ExportableValue;
-use Chrif\Cocotte\Environment\ImportableValue;
-use Chrif\Cocotte\Environment\InputOptionValue;
+use Chrif\Cocotte\Environment\LazyEnvironmentValue;
+use Chrif\Cocotte\Environment\LazyOptionExportValue;
 use Chrif\Cocotte\Shell\Env;
 
-class TraefikPassword implements ImportableValue, ExportableValue, InputOptionValue
+class TraefikPassword implements LazyOptionExportValue
 {
     const TRAEFIK_UI_PASSWORD = 'TRAEFIK_UI_PASSWORD';
     const OPTION_NAME = 'traefik-ui-password';
@@ -35,19 +34,19 @@ class TraefikPassword implements ImportableValue, ExportableValue, InputOptionVa
     }
 
     /**
-     * @return ImportableValue|self
+     * @return LazyEnvironmentValue|self
      */
-    public static function fromEnv(): ImportableValue
+    public static function fromEnv(): LazyEnvironmentValue
     {
         return new self(Env::get(self::TRAEFIK_UI_PASSWORD));
     }
 
-    public static function toEnv($value): void
+    public static function toEnv(string $value): void
     {
         Env::put(self::TRAEFIK_UI_PASSWORD, $value);
     }
 
-    public static function inputOptionName(): string
+    public static function optionName(): string
     {
         return self::OPTION_NAME;
     }

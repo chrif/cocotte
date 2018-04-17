@@ -2,9 +2,8 @@
 
 namespace Chrif\Cocotte\DependencyInjection;
 
-use Chrif\Cocotte\Environment\EnvironmentManager;
-use Chrif\Cocotte\Environment\ExportableValue;
-use Chrif\Cocotte\Environment\ImportableValue;
+use Chrif\Cocotte\Environment\LazyEnvironmentLoader;
+use Chrif\Cocotte\Environment\LazyEnvironmentValue;
 use InvalidArgumentException;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -20,20 +19,17 @@ final class EnvironmentValuePass implements CompilerPassInterface
         foreach ($configs as $id => $attributes) {
             $valueDefinition = $container->getDefinition($id);
             $valueClass = $container->getParameterBag()->resolveValue($valueDefinition->getClass());
-            $managerDefinition = $container->getDefinition(EnvironmentManager::class);
+            $lazyLoaderDefinition = $container->getDefinition(LazyEnvironmentLoader::class);
 
             if (!$r = $container->getReflectionClass($valueClass)) {
                 throw new InvalidArgumentException(
                     sprintf('Class "%s" used for service "%s" cannot be found.', $valueClass, $id)
                 );
             }
-            if ($r->implementsInterface(ImportableValue::class)) {
-                $valueDefinition->setFactory([$valueClass, "fromEnv"]);
+            if ($r->implementsInterface(LazyEnvironmentValue::class)) {
                 $valueDefinition->setLazy(true);
-                $managerDefinition->addMethodCall('addImportableValue', [new Reference($id)]);
-            }
-            if ($r->implementsInterface(ExportableValue::class)) {
-                $managerDefinition->addMethodCall('addExportableValue', [new Reference($id)]);
+                $valueDefinition->setFactory([$valueClass, "fromEnv"]);
+                $lazyLoaderDefinition->addMethodCall('addValue', [new Reference($id)]);
             }
         }
     }

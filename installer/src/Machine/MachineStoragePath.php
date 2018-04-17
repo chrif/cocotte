@@ -3,14 +3,14 @@
 namespace Chrif\Cocotte\Machine;
 
 use Assert\Assertion;
-use Chrif\Cocotte\Environment\ExportableValue;
-use Chrif\Cocotte\Environment\ImportableValue;
+use Chrif\Cocotte\Environment\LazyEnvironmentValue;
+use Chrif\Cocotte\Environment\LazyLoadAware;
 use Chrif\Cocotte\Filesystem\CocotteFilesystem;
 use Chrif\Cocotte\Filesystem\Filesystem;
 use Chrif\Cocotte\Host\HostMount;
 use Chrif\Cocotte\Shell\Env;
 
-class MachineStoragePath implements ImportableValue, ExportableValue
+class MachineStoragePath implements LazyEnvironmentValue, LazyLoadAware
 {
     const MACHINE_STORAGE_PATH = 'MACHINE_STORAGE_PATH';
     const INPUT_OPTION = 'machine-storage-path';
@@ -42,18 +42,13 @@ class MachineStoragePath implements ImportableValue, ExportableValue
     }
 
     /**
-     * @return self|ImportableValue
+     * @return self|LazyEnvironmentValue
      * @throws \Assert\AssertionFailedException
      * @throws \Exception
      */
-    public static function fromEnv(): ImportableValue
+    public static function fromEnv(): LazyEnvironmentValue
     {
         return new self(HostMount::fromEnv()->sourcePath().'/machine', CocotteFilesystem::create());
-    }
-
-    public static function toEnv($value): void
-    {
-        Env::put(self::MACHINE_STORAGE_PATH, $value);
     }
 
     public function toString(): string
@@ -66,9 +61,9 @@ class MachineStoragePath implements ImportableValue, ExportableValue
         return $this->toString();
     }
 
-    public function export()
+    public function onLazyLoad(): void
     {
-        self::toEnv($this->toString());
+        Env::put(self::MACHINE_STORAGE_PATH, $this->toString());
         $this->symLink();
     }
 

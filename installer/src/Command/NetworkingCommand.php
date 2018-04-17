@@ -2,17 +2,19 @@
 
 namespace Chrif\Cocotte\Command;
 
+use Chrif\Cocotte\DigitalOcean\ApiToken;
 use Chrif\Cocotte\DigitalOcean\ApiTokenInteraction;
 use Chrif\Cocotte\DigitalOcean\HostnameCollection;
 use Chrif\Cocotte\DigitalOcean\NetworkingConfigurator;
-use Chrif\Cocotte\Environment\EnvironmentManager;
+use Chrif\Cocotte\Environment\LazyEnvironment;
+use Chrif\Cocotte\Environment\LazyEnvironmentLoader;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-final class NetworkingCommand extends Command
+final class NetworkingCommand extends Command implements LazyEnvironment
 {
     /**
      * @var NetworkingConfigurator
@@ -20,9 +22,9 @@ final class NetworkingCommand extends Command
     private $networkingConfigurator;
 
     /**
-     * @var EnvironmentManager
+     * @var LazyEnvironmentLoader
      */
-    private $environmentManager;
+    private $lazyEnvironmentLoader;
 
     /**
      * @var ApiTokenInteraction
@@ -31,11 +33,11 @@ final class NetworkingCommand extends Command
 
     public function __construct(
         NetworkingConfigurator $networkingConfigurator,
-        EnvironmentManager $environmentManager,
+        LazyEnvironmentLoader $lazyEnvironmentLoader,
         ApiTokenInteraction $apiTokenInteraction
     ) {
         $this->networkingConfigurator = $networkingConfigurator;
-        $this->environmentManager = $environmentManager;
+        $this->lazyEnvironmentLoader = $lazyEnvironmentLoader;
         $this->apiTokenInteraction = $apiTokenInteraction;
         parent::__construct();
     }
@@ -43,6 +45,13 @@ final class NetworkingCommand extends Command
     public function isHidden()
     {
         return !getenv('SHOW_HIDDEN_COMMANDS');
+    }
+
+    public function requires(): array
+    {
+        return [
+            ApiToken::class,
+        ];
     }
 
     protected function configure()
@@ -61,10 +70,11 @@ final class NetworkingCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->environmentManager->exportFromInput($input);
+        $this->lazyEnvironmentLoader->load($this, $input);
         $this->networkingConfigurator->configure(
             HostnameCollection::fromString($input->getArgument('hostnames')),
             $input->getOption('remove')
         );
     }
+
 }

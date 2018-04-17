@@ -3,10 +3,10 @@
 namespace Chrif\Cocotte\Machine;
 
 use Assert\Assertion;
-use Chrif\Cocotte\Environment\ImportableValue;
+use Chrif\Cocotte\Environment\LazyEnvironmentValue;
 use Symfony\Component\Process\Process;
 
-class MachineIp implements ImportableValue
+class MachineIp implements LazyEnvironmentValue
 {
     /**
      * @var string
@@ -24,7 +24,10 @@ class MachineIp implements ImportableValue
         return new self($value);
     }
 
-    public static function fromEnv(): ImportableValue
+    /**
+     * @return LazyEnvironmentValue|self
+     */
+    public static function fromEnv(): LazyEnvironmentValue
     {
         $process = new Process(
             'docker-machine inspect '.
@@ -39,14 +42,8 @@ class MachineIp implements ImportableValue
     /**
      * @return string
      */
-    public function value(): string
+    public function toString(): string
     {
         return $this->value;
     }
-
-    public function equals(MachineIp $ip): bool
-    {
-        return $this->value() === $ip->value();
-    }
-
 }

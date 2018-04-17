@@ -3,12 +3,13 @@
 namespace Chrif\Cocotte\Command;
 
 use Chrif\Cocotte\Console\Style;
+use Chrif\Cocotte\DigitalOcean\ApiToken;
 use Chrif\Cocotte\DigitalOcean\ApiTokenInteraction;
 use Chrif\Cocotte\DigitalOcean\NetworkingConfigurator;
-use Chrif\Cocotte\Environment\EnvironmentManager;
+use Chrif\Cocotte\Environment\LazyEnvironment;
+use Chrif\Cocotte\Environment\LazyEnvironmentLoader;
 use Chrif\Cocotte\Machine\MachineName;
 use Chrif\Cocotte\Machine\MachineNameInteraction;
-use Chrif\Cocotte\Machine\MachineState;
 use Chrif\Cocotte\Machine\MachineStoragePath;
 use Chrif\Cocotte\Shell\ProcessRunner;
 use Chrif\Cocotte\Template\Traefik\TraefikHostname;
@@ -18,12 +19,12 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Process;
 
-final class UninstallCommand extends Command
+final class UninstallCommand extends Command implements LazyEnvironment
 {
     /**
-     * @var EnvironmentManager
+     * @var LazyEnvironmentLoader
      */
-    private $environmentManager;
+    private $lazyEnvironmentLoader;
 
     /**
      * @var ProcessRunner
@@ -34,11 +35,6 @@ final class UninstallCommand extends Command
      * @var NetworkingConfigurator
      */
     private $networkingConfigurator;
-
-    /**
-     * @var MachineState
-     */
-    private $machineState;
 
     /**
      * @var TraefikHostname
@@ -56,11 +52,6 @@ final class UninstallCommand extends Command
     private $machineName;
 
     /**
-     * @var MachineStoragePath
-     */
-    private $machineStoragePath;
-
-    /**
      * @var TraefikHostnameInteraction
      */
     private $traefikHostnameInteraction;
@@ -76,30 +67,36 @@ final class UninstallCommand extends Command
     private $machineNameInteraction;
 
     public function __construct(
-        EnvironmentManager $environmentManager,
+        LazyEnvironmentLoader $lazyEnvironmentLoader,
         ProcessRunner $processRunner,
         NetworkingConfigurator $networkingConfigurator,
-        MachineState $machineState,
         TraefikHostname $traefikHostname,
         Style $style,
         MachineName $machineName,
-        MachineStoragePath $machineStoragePath,
         TraefikHostnameInteraction $traefikHostnameInteraction,
         ApiTokenInteraction $apiTokenInteraction,
         MachineNameInteraction $machineNameInteraction
     ) {
-        $this->environmentManager = $environmentManager;
+        $this->lazyEnvironmentLoader = $lazyEnvironmentLoader;
         $this->processRunner = $processRunner;
         $this->networkingConfigurator = $networkingConfigurator;
-        $this->machineState = $machineState;
         $this->traefikHostname = $traefikHostname;
         $this->style = $style;
         $this->machineName = $machineName;
-        $this->machineStoragePath = $machineStoragePath;
         $this->traefikHostnameInteraction = $traefikHostnameInteraction;
         $this->apiTokenInteraction = $apiTokenInteraction;
         $this->machineNameInteraction = $machineNameInteraction;
         parent::__construct();
+    }
+
+    public function requires(): array
+    {
+        return [
+            ApiToken::class,
+            MachineName::class,
+            MachineStoragePath::class,
+            TraefikHostname::class,
+        ];
     }
 
     protected function interact(InputInterface $input, OutputInterface $output)
@@ -126,26 +123,21 @@ final class UninstallCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->environmentManager->exportFromInput($input);
-        $this->machineStoragePath->export();
+        $this->lazyEnvironmentLoader->load($this, $input);
+        $this->confirm();
+        $this->networkingConfigurator->configure($this->traefikHostname->toHostnameCollection(), true);
+        $this->processRunner->mustRun(new Process('docker-machine rm -y "${MACHINE_NAME}"'));
+    }
 
-        $uninstall = $input->getOption('no-interaction') || $this->style->confirm(
-                "You are about to uninstall a Docker Machine named '<options=bold>{$this->machineName}</>' on Digital Ocean and ".
-                "remove the domain record '<options=bold>{$this->traefikHostname}</>' associated with this machine.",
-                false
-            );
-        if ($uninstall) {
-            $this->networkingConfigurator->configure(
-                $this->traefikHostname->toHostnameCollection(),
-                true
-            );
-            $this->processRunner->mustRun(
-                new Process(
-                    'docker-machine rm -y "${MACHINE_NAME}"'
-                )
-            );
-        } else {
-            $this->style->writeln('Cancelled');
-        }
+    private function confirm(): void
+    {
+        if (!$this->style->confirm(
+            "You are about to uninstall a Docker Machine named '<options=bold>{$this->machineName->toString()}</>' ".
+            "on Digital Ocean and remove the domain record '<options=bold>{$this->traefikHostname->toString()}</>' ".
+            "associated with this machine.",
+            false
+        )) {
+            throw new \Exception('Cancelled');
+        };
     }
 }

@@ -45,7 +45,7 @@ final class DomainRecord
         return $this->domainRecordApi->updateData(
             $hostname->domainName(),
             $record->id,
-            $this->machineIp->value()
+            $this->machineIp->toString()
         );
     }
 
@@ -55,7 +55,7 @@ final class DomainRecord
             $hostname->domainName(),
             self::A,
             $hostname->recordName(),
-            $this->machineIp->value()
+            $this->machineIp->toString()
         );
     }
 
@@ -103,7 +103,7 @@ final class DomainRecord
 
     public function isUpToDate(Hostname $hostname): bool
     {
-        return $this->get($hostname)->data === $this->machineIp->value();
+        return $this->get($hostname)->data === $this->machineIp->toString();
     }
 
     private function isTypeARecord($record): bool

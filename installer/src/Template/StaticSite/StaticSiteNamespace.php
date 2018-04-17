@@ -3,13 +3,12 @@
 namespace Chrif\Cocotte\Template\StaticSite;
 
 use Assert\Assertion;
-use Chrif\Cocotte\Environment\ExportableValue;
-use Chrif\Cocotte\Environment\ImportableValue;
-use Chrif\Cocotte\Environment\InputOptionValue;
+use Chrif\Cocotte\Environment\LazyEnvironmentValue;
+use Chrif\Cocotte\Environment\LazyOptionExportValue;
 use Chrif\Cocotte\Shell\Env;
 use Symfony\Component\Console\Input\InputOption;
 
-class StaticSiteNamespace implements ImportableValue, ExportableValue, InputOptionValue
+class StaticSiteNamespace implements LazyOptionExportValue
 {
     const STATIC_SITE_NAMESPACE = 'STATIC_SITE_NAMESPACE';
     const INPUT_OPTION = 'namespace';
@@ -36,14 +35,14 @@ class StaticSiteNamespace implements ImportableValue, ExportableValue, InputOpti
     }
 
     /**
-     * @return ImportableValue|self
+     * @return LazyEnvironmentValue|self
      */
-    public static function fromEnv(): ImportableValue
+    public static function fromEnv(): LazyEnvironmentValue
     {
         return new self(Env::get(self::STATIC_SITE_NAMESPACE));
     }
 
-    public static function toEnv($value): void
+    public static function toEnv(string $value): void
     {
         Env::put(self::STATIC_SITE_NAMESPACE, $value);
     }
@@ -59,7 +58,7 @@ class StaticSiteNamespace implements ImportableValue, ExportableValue, InputOpti
         );
     }
 
-    public static function inputOptionName(): string
+    public static function optionName(): string
     {
         return self::INPUT_OPTION;
     }

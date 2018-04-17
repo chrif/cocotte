@@ -3,36 +3,34 @@
 namespace Chrif\Cocotte\Command;
 
 use Chrif\Cocotte\Console\Style;
+use Chrif\Cocotte\DigitalOcean\ApiToken;
 use Chrif\Cocotte\DigitalOcean\ApiTokenInteraction;
 use Chrif\Cocotte\DigitalOcean\NetworkingConfigurator;
-use Chrif\Cocotte\Environment\EnvironmentManager;
+use Chrif\Cocotte\Environment\LazyEnvironment;
+use Chrif\Cocotte\Environment\LazyEnvironmentLoader;
 use Chrif\Cocotte\Machine\MachineCreator;
 use Chrif\Cocotte\Machine\MachineName;
 use Chrif\Cocotte\Machine\MachineNameInteraction;
-use Chrif\Cocotte\Machine\MachineState;
 use Chrif\Cocotte\Machine\MachineStoragePath;
 use Chrif\Cocotte\Shell\ProcessRunner;
-use Chrif\Cocotte\Template\Traefik\TraefikExporter;
+use Chrif\Cocotte\Template\Traefik\TraefikCreator;
 use Chrif\Cocotte\Template\Traefik\TraefikHostname;
 use Chrif\Cocotte\Template\Traefik\TraefikHostnameInteraction;
+use Chrif\Cocotte\Template\Traefik\TraefikPassword;
 use Chrif\Cocotte\Template\Traefik\TraefikPasswordInteraction;
+use Chrif\Cocotte\Template\Traefik\TraefikUsername;
 use Chrif\Cocotte\Template\Traefik\TraefikUsernameInteraction;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Process;
 
-final class InstallCommand extends Command
+final class InstallCommand extends Command implements LazyEnvironment
 {
     /**
-     * @var MachineStoragePath
+     * @var LazyEnvironmentLoader
      */
-    private $machineStoragePath;
-
-    /**
-     * @var EnvironmentManager
-     */
-    private $environmentManager;
+    private $lazyEnvironmentLoader;
 
     /**
      * @var MachineCreator
@@ -45,14 +43,9 @@ final class InstallCommand extends Command
     private $processRunner;
 
     /**
-     * @var MachineState
+     * @var TraefikCreator
      */
-    private $machineState;
-
-    /**
-     * @var TraefikExporter
-     */
-    private $traefikExporter;
+    private $traefikCreator;
 
     /**
      * @var Style
@@ -100,14 +93,13 @@ final class InstallCommand extends Command
     private $machineNameInteraction;
 
     public function __construct(
-        MachineStoragePath $machineStoragePath,
-        EnvironmentManager $environmentManager,
+        LazyEnvironmentLoader $lazyEnvironmentLoader,
         MachineCreator $machineCreator,
         ProcessRunner $processRunner,
-        MachineState $machineState,
-        TraefikExporter $traefikExporter,
+        TraefikCreator $traefikCreator,
         Style $style,
         NetworkingConfigurator $networkingConfigurator,
+        MachineName $machineName,
         TraefikHostname $traefikHostname,
         TraefikPasswordInteraction $traefikPasswordInteraction,
         TraefikHostnameInteraction $traefikHostnameInteraction,
@@ -115,14 +107,13 @@ final class InstallCommand extends Command
         ApiTokenInteraction $apiTokenInteraction,
         MachineNameInteraction $machineNameInteraction
     ) {
-        $this->machineStoragePath = $machineStoragePath;
-        $this->environmentManager = $environmentManager;
+        $this->lazyEnvironmentLoader = $lazyEnvironmentLoader;
         $this->machineCreator = $machineCreator;
         $this->processRunner = $processRunner;
-        $this->machineState = $machineState;
-        $this->traefikExporter = $traefikExporter;
+        $this->traefikCreator = $traefikCreator;
         $this->style = $style;
         $this->networkingConfigurator = $networkingConfigurator;
+        $this->machineName = $machineName;
         $this->traefikHostname = $traefikHostname;
         $this->traefikPasswordInteraction = $traefikPasswordInteraction;
         $this->traefikHostnameInteraction = $traefikHostnameInteraction;
@@ -130,6 +121,18 @@ final class InstallCommand extends Command
         $this->apiTokenInteraction = $apiTokenInteraction;
         $this->machineNameInteraction = $machineNameInteraction;
         parent::__construct();
+    }
+
+    public function requires(): array
+    {
+        return [
+            ApiToken::class,
+            MachineName::class,
+            MachineStoragePath::class,
+            TraefikHostname::class,
+            TraefikPassword::class,
+            TraefikUsername::class,
+        ];
     }
 
     protected function interact(InputInterface $input, OutputInterface $output)
@@ -159,21 +162,24 @@ final class InstallCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->environmentManager->exportFromInput($input);
-        $this->machineStoragePath->export();
-
-        $install = $input->getOption('no-interaction') || $this->style->confirm(
-                "You are about to create a Docker Machine named '{$this->machineName}' on Digital Ocean ".
-                "and install the Traefik reverse proxy on it with hostname '{$this->traefikHostname}'".
-                "This action may take a few minutes."
-            );
-
-        if ($install) {
-            $this->machineCreator->create();
-            $this->traefikExporter->export();
-            $this->networkingConfigurator->configure($this->traefikHostname->toHostnameCollection());
-            $this->style->title('Deploying exported site to cloud machine');
-            $this->processRunner->mustRun(new Process('./bin/prod', $this->traefikExporter->hostAppPath()));
-        }
+        $this->lazyEnvironmentLoader->load($this, $input);
+        $this->confirm();
+        $this->machineCreator->create();
+        $this->traefikCreator->create();
+        $this->networkingConfigurator->configure($this->traefikHostname->toHostnameCollection());
+        $this->style->title('Deploying exported site to cloud machine');
+        $this->processRunner->mustRun(new Process('./bin/prod', $this->traefikCreator->hostAppPath()));
     }
+
+    private function confirm(): void
+    {
+        if (!$this->style->confirm(
+            "You are about to create a Docker Machine named '{$this->machineName->toString()}' on Digital Ocean ".
+            "and install the Traefik reverse proxy on it with hostname '{$this->traefikHostname->toString()}'. ".
+            "This action may take a few minutes."
+        )) {
+            throw new \Exception('Cancelled');
+        };
+    }
+
 }

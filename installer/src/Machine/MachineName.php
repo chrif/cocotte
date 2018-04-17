@@ -3,12 +3,11 @@
 namespace Chrif\Cocotte\Machine;
 
 use Assert\Assertion;
-use Chrif\Cocotte\Environment\ExportableValue;
-use Chrif\Cocotte\Environment\ImportableValue;
-use Chrif\Cocotte\Environment\InputOptionValue;
+use Chrif\Cocotte\Environment\LazyEnvironmentValue;
+use Chrif\Cocotte\Environment\LazyOptionExportValue;
 use Chrif\Cocotte\Shell\Env;
 
-class MachineName implements ImportableValue, ExportableValue, InputOptionValue
+class MachineName implements LazyOptionExportValue
 {
     const MACHINE_NAME = 'MACHINE_NAME';
     const OPTION_NAME = 'machine-name';
@@ -35,19 +34,19 @@ class MachineName implements ImportableValue, ExportableValue, InputOptionValue
     }
 
     /**
-     * @return ImportableValue|self
+     * @return LazyEnvironmentValue|self
      */
-    public static function fromEnv(): ImportableValue
+    public static function fromEnv(): LazyEnvironmentValue
     {
         return new self(Env::get(self::MACHINE_NAME));
     }
 
-    public static function toEnv($value): void
+    public static function toEnv(string $value): void
     {
         Env::put(self::MACHINE_NAME, $value);
     }
 
-    public static function inputOptionName(): string
+    public static function optionName(): string
     {
         return self::OPTION_NAME;
     }

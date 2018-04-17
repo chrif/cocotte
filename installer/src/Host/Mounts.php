@@ -3,10 +3,10 @@
 namespace Chrif\Cocotte\Host;
 
 use Assert\Assertion;
-use Chrif\Cocotte\Environment\ImportableValue;
+use Chrif\Cocotte\Environment\LazyEnvironmentValue;
 use Symfony\Component\Process\Process;
 
-class Mounts implements ImportableValue
+class Mounts implements LazyEnvironmentValue
 {
     /**
      * @var array
@@ -25,10 +25,10 @@ class Mounts implements ImportableValue
     }
 
     /**
-     * @return self|ImportableValue
+     * @return LazyEnvironmentValue|self
      * @throws \Exception
      */
-    public static function fromEnv(): ImportableValue
+    public static function fromEnv(): LazyEnvironmentValue
     {
         if (null === self::$mounts) {
             $process = new Process('docker inspect --format="{{json .Mounts}}" $HOSTNAME');

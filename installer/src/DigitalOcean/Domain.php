@@ -33,7 +33,7 @@ final class Domain
     {
         return $this->domainApi->create(
             $hostname->domainName(),
-            $this->machineIp->value()
+            $this->machineIp->toString()
         );
     }
 

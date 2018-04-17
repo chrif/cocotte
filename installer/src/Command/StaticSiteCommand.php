@@ -3,12 +3,15 @@
 namespace Chrif\Cocotte\Command;
 
 use Chrif\Cocotte\Console\Style;
+use Chrif\Cocotte\DigitalOcean\ApiToken;
 use Chrif\Cocotte\DigitalOcean\ApiTokenInteraction;
 use Chrif\Cocotte\DigitalOcean\NetworkingConfigurator;
-use Chrif\Cocotte\Environment\EnvironmentManager;
-use Chrif\Cocotte\Machine\MachineState;
+use Chrif\Cocotte\Environment\LazyEnvironment;
+use Chrif\Cocotte\Environment\LazyEnvironmentLoader;
+use Chrif\Cocotte\Machine\MachineName;
+use Chrif\Cocotte\Machine\MachineStoragePath;
 use Chrif\Cocotte\Shell\ProcessRunner;
-use Chrif\Cocotte\Template\StaticSite\StaticSiteExporter;
+use Chrif\Cocotte\Template\StaticSite\StaticSiteCreator;
 use Chrif\Cocotte\Template\StaticSite\StaticSiteHostname;
 use Chrif\Cocotte\Template\StaticSite\StaticSiteNamespace;
 use Symfony\Component\Console\Command\Command;
@@ -17,10 +20,10 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Process;
 
-final class StaticSiteCommand extends Command
+final class StaticSiteCommand extends Command implements LazyEnvironment
 {
     /**
-     * @var StaticSiteExporter
+     * @var StaticSiteCreator
      */
     private $staticSiteExporter;
 
@@ -30,14 +33,9 @@ final class StaticSiteCommand extends Command
     private $networkingConfigurator;
 
     /**
-     * @var EnvironmentManager
+     * @var LazyEnvironmentLoader
      */
-    private $environmentManager;
-
-    /**
-     * @var MachineState
-     */
-    private $machineState;
+    private $lazyEnvironmentLoader;
 
     /**
      * @var StaticSiteHostname
@@ -60,10 +58,9 @@ final class StaticSiteCommand extends Command
     private $apiTokenInteraction;
 
     public function __construct(
-        StaticSiteExporter $staticSiteExporter,
+        StaticSiteCreator $staticSiteExporter,
         NetworkingConfigurator $networkingConfigurator,
-        EnvironmentManager $environmentManager,
-        MachineState $machineState,
+        LazyEnvironmentLoader $lazyEnvironmentLoader,
         StaticSiteHostname $staticSiteHostname,
         Style $style,
         ProcessRunner $processRunner,
@@ -71,13 +68,21 @@ final class StaticSiteCommand extends Command
     ) {
         $this->staticSiteExporter = $staticSiteExporter;
         $this->networkingConfigurator = $networkingConfigurator;
-        $this->environmentManager = $environmentManager;
-        $this->machineState = $machineState;
+        $this->lazyEnvironmentLoader = $lazyEnvironmentLoader;
         $this->staticSiteHostname = $staticSiteHostname;
         $this->style = $style;
         $this->processRunner = $processRunner;
         $this->apiTokenInteraction = $apiTokenInteraction;
         parent::__construct();
+    }
+
+    public function requires(): array
+    {
+        return [
+            ApiToken::class,
+            MachineName::class,
+            MachineStoragePath::class,
+        ];
     }
 
     protected function configure()
@@ -108,8 +113,7 @@ final class StaticSiteCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->environmentManager->exportFromInput($input);
-
+        $this->lazyEnvironmentLoader->load($this, $input);
         $skipNetworking = $input->getOption('skip-networking');
         $skipDeploy = $input->getOption('skip-deploy');
 
@@ -117,7 +121,7 @@ final class StaticSiteCommand extends Command
             throw new \Exception("Cannot skip networking when deploying");
         }
 
-        $this->staticSiteExporter->export();
+        $this->staticSiteExporter->create();
 
         if (!$skipNetworking) {
             $this->networkingConfigurator->configure($this->staticSiteHostname->toHostnameCollection());

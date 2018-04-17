@@ -10,7 +10,7 @@ use Chrif\Cocotte\Shell\EnvironmentSubstitution\SubstitutionFactory;
 use Chrif\Cocotte\Shell\ProcessRunner;
 use Symfony\Component\Process\Process;
 
-final class StaticSiteExporter
+final class StaticSiteCreator
 {
 
     /**
@@ -71,7 +71,7 @@ final class StaticSiteExporter
         $this->staticSiteHostname = $staticSiteHostname;
     }
 
-    public function export()
+    public function create()
     {
         $this->style->title('Exporting a new static site to the host filesystem');
         $this->backup();

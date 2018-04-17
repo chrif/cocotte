@@ -3,13 +3,12 @@
 namespace Chrif\Cocotte\Template\StaticSite;
 
 use Chrif\Cocotte\DigitalOcean\HostnameCollection;
-use Chrif\Cocotte\Environment\ExportableValue;
-use Chrif\Cocotte\Environment\ImportableValue;
-use Chrif\Cocotte\Environment\InputOptionValue;
+use Chrif\Cocotte\Environment\LazyEnvironmentValue;
+use Chrif\Cocotte\Environment\LazyOptionExportValue;
 use Chrif\Cocotte\Shell\Env;
 use Symfony\Component\Console\Input\InputOption;
 
-class StaticSiteHostname implements ImportableValue, ExportableValue, InputOptionValue
+class StaticSiteHostname implements LazyOptionExportValue
 {
     const STATIC_SITE_HOSTNAME = 'STATIC_SITE_HOSTNAME';
     const INPUT_OPTION = 'hostname';
@@ -30,14 +29,14 @@ class StaticSiteHostname implements ImportableValue, ExportableValue, InputOptio
     }
 
     /**
-     * @return ImportableValue|self
+     * @return LazyEnvironmentValue|self
      */
-    public static function fromEnv(): ImportableValue
+    public static function fromEnv(): LazyEnvironmentValue
     {
         return new self(HostnameCollection::fromString(Env::get(self::STATIC_SITE_HOSTNAME)));
     }
 
-    public static function toEnv($value): void
+    public static function toEnv(string $value): void
     {
         Env::put(self::STATIC_SITE_HOSTNAME, $value);
     }
@@ -53,7 +52,7 @@ class StaticSiteHostname implements ImportableValue, ExportableValue, InputOptio
         );
     }
 
-    public static function inputOptionName(): string
+    public static function optionName(): string
     {
         return self::INPUT_OPTION;
     }
@@ -77,5 +76,4 @@ class StaticSiteHostname implements ImportableValue, ExportableValue, InputOptio
     {
         return $this->hostnameCollection;
     }
-
 }

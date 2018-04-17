@@ -3,14 +3,13 @@
 namespace Chrif\Cocotte\DigitalOcean;
 
 use Assert\Assertion;
-use Chrif\Cocotte\Environment\ExportableValue;
-use Chrif\Cocotte\Environment\ImportableValue;
-use Chrif\Cocotte\Environment\InputOptionValue;
+use Chrif\Cocotte\Environment\LazyEnvironmentValue;
+use Chrif\Cocotte\Environment\LazyOptionExportValue;
 use Chrif\Cocotte\Shell\Env;
 use DigitalOceanV2\Adapter\GuzzleHttpAdapter;
 use DigitalOceanV2\DigitalOceanV2;
 
-class ApiToken implements ImportableValue, ExportableValue, InputOptionValue
+class ApiToken implements LazyOptionExportValue
 {
     const DIGITAL_OCEAN_API_TOKEN = 'DIGITAL_OCEAN_API_TOKEN';
     const OPTION_NAME = 'digital-ocean-api-token';
@@ -26,17 +25,17 @@ class ApiToken implements ImportableValue, ExportableValue, InputOptionValue
         $this->value = $value;
     }
 
-    public static function fromEnv(): ImportableValue
+    public static function fromEnv(): LazyEnvironmentValue
     {
         return new self(Env::get(self::DIGITAL_OCEAN_API_TOKEN));
     }
 
-    public static function toEnv($value): void
+    public static function toEnv(string $value): void
     {
         Env::put(self::DIGITAL_OCEAN_API_TOKEN, $value);
     }
 
-    public static function inputOptionName(): string
+    public static function optionName(): string
     {
         return self::OPTION_NAME;
     }

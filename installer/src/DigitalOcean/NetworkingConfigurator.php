@@ -59,7 +59,7 @@ final class NetworkingConfigurator
         if (!$this->domain->exists($hostname)) {
             $this->style->writeln(
                 "Domain '{$hostname->toRoot()}' does not exist. Creating it and adding ".
-                "{$hostname->toRoot()} with ip ".$this->machineIp->value()
+                "{$hostname->toRoot()} with ip ".$this->machineIp->toString()
             );
             $this->domain->create($hostname);
         }
@@ -72,7 +72,7 @@ final class NetworkingConfigurator
         if ($this->domainRecord->exists($hostname)) {
             if (!$this->domainRecord->isUpToDate($hostname)) {
                 $this->style->writeln(
-                    "Domain record '{$hostname}' exists. Updating its ip to ".$this->machineIp->value()
+                    "Domain record '{$hostname}' exists. Updating its ip to ".$this->machineIp->toString()
                 );
                 $this->domainRecord->update($hostname);
             } else {
@@ -80,7 +80,7 @@ final class NetworkingConfigurator
             }
         } else {
             $this->style->writeln(
-                "Domain record '{$hostname}' does not exist. Creating it with ip ".$this->machineIp->value()
+                "Domain record '{$hostname}' does not exist. Creating it with ip ".$this->machineIp->toString()
             );
             $this->domainRecord->create($hostname);
         }

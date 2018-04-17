@@ -44,4 +44,6 @@ interface Style extends OutputInterface, StyleInterface
     public function quittableQuestion($message): string;
 
     public function link(string $url): string;
+
+    public function verbose(\Closure $closure);
 }

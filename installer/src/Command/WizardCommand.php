@@ -67,7 +67,7 @@ final class WizardCommand extends Command
             $this->style->optionHelp(
                 "Cocotte Wizard",
                 [
-                    "This wizard helps you get started by building a simple '<info>install</info>' command for Cocotte.",
+                    "This wizard helps you build a simple '<info>install</info>' command for Cocotte.",
                     "It assumes that you own a domain name and can change its name servers.",
                     "Read Cocotte documentation at ".$this->style->link('github.com/chrif/cocotte'),
                 ]

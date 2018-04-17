@@ -36,4 +36,21 @@ final class CocotteStyle extends SymfonyStyle implements Style
     {
         return "<info>$url</info> \u{1F517} ";
     }
+
+    public function verbose(\Closure $closure)
+    {
+        $verbosity = $this->verbosities() & self::VERBOSITY_VERBOSE;
+        if ($verbosity <= $this->getVerbosity()) {
+            $closure();
+        }
+    }
+
+    /**
+     * @return int
+     */
+    private function verbosities(): int
+    {
+        return self::VERBOSITY_QUIET | self::VERBOSITY_NORMAL | self::VERBOSITY_VERBOSE | self::VERBOSITY_VERY_VERBOSE | self::VERBOSITY_DEBUG;
+    }
+
 }

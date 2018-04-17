@@ -11,7 +11,7 @@ use Chrif\Cocotte\Shell\EnvironmentSubstitution\SubstitutionFactory;
 use Chrif\Cocotte\Shell\ProcessRunner;
 use Symfony\Component\Process\Process;
 
-final class TraefikExporter
+final class TraefikCreator
 {
 
     /**
@@ -86,7 +86,7 @@ final class TraefikExporter
         $this->basicAuth = $basicAuth;
     }
 
-    public function export()
+    public function create()
     {
         $this->style->title('Exporting traefik template to host filesystem');
         $this->backup();

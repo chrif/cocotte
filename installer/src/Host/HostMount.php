@@ -3,11 +3,11 @@
 namespace Chrif\Cocotte\Host;
 
 use Assert\Assertion;
-use Chrif\Cocotte\Environment\ImportableValue;
+use Chrif\Cocotte\Environment\LazyEnvironmentValue;
 use Chrif\Cocotte\Filesystem\CocotteFilesystem;
 use Chrif\Cocotte\Filesystem\Filesystem;
 
-class HostMount implements ImportableValue
+class HostMount implements LazyEnvironmentValue
 {
     /**
      * @var array
@@ -33,11 +33,11 @@ class HostMount implements ImportableValue
     }
 
     /**
-     * @return self|ImportableValue
+     * @return LazyEnvironmentValue|self
      * @throws \Assert\AssertionFailedException
      * @throws \Exception
      */
-    public static function fromEnv(): ImportableValue
+    public static function fromEnv(): LazyEnvironmentValue
     {
         foreach (Mounts::fromEnv()->toArray() as $mount) {
             if ('bind' === $mount['Type'] && '/host' === $mount['Destination']) {
