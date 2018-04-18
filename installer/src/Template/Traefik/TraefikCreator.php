@@ -3,8 +3,8 @@
 namespace Chrif\Cocotte\Template\Traefik;
 
 use Chrif\Cocotte\Console\Style;
+use Chrif\Cocotte\DigitalOcean\NetworkingConfigurator;
 use Chrif\Cocotte\Filesystem\Filesystem;
-use Chrif\Cocotte\Finder\Finder;
 use Chrif\Cocotte\Shell\BasicAuth;
 use Chrif\Cocotte\Shell\EnvironmentSubstitution\EnvironmentSubstitution;
 use Chrif\Cocotte\Shell\EnvironmentSubstitution\SubstitutionFactory;
@@ -28,11 +28,6 @@ final class TraefikCreator
      * @var ProcessRunner
      */
     private $processRunner;
-
-    /**
-     * @var Finder
-     */
-    private $finder;
 
     /**
      * @var Filesystem
@@ -60,30 +55,35 @@ final class TraefikCreator
     private $traefikUsername;
 
     /**
-     * @var \Chrif\Cocotte\Shell\BasicAuth
+     * @var BasicAuth
      */
     private $basicAuth;
+
+    /**
+     * @var NetworkingConfigurator
+     */
+    private $networkingConfigurator;
 
     public function __construct(
         Style $style,
         ProcessRunner $processRunner,
-        Finder $finder,
         Filesystem $filesystem,
         SubstitutionFactory $substitutionFactory,
         TraefikHostname $traefikHostname,
         TraefikPassword $traefikPassword,
         TraefikUsername $traefikUsername,
-        BasicAuth $basicAuth
+        BasicAuth $basicAuth,
+        NetworkingConfigurator $networkingConfigurator
     ) {
         $this->style = $style;
         $this->processRunner = $processRunner;
-        $this->finder = $finder;
         $this->filesystem = $filesystem;
         $this->substitutionFactory = $substitutionFactory;
         $this->traefikHostname = $traefikHostname;
         $this->traefikPassword = $traefikPassword;
         $this->traefikUsername = $traefikUsername;
         $this->basicAuth = $basicAuth;
+        $this->networkingConfigurator = $networkingConfigurator;
     }
 
     public function create()
@@ -95,6 +95,9 @@ final class TraefikCreator
         $this->createDockerComposeOverride();
         $this->createDotEnv();
         $this->copyTmpToHost();
+        $this->networkingConfigurator->configure($this->traefikHostname->toHostnameCollection());
+        $this->style->title('Deploying traefik to cloud machine');
+        $this->processRunner->mustRun(new Process('./bin/prod', $this->hostAppPath()));
     }
 
     public function hostAppPath(): string

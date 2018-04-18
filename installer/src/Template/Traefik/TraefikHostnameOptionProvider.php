@@ -3,7 +3,7 @@
 namespace Chrif\Cocotte\Template\Traefik;
 
 use Chrif\Cocotte\Console\InteractionOperator;
-use Chrif\Cocotte\Console\OptionInteraction;
+use Chrif\Cocotte\Console\OptionProvider;
 use Chrif\Cocotte\Console\Style;
 use Chrif\Cocotte\DigitalOcean\DnsValidator;
 use Chrif\Cocotte\DigitalOcean\Hostname;
@@ -12,7 +12,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Question\Question;
 
-class TraefikHostnameInteraction implements OptionInteraction
+class TraefikHostnameOptionProvider implements OptionProvider
 {
     /**
      * @var Style
@@ -51,16 +51,7 @@ class TraefikHostnameInteraction implements OptionInteraction
     {
         return $this->style->optionHelp(
             "Traefik UI hostname",
-            [
-                "This the fully qualified domain name for your Traefik UI.",
-                "It has to be with a subdomain like in '<info>traefik.mydomain.com</info>', in which case \n".
-                "'<info>mydomain.com</info>' must point to the name servers of Digital Ocean, and Cocotte \n".
-                "will create and configure the '<info>traefik</info>' subdomain for you.",
-                "Cocotte validates that the name servers of the domain you enter are Digital \nOcean's. ".
-                "How to point to Digital Ocean name servers: ".$this->style->link('goo.gl/SJnw2c')."\n".
-                "Please note that when a domain is newly registered, or the name servers are \nchanged, you can expect ".
-                "a propagation time up to 24 hours.",
-            ]
+            $this->style->hostnameHelp('Traefik UI', 'traefik')
         );
     }
 
@@ -100,4 +91,5 @@ class TraefikHostnameInteraction implements OptionInteraction
     {
         return $this->operator->ask($this);
     }
+
 }

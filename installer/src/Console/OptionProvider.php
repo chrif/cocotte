@@ -6,8 +6,10 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Question\Question;
 
-interface OptionInteraction
+interface OptionProvider
 {
+    const OPTION_PROVIDER = 'option.provider';
+
     public function option(): InputOption;
 
     public function interact(InputInterface $input);

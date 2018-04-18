@@ -9,6 +9,7 @@ services:
       - src:/opt/app
     labels:
       - "traefik.enable=true"
+      - "traefik.backend=${APP_HOSTS}"
       - "traefik.frontend.rule=Host:${APP_HOSTS}"
       - "traefik.port=80"
       - "traefik.docker.network=traefik"

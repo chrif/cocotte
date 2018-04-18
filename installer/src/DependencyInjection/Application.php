@@ -8,6 +8,8 @@ use Symfony\Component\Console\Application as Console;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
+use Symfony\Component\EventDispatcher\DependencyInjection\RegisterListenersPass;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 final class Application
 {
@@ -24,8 +26,14 @@ final class Application
         $loader = new YamlFileLoader($container, new FileLocator());
         $loader->load($serviceResource);
 
-        $container->addCompilerPass(new EnvironmentValuePass());
+        $container->addCompilerPass(new LazyEnvironmentPass());
         $container->addCompilerPass(new ConsoleCommandPass());
+        $container->addCompilerPass(new OptionProviderPass());
+        $container->addCompilerPass(new RegisterListenersPass(
+            EventDispatcherInterface::class,
+            'event.listener',
+            'event.subscriber'
+        ));
 
         $container->compile(true);
 

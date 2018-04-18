@@ -2,16 +2,18 @@
 
 namespace Chrif\Cocotte\Command;
 
+use Chrif\Cocotte\Console\AbstractCommand;
+use Chrif\Cocotte\Console\OptionProviderRegistry;
 use Chrif\Cocotte\Console\Style;
-use Chrif\Cocotte\DigitalOcean\ApiTokenInteraction;
-use Chrif\Cocotte\Template\Traefik\TraefikHostnameInteraction;
-use Chrif\Cocotte\Template\Traefik\TraefikPasswordInteraction;
-use Chrif\Cocotte\Template\Traefik\TraefikUsernameInteraction;
-use Symfony\Component\Console\Command\Command;
+use Chrif\Cocotte\DigitalOcean\ApiToken;
+use Chrif\Cocotte\Template\Traefik\TraefikHostname;
+use Chrif\Cocotte\Template\Traefik\TraefikPassword;
+use Chrif\Cocotte\Template\Traefik\TraefikUsername;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
-final class WizardCommand extends Command
+final class WizardCommand extends AbstractCommand
 {
     /**
      * @var Style
@@ -19,48 +21,44 @@ final class WizardCommand extends Command
     private $style;
 
     /**
-     * @var TraefikUsernameInteraction
+     * @var EventDispatcherInterface
      */
-    private $traefikUsernameInteraction;
+    private $eventDispatcher;
 
     /**
-     * @var TraefikPasswordInteraction
+     * @var OptionProviderRegistry
      */
-    private $traefikPasswordInteraction;
-
-    /**
-     * @var TraefikHostnameInteraction
-     */
-    private $traefikHostnameInteraction;
-
-    /**
-     * @var ApiTokenInteraction
-     */
-    private $apiTokenInteraction;
+    private $optionProviderRegistry;
 
     public function __construct(
         Style $style,
-        TraefikUsernameInteraction $traefikUsernameInteraction,
-        TraefikPasswordInteraction $traefikPasswordInteraction,
-        TraefikHostnameInteraction $traefikHostnameInteraction,
-        ApiTokenInteraction $apiTokenInteraction
+        EventDispatcherInterface $eventDispatcher,
+        OptionProviderRegistry $optionProviderRegistry
     ) {
         $this->style = $style;
-        $this->traefikUsernameInteraction = $traefikUsernameInteraction;
-        $this->traefikPasswordInteraction = $traefikPasswordInteraction;
-        $this->traefikHostnameInteraction = $traefikHostnameInteraction;
-        $this->apiTokenInteraction = $apiTokenInteraction;
+        $this->eventDispatcher = $eventDispatcher;
+        $this->optionProviderRegistry = $optionProviderRegistry;
         parent::__construct();
     }
 
-    protected function configure()
+    public function optionProviders(): array
+    {
+        return [];
+    }
+
+    protected function eventDispatcher(): EventDispatcherInterface
+    {
+        return $this->eventDispatcher;
+    }
+
+    protected function doConfigure(): void
     {
         $this
             ->setName('wizard')
-            ->setDescription('Interactively build a simple install command for Cocotte');
+            ->setDescription("Interactively build a simple '<info>install</info>' command for <options=bold>Cocotte</>");
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function doExecute(InputInterface $input, OutputInterface $output)
     {
         $input->setInteractive(true);
         $this->style->help(
@@ -75,18 +73,18 @@ final class WizardCommand extends Command
         );
         $this->style->pause();
 
-        $token = $this->apiTokenInteraction->ask();
-        $traefikHostname = $this->traefikHostnameInteraction->ask();
-        $traefikUsername = $this->traefikUsernameInteraction->ask();
-        $traefikPassword = $this->traefikPasswordInteraction->ask();
+        $token = $this->ask(ApiToken::OPTION_NAME);
+        $traefikHostname = $this->ask(TraefikHostname::OPTION_NAME);
+        $traefikUsername = $this->ask(TraefikUsername::OPTION_NAME);
+        $traefikPassword = $this->ask(TraefikPassword::OPTION_NAME);
 
         $this->style->block(
             [
                 "A command will be printed to the terminal.",
                 "Run the command from a location on your computer where you usually put new project code.",
-                "Afterwards, two directories will be created: one named 'machine' that you must leave there ".
-                "and never edit (it is used by Docker Machine to login to your cloud machine), and one named 'traefik' ".
-                "that you can edit all you want and which is ready for Git version control: this your Traefik project.",
+                "Afterwards, two directories will be created:\n- one named 'machine' that you must leave there ".
+                "and never edit (it is used by Docker Machine to login to your cloud machine),\n- and one named 'traefik' ".
+                "that you can edit all you want and which is ready for Git version control: this your new Traefik project.",
                 "Thank you for trying Cocotte!",
             ],
             'COMPLETE',
@@ -113,4 +111,8 @@ EOF
         );
     }
 
+    private function ask(string $name): string
+    {
+        return $this->optionProviderRegistry->providerByOptionName($name)->ask();
+    }
 }

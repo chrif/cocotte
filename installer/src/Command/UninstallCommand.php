@@ -2,30 +2,26 @@
 
 namespace Chrif\Cocotte\Command;
 
+use Chrif\Cocotte\Console\AbstractCommand;
 use Chrif\Cocotte\Console\Style;
 use Chrif\Cocotte\DigitalOcean\ApiToken;
-use Chrif\Cocotte\DigitalOcean\ApiTokenInteraction;
+use Chrif\Cocotte\DigitalOcean\ApiTokenOptionProvider;
 use Chrif\Cocotte\DigitalOcean\NetworkingConfigurator;
 use Chrif\Cocotte\Environment\LazyEnvironment;
-use Chrif\Cocotte\Environment\LazyEnvironmentLoader;
 use Chrif\Cocotte\Machine\MachineName;
-use Chrif\Cocotte\Machine\MachineNameInteraction;
+use Chrif\Cocotte\Machine\MachineNameOptionProvider;
+use Chrif\Cocotte\Machine\MachineState;
 use Chrif\Cocotte\Machine\MachineStoragePath;
 use Chrif\Cocotte\Shell\ProcessRunner;
 use Chrif\Cocotte\Template\Traefik\TraefikHostname;
-use Chrif\Cocotte\Template\Traefik\TraefikHostnameInteraction;
-use Symfony\Component\Console\Command\Command;
+use Chrif\Cocotte\Template\Traefik\TraefikHostnameOptionProvider;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Process\Process;
 
-final class UninstallCommand extends Command implements LazyEnvironment
+final class UninstallCommand extends AbstractCommand implements LazyEnvironment
 {
-    /**
-     * @var LazyEnvironmentLoader
-     */
-    private $lazyEnvironmentLoader;
-
     /**
      * @var ProcessRunner
      */
@@ -52,44 +48,35 @@ final class UninstallCommand extends Command implements LazyEnvironment
     private $machineName;
 
     /**
-     * @var TraefikHostnameInteraction
+     * @var EventDispatcherInterface
      */
-    private $traefikHostnameInteraction;
+    private $eventDispatcher;
 
     /**
-     * @var ApiTokenInteraction
+     * @var MachineState
      */
-    private $apiTokenInteraction;
-
-    /**
-     * @var MachineNameInteraction
-     */
-    private $machineNameInteraction;
+    private $machineState;
 
     public function __construct(
-        LazyEnvironmentLoader $lazyEnvironmentLoader,
         ProcessRunner $processRunner,
         NetworkingConfigurator $networkingConfigurator,
         TraefikHostname $traefikHostname,
         Style $style,
         MachineName $machineName,
-        TraefikHostnameInteraction $traefikHostnameInteraction,
-        ApiTokenInteraction $apiTokenInteraction,
-        MachineNameInteraction $machineNameInteraction
+        EventDispatcherInterface $eventDispatcher,
+        MachineState $machineState
     ) {
-        $this->lazyEnvironmentLoader = $lazyEnvironmentLoader;
         $this->processRunner = $processRunner;
         $this->networkingConfigurator = $networkingConfigurator;
         $this->traefikHostname = $traefikHostname;
         $this->style = $style;
         $this->machineName = $machineName;
-        $this->traefikHostnameInteraction = $traefikHostnameInteraction;
-        $this->apiTokenInteraction = $apiTokenInteraction;
-        $this->machineNameInteraction = $machineNameInteraction;
+        $this->eventDispatcher = $eventDispatcher;
+        $this->machineState = $machineState;
         parent::__construct();
     }
 
-    public function requires(): array
+    public function lazyEnvironmentValues(): array
     {
         return [
             ApiToken::class,
@@ -99,43 +86,45 @@ final class UninstallCommand extends Command implements LazyEnvironment
         ];
     }
 
-    protected function interact(InputInterface $input, OutputInterface $output)
+    public function optionProviders(): array
     {
-        $this->apiTokenInteraction->interact($input);
-        $this->machineNameInteraction->interact($input);
-        $this->traefikHostnameInteraction->interact($input);
+        return [
+            ApiTokenOptionProvider::class,
+            MachineNameOptionProvider::class,
+            TraefikHostnameOptionProvider::class,
+        ];
     }
 
-    protected function configure()
+    protected function eventDispatcher(): EventDispatcherInterface
+    {
+        return $this->eventDispatcher;
+    }
+
+    protected function doConfigure(): void
     {
         $this
             ->setName('uninstall')
-            ->setDescription('Destroy the Docker Machine on Digital Ocean and remove the Traefik subdomain.')
-            ->getDefinition()
-            ->addOptions(
-                [
-                    $this->apiTokenInteraction->option(),
-                    $this->machineNameInteraction->option(),
-                    $this->traefikHostnameInteraction->option(),
-                ]
-            );
+            ->setDescription('Destroy the Docker machine on Digital Ocean and remove the Traefik subdomain.');
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function doExecute(InputInterface $input, OutputInterface $output)
     {
-        $this->lazyEnvironmentLoader->load($this, $input);
         $this->confirm();
         $this->networkingConfigurator->configure($this->traefikHostname->toHostnameCollection(), true);
-        $this->processRunner->mustRun(new Process('docker-machine rm -y "${MACHINE_NAME}"'));
+        if (!$this->machineState->exists()) {
+            $this->style->note("Machine does not exist");
+        } else {
+            $this->processRunner->mustRun(new Process('docker-machine rm -y "${MACHINE_NAME}"'));
+        }
+        $this->style->success("Uninstall successful.");
     }
 
     private function confirm(): void
     {
         if (!$this->style->confirm(
-            "You are about to uninstall a Docker Machine named '<options=bold>{$this->machineName->toString()}</>' ".
-            "on Digital Ocean and remove the domain record '<options=bold>{$this->traefikHostname->toString()}</>' ".
-            "associated with this machine.",
-            false
+            "You are about to uninstall a Docker machine named '<options=bold>{$this->machineName->toString()}</>' ".
+            "on Digital Ocean and remove the domain record(s) '<options=bold>{$this->traefikHostname->toString()}</>' ".
+            "associated with this machine."
         )) {
             throw new \Exception('Cancelled');
         };

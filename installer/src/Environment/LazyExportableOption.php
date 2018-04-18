@@ -2,10 +2,9 @@
 
 namespace Chrif\Cocotte\Environment;
 
-interface LazyOptionExportValue extends LazyEnvironmentValue
+interface LazyExportableOption extends LazyEnvironmentValue
 {
     public static function optionName(): string;
 
     public static function toEnv(string $value): void;
-
 }

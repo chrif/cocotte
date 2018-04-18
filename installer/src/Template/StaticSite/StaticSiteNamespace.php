@@ -4,14 +4,14 @@ namespace Chrif\Cocotte\Template\StaticSite;
 
 use Assert\Assertion;
 use Chrif\Cocotte\Environment\LazyEnvironmentValue;
-use Chrif\Cocotte\Environment\LazyOptionExportValue;
+use Chrif\Cocotte\Environment\LazyExportableOption;
 use Chrif\Cocotte\Shell\Env;
-use Symfony\Component\Console\Input\InputOption;
 
-class StaticSiteNamespace implements LazyOptionExportValue
+class StaticSiteNamespace implements LazyExportableOption
 {
     const STATIC_SITE_NAMESPACE = 'STATIC_SITE_NAMESPACE';
-    const INPUT_OPTION = 'namespace';
+    const OPTION_NAME = 'namespace';
+    const REGEX = '/^[a-z0-9-]+$/';
 
     /**
      * @var string
@@ -23,7 +23,7 @@ class StaticSiteNamespace implements LazyOptionExportValue
         Assertion::notEmpty($value, "The site namespace is empty");
         Assertion::regex(
             $value,
-            '/^[a-z0-9-]+$/',
+            self::REGEX,
             "The site namespace does not contain only lowercase letters, digits and -"
         );
         $this->value = $value;
@@ -47,20 +47,9 @@ class StaticSiteNamespace implements LazyOptionExportValue
         Env::put(self::STATIC_SITE_NAMESPACE, $value);
     }
 
-    public static function inputOption(): InputOption
-    {
-        return new InputOption(
-            self::INPUT_OPTION,
-            null,
-            InputOption::VALUE_REQUIRED,
-            'Namespace for the site. Allowed characters are lowercase letters, digits and -',
-            Env::get(self::STATIC_SITE_NAMESPACE)
-        );
-    }
-
     public static function optionName(): string
     {
-        return self::INPUT_OPTION;
+        return self::OPTION_NAME;
     }
 
     public function toString(): string

@@ -7,9 +7,6 @@ services:
       autowire: true
       public: true
 
-  # environment
-  Chrif\Cocotte\Environment\LazyEnvironmentLoader: ~
-
   # console
   Symfony\Component\Console\Input\InputInterface:
     class: Symfony\Component\Console\Input\ArgvInput
@@ -27,11 +24,15 @@ services:
     resource: '../src/Command/*'
     tags: ['console.command']
   Chrif\Cocotte\Console\InteractionOperator: ~
+  Chrif\Cocotte\Console\OptionProviderRegistry: ~
+  Chrif\Cocotte\Console\OptionProviderAutomation:
+    tags: ['event.subscriber']
 
   # digital ocean
   Chrif\Cocotte\DigitalOcean\ApiToken:
-    tags: ['environment']
-  Chrif\Cocotte\DigitalOcean\ApiTokenInteraction: ~
+    tags: ['lazy.environment']
+  Chrif\Cocotte\DigitalOcean\ApiTokenOptionProvider:
+    tags: ['option.provider']
   Chrif\Cocotte\DigitalOcean\DigitalOceanFactory: ~
   Iodev\Whois\Whois:
     factory: 'Iodev\Whois\Whois::create'
@@ -52,6 +53,14 @@ services:
   DigitalOceanV2\Api\Domain: ~
   DigitalOceanV2\Api\DomainRecord: ~
 
+  # environment
+  Chrif\Cocotte\Environment\LazyEnvironmentLoader:
+    tags: ['event.subscriber']
+
+  # event
+  Symfony\Component\EventDispatcher\EventDispatcherInterface:
+    class: Symfony\Component\EventDispatcher\EventDispatcher
+
   # filesystem
   Chrif\Cocotte\Filesystem\Filesystem:
     class: Chrif\Cocotte\Filesystem\CocotteFilesystem
@@ -61,20 +70,21 @@ services:
     class: Chrif\Cocotte\Finder\CocotteFinder
 
   Chrif\Cocotte\Host\HostMount:
-    tags: ['environment']
+    tags: ['lazy.environment']
   Chrif\Cocotte\Host\Mounts:
-    tags: ['environment']
+    tags: ['lazy.environment']
 
   # machine
   Chrif\Cocotte\Machine\MachineCreator: ~
   Chrif\Cocotte\Machine\MachineIp:
-    tags: ['environment']
+    tags: ['lazy.environment']
   Chrif\Cocotte\Machine\MachineName:
-    tags: ['environment']
-  Chrif\Cocotte\Machine\MachineNameInteraction: ~
+    tags: ['lazy.environment']
+  Chrif\Cocotte\Machine\MachineNameOptionProvider:
+    tags: ['option.provider']
   Chrif\Cocotte\Machine\MachineState: ~
   Chrif\Cocotte\Machine\MachineStoragePath:
-    tags: ['environment']
+    tags: ['lazy.environment']
 
   # shell
   Chrif\Cocotte\Shell\ProcessRunner: ~
@@ -85,16 +95,23 @@ services:
   # template
   Chrif\Cocotte\Template\StaticSite\StaticSiteCreator: ~
   Chrif\Cocotte\Template\StaticSite\StaticSiteHostname:
-    tags: ['environment']
+    tags: ['lazy.environment']
+  Chrif\Cocotte\Template\StaticSite\StaticSiteHostnameOptionProvider:
+    tags: ['option.provider']
   Chrif\Cocotte\Template\StaticSite\StaticSiteNamespace:
-    tags: ['environment']
+    tags: ['lazy.environment']
+  Chrif\Cocotte\Template\StaticSite\StaticSiteNamespaceOptionProvider:
+    tags: ['option.provider']
   Chrif\Cocotte\Template\Traefik\TraefikCreator: ~
   Chrif\Cocotte\Template\Traefik\TraefikHostname:
-    tags: ['environment']
-  Chrif\Cocotte\Template\Traefik\TraefikHostnameInteraction: ~
+    tags: ['lazy.environment']
+  Chrif\Cocotte\Template\Traefik\TraefikHostnameOptionProvider:
+    tags: ['option.provider']
   Chrif\Cocotte\Template\Traefik\TraefikPassword:
-    tags: ['environment']
-  Chrif\Cocotte\Template\Traefik\TraefikPasswordInteraction: ~
+    tags: ['lazy.environment']
+  Chrif\Cocotte\Template\Traefik\TraefikPasswordOptionProvider:
+    tags: ['option.provider']
   Chrif\Cocotte\Template\Traefik\TraefikUsername:
-    tags: ['environment']
-  Chrif\Cocotte\Template\Traefik\TraefikUsernameInteraction: ~
+    tags: ['lazy.environment']
+  Chrif\Cocotte\Template\Traefik\TraefikUsernameOptionProvider:
+    tags: ['option.provider']

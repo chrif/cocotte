@@ -16,7 +16,7 @@ final class InteractionOperator
         $this->style = $style;
     }
 
-    public function interact(InputInterface $input, OptionInteraction $interaction)
+    public function interact(InputInterface $input, OptionProvider $interaction)
     {
         $name = $interaction->optionName();
 
@@ -32,7 +32,7 @@ final class InteractionOperator
         }
     }
 
-    public function ask(OptionInteraction $interaction): string
+    public function ask(OptionProvider $interaction): string
     {
         $this->style->help($interaction->helpMessage());
 
@@ -50,7 +50,7 @@ final class InteractionOperator
         };
     }
 
-    private function validator(OptionInteraction $interaction): \Closure
+    private function validator(OptionProvider $interaction): \Closure
     {
         return function (string $answer) use ($interaction): string {
             if (!$answer) {

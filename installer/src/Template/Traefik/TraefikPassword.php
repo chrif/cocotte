@@ -4,10 +4,10 @@ namespace Chrif\Cocotte\Template\Traefik;
 
 use Assert\Assertion;
 use Chrif\Cocotte\Environment\LazyEnvironmentValue;
-use Chrif\Cocotte\Environment\LazyOptionExportValue;
+use Chrif\Cocotte\Environment\LazyExportableOption;
 use Chrif\Cocotte\Shell\Env;
 
-class TraefikPassword implements LazyOptionExportValue
+class TraefikPassword implements LazyExportableOption
 {
     const TRAEFIK_UI_PASSWORD = 'TRAEFIK_UI_PASSWORD';
     const OPTION_NAME = 'traefik-ui-password';

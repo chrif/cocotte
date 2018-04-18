@@ -4,12 +4,12 @@ namespace Chrif\Cocotte\DigitalOcean;
 
 use Assert\Assertion;
 use Chrif\Cocotte\Environment\LazyEnvironmentValue;
-use Chrif\Cocotte\Environment\LazyOptionExportValue;
+use Chrif\Cocotte\Environment\LazyExportableOption;
 use Chrif\Cocotte\Shell\Env;
 use DigitalOceanV2\Adapter\GuzzleHttpAdapter;
 use DigitalOceanV2\DigitalOceanV2;
 
-class ApiToken implements LazyOptionExportValue
+class ApiToken implements LazyExportableOption
 {
     const DIGITAL_OCEAN_API_TOKEN = 'DIGITAL_OCEAN_API_TOKEN';
     const OPTION_NAME = 'digital-ocean-api-token';

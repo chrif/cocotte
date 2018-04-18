@@ -1,73 +1,76 @@
 <?php declare(strict_types=1);
 
-namespace Chrif\Cocotte\Template\Traefik;
+namespace Chrif\Cocotte\Machine;
 
 use Chrif\Cocotte\Console\InteractionOperator;
-use Chrif\Cocotte\Console\OptionInteraction;
+use Chrif\Cocotte\Console\OptionProvider;
 use Chrif\Cocotte\Console\Style;
 use Chrif\Cocotte\Shell\Env;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Question\Question;
 
-class TraefikPasswordInteraction implements OptionInteraction
+class MachineNameOptionProvider implements OptionProvider
 {
-    /**
-     * @var Style
-     */
-    private $style;
     /**
      * @var InteractionOperator
      */
     private $operator;
 
-    public function __construct(Style $style, InteractionOperator $operator)
+    /**
+     * @var Style
+     */
+    private $style;
+
+    public function __construct(InteractionOperator $operator, Style $style)
     {
-        $this->style = $style;
         $this->operator = $operator;
+        $this->style = $style;
     }
 
     public function option(): InputOption
     {
         return new InputOption(
-            TraefikPassword::OPTION_NAME,
+            MachineName::OPTION_NAME,
             null,
             InputOption::VALUE_REQUIRED,
             $this->helpMessage(),
-            Env::get(TraefikPassword::TRAEFIK_UI_PASSWORD)
+            Env::get(MachineName::MACHINE_NAME)
         );
-    }
-
-    public function validate(string $value)
-    {
-        TraefikPassword::fromString($value);
     }
 
     public function helpMessage(): string
     {
         return $this->style->optionHelp(
-            "Traefik UI password",
+            "Machine Name",
             [
-                "Alphanumeric and some special characters. Must match ".TraefikPassword::REGEX,
+                "This is both the name used for <info>docker-machine</info> commands and by Digital Ocean\nfor the droplet name. ".
+                "Must match ".MachineName::REGEX,
             ]
         );
     }
 
-    public function optionName(): string
+    public function validate(string $value)
     {
-        return TraefikPassword::OPTION_NAME;
-    }
-
-    public function question(): Question
-    {
-        return new Question(
-            $this->style->quittableQuestion("Choose a <options=bold>password for your Traefik UI</>")
-        );
+        MachineName::fromString($value);
     }
 
     public function onCorrectAnswer(string $answer)
     {
         // do nothing
+    }
+
+    public function optionName(): string
+    {
+        return MachineName::OPTION_NAME;
+    }
+
+    public function question(): Question
+    {
+        return new Question(
+            $this->style->quittableQuestion("Enter a <options=bold>Machine name</>"),
+            'cocotte'
+        );
     }
 
     public function interact(InputInterface $input)

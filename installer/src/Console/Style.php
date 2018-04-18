@@ -45,5 +45,7 @@ interface Style extends OutputInterface, StyleInterface
 
     public function link(string $url): string;
 
-    public function verbose(\Closure $closure);
+    public function verbose(\Closure $closure): void;
+
+    public function hostnameHelp(string $name, string $subdomain): array;
 }

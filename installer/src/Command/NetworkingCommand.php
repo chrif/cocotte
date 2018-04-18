@@ -2,19 +2,20 @@
 
 namespace Chrif\Cocotte\Command;
 
+use Chrif\Cocotte\Console\AbstractCommand;
+use Chrif\Cocotte\Console\Style;
 use Chrif\Cocotte\DigitalOcean\ApiToken;
-use Chrif\Cocotte\DigitalOcean\ApiTokenInteraction;
+use Chrif\Cocotte\DigitalOcean\ApiTokenOptionProvider;
 use Chrif\Cocotte\DigitalOcean\HostnameCollection;
 use Chrif\Cocotte\DigitalOcean\NetworkingConfigurator;
 use Chrif\Cocotte\Environment\LazyEnvironment;
-use Chrif\Cocotte\Environment\LazyEnvironmentLoader;
-use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
-final class NetworkingCommand extends Command implements LazyEnvironment
+final class NetworkingCommand extends AbstractCommand implements LazyEnvironment
 {
     /**
      * @var NetworkingConfigurator
@@ -22,24 +23,38 @@ final class NetworkingCommand extends Command implements LazyEnvironment
     private $networkingConfigurator;
 
     /**
-     * @var LazyEnvironmentLoader
+     * @var EventDispatcherInterface
      */
-    private $lazyEnvironmentLoader;
+    private $eventDispatcher;
 
     /**
-     * @var ApiTokenInteraction
+     * @var Style
      */
-    private $apiTokenInteraction;
+    private $style;
 
     public function __construct(
         NetworkingConfigurator $networkingConfigurator,
-        LazyEnvironmentLoader $lazyEnvironmentLoader,
-        ApiTokenInteraction $apiTokenInteraction
+        EventDispatcherInterface $eventDispatcher,
+        Style $style
     ) {
         $this->networkingConfigurator = $networkingConfigurator;
-        $this->lazyEnvironmentLoader = $lazyEnvironmentLoader;
-        $this->apiTokenInteraction = $apiTokenInteraction;
+        $this->eventDispatcher = $eventDispatcher;
+        $this->style = $style;
         parent::__construct();
+    }
+
+    public function lazyEnvironmentValues(): array
+    {
+        return [
+            ApiToken::class,
+        ];
+    }
+
+    public function optionProviders(): array
+    {
+        return [
+            ApiTokenOptionProvider::class,
+        ];
     }
 
     public function isHidden()
@@ -47,34 +62,27 @@ final class NetworkingCommand extends Command implements LazyEnvironment
         return !getenv('SHOW_HIDDEN_COMMANDS');
     }
 
-    public function requires(): array
+    protected function eventDispatcher(): EventDispatcherInterface
     {
-        return [
-            ApiToken::class,
-        ];
+        return $this->eventDispatcher;
     }
 
-    protected function configure()
+    protected function doConfigure(): void
     {
         $this
             ->setName('networking')
             ->setDescription('Configure networking of Digital Ocean')
             ->addArgument('hostnames', InputArgument::REQUIRED, 'Comma-separated list of hostnames')
-            ->addOption('remove', null, InputOption::VALUE_NONE, 'Remove networking for hostnames')
-            ->getDefinition()->addOptions(
-                [
-                    $this->apiTokenInteraction->option(),
-                ]
-            );
+            ->addOption('remove', null, InputOption::VALUE_NONE, 'Remove networking for hostnames');
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function doExecute(InputInterface $input, OutputInterface $output)
     {
-        $this->lazyEnvironmentLoader->load($this, $input);
         $this->networkingConfigurator->configure(
             HostnameCollection::fromString($input->getArgument('hostnames')),
             $input->getOption('remove')
         );
+        $this->style->success("Networking successfully configured.");
     }
 
 }

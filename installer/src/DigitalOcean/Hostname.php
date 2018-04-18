@@ -51,7 +51,7 @@ final class Hostname
         $domains = explode('.', $value);
 
         if (count($domains) < 2) {
-            throw new \Exception("'$value' is does not have a first and second level domains");
+            throw new \Exception("'$value' does not have a first and second level domains");
         }
         if (count($domains) > 3) {
             throw new \Exception("'$value' is a domain with more than 3 levels.");

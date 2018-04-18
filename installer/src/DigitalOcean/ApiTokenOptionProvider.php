@@ -1,21 +1,22 @@
 <?php declare(strict_types=1);
 
-namespace Chrif\Cocotte\Template\Traefik;
+namespace Chrif\Cocotte\DigitalOcean;
 
 use Chrif\Cocotte\Console\InteractionOperator;
-use Chrif\Cocotte\Console\OptionInteraction;
+use Chrif\Cocotte\Console\OptionProvider;
 use Chrif\Cocotte\Console\Style;
 use Chrif\Cocotte\Shell\Env;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Question\Question;
 
-class TraefikUsernameInteraction implements OptionInteraction
+class ApiTokenOptionProvider implements OptionProvider
 {
     /**
      * @var Style
      */
     private $style;
+
     /**
      * @var InteractionOperator
      */
@@ -30,46 +31,42 @@ class TraefikUsernameInteraction implements OptionInteraction
     public function option(): InputOption
     {
         return new InputOption(
-            TraefikUsername::OPTION_NAME,
+            ApiToken::OPTION_NAME,
             null,
             InputOption::VALUE_REQUIRED,
             $this->helpMessage(),
-            Env::get(TraefikUsername::TRAEFIK_UI_USERNAME)
+            Env::get(ApiToken::DIGITAL_OCEAN_API_TOKEN)
         );
     }
 
     public function helpMessage(): string
     {
         return $this->style->optionHelp(
-            "Traefik UI username",
+            "Digital Ocean API Token",
             [
-                "Alphanumeric characters. ".
-                "Must match ".TraefikUsername::REGEX,
+                "If you don't have a Digital Ocean account yet, get one with a 10$ credit at\n".
+                $this->style->link('digitalocean.com/?refcode=c25ed78e51c5')."",
+                "Then generate a token at ".$this->style->link('cloud.digitalocean.com/settings/api/tokens'),
+                "Cocotte will make a call to Digital Ocean's API to validate the token.",
             ]
         );
     }
 
     public function validate(string $value)
     {
-        TraefikUsername::fromString($value);
-    }
-
-    public function optionName(): string
-    {
-        return TraefikUsername::OPTION_NAME;
-    }
-
-    public function question(): Question
-    {
-        return new Question(
-            $this->style->quittableQuestion("Choose a <options=bold>username for your Traefik UI</>"),
-            "admin"
-        );
+        $token = new ApiToken($value);
+        $token->assertAccountIsActive();
     }
 
     public function onCorrectAnswer(string $answer)
     {
-        // do nothing
+        $this->style->success("Token '$answer' is valid");
+        $this->style->pause();
+    }
+
+    public function optionName(): string
+    {
+        return ApiToken::OPTION_NAME;
     }
 
     public function interact(InputInterface $input)
@@ -80,6 +77,13 @@ class TraefikUsernameInteraction implements OptionInteraction
     public function ask(): string
     {
         return $this->operator->ask($this);
+    }
+
+    public function question(): Question
+    {
+        return new Question(
+            $this->style->quittableQuestion("Enter your <options=bold>Digital Ocean API token</>")
+        );
     }
 
 }

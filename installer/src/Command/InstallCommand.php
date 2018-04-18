@@ -2,45 +2,32 @@
 
 namespace Chrif\Cocotte\Command;
 
+use Chrif\Cocotte\Console\AbstractCommand;
 use Chrif\Cocotte\Console\Style;
 use Chrif\Cocotte\DigitalOcean\ApiToken;
-use Chrif\Cocotte\DigitalOcean\ApiTokenInteraction;
-use Chrif\Cocotte\DigitalOcean\NetworkingConfigurator;
+use Chrif\Cocotte\DigitalOcean\ApiTokenOptionProvider;
 use Chrif\Cocotte\Environment\LazyEnvironment;
-use Chrif\Cocotte\Environment\LazyEnvironmentLoader;
 use Chrif\Cocotte\Machine\MachineCreator;
 use Chrif\Cocotte\Machine\MachineName;
-use Chrif\Cocotte\Machine\MachineNameInteraction;
+use Chrif\Cocotte\Machine\MachineNameOptionProvider;
 use Chrif\Cocotte\Machine\MachineStoragePath;
-use Chrif\Cocotte\Shell\ProcessRunner;
 use Chrif\Cocotte\Template\Traefik\TraefikCreator;
 use Chrif\Cocotte\Template\Traefik\TraefikHostname;
-use Chrif\Cocotte\Template\Traefik\TraefikHostnameInteraction;
+use Chrif\Cocotte\Template\Traefik\TraefikHostnameOptionProvider;
 use Chrif\Cocotte\Template\Traefik\TraefikPassword;
-use Chrif\Cocotte\Template\Traefik\TraefikPasswordInteraction;
+use Chrif\Cocotte\Template\Traefik\TraefikPasswordOptionProvider;
 use Chrif\Cocotte\Template\Traefik\TraefikUsername;
-use Chrif\Cocotte\Template\Traefik\TraefikUsernameInteraction;
-use Symfony\Component\Console\Command\Command;
+use Chrif\Cocotte\Template\Traefik\TraefikUsernameOptionProvider;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Process\Process;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
-final class InstallCommand extends Command implements LazyEnvironment
+final class InstallCommand extends AbstractCommand implements LazyEnvironment
 {
-    /**
-     * @var LazyEnvironmentLoader
-     */
-    private $lazyEnvironmentLoader;
-
     /**
      * @var MachineCreator
      */
     private $machineCreator;
-
-    /**
-     * @var ProcessRunner
-     */
-    private $processRunner;
 
     /**
      * @var TraefikCreator
@@ -53,11 +40,6 @@ final class InstallCommand extends Command implements LazyEnvironment
     private $style;
 
     /**
-     * @var NetworkingConfigurator
-     */
-    private $networkingConfigurator;
-
-    /**
      * @var MachineName
      */
     private $machineName;
@@ -68,62 +50,28 @@ final class InstallCommand extends Command implements LazyEnvironment
     private $traefikHostname;
 
     /**
-     * @var TraefikPasswordInteraction
+     * @var EventDispatcherInterface
      */
-    private $traefikPasswordInteraction;
-
-    /**
-     * @var TraefikHostnameInteraction
-     */
-    private $traefikHostnameInteraction;
-
-    /**
-     * @var TraefikUsernameInteraction
-     */
-    private $traefikUsernameInteraction;
-
-    /**
-     * @var ApiTokenInteraction
-     */
-    private $apiTokenInteraction;
-
-    /**
-     * @var MachineNameInteraction
-     */
-    private $machineNameInteraction;
+    private $eventDispatcher;
 
     public function __construct(
-        LazyEnvironmentLoader $lazyEnvironmentLoader,
         MachineCreator $machineCreator,
-        ProcessRunner $processRunner,
         TraefikCreator $traefikCreator,
         Style $style,
-        NetworkingConfigurator $networkingConfigurator,
         MachineName $machineName,
         TraefikHostname $traefikHostname,
-        TraefikPasswordInteraction $traefikPasswordInteraction,
-        TraefikHostnameInteraction $traefikHostnameInteraction,
-        TraefikUsernameInteraction $traefikUsernameInteraction,
-        ApiTokenInteraction $apiTokenInteraction,
-        MachineNameInteraction $machineNameInteraction
+        EventDispatcherInterface $eventDispatcher
     ) {
-        $this->lazyEnvironmentLoader = $lazyEnvironmentLoader;
         $this->machineCreator = $machineCreator;
-        $this->processRunner = $processRunner;
         $this->traefikCreator = $traefikCreator;
         $this->style = $style;
-        $this->networkingConfigurator = $networkingConfigurator;
         $this->machineName = $machineName;
         $this->traefikHostname = $traefikHostname;
-        $this->traefikPasswordInteraction = $traefikPasswordInteraction;
-        $this->traefikHostnameInteraction = $traefikHostnameInteraction;
-        $this->traefikUsernameInteraction = $traefikUsernameInteraction;
-        $this->apiTokenInteraction = $apiTokenInteraction;
-        $this->machineNameInteraction = $machineNameInteraction;
+        $this->eventDispatcher = $eventDispatcher;
         parent::__construct();
     }
 
-    public function requires(): array
+    public function lazyEnvironmentValues(): array
     {
         return [
             ApiToken::class,
@@ -135,47 +83,42 @@ final class InstallCommand extends Command implements LazyEnvironment
         ];
     }
 
-    protected function interact(InputInterface $input, OutputInterface $output)
+    public function optionProviders(): array
     {
-        $this->apiTokenInteraction->interact($input);
-        $this->machineNameInteraction->interact($input);
-        $this->traefikHostnameInteraction->interact($input);
-        $this->traefikUsernameInteraction->interact($input);
-        $this->traefikPasswordInteraction->interact($input);
+        return [
+            ApiTokenOptionProvider::class,
+            MachineNameOptionProvider::class,
+            TraefikHostnameOptionProvider::class,
+            TraefikPasswordOptionProvider::class,
+            TraefikUsernameOptionProvider::class,
+        ];
     }
 
-    protected function configure()
+    protected function eventDispatcher(): EventDispatcherInterface
+    {
+        return $this->eventDispatcher;
+    }
+
+    protected function doConfigure(): void
     {
         $this
             ->setName('install')
-            ->setDescription('Create a Docker Machine on Digital Ocean and install the Traefik reverse proxy on it.')
-            ->getDefinition()->addOptions(
-                [
-                    $this->apiTokenInteraction->option(),
-                    $this->traefikHostnameInteraction->option(),
-                    $this->traefikUsernameInteraction->option(),
-                    $this->traefikPasswordInteraction->option(),
-                    $this->machineNameInteraction->option(),
-                ]
-            );
+            ->setDescription('Create a <options=bold>Docker</> machine on <options=bold>Digital Ocean</> and install the <options=bold>Traefik</> reverse proxy on it.');
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function doExecute(InputInterface $input, OutputInterface $output)
     {
-        $this->lazyEnvironmentLoader->load($this, $input);
         $this->confirm();
         $this->machineCreator->create();
         $this->traefikCreator->create();
-        $this->networkingConfigurator->configure($this->traefikHostname->toHostnameCollection());
-        $this->style->title('Deploying exported site to cloud machine');
-        $this->processRunner->mustRun(new Process('./bin/prod', $this->traefikCreator->hostAppPath()));
+        $this->style->success("Installation successful. You can visit your Traefik UI at {$this->traefikHostname->toString()}");
     }
 
     private function confirm(): void
     {
         if (!$this->style->confirm(
-            "You are about to create a Docker Machine named '{$this->machineName->toString()}' on Digital Ocean ".
-            "and install the Traefik reverse proxy on it with hostname '{$this->traefikHostname->toString()}'. ".
+            "You are about to create a Docker machine named '<options=bold>{$this->machineName->toString()}</>' on Digital Ocean ".
+            "and install the Traefik reverse proxy on it with hostname(s) '<options=bold>{$this->traefikHostname->toString()}</>'. ".
             "This action may take a few minutes."
         )) {
             throw new \Exception('Cancelled');

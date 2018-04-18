@@ -2,40 +2,39 @@
 
 namespace Chrif\Cocotte\Command;
 
+use Chrif\Cocotte\Console\AbstractCommand;
 use Chrif\Cocotte\Console\Style;
 use Chrif\Cocotte\DigitalOcean\ApiToken;
-use Chrif\Cocotte\DigitalOcean\ApiTokenInteraction;
+use Chrif\Cocotte\DigitalOcean\ApiTokenOptionProvider;
 use Chrif\Cocotte\DigitalOcean\NetworkingConfigurator;
 use Chrif\Cocotte\Environment\LazyEnvironment;
-use Chrif\Cocotte\Environment\LazyEnvironmentLoader;
 use Chrif\Cocotte\Machine\MachineName;
+use Chrif\Cocotte\Machine\MachineNameOptionProvider;
+use Chrif\Cocotte\Machine\MachineState;
 use Chrif\Cocotte\Machine\MachineStoragePath;
 use Chrif\Cocotte\Shell\ProcessRunner;
 use Chrif\Cocotte\Template\StaticSite\StaticSiteCreator;
 use Chrif\Cocotte\Template\StaticSite\StaticSiteHostname;
+use Chrif\Cocotte\Template\StaticSite\StaticSiteHostnameOptionProvider;
 use Chrif\Cocotte\Template\StaticSite\StaticSiteNamespace;
-use Symfony\Component\Console\Command\Command;
+use Chrif\Cocotte\Template\StaticSite\StaticSiteNamespaceOptionProvider;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Process\Process;
 
-final class StaticSiteCommand extends Command implements LazyEnvironment
+final class StaticSiteCommand extends AbstractCommand implements LazyEnvironment
 {
     /**
      * @var StaticSiteCreator
      */
-    private $staticSiteExporter;
+    private $staticSiteCreator;
 
     /**
      * @var NetworkingConfigurator
      */
     private $networkingConfigurator;
-
-    /**
-     * @var LazyEnvironmentLoader
-     */
-    private $lazyEnvironmentLoader;
 
     /**
      * @var StaticSiteHostname
@@ -53,39 +52,61 @@ final class StaticSiteCommand extends Command implements LazyEnvironment
     private $processRunner;
 
     /**
-     * @var ApiTokenInteraction
+     * @var EventDispatcherInterface
      */
-    private $apiTokenInteraction;
+    private $eventDispatcher;
+
+    /**
+     * @var MachineState
+     */
+    private $machineState;
 
     public function __construct(
-        StaticSiteCreator $staticSiteExporter,
+        StaticSiteCreator $staticSiteCreator,
         NetworkingConfigurator $networkingConfigurator,
-        LazyEnvironmentLoader $lazyEnvironmentLoader,
         StaticSiteHostname $staticSiteHostname,
         Style $style,
         ProcessRunner $processRunner,
-        ApiTokenInteraction $apiTokenInteraction
+        EventDispatcherInterface $eventDispatcher,
+        MachineState $machineState
     ) {
-        $this->staticSiteExporter = $staticSiteExporter;
+        $this->staticSiteCreator = $staticSiteCreator;
         $this->networkingConfigurator = $networkingConfigurator;
-        $this->lazyEnvironmentLoader = $lazyEnvironmentLoader;
         $this->staticSiteHostname = $staticSiteHostname;
         $this->style = $style;
         $this->processRunner = $processRunner;
-        $this->apiTokenInteraction = $apiTokenInteraction;
+        $this->eventDispatcher = $eventDispatcher;
+        $this->machineState = $machineState;
         parent::__construct();
     }
 
-    public function requires(): array
+    public function lazyEnvironmentValues(): array
     {
         return [
             ApiToken::class,
             MachineName::class,
             MachineStoragePath::class,
+            StaticSiteNamespace::class,
+            StaticSiteHostname::class,
         ];
     }
 
-    protected function configure()
+    public function optionProviders(): array
+    {
+        return [
+            StaticSiteNamespaceOptionProvider::class,
+            StaticSiteHostnameOptionProvider::class,
+            ApiTokenOptionProvider::class,
+            MachineNameOptionProvider::class,
+        ];
+    }
+
+    protected function eventDispatcher(): EventDispatcherInterface
+    {
+        return $this->eventDispatcher;
+    }
+
+    protected function doConfigure(): void
     {
         $this
             ->setName('static-site')
@@ -101,19 +122,17 @@ final class StaticSiteCommand extends Command implements LazyEnvironment
                 InputOption::VALUE_NONE,
                 'Deploy to prod after exportation'
             )
-            ->setDescription('Create a static website and deploy it to your Docker Machine.')
-            ->getDefinition()->addOptions(
-                [
-                    StaticSiteNamespace::inputOption(),
-                    StaticSiteHostname::inputOption(),
-                    $this->apiTokenInteraction->option(),
-                ]
-            );
+            ->setDescription('Create a static website and deploy it to your Docker Machine.');
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function doExecute(InputInterface $input, OutputInterface $output)
     {
-        $this->lazyEnvironmentLoader->load($this, $input);
+        if (!$this->machineState->exists()) {
+            $this->style->warning("Could not find a machine. ".
+                "Did you create a machine with the install command before ? ".
+                "Did you provide the correct machine name ?");
+        }
+
         $skipNetworking = $input->getOption('skip-networking');
         $skipDeploy = $input->getOption('skip-deploy');
 
@@ -121,7 +140,7 @@ final class StaticSiteCommand extends Command implements LazyEnvironment
             throw new \Exception("Cannot skip networking when deploying");
         }
 
-        $this->staticSiteExporter->create();
+        $this->staticSiteCreator->create();
 
         if (!$skipNetworking) {
             $this->networkingConfigurator->configure($this->staticSiteHostname->toHostnameCollection());
@@ -129,7 +148,9 @@ final class StaticSiteCommand extends Command implements LazyEnvironment
 
         if (!$skipDeploy) {
             $this->style->title('Deploying exported site to cloud machine');
-            $this->processRunner->mustRun(new Process('./bin/prod', $this->staticSiteExporter->hostAppPath()));
+            $this->processRunner->mustRun(new Process('./bin/prod', $this->staticSiteCreator->hostAppPath()));
+            $this->style->success("Static site successfully deployed at {$this->staticSiteHostname->toString()}");
         }
     }
+
 }

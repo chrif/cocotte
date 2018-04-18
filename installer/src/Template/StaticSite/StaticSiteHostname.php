@@ -4,14 +4,13 @@ namespace Chrif\Cocotte\Template\StaticSite;
 
 use Chrif\Cocotte\DigitalOcean\HostnameCollection;
 use Chrif\Cocotte\Environment\LazyEnvironmentValue;
-use Chrif\Cocotte\Environment\LazyOptionExportValue;
+use Chrif\Cocotte\Environment\LazyExportableOption;
 use Chrif\Cocotte\Shell\Env;
-use Symfony\Component\Console\Input\InputOption;
 
-class StaticSiteHostname implements LazyOptionExportValue
+class StaticSiteHostname implements LazyExportableOption
 {
     const STATIC_SITE_HOSTNAME = 'STATIC_SITE_HOSTNAME';
-    const INPUT_OPTION = 'hostname';
+    const OPTION_NAME = 'hostname';
 
     /**
      * @var HostnameCollection
@@ -41,20 +40,9 @@ class StaticSiteHostname implements LazyOptionExportValue
         Env::put(self::STATIC_SITE_HOSTNAME, $value);
     }
 
-    public static function inputOption(): InputOption
-    {
-        return new InputOption(
-            self::INPUT_OPTION,
-            null,
-            InputOption::VALUE_REQUIRED,
-            'Comma-separated list of hostname(s) for the deployed website.',
-            Env::get(self::STATIC_SITE_HOSTNAME)
-        );
-    }
-
     public static function optionName(): string
     {
-        return self::INPUT_OPTION;
+        return self::OPTION_NAME;
     }
 
     public function toLocalHostnameCollection(): HostnameCollection

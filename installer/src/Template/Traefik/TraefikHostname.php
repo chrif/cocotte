@@ -4,10 +4,10 @@ namespace Chrif\Cocotte\Template\Traefik;
 
 use Chrif\Cocotte\DigitalOcean\HostnameCollection;
 use Chrif\Cocotte\Environment\LazyEnvironmentValue;
-use Chrif\Cocotte\Environment\LazyOptionExportValue;
+use Chrif\Cocotte\Environment\LazyExportableOption;
 use Chrif\Cocotte\Shell\Env;
 
-class TraefikHostname implements LazyOptionExportValue
+class TraefikHostname implements LazyExportableOption
 {
     const TRAEFIK_UI_HOSTNAME = 'TRAEFIK_UI_HOSTNAME';
     const OPTION_NAME = 'traefik-ui-hostname';

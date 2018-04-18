@@ -3,12 +3,15 @@
 namespace Chrif\Cocotte\Environment;
 
 use Assert\Assertion;
+use Chrif\Cocotte\Console\CommandEventStore;
+use Chrif\Cocotte\Console\CommandExecuteEvent;
 use Chrif\Cocotte\Console\Style;
 use ProxyManager\Proxy\LazyLoadingInterface;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-final class LazyEnvironmentLoader
+final class LazyEnvironmentLoader implements EventSubscriberInterface
 {
     /**
      * @var LazyEnvironmentValue|LazyLoadingInterface[]
@@ -25,16 +28,31 @@ final class LazyEnvironmentLoader
         $this->style = $style;
     }
 
-    public function addValue(LazyEnvironmentValue $value)
+    public static function getSubscribedEvents()
+    {
+        return [
+            CommandEventStore::COMMAND_EXECUTE => 'onCommandExecute',
+        ];
+    }
+
+    public function onCommandExecute(CommandExecuteEvent $event)
+    {
+        $command = $event->command();
+        if ($command instanceof LazyEnvironment) {
+            $this->load($command, $event->input());
+        }
+    }
+
+    public function registerValue(LazyEnvironmentValue $value)
     {
         $this->values[] = $value;
     }
 
     public function load(LazyEnvironment $environment, InputInterface $input)
     {
-        foreach ($environment->requires() as $require) {
-            $lazyValue = $this->getLazyValue($require);
-            if ($lazyValue instanceof LazyOptionExportValue) {
+        foreach ($environment->lazyEnvironmentValues() as $className) {
+            $lazyValue = $this->getLazyValue($className);
+            if ($lazyValue instanceof LazyExportableOption) {
                 $this->exportOption($input, $lazyValue);
             }
             $this->initializeProxy($lazyValue);
@@ -69,7 +87,7 @@ final class LazyEnvironmentLoader
         }
     }
 
-    private function exportOption(InputInterface $input, LazyOptionExportValue $optionExportValue): void
+    private function exportOption(InputInterface $input, LazyExportableOption $optionExportValue): void
     {
         $name = $optionExportValue::optionName();
         Assertion::true($input->hasOption($name), sprintf("input does not have an option named '%s'", $name));

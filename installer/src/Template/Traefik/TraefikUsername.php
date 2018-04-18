@@ -4,10 +4,10 @@ namespace Chrif\Cocotte\Template\Traefik;
 
 use Assert\Assertion;
 use Chrif\Cocotte\Environment\LazyEnvironmentValue;
-use Chrif\Cocotte\Environment\LazyOptionExportValue;
+use Chrif\Cocotte\Environment\LazyExportableOption;
 use Chrif\Cocotte\Shell\Env;
 
-class TraefikUsername implements LazyOptionExportValue
+class TraefikUsername implements LazyExportableOption
 {
     const TRAEFIK_UI_USERNAME = 'TRAEFIK_UI_USERNAME';
     const OPTION_NAME = 'traefik-ui-username';

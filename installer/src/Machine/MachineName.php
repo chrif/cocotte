@@ -4,10 +4,10 @@ namespace Chrif\Cocotte\Machine;
 
 use Assert\Assertion;
 use Chrif\Cocotte\Environment\LazyEnvironmentValue;
-use Chrif\Cocotte\Environment\LazyOptionExportValue;
+use Chrif\Cocotte\Environment\LazyExportableOption;
 use Chrif\Cocotte\Shell\Env;
 
-class MachineName implements LazyOptionExportValue
+class MachineName implements LazyExportableOption
 {
     const MACHINE_NAME = 'MACHINE_NAME';
     const OPTION_NAME = 'machine-name';

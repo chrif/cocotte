@@ -9,5 +9,5 @@ interface LazyEnvironment
      *
      * @return string[]
      */
-    public function requires(): array;
+    public function lazyEnvironmentValues(): array;
 }
