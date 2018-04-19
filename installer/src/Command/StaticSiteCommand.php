@@ -140,6 +140,8 @@ final class StaticSiteCommand extends AbstractCommand implements LazyEnvironment
 
     protected function doExecute(InputInterface $input, OutputInterface $output)
     {
+        $this->confirm();
+
         if (!$this->machineState->exists()) {
             $this->style->warning("Could not find a machine. ".
                 "Did you create a machine with the install command before ? ".
@@ -154,12 +156,12 @@ final class StaticSiteCommand extends AbstractCommand implements LazyEnvironment
         }
 
         $this->style->writeln(
-            "Exporting a new static site to {$this->hostMount->sourcePath()}/{$this->staticSiteNamespace}"
+            "Exporting a new static site to {$this->sitePath()}"
         );
         $this->staticSiteCreator->create();
 
         if (!$skipNetworking) {
-            $this->style->writeln("Configuring networking for {$this->staticSiteHostname->toString()}");
+            $this->style->writeln("Configuring networking for {$this->staticSiteHostname}");
             $this->networkingConfigurator->configure($this->staticSiteHostname->toHostnameCollection());
         }
 
@@ -167,10 +169,30 @@ final class StaticSiteCommand extends AbstractCommand implements LazyEnvironment
             $this->style->writeln('Deploying exported site to cloud machine');
             $this->processRunner->mustRun(new Process('./bin/prod 2>/dev/stdout',
                 $this->staticSiteCreator->hostAppPath()));
-            $this->style->success("Static site successfully deployed at {$this->staticSiteHostname->formatSecureUrl()}");
+            $this->style->complete([
+                "Static site successfully deployed at ".
+                "<options=bold>{$this->staticSiteHostname->formatSecureUrl()}</>",
+            ]);
         } else {
-            $this->style->success("Deployment has been skipped.");
+            $this->style->complete("Deployment has been skipped.");
         }
+    }
+
+    private function sitePath(): string
+    {
+        return "{$this->hostMount->sourcePath()}/{$this->staticSiteNamespace}";
+    }
+
+    private function confirm(): void
+    {
+        if (!$this->style->confirm(
+            "You are about to create a static website in " .
+            "'<options=bold>{$this->sitePath()}</>'\n".
+            " and deploy it to Digital Ocean at ".
+            "'<options=bold>{$this->staticSiteHostname->toString()}</>'."
+        )) {
+            throw new \Exception('Cancelled');
+        };
     }
 
 }

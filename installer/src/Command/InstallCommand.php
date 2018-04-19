@@ -147,14 +147,20 @@ final class InstallCommand extends AbstractCommand implements LazyEnvironment
         $this->style->writeln('Deploying traefik to cloud machine');
         $this->processRunner->mustRun(new Process('./bin/prod 2>/dev/stdout', $this->traefikCreator->hostAppPath()));
 
-        $this->style->success("Installation successful. You can visit your Traefik UI at {$this->traefikHostname->formatSecureUrl()}");
+        $this->style->complete([
+            "Installation successful.",
+            "You can now:\n".
+            "- visit your Traefik UI at <options=bold>{$this->traefikHostname->formatSecureUrl()}</>\n".
+            "- use any docker-machine commands like ssh: <options=bold>docker-machine -s machine ssh {$this->machineName}</>\n".
+            "- deploy a static website on your cloud machine with the <options=bold>static-site</> command.",
+        ]);
     }
 
     private function confirm(): void
     {
         if (!$this->style->confirm(
-            "You are about to create a Docker machine named '<options=bold>{$this->machineName->toString()}</>' " .
-            "on Digital Ocean \nand install the Traefik reverse proxy on it with hostname(s) " .
+            "You are about to create a Docker machine named '<options=bold>{$this->machineName->toString()}</>' ".
+            " on Digital Ocean \nand install the Traefik reverse proxy on it with hostname(s) ".
             "'<options=bold>{$this->traefikHostname->toString()}</>'.\n".
             "This action may take a few minutes."
         )) {
