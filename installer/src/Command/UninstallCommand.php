@@ -123,8 +123,8 @@ final class UninstallCommand extends AbstractCommand implements LazyEnvironment
     {
         if (!$this->style->confirm(
             "You are about to uninstall a Docker machine named '<options=bold>{$this->machineName->toString()}</>' ".
-            "on Digital Ocean and remove the domain record(s) '<options=bold>{$this->traefikHostname->toString()}</>' ".
-            "associated with this machine."
+            "on Digital Ocean \nand remove the domain record(s) '<options=bold>{$this->traefikHostname->toString()}</>' ".
+            "associated with \nthis machine."
         )) {
             throw new \Exception('Cancelled');
         };

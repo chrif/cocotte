@@ -2,6 +2,7 @@
 
 namespace Chrif\Cocotte\Console;
 
+use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\Question;
 use Symfony\Component\Console\Style\StyleInterface;
@@ -55,4 +56,10 @@ interface Style extends OutputInterface, StyleInterface
 
     public function debug($messages): void;
 
+    /**
+     * @param int $max
+     *
+     * @return ProgressBar
+     */
+    public function createProgressBar($max = 0);
 }

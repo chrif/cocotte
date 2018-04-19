@@ -153,8 +153,9 @@ final class InstallCommand extends AbstractCommand implements LazyEnvironment
     private function confirm(): void
     {
         if (!$this->style->confirm(
-            "You are about to create a Docker machine named '<options=bold>{$this->machineName->toString()}</>' on Digital Ocean ".
-            "and install the Traefik reverse proxy on it with hostname(s) '<options=bold>{$this->traefikHostname->toString()}</>'. ".
+            "You are about to create a Docker machine named '<options=bold>{$this->machineName->toString()}</>' " .
+            "on Digital Ocean \nand install the Traefik reverse proxy on it with hostname(s) " .
+            "'<options=bold>{$this->traefikHostname->toString()}</>'.\n".
             "This action may take a few minutes."
         )) {
             throw new \Exception('Cancelled');

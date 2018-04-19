@@ -30,8 +30,6 @@ services:
   Chrif\Cocotte\Console\HelperFactory: ~
   Symfony\Component\Console\Helper\ProcessHelper:
     factory: 'Chrif\Cocotte\Console\HelperFactory:processHelper'
-  Symfony\Component\Console\Helper\ProgressBar:
-    shared: false
 
   # digital ocean
   Chrif\Cocotte\DigitalOcean\ApiToken:

@@ -70,7 +70,7 @@ final class MachineCreator
 
         $process->setTimeout(300);
 
-        $this->processRunner->mustRun($process);
+        $this->processRunner->mustRun($process, true);
     }
 
 }
