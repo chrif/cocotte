@@ -27,6 +27,9 @@ services:
   Chrif\Cocotte\Console\OptionProviderRegistry: ~
   Chrif\Cocotte\Console\OptionProviderAutomation:
     tags: ['event.subscriber']
+  Symfony\Component\Console\Helper\ProcessHelper:
+    factory: ['Chrif\Cocotte\Console\HelperFactory', processHelper]
+  Symfony\Component\Console\Helper\ProgressBar: ~
 
   # digital ocean
   Chrif\Cocotte\DigitalOcean\ApiToken:

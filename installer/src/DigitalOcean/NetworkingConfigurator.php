@@ -4,7 +4,6 @@ namespace Chrif\Cocotte\DigitalOcean;
 
 use Chrif\Cocotte\Console\Style;
 use Chrif\Cocotte\Machine\MachineIp;
-use Symfony\Component\Console\Output\OutputInterface;
 
 final class NetworkingConfigurator
 {
@@ -42,11 +41,9 @@ final class NetworkingConfigurator
      */
     public function configure(HostnameCollection $hostnames, $remove = false)
     {
-        $this->style->writeln('Configuring networking for all the hostnames supplied: '.$hostnames->toString(),
-            OutputInterface::VERBOSITY_VERBOSE);
+        $this->style->veryVerbose('Configuring networking for all the hostnames supplied: '.$hostnames->toString());
         foreach ($hostnames as $host) {
-            $this->style->writeln('Configuring '.$host,
-                OutputInterface::VERBOSITY_VERBOSE);
+            $this->style->veryVerbose('Configuring '.$host);
             if ($remove) {
                 $this->removeDomainRecord($host);
             } else {
@@ -58,10 +55,9 @@ final class NetworkingConfigurator
     private function configureDomain(Hostname $hostname): void
     {
         if (!$this->domain->exists($hostname)) {
-            $this->style->writeln(
+            $this->style->verbose(
                 "Domain '{$hostname->toRoot()}' does not exist. Creating it and adding ".
-                "{$hostname->toRoot()} with ip ".$this->machineIp->toString(),
-                OutputInterface::VERBOSITY_VERBOSE
+                "{$hostname->toRoot()} with ip ".$this->machineIp->toString()
             );
             $this->domain->create($hostname);
         }
@@ -73,19 +69,16 @@ final class NetworkingConfigurator
     {
         if ($this->domainRecord->exists($hostname)) {
             if (!$this->domainRecord->isUpToDate($hostname)) {
-                $this->style->writeln(
-                    "Domain record '{$hostname}' exists. Updating its ip to ".$this->machineIp->toString(),
-                    OutputInterface::VERBOSITY_VERBOSE
+                $this->style->verbose(
+                    "Domain record '{$hostname}' exists. Updating its ip to ".$this->machineIp->toString()
                 );
                 $this->domainRecord->update($hostname);
             } else {
-                $this->style->writeln("Domain record '{$hostname}' exists and its ip is up-to-date.",
-                    OutputInterface::VERBOSITY_VERBOSE);
+                $this->style->verbose("Domain record '{$hostname}' exists and its ip is up-to-date.");
             }
         } else {
-            $this->style->writeln(
-                "Domain record '{$hostname}' does not exist. Creating it with ip ".$this->machineIp->toString(),
-                OutputInterface::VERBOSITY_VERBOSE
+            $this->style->verbose(
+                "Domain record '{$hostname}' does not exist. Creating it with ip ".$this->machineIp->toString()
             );
             $this->domainRecord->create($hostname);
         }
@@ -94,10 +87,10 @@ final class NetworkingConfigurator
     private function removeDomainRecord(Hostname $hostname): void
     {
         if ($this->domainRecord->exists($hostname)) {
-            $this->style->writeln("Removing domain record '{$hostname}'");
+            $this->style->verbose("Removing domain record '{$hostname}'");
             $this->domainRecord->delete($hostname);
         } else {
-            $this->style->note("Domain record '{$hostname}' was already removed");
+            $this->style->verbose("Domain record '{$hostname}' was already removed");
         }
     }
 

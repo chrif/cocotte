@@ -73,7 +73,6 @@ final class StaticSiteCreator
 
     public function create()
     {
-        $this->style->title('Exporting a new static site to the host filesystem');
         $this->backup();
         $this->copyTemplateToTmp();
         $this->removeIgnoredFiles();
@@ -90,9 +89,9 @@ final class StaticSiteCreator
 
     private function backup(): void
     {
-        $this->style->section('Backup');
+        $this->style->verbose('Backup');
         if ($this->filesystem->exists($this->hostAppPath())) {
-            $this->style->warning("Backing up old '{$this->staticSiteNamespace}' folder on host filesystem");
+            $this->style->note("Backing up old '{$this->staticSiteNamespace}' folder on host filesystem");
             $this->mustRun(
                 [
                     'mv',
@@ -102,13 +101,13 @@ final class StaticSiteCreator
                 ]
             );
         } else {
-            $this->style->success('No backup was necessary');
+            $this->style->veryVerbose('No backup was necessary');
         }
     }
 
     private function copyTemplateToTmp(): void
     {
-        $this->style->section('Copy template to tmp directory');
+        $this->style->verbose('Copy template to tmp directory');
         $this->cleanUpTmp();
         $this->mustRun(
             [
@@ -123,7 +122,7 @@ final class StaticSiteCreator
 
     private function removeIgnoredFiles(): void
     {
-        $this->style->section('Remove ignored files (needed when developing only)');
+        $this->style->verbose('Remove ignored files (needed when developing only)');
         $this->mustRun(
             [
                 'rm',
@@ -137,7 +136,7 @@ final class StaticSiteCreator
 
     private function createDockerComposeOverride(): void
     {
-        $this->style->section('Create ignored docker-compose.override.yml from dist');
+        $this->style->verbose('Create ignored docker-compose.override.yml from dist');
         $this->mustRun(
             [
                 'cp',
@@ -150,7 +149,7 @@ final class StaticSiteCreator
 
     private function createDotEnv(): void
     {
-        $this->style->section("Create '.env' and '.env-override' from command options + env");
+        $this->style->verbose("Create '.env' and '.env-override' from command options + env");
         EnvironmentSubstitution::withDefaults()
             ->export(
                 [
@@ -189,7 +188,7 @@ final class StaticSiteCreator
 
     private function substituteEnvInIndexHtml(): void
     {
-        $this->style->section('Substitute appName in template index.html');
+        $this->style->verbose('Substitute appName in template index.html');
         EnvironmentSubstitution::withDefaults()
             ->export(
                 [
@@ -208,7 +207,7 @@ final class StaticSiteCreator
 
     private function copyTmpToHost(): void
     {
-        $this->style->section('Copy tmp to host filesystem');
+        $this->style->verbose('Copy tmp to host filesystem');
         $this->mustRun(
             [
                 'rsync',

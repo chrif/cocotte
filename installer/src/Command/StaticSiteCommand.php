@@ -8,6 +8,7 @@ use Chrif\Cocotte\DigitalOcean\ApiToken;
 use Chrif\Cocotte\DigitalOcean\ApiTokenOptionProvider;
 use Chrif\Cocotte\DigitalOcean\NetworkingConfigurator;
 use Chrif\Cocotte\Environment\LazyEnvironment;
+use Chrif\Cocotte\Host\HostMount;
 use Chrif\Cocotte\Machine\MachineName;
 use Chrif\Cocotte\Machine\MachineNameOptionProvider;
 use Chrif\Cocotte\Machine\MachineState;
@@ -60,6 +61,14 @@ final class StaticSiteCommand extends AbstractCommand implements LazyEnvironment
      * @var MachineState
      */
     private $machineState;
+    /**
+     * @var StaticSiteNamespace
+     */
+    private $staticSiteNamespace;
+    /**
+     * @var HostMount
+     */
+    private $hostMount;
 
     public function __construct(
         StaticSiteCreator $staticSiteCreator,
@@ -68,7 +77,9 @@ final class StaticSiteCommand extends AbstractCommand implements LazyEnvironment
         Style $style,
         ProcessRunner $processRunner,
         EventDispatcherInterface $eventDispatcher,
-        MachineState $machineState
+        MachineState $machineState,
+        StaticSiteNamespace $staticSiteNamespace,
+        HostMount $hostMount
     ) {
         $this->staticSiteCreator = $staticSiteCreator;
         $this->networkingConfigurator = $networkingConfigurator;
@@ -77,6 +88,8 @@ final class StaticSiteCommand extends AbstractCommand implements LazyEnvironment
         $this->processRunner = $processRunner;
         $this->eventDispatcher = $eventDispatcher;
         $this->machineState = $machineState;
+        $this->staticSiteNamespace = $staticSiteNamespace;
+        $this->hostMount = $hostMount;
         parent::__construct();
     }
 
@@ -140,16 +153,23 @@ final class StaticSiteCommand extends AbstractCommand implements LazyEnvironment
             throw new \Exception("Cannot skip networking when deploying");
         }
 
+        $this->style->writeln(
+            "Exporting a new static site to {$this->hostMount->sourcePath()}/{$this->staticSiteNamespace}"
+        );
         $this->staticSiteCreator->create();
 
         if (!$skipNetworking) {
+            $this->style->writeln("Configuring networking for {$this->staticSiteHostname->toString()}");
             $this->networkingConfigurator->configure($this->staticSiteHostname->toHostnameCollection());
         }
 
         if (!$skipDeploy) {
-            $this->style->title('Deploying exported site to cloud machine');
-            $this->processRunner->mustRun(new Process('./bin/prod', $this->staticSiteCreator->hostAppPath()));
+            $this->style->writeln('Deploying exported site to cloud machine');
+            $this->processRunner->mustRun(new Process('./bin/prod 2>/dev/stdout',
+                $this->staticSiteCreator->hostAppPath()));
             $this->style->success("Static site successfully deployed at {$this->staticSiteHostname->toString()}");
+        } else {
+            $this->style->success("Deployment has been skipped.");
         }
     }
 

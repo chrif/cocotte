@@ -112,11 +112,11 @@ final class UninstallCommand extends AbstractCommand implements LazyEnvironment
         $this->confirm();
         $this->networkingConfigurator->configure($this->traefikHostname->toHostnameCollection(), true);
         if (!$this->machineState->exists()) {
-            $this->style->note("Machine does not exist");
+            $this->style->verbose("Machine '{$this->machineName->toString()}' did not exist");
         } else {
-            $this->processRunner->mustRun(new Process('docker-machine rm -y "${MACHINE_NAME}"'));
+            $this->processRunner->mustRun(new Process('docker-machine rm -f "${MACHINE_NAME}"'));
         }
-        $this->style->success("Uninstall successful.");
+        $this->style->success("Uninstalled");
     }
 
     private function confirm(): void

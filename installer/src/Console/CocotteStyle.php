@@ -2,6 +2,7 @@
 
 namespace Chrif\Cocotte\Console;
 
+use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 final class CocotteStyle extends SymfonyStyle implements Style
@@ -15,6 +16,11 @@ final class CocotteStyle extends SymfonyStyle implements Style
     public function help($message)
     {
         $this->block($message, 'HELP', null, ' ', false, false);
+    }
+
+    public function complete($messages): void
+    {
+        $this->block($messages, 'COMPLETE', 'fg=black;bg=green', ' ', true, false);
     }
 
     public function pause()
@@ -37,14 +43,6 @@ final class CocotteStyle extends SymfonyStyle implements Style
         return "<info>$url</info> \u{1F517} ";
     }
 
-    public function verbose(\Closure $closure): void
-    {
-        $verbosity = $this->verbosities() & self::VERBOSITY_VERBOSE;
-        if ($verbosity <= $this->getVerbosity()) {
-            $closure();
-        }
-    }
-
     public function hostnameHelp(string $name, string $subdomain): array
     {
         return [
@@ -59,13 +57,19 @@ final class CocotteStyle extends SymfonyStyle implements Style
         ];
     }
 
-    /**
-     * @return int
-     */
-    private function verbosities(): int
+    public function verbose($messages): void
     {
-        return self::VERBOSITY_QUIET | self::VERBOSITY_NORMAL | self::VERBOSITY_VERBOSE |
-            self::VERBOSITY_VERY_VERBOSE | self::VERBOSITY_DEBUG;
+        $this->writeln($messages, OutputInterface::VERBOSITY_VERBOSE);
+    }
+
+    public function veryVerbose($messages): void
+    {
+        $this->writeln($messages, OutputInterface::VERBOSITY_VERY_VERBOSE);
+    }
+
+    public function debug($messages): void
+    {
+        $this->writeln($messages, OutputInterface::VERBOSITY_DEBUG);
     }
 
 }

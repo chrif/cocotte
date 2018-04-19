@@ -37,6 +37,8 @@ interface Style extends OutputInterface, StyleInterface
 
     public function help($message);
 
+    public function complete($messages): void;
+
     public function pause();
 
     public function optionHelp(string $title, array $message): string;
@@ -45,7 +47,11 @@ interface Style extends OutputInterface, StyleInterface
 
     public function link(string $url): string;
 
-    public function verbose(\Closure $closure): void;
-
     public function hostnameHelp(string $name, string $subdomain): array;
+
+    public function verbose($messages): void;
+
+    public function veryVerbose($messages): void;
+
+    public function debug($messages): void;
 }

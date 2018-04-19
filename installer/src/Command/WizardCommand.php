@@ -55,7 +55,8 @@ final class WizardCommand extends AbstractCommand
     {
         $this
             ->setName('wizard')
-            ->setDescription("Interactively build a simple '<info>install</info>' command for <options=bold>Cocotte</>");
+            ->setDescription(/** @lang text */
+                "Interactively build a simple '<info>install</info>' command for <options=bold>Cocotte</>");
     }
 
     protected function doExecute(InputInterface $input, OutputInterface $output)
@@ -78,21 +79,14 @@ final class WizardCommand extends AbstractCommand
         $traefikUsername = $this->ask(TraefikUsername::OPTION_NAME);
         $traefikPassword = $this->ask(TraefikPassword::OPTION_NAME);
 
-        $this->style->block(
-            [
-                "A command will be printed to the terminal.",
-                "Run the command from a location on your computer where you usually put new project code.",
-                "Afterwards, two directories will be created:\n- one named 'machine' that you must leave there ".
-                "and never edit (it is used by Docker Machine to login to your cloud machine),\n- and one named 'traefik' ".
-                "that you can edit all you want and which is ready for Git version control: this your new Traefik project.",
-                "Thank you for trying Cocotte!",
-            ],
-            'COMPLETE',
-            'fg=black;bg=green',
-            ' ',
-            true,
-            false
-        );
+        $this->style->complete([
+            "A command will be printed to the terminal.",
+            "Run the command from a location on your computer where you usually put new project code.",
+            "Afterwards, two directories will be created:\n- one named 'machine' that you must leave there ".
+            "and never edit (it is used by Docker Machine to login to your cloud machine),\n- and one named 'traefik' ".
+            "that you can edit all you want and which is ready for Git version control: this your new Traefik project.",
+            "Thank you for trying Cocotte!",
+        ]);
         $this->style->pause();
 
         $this->style->writeln(

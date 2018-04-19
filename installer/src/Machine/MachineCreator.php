@@ -51,8 +51,6 @@ final class MachineCreator
 
     public function create()
     {
-        $this->style->title("Creating a Docker machine named '{$this->machineName}' on Digital Ocean");
-
         if ($this->machineState->exists()) {
             throw new \Exception(
                 "Error: a machine named {$this->machineName} already exists. Remove it or choose a ".

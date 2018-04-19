@@ -8,7 +8,6 @@ use Chrif\Cocotte\Console\CommandExecuteEvent;
 use Chrif\Cocotte\Console\Style;
 use ProxyManager\Proxy\LazyLoadingInterface;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 final class LazyEnvironmentLoader implements EventSubscriberInterface
@@ -57,7 +56,7 @@ final class LazyEnvironmentLoader implements EventSubscriberInterface
             }
             $this->initializeProxy($lazyValue);
         }
-        $this->style->writeln("Lazy loaded env:\n".print_r(getenv(), true), OutputInterface::VERBOSITY_VERBOSE);
+        $this->style->debug("Lazy loaded env:\n".print_r(getenv(), true));
     }
 
     private function getLazyValue(string $className): LazyLoadingInterface

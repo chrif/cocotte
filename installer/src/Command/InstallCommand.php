@@ -6,11 +6,14 @@ use Chrif\Cocotte\Console\AbstractCommand;
 use Chrif\Cocotte\Console\Style;
 use Chrif\Cocotte\DigitalOcean\ApiToken;
 use Chrif\Cocotte\DigitalOcean\ApiTokenOptionProvider;
+use Chrif\Cocotte\DigitalOcean\NetworkingConfigurator;
 use Chrif\Cocotte\Environment\LazyEnvironment;
+use Chrif\Cocotte\Host\HostMount;
 use Chrif\Cocotte\Machine\MachineCreator;
 use Chrif\Cocotte\Machine\MachineName;
 use Chrif\Cocotte\Machine\MachineNameOptionProvider;
 use Chrif\Cocotte\Machine\MachineStoragePath;
+use Chrif\Cocotte\Shell\ProcessRunner;
 use Chrif\Cocotte\Template\Traefik\TraefikCreator;
 use Chrif\Cocotte\Template\Traefik\TraefikHostname;
 use Chrif\Cocotte\Template\Traefik\TraefikHostnameOptionProvider;
@@ -21,6 +24,7 @@ use Chrif\Cocotte\Template\Traefik\TraefikUsernameOptionProvider;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\Process\Process;
 
 final class InstallCommand extends AbstractCommand implements LazyEnvironment
 {
@@ -54,13 +58,31 @@ final class InstallCommand extends AbstractCommand implements LazyEnvironment
      */
     private $eventDispatcher;
 
+    /**
+     * @var NetworkingConfigurator
+     */
+    private $networkingConfigurator;
+
+    /**
+     * @var ProcessRunner
+     */
+    private $processRunner;
+
+    /**
+     * @var HostMount
+     */
+    private $hostMount;
+
     public function __construct(
         MachineCreator $machineCreator,
         TraefikCreator $traefikCreator,
         Style $style,
         MachineName $machineName,
         TraefikHostname $traefikHostname,
-        EventDispatcherInterface $eventDispatcher
+        EventDispatcherInterface $eventDispatcher,
+        NetworkingConfigurator $networkingConfigurator,
+        ProcessRunner $processRunner,
+        HostMount $hostMount
     ) {
         $this->machineCreator = $machineCreator;
         $this->traefikCreator = $traefikCreator;
@@ -68,6 +90,9 @@ final class InstallCommand extends AbstractCommand implements LazyEnvironment
         $this->machineName = $machineName;
         $this->traefikHostname = $traefikHostname;
         $this->eventDispatcher = $eventDispatcher;
+        $this->networkingConfigurator = $networkingConfigurator;
+        $this->processRunner = $processRunner;
+        $this->hostMount = $hostMount;
         parent::__construct();
     }
 
@@ -103,14 +128,26 @@ final class InstallCommand extends AbstractCommand implements LazyEnvironment
     {
         $this
             ->setName('install')
-            ->setDescription('Create a <options=bold>Docker</> machine on <options=bold>Digital Ocean</> and install the <options=bold>Traefik</> reverse proxy on it.');
+            ->setDescription('Create a <options=bold>Docker</> machine on <options=bold>Digital Ocean</> and '.
+                'install the <options=bold>Traefik</> reverse proxy on it.');
     }
 
     protected function doExecute(InputInterface $input, OutputInterface $output)
     {
         $this->confirm();
+
+        $this->style->writeln("Creating a Docker machine named '{$this->machineName}' on Digital Ocean.");
         $this->machineCreator->create();
+
+        $this->style->writeln("Exporting traefik template to {$this->hostMount->sourcePath()}/traefik");
         $this->traefikCreator->create();
+
+        $this->style->writeln("Configuring networking for {$this->traefikHostname->toString()}");
+        $this->networkingConfigurator->configure($this->traefikHostname->toHostnameCollection());
+
+        $this->style->writeln('Deploying traefik to cloud machine');
+        $this->processRunner->mustRun(new Process('./bin/prod 2>/dev/stdout', $this->traefikCreator->hostAppPath()));
+
         $this->style->success("Installation successful. You can visit your Traefik UI at {$this->traefikHostname->toString()}");
     }
 

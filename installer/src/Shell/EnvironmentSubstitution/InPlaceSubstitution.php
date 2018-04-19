@@ -47,7 +47,7 @@ final class InPlaceSubstitution implements SubstitutionStrategy
     {
         /** @var SplFileInfo $file */
         foreach ($this->finder->files() as $file) {
-            $this->style->writeln('In-place substitution of environment in '.$file->getRealPath());
+            $this->style->verbose('In-place substitution of environment in '.$file->getRealPath());
 
             $envSubstProcess->setInput($file->getContents());
             $this->processRunner->mustRun($envSubstProcess);
