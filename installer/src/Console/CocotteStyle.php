@@ -71,5 +71,4 @@ final class CocotteStyle extends SymfonyStyle implements Style
     {
         $this->writeln($messages, OutputInterface::VERBOSITY_DEBUG);
     }
-
 }

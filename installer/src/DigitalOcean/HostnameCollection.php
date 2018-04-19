@@ -2,6 +2,7 @@
 
 namespace Chrif\Cocotte\DigitalOcean;
 
+use Assert\Assertion;
 use Chrif\Cocotte\Collection\GenericCollection;
 
 final class HostnameCollection extends GenericCollection
@@ -10,6 +11,7 @@ final class HostnameCollection extends GenericCollection
 
     public function __construct(Hostname ...$hostnames)
     {
+        Assertion::greaterThan($hostnames, 0, "There is no hostname");
         $this->values = $hostnames;
     }
 
@@ -56,5 +58,10 @@ final class HostnameCollection extends GenericCollection
         }
 
         return self::fromArray($localHosts);
+    }
+
+    public function formatSecureUrl(): string
+    {
+        return 'https://' . $this->values[0]->toString();
     }
 }

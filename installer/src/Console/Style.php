@@ -54,4 +54,5 @@ interface Style extends OutputInterface, StyleInterface
     public function veryVerbose($messages): void;
 
     public function debug($messages): void;
+
 }

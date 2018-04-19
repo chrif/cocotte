@@ -65,4 +65,8 @@ class TraefikHostname implements LazyExportableOption
         return $this->hostnameCollection;
     }
 
+    public function formatSecureUrl(): string
+    {
+        return $this->hostnameCollection->formatSecureUrl();
+    }
 }

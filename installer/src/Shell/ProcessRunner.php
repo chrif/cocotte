@@ -36,6 +36,7 @@ final class ProcessRunner
     {
         $useProgress = !$this->style->isVerbose();
         if ($useProgress) {
+            $this->progressBar->setFormat('[%bar%]');
             $this->progressBar->start();
         }
 

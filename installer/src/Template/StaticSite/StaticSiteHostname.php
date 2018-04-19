@@ -2,6 +2,7 @@
 
 namespace Chrif\Cocotte\Template\StaticSite;
 
+use Chrif\Cocotte\DigitalOcean\Hostname;
 use Chrif\Cocotte\DigitalOcean\HostnameCollection;
 use Chrif\Cocotte\Environment\LazyEnvironmentValue;
 use Chrif\Cocotte\Environment\LazyExportableOption;
@@ -63,5 +64,10 @@ class StaticSiteHostname implements LazyExportableOption
     public function toHostnameCollection(): HostnameCollection
     {
         return $this->hostnameCollection;
+    }
+
+    public function formatSecureUrl(): string
+    {
+        return $this->hostnameCollection->formatSecureUrl();
     }
 }

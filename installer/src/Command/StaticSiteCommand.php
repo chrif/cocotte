@@ -167,7 +167,7 @@ final class StaticSiteCommand extends AbstractCommand implements LazyEnvironment
             $this->style->writeln('Deploying exported site to cloud machine');
             $this->processRunner->mustRun(new Process('./bin/prod 2>/dev/stdout',
                 $this->staticSiteCreator->hostAppPath()));
-            $this->style->success("Static site successfully deployed at {$this->staticSiteHostname->toString()}");
+            $this->style->success("Static site successfully deployed at {$this->staticSiteHostname->formatSecureUrl()}");
         } else {
             $this->style->success("Deployment has been skipped.");
         }

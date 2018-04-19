@@ -114,8 +114,8 @@ final class InstallCommand extends AbstractCommand implements LazyEnvironment
             ApiTokenOptionProvider::class,
             MachineNameOptionProvider::class,
             TraefikHostnameOptionProvider::class,
-            TraefikPasswordOptionProvider::class,
             TraefikUsernameOptionProvider::class,
+            TraefikPasswordOptionProvider::class,
         ];
     }
 
@@ -135,7 +135,6 @@ final class InstallCommand extends AbstractCommand implements LazyEnvironment
     protected function doExecute(InputInterface $input, OutputInterface $output)
     {
         $this->confirm();
-
         $this->style->writeln("Creating a Docker machine named '{$this->machineName}' on Digital Ocean.");
         $this->machineCreator->create();
 
@@ -148,7 +147,7 @@ final class InstallCommand extends AbstractCommand implements LazyEnvironment
         $this->style->writeln('Deploying traefik to cloud machine');
         $this->processRunner->mustRun(new Process('./bin/prod 2>/dev/stdout', $this->traefikCreator->hostAppPath()));
 
-        $this->style->success("Installation successful. You can visit your Traefik UI at {$this->traefikHostname->toString()}");
+        $this->style->success("Installation successful. You can visit your Traefik UI at {$this->traefikHostname->formatSecureUrl()}");
     }
 
     private function confirm(): void
