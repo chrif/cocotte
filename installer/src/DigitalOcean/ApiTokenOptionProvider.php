@@ -5,6 +5,8 @@ namespace Chrif\Cocotte\DigitalOcean;
 use Chrif\Cocotte\Console\OptionProvider;
 use Chrif\Cocotte\Console\Style;
 use Chrif\Cocotte\Shell\Env;
+use DigitalOceanV2\Adapter\GuzzleHttpAdapter;
+use DigitalOceanV2\DigitalOceanV2;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Question\Question;
 
@@ -47,7 +49,22 @@ class ApiTokenOptionProvider implements OptionProvider
     public function validate(string $value)
     {
         $token = new ApiToken($value);
-        $token->assertAccountIsActive();
+        $adapter = new GuzzleHttpAdapter($token->toString());
+        $digitalOceanV2 = new DigitalOceanV2($adapter);
+        try {
+            $account = $digitalOceanV2->account()->getUserInformation();
+        } catch (\Exception $e) {
+            throw new \Exception(
+                "Failed to validate the Digital Ocean token with message:\n".
+                $e->getMessage()
+            );
+        }
+        if ($account->status !== 'active') {
+            throw new \Exception(
+                "Failed to validate the Digital Ocean token with message:\n".
+                "The Digital Ocean token is associated to an account with status '{$account->status}'."
+            );
+        }
     }
 
     public function onCorrectAnswer(string $answer)
