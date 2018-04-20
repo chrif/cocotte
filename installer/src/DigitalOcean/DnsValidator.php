@@ -3,6 +3,7 @@
 namespace Chrif\Cocotte\DigitalOcean;
 
 use Assert\Assertion;
+use Iodev\Whois\DomainInfo;
 use Iodev\Whois\Whois;
 
 final class DnsValidator
@@ -20,6 +21,9 @@ final class DnsValidator
     public function validateNameServers(Hostname $hostname)
     {
         $info = $this->whois->loadDomainInfo($hostname->domainName());
+        if (!$info instanceof DomainInfo) {
+            throw new \Exception("Could not load domain info of $hostname");
+        }
         $nameServers = $info->getNameServers();
         Assertion::isArray(
             $nameServers,
@@ -32,8 +36,12 @@ final class DnsValidator
         );
         foreach ($nameServers as $nameServer) {
             $nameServer = Hostname::parse($nameServer);
-            Assertion::eq($nameServer->domainName(), "digitalocean.com");
-            Assertion::regex($nameServer->recordName(), "/ns\d/");
+            Assertion::regex(
+                $nameServer->toString(),
+                "/ns[0-9]\.digitalocean\.com/",
+                "'{$nameServer->toString()}' is not a Digital Ocean's name server in the ".
+                "form of ns[0-9].digitalocean.com"
+            );
         }
     }
 

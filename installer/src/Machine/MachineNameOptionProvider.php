@@ -2,29 +2,21 @@
 
 namespace Chrif\Cocotte\Machine;
 
-use Chrif\Cocotte\Console\InteractionOperator;
 use Chrif\Cocotte\Console\OptionProvider;
 use Chrif\Cocotte\Console\Style;
 use Chrif\Cocotte\Shell\Env;
-use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Question\Question;
 
 class MachineNameOptionProvider implements OptionProvider
 {
     /**
-     * @var InteractionOperator
-     */
-    private $operator;
-
-    /**
      * @var Style
      */
     private $style;
 
-    public function __construct(InteractionOperator $operator, Style $style)
+    public function __construct(Style $style)
     {
-        $this->operator = $operator;
         $this->style = $style;
     }
 
@@ -71,16 +63,6 @@ class MachineNameOptionProvider implements OptionProvider
             $this->style->quittableQuestion("Enter a <options=bold>Machine name</>"),
             'cocotte'
         );
-    }
-
-    public function interact(InputInterface $input)
-    {
-        $this->operator->interact($input, $this);
-    }
-
-    public function ask(): string
-    {
-        return $this->operator->ask($this);
     }
 
 }

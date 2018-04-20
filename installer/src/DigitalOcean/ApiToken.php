@@ -54,10 +54,18 @@ class ApiToken implements LazyExportableOption
     {
         $adapter = new GuzzleHttpAdapter($this->toString());
         $digitalOceanV2 = new DigitalOceanV2($adapter);
-        $account = $digitalOceanV2->account()->getUserInformation();
+        try {
+            $account = $digitalOceanV2->account()->getUserInformation();
+        } catch (\Exception $e) {
+            throw new \Exception(
+                "Failed to validate the Digital Ocean token with message:\n".
+                $e->getMessage()
+            );
+        }
         if ($account->status !== 'active') {
             throw new \Exception(
-                "Token is associated to an account with status '{$account->status}'."
+                "Failed to validate the Digital Ocean token with message:\n".
+                "The Digital Ocean token is associated to an account with status '{$account->status}'."
             );
         }
     }

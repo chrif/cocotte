@@ -2,13 +2,11 @@
 
 namespace Chrif\Cocotte\Template\StaticSite;
 
-use Chrif\Cocotte\Console\InteractionOperator;
 use Chrif\Cocotte\Console\OptionProvider;
 use Chrif\Cocotte\Console\Style;
 use Chrif\Cocotte\DigitalOcean\DnsValidator;
 use Chrif\Cocotte\DigitalOcean\Hostname;
 use Chrif\Cocotte\Shell\Env;
-use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Question\Question;
 
@@ -18,21 +16,14 @@ class StaticSiteHostnameOptionProvider implements OptionProvider
      * @var Style
      */
     private $style;
-
-    /**
-     * @var InteractionOperator
-     */
-    private $operator;
-
     /**
      * @var DnsValidator
      */
     private $dnsValidator;
 
-    public function __construct(Style $style, InteractionOperator $operator, DnsValidator $dnsValidator)
+    public function __construct(Style $style, DnsValidator $dnsValidator)
     {
         $this->style = $style;
-        $this->operator = $operator;
         $this->dnsValidator = $dnsValidator;
     }
 
@@ -45,16 +36,6 @@ class StaticSiteHostnameOptionProvider implements OptionProvider
             $this->helpMessage(),
             Env::get(StaticSiteHostname::STATIC_SITE_HOSTNAME)
         );
-    }
-
-    public function interact(InputInterface $input)
-    {
-        $this->operator->interact($input, $this);
-    }
-
-    public function ask(): string
-    {
-        return $this->operator->ask($this);
     }
 
     public function validate(string $value)

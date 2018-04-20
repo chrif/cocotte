@@ -2,11 +2,9 @@
 
 namespace Chrif\Cocotte\Template\Traefik;
 
-use Chrif\Cocotte\Console\InteractionOperator;
 use Chrif\Cocotte\Console\OptionProvider;
 use Chrif\Cocotte\Console\Style;
 use Chrif\Cocotte\Shell\Env;
-use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Question\Question;
 
@@ -16,15 +14,10 @@ class TraefikPasswordOptionProvider implements OptionProvider
      * @var Style
      */
     private $style;
-    /**
-     * @var InteractionOperator
-     */
-    private $operator;
 
-    public function __construct(Style $style, InteractionOperator $operator)
+    public function __construct(Style $style)
     {
         $this->style = $style;
-        $this->operator = $operator;
     }
 
     public function option(): InputOption
@@ -68,16 +61,6 @@ class TraefikPasswordOptionProvider implements OptionProvider
     public function onCorrectAnswer(string $answer)
     {
         // do nothing
-    }
-
-    public function interact(InputInterface $input)
-    {
-        $this->operator->interact($input, $this);
-    }
-
-    public function ask(): string
-    {
-        return $this->operator->ask($this);
     }
 
 }

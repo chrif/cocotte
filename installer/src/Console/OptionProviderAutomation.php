@@ -26,6 +26,7 @@ final class OptionProviderAutomation implements EventSubscriberInterface
     {
         return [
             CommandEventStore::COMMAND_CONFIGURE => 'onCommandConfigure',
+            CommandEventStore::COMMAND_INITIALIZE => 'onCommandInitialize',
             CommandEventStore::COMMAND_INTERACT => 'onCommandInteract',
         ];
     }
@@ -33,21 +34,37 @@ final class OptionProviderAutomation implements EventSubscriberInterface
     public function onCommandConfigure(CommandConfigureEvent $event)
     {
         $command = $event->command();
+
         foreach ($command->optionProviders() as $className) {
-            $event->inputDefinition()->addOption(
-                $this->registry->providerByClassName($className)->option()
-            );
+            $optionProvider = $this->registry->providerByClassName($className);
+
+            $event->inputDefinition()->addOption($optionProvider->option());
+        }
+    }
+
+    public function onCommandInitialize(CommandInitializeEvent $event)
+    {
+        $command = $event->command();
+        $input = $event->input();
+
+        foreach ($command->optionProviders() as $className) {
+            $optionProvider = $this->registry->providerByClassName($className);
+
+            $value = $input->getOption($optionProvider->optionName());
+            if (is_string($value)) {
+                $optionProvider->validate($value);
+            }
         }
     }
 
     public function onCommandInteract(CommandInteractEvent $event)
     {
         $command = $event->command();
+
         foreach ($command->optionProviders() as $className) {
-            $this->operator->interact(
-                $event->input(),
-                $this->registry->providerByClassName($className)
-            );
+            $optionProvider = $this->registry->providerByClassName($className);
+
+            $this->operator->interact($event->input(), $optionProvider);
         }
     }
 

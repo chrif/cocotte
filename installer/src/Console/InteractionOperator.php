@@ -16,30 +16,31 @@ final class InteractionOperator
         $this->style = $style;
     }
 
-    public function interact(InputInterface $input, OptionProvider $interaction)
+    public function interact(InputInterface $input, OptionProvider $optionProvider)
     {
-        $name = $interaction->optionName();
+        $name = $optionProvider->optionName();
 
         if (!$input->hasOption($name)) {
             throw new \Exception("input does not have option '$name'");
         }
 
         try {
-            $interaction->validate($input->getOption($name) ?? "");
+            $optionProvider->validate($input->getOption($name) ?? "");
         } catch (\Exception $e) {
             $this->style->error($e->getMessage());
-            $input->setOption($name, $interaction->ask());
+            $input->setOption($name, $this->ask($optionProvider));
         }
     }
 
-    public function ask(OptionProvider $interaction): string
+    public function ask(OptionProvider $optionProvider): string
     {
-        $this->style->help($interaction->helpMessage());
+        $this->style->help($optionProvider->helpMessage());
 
         return $this->style->askQuestion(
-            $interaction->question()
+            $optionProvider
+                ->question()
                 ->setNormalizer($this->normalizer())
-                ->setValidator($this->validator($interaction))
+                ->setValidator($this->validator($optionProvider))
         );
     }
 
@@ -50,15 +51,15 @@ final class InteractionOperator
         };
     }
 
-    private function validator(OptionProvider $interaction): \Closure
+    private function validator(OptionProvider $optionProvider): \Closure
     {
-        return function (string $answer) use ($interaction): string {
+        return function (string $answer) use ($optionProvider): string {
             if (!$answer) {
                 throw new \Exception('No answer was given. Try again.');
             }
 
-            $interaction->validate($answer);
-            $interaction->onCorrectAnswer($answer);
+            $optionProvider->validate($answer);
+            $optionProvider->onCorrectAnswer($answer);
 
             return $answer;
         };

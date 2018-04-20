@@ -2,13 +2,11 @@
 
 namespace Chrif\Cocotte\Template\Traefik;
 
-use Chrif\Cocotte\Console\InteractionOperator;
 use Chrif\Cocotte\Console\OptionProvider;
 use Chrif\Cocotte\Console\Style;
 use Chrif\Cocotte\DigitalOcean\DnsValidator;
 use Chrif\Cocotte\DigitalOcean\Hostname;
 use Chrif\Cocotte\Shell\Env;
-use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Question\Question;
 
@@ -24,16 +22,10 @@ class TraefikHostnameOptionProvider implements OptionProvider
      */
     private $dnsValidator;
 
-    /**
-     * @var InteractionOperator
-     */
-    private $operator;
-
-    public function __construct(Style $style, DnsValidator $dnsValidator, InteractionOperator $operator)
+    public function __construct(Style $style, DnsValidator $dnsValidator)
     {
         $this->style = $style;
         $this->dnsValidator = $dnsValidator;
-        $this->operator = $operator;
     }
 
     public function option(): InputOption
@@ -80,16 +72,6 @@ class TraefikHostnameOptionProvider implements OptionProvider
                 "Enter the <options=bold>Traefik UI hostname</> (e.g., traefik.mydomain.com)"
             )
         );
-    }
-
-    public function interact(InputInterface $input)
-    {
-        $this->operator->interact($input, $this);
-    }
-
-    public function ask(): string
-    {
-        return $this->operator->ask($this);
     }
 
 }

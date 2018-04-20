@@ -29,7 +29,7 @@ abstract class AbstractCommand extends Command implements CommandInterface
     {
         $this->eventDispatcher()->dispatch(
             CommandEventStore::COMMAND_INITIALIZE,
-            new CommandInitializeEvent($this)
+            new CommandInitializeEvent($this, $input)
         );
     }
 

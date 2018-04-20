@@ -3,6 +3,7 @@
 namespace Chrif\Cocotte\Command;
 
 use Chrif\Cocotte\Console\AbstractCommand;
+use Chrif\Cocotte\Console\InteractionOperator;
 use Chrif\Cocotte\Console\OptionProviderRegistry;
 use Chrif\Cocotte\Console\Style;
 use Chrif\Cocotte\DigitalOcean\ApiToken;
@@ -30,14 +31,21 @@ final class WizardCommand extends AbstractCommand
      */
     private $optionProviderRegistry;
 
+    /**
+     * @var InteractionOperator
+     */
+    private $operator;
+
     public function __construct(
         Style $style,
         EventDispatcherInterface $eventDispatcher,
-        OptionProviderRegistry $optionProviderRegistry
+        OptionProviderRegistry $optionProviderRegistry,
+        InteractionOperator $operator
     ) {
         $this->style = $style;
         $this->eventDispatcher = $eventDispatcher;
         $this->optionProviderRegistry = $optionProviderRegistry;
+        $this->operator = $operator;
         parent::__construct();
     }
 
@@ -107,6 +115,6 @@ EOF
 
     private function ask(string $name): string
     {
-        return $this->optionProviderRegistry->providerByOptionName($name)->ask();
+        return $this->operator->ask($this->optionProviderRegistry->providerByOptionName($name));
     }
 }
