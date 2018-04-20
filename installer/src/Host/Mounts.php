@@ -26,7 +26,7 @@ class Mounts implements LazyEnvironmentValue
 
     /**
      * @return LazyEnvironmentValue|self
-     * @throws \Exception
+     * @throws HostException
      */
     public static function fromEnv(): LazyEnvironmentValue
     {
@@ -34,10 +34,12 @@ class Mounts implements LazyEnvironmentValue
             $process = new Process('docker inspect --format="{{json .Mounts}}" $HOSTNAME');
             $process->run();
             if (!$process->isSuccessful()) {
-                throw new \Exception(
-                    $process->getErrorOutput()."\nMake sure you start Docker and mount the Docker ".
-                    "socket with a volume like this:\n-v /var/run/docker.sock:/var/run/docker.sock:ro"
-                );
+                $error = $process->getErrorOutput();
+                if (false !== strpos($error, 'var/run/docker.sock')) {
+                    throw HostException::noSocketMount($process->getErrorOutput());
+                } else {
+                    throw new HostException($error);
+                }
             }
             self::$mounts = json_decode($process->getOutput(), true);
         }

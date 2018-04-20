@@ -77,6 +77,8 @@ services:
     tags: ['lazy.environment']
   Chrif\Cocotte\Host\Mounts:
     tags: ['lazy.environment']
+  Chrif\Cocotte\Host\HostMountRequiredListener:
+    tags: ['event.subscriber']
 
   # machine
   Chrif\Cocotte\Machine\MachineCreator: ~

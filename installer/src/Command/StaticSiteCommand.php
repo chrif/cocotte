@@ -9,6 +9,7 @@ use Chrif\Cocotte\DigitalOcean\ApiTokenOptionProvider;
 use Chrif\Cocotte\DigitalOcean\NetworkingConfigurator;
 use Chrif\Cocotte\Environment\LazyEnvironment;
 use Chrif\Cocotte\Host\HostMount;
+use Chrif\Cocotte\Host\HostMountRequired;
 use Chrif\Cocotte\Machine\MachineName;
 use Chrif\Cocotte\Machine\MachineNameOptionProvider;
 use Chrif\Cocotte\Machine\MachineState;
@@ -25,7 +26,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Process\Process;
 
-final class StaticSiteCommand extends AbstractCommand implements LazyEnvironment
+final class StaticSiteCommand extends AbstractCommand implements LazyEnvironment, HostMountRequired
 {
     /**
      * @var StaticSiteCreator
@@ -186,7 +187,7 @@ final class StaticSiteCommand extends AbstractCommand implements LazyEnvironment
     private function confirm(): void
     {
         if (!$this->style->confirm(
-            "You are about to create a static website in " .
+            "You are about to create a static website in ".
             "'<options=bold>{$this->sitePath()}</>'\n".
             " and deploy it to Digital Ocean at ".
             "'<options=bold>{$this->staticSiteHostname->toString()}</>'."

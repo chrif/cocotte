@@ -2,7 +2,6 @@
 
 namespace Chrif\Cocotte\Template\StaticSite;
 
-use Chrif\Cocotte\DigitalOcean\Hostname;
 use Chrif\Cocotte\DigitalOcean\HostnameCollection;
 use Chrif\Cocotte\Environment\LazyEnvironmentValue;
 use Chrif\Cocotte\Environment\LazyExportableOption;

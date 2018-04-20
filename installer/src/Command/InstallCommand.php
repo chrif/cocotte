@@ -9,6 +9,7 @@ use Chrif\Cocotte\DigitalOcean\ApiTokenOptionProvider;
 use Chrif\Cocotte\DigitalOcean\NetworkingConfigurator;
 use Chrif\Cocotte\Environment\LazyEnvironment;
 use Chrif\Cocotte\Host\HostMount;
+use Chrif\Cocotte\Host\HostMountRequired;
 use Chrif\Cocotte\Machine\MachineCreator;
 use Chrif\Cocotte\Machine\MachineName;
 use Chrif\Cocotte\Machine\MachineNameOptionProvider;
@@ -26,7 +27,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Process\Process;
 
-final class InstallCommand extends AbstractCommand implements LazyEnvironment
+final class InstallCommand extends AbstractCommand implements LazyEnvironment, HostMountRequired
 {
     /**
      * @var MachineCreator

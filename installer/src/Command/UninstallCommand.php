@@ -8,6 +8,7 @@ use Chrif\Cocotte\DigitalOcean\ApiToken;
 use Chrif\Cocotte\DigitalOcean\ApiTokenOptionProvider;
 use Chrif\Cocotte\DigitalOcean\NetworkingConfigurator;
 use Chrif\Cocotte\Environment\LazyEnvironment;
+use Chrif\Cocotte\Host\HostMountRequired;
 use Chrif\Cocotte\Machine\MachineName;
 use Chrif\Cocotte\Machine\MachineNameOptionProvider;
 use Chrif\Cocotte\Machine\MachineState;
@@ -20,7 +21,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Process\Process;
 
-final class UninstallCommand extends AbstractCommand implements LazyEnvironment
+final class UninstallCommand extends AbstractCommand implements LazyEnvironment, HostMountRequired
 {
     /**
      * @var ProcessRunner

@@ -25,6 +25,14 @@ abstract class AbstractCommand extends Command implements CommandInterface
 
     abstract protected function doConfigure(): void;
 
+    final protected function initialize(InputInterface $input, OutputInterface $output)
+    {
+        $this->eventDispatcher()->dispatch(
+            CommandEventStore::COMMAND_INITIALIZE,
+            new CommandInitializeEvent($this)
+        );
+    }
+
     final protected function interact(InputInterface $input, OutputInterface $output)
     {
         $this->eventDispatcher()->dispatch(

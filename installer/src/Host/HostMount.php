@@ -35,7 +35,7 @@ class HostMount implements LazyEnvironmentValue
     /**
      * @return LazyEnvironmentValue|self
      * @throws \Assert\AssertionFailedException
-     * @throws \Exception
+     * @throws HostException
      */
     public static function fromEnv(): LazyEnvironmentValue
     {
@@ -46,7 +46,7 @@ class HostMount implements LazyEnvironmentValue
                 return new self($mount, CocotteFilesystem::create());
             }
         }
-        throw new \Exception("There is no writable bind mount with the destination '/host");
+        throw HostException::noHostMount();
     }
 
     /**

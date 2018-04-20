@@ -6,6 +6,7 @@ final class CommandEventStore
 {
 
     const COMMAND_CONFIGURE = 'command.configure';
+    const COMMAND_INITIALIZE = 'command.initialize';
     const COMMAND_INTERACT = 'command.interact';
     const COMMAND_EXECUTE = 'command.execute';
 
