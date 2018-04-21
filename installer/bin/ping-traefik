@@ -4,9 +4,10 @@
 function traefikIsReady()
 {
     $httpStatus = exec(
-        'curl -S --insecure --silent --output /dev/stderr --write-out "%{http_code}" ' .
-        '--user "${TRAEFIK_UI_USERNAME}":"${TRAEFIK_UI_PASSWORD}" ' .
-        'https://${TRAEFIK_UI_HOSTNAME}/ping',
+        'curl -S --insecure --silent --output /dev/stderr --write-out "%{http_code}" '.
+        '--user "${TRAEFIK_UI_USERNAME}":"${TRAEFIK_UI_PASSWORD}" '.
+        '--header "Host: ${TRAEFIK_UI_HOSTNAME}" '.
+        'https://$(docker-machine -s /host/machine ip $MACHINE_NAME):443/ping',
         $out,
         $ret
     );

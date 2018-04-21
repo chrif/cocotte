@@ -46,4 +46,12 @@ class MachineIp implements LazyEnvironmentValue
     {
         return $this->value;
     }
+
+    /**
+     * @return string
+     */
+    public function __toString(): string
+    {
+        return $this->toString();
+    }
 }

@@ -26,18 +26,13 @@ install:
 
 script:
 - ./bin/installer phpunit --exclude-group=functional
-- ./bin/installer create-machine
-- ./bin/installer phpunit --group=functional
-- ./bin/installer export-traefik
-- ./bin/installer deploy-traefik
-- ./bin/installer ping-traefik 6
-- if [ "${ACME_ENABLED:-true}" = true ]; then ./bin/installer check-certificate ${TRAEFIK_UI_HOSTNAME} 6; else echo "Skipping SSL verification"; fi
+- ./bin/installer install -n -vvv
 - ./bin/installer machine-ssh docker logs -t traefik
-- ./bin/installer static-site --namespace=test --hostname=${STATIC_TEST_HOST}
+- ./bin/installer static-site -n -vvv --namespace=test --hostname=${STATIC_TEST_HOST}
 - ./bin/installer check-online ${STATIC_TEST_HOST} 6
 - if [ "${ACME_ENABLED:-true}" = true ]; then ./bin/installer check-certificate ${STATIC_TEST_HOST} 6; else echo "Skipping SSL verification"; fi
 - if [ "${KEEP_MACHINE_AFTER:-false}" = false ]; then ./bin/installer configure-networking --remove ${STATIC_TEST_HOST}; else true; fi
-- if [ "${KEEP_MACHINE_AFTER:-false}" = false ]; then ./bin/installer uninstall; else echo "Machine not removed."; fi
+- if [ "${KEEP_MACHINE_AFTER:-false}" = false ]; then ./bin/installer uninstall -n -vvv; else echo "Machine not removed."; fi
 
 env:
   global:

@@ -16,6 +16,7 @@ use Chrif\Cocotte\Machine\MachineNameOptionProvider;
 use Chrif\Cocotte\Machine\MachineStoragePath;
 use Chrif\Cocotte\Shell\ProcessRunner;
 use Chrif\Cocotte\Template\Traefik\TraefikCreator;
+use Chrif\Cocotte\Template\Traefik\TraefikDeploymentValidator;
 use Chrif\Cocotte\Template\Traefik\TraefikHostname;
 use Chrif\Cocotte\Template\Traefik\TraefikHostnameOptionProvider;
 use Chrif\Cocotte\Template\Traefik\TraefikPassword;
@@ -74,6 +75,11 @@ final class InstallCommand extends AbstractCommand implements LazyEnvironment, H
      */
     private $hostMount;
 
+    /**
+     * @var TraefikDeploymentValidator
+     */
+    private $traefikDeploymentValidator;
+
     public function __construct(
         MachineCreator $machineCreator,
         TraefikCreator $traefikCreator,
@@ -83,7 +89,8 @@ final class InstallCommand extends AbstractCommand implements LazyEnvironment, H
         EventDispatcherInterface $eventDispatcher,
         NetworkingConfigurator $networkingConfigurator,
         ProcessRunner $processRunner,
-        HostMount $hostMount
+        HostMount $hostMount,
+        TraefikDeploymentValidator $traefikDeploymentValidator
     ) {
         $this->machineCreator = $machineCreator;
         $this->traefikCreator = $traefikCreator;
@@ -94,6 +101,7 @@ final class InstallCommand extends AbstractCommand implements LazyEnvironment, H
         $this->networkingConfigurator = $networkingConfigurator;
         $this->processRunner = $processRunner;
         $this->hostMount = $hostMount;
+        $this->traefikDeploymentValidator = $traefikDeploymentValidator;
         parent::__construct();
     }
 
@@ -139,31 +147,33 @@ final class InstallCommand extends AbstractCommand implements LazyEnvironment, H
         $this->style->writeln("Creating a Docker machine named '{$this->machineName}' on Digital Ocean.");
         $this->machineCreator->create();
 
-        $this->style->writeln("Exporting traefik template to {$this->hostMount->sourcePath()}/traefik");
+        $this->style->writeln("Exporting Traefik template to {$this->hostMount->sourcePath()}/traefik");
         $this->traefikCreator->create();
 
         $this->style->writeln("Configuring networking for {$this->traefikHostname->toString()}");
         $this->networkingConfigurator->configure($this->traefikHostname->toHostnameCollection());
 
-        $this->style->writeln('Deploying traefik to cloud machine');
+        $this->style->writeln('Deploying Traefik to cloud machine');
         $this->processRunner->mustRun(new Process('./bin/prod 2>/dev/stdout', $this->traefikCreator->hostAppPath()));
+
+        $this->style->writeln('Waiting for Traefik to start');
+        $this->traefikDeploymentValidator->validate();
 
         $this->style->complete([
             "Installation successful.",
             "You can now:\n".
             "- visit your Traefik UI at <options=bold>{$this->traefikHostname->formatSecureUrl()}</>\n".
-            "- use any docker-machine commands like ssh: <options=bold>docker-machine -s machine ssh {$this->machineName}</>\n".
-            "- deploy a static website on your cloud machine with the <options=bold>static-site</> command.",
+            "- use docker-machine commands (e.g. <options=bold>docker-machine -s machine ssh {$this->machineName}</>)\n".
+            "- deploy a static website on your cloud machine with the <options=bold>static-site</> Cocotte command.",
         ]);
     }
 
     private function confirm(): void
     {
         if (!$this->style->confirm(
-            "You are about to create a Docker machine named '<options=bold>{$this->machineName->toString()}</>' ".
-            " on Digital Ocean \nand install the Traefik reverse proxy on it with hostname(s) ".
-            "'<options=bold>{$this->traefikHostname->toString()}</>'.\n".
-            "This action may take a few minutes."
+            "You are about to create a Docker machine named '<options=bold>{$this->machineName->toString()}</>' on Digital Ocean \n".
+            " and install the Traefik reverse proxy on it with hostname(s) '<options=bold>{$this->traefikHostname->toString()}</>'.\n".
+            " This action may take a few minutes."
         )) {
             throw new \Exception('Cancelled');
         };
