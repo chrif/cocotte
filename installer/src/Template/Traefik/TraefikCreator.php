@@ -188,7 +188,7 @@ final class TraefikCreator
         EnvironmentSubstitution::withDefaults()
             ->export(
                 [
-                    'APP_HOSTS' => $this->traefikHostname->toLocalHostnameCollection()->toString(),
+                    'APP_HOSTS' => $this->traefikHostname->toLocal()->toString(),
                 ]
             )->substitute(
                 $this->substitutionFactory->dumpFile(

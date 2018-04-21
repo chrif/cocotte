@@ -172,7 +172,7 @@ final class StaticSiteCreator
         EnvironmentSubstitution::withDefaults()
             ->export(
                 [
-                    'APP_HOSTS' => $this->staticSiteHostname->toLocalHostnameCollection()->toString(),
+                    'APP_HOSTS' => $this->staticSiteHostname->toLocal()->toString(),
                 ]
             )->substitute(
                 $this->substitutionFactory->dumpFile(

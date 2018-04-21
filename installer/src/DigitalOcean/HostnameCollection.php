@@ -59,9 +59,4 @@ final class HostnameCollection extends GenericCollection
 
         return self::fromArray($localHosts);
     }
-
-    public function formatSecureUrl(): string
-    {
-        return 'https://' . $this->values[0]->toString();
-    }
 }

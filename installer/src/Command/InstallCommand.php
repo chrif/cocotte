@@ -162,7 +162,7 @@ final class InstallCommand extends AbstractCommand implements LazyEnvironment, H
         $this->style->complete([
             "Installation successful.",
             "You can now:\n".
-            "- visit your Traefik UI at <options=bold>{$this->traefikHostname->formatSecureUrl()}</>\n".
+            "- visit your Traefik UI at <options=bold>https://{$this->traefikHostname->toString()}</>\n".
             "- use docker-machine commands (e.g. <options=bold>docker-machine -s machine ssh {$this->machineName}</>)\n".
             "- deploy a static website on your cloud machine with the <options=bold>static-site</> Cocotte command.",
         ]);
@@ -172,7 +172,7 @@ final class InstallCommand extends AbstractCommand implements LazyEnvironment, H
     {
         if (!$this->style->confirm(
             "You are about to create a Docker machine named '<options=bold>{$this->machineName->toString()}</>' on Digital Ocean \n".
-            " and install the Traefik reverse proxy on it with hostname(s) '<options=bold>{$this->traefikHostname->toString()}</>'.\n".
+            " and install the Traefik reverse proxy on it with hostname '<options=bold>{$this->traefikHostname->toString()}</>'.\n".
             " This action may take a few minutes."
         )) {
             throw new \Exception('Cancelled');

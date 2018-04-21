@@ -172,7 +172,7 @@ final class StaticSiteCommand extends AbstractCommand implements LazyEnvironment
                 $this->staticSiteCreator->hostAppPath()));
             $this->style->complete([
                 "Static site successfully deployed at ".
-                "<options=bold>{$this->staticSiteHostname->formatSecureUrl()}</>",
+                "<options=bold>https://{$this->staticSiteHostname->toString()}</>",
             ]);
         } else {
             $this->style->complete("Deployment has been skipped.");

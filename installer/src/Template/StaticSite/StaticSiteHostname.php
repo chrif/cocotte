@@ -2,6 +2,7 @@
 
 namespace Chrif\Cocotte\Template\StaticSite;
 
+use Chrif\Cocotte\DigitalOcean\Hostname;
 use Chrif\Cocotte\DigitalOcean\HostnameCollection;
 use Chrif\Cocotte\Environment\LazyEnvironmentValue;
 use Chrif\Cocotte\Environment\LazyExportableOption;
@@ -13,26 +14,22 @@ class StaticSiteHostname implements LazyExportableOption
     const OPTION_NAME = 'hostname';
 
     /**
-     * @var HostnameCollection
+     * @var Hostname
      */
-    private $hostnameCollection;
+    private $hostname;
 
-    public function __construct(HostnameCollection $hostnameCollection)
+    public function __construct(Hostname $hostname)
     {
-        $this->hostnameCollection = $hostnameCollection;
-    }
-
-    public static function fromString(string $value): self
-    {
-        return new self(HostnameCollection::fromString($value));
+        $this->hostname = $hostname;
     }
 
     /**
      * @return LazyEnvironmentValue|self
+     * @throws \Exception
      */
     public static function fromEnv(): LazyEnvironmentValue
     {
-        return new self(HostnameCollection::fromString(Env::get(self::STATIC_SITE_HOSTNAME, "")));
+        return new self(Hostname::parse(Env::get(self::STATIC_SITE_HOSTNAME, "")));
     }
 
     public static function toEnv(string $value): void
@@ -45,9 +42,9 @@ class StaticSiteHostname implements LazyExportableOption
         return self::OPTION_NAME;
     }
 
-    public function toLocalHostnameCollection(): HostnameCollection
+    public function toLocal(): Hostname
     {
-        return $this->hostnameCollection->toLocal();
+        return $this->hostname->toLocal();
     }
 
     public function __toString()
@@ -55,18 +52,13 @@ class StaticSiteHostname implements LazyExportableOption
         return $this->toString();
     }
 
-    public function toString()
+    public function toString(): string
     {
-        return $this->hostnameCollection->toString();
+        return $this->hostname->toString();
     }
 
     public function toHostnameCollection(): HostnameCollection
     {
-        return $this->hostnameCollection;
-    }
-
-    public function formatSecureUrl(): string
-    {
-        return $this->hostnameCollection->formatSecureUrl();
+        return HostnameCollection::fromArray([$this->hostname]);
     }
 }
