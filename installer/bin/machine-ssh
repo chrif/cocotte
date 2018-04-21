@@ -2,4 +2,4 @@
 
 set -eu
 
-docker-machine -s "${MACHINE_STORAGE_PATH}" ssh ${COCOTTE_MACHINE} "$@"
+docker-machine ssh ${MACHINE_NAME} "$@"

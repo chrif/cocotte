@@ -2,10 +2,8 @@
 
 namespace Chrif\Cocotte\DigitalOcean;
 
-use Chrif\Cocotte\Configuration\AppHost;
-use Chrif\Cocotte\Configuration\AppHostCollection;
-use Chrif\Cocotte\Configuration\MachineIp;
 use Chrif\Cocotte\Console\Style;
+use Chrif\Cocotte\Machine\MachineIp;
 
 final class NetworkingConfigurator
 {
@@ -38,63 +36,61 @@ final class NetworkingConfigurator
     }
 
     /**
-     * @param AppHostCollection|AppHost[] $appHostCollection
+     * @param HostnameCollection|Hostname[] $hostnames
      * @param bool $remove
      */
-    public function configure(AppHostCollection $appHostCollection, $remove = false)
+    public function configure(HostnameCollection $hostnames, $remove = false)
     {
-        $this->style->title('Configuring networking for all the hosts supplied: ');
-        $this->style->listing($appHostCollection->toArray());
-        foreach ($appHostCollection as $host) {
-            $this->style->section($host);
+        $this->style->veryVerbose('Configuring networking for all the hostnames supplied: '.$hostnames->toString());
+        foreach ($hostnames as $host) {
+            $this->style->veryVerbose('Configuring '.$host);
             if ($remove) {
                 $this->removeDomainRecord($host);
             } else {
                 $this->configureDomain($host);
             }
         }
-        $this->style->success("");
     }
 
-    private function configureDomain(AppHost $host): void
+    private function configureDomain(Hostname $hostname): void
     {
-        if (!$this->domain->exists($host)) {
-            $this->style->writeln(
-                "Domain '{$host->toRoot()}' does not exist. Creating it and adding ".
-                "{$host->toRoot()} with ip ".$this->machineIp->value()
+        if (!$this->domain->exists($hostname)) {
+            $this->style->verbose(
+                "Domain '{$hostname->toRoot()}' does not exist. Creating it and adding ".
+                "{$hostname->toRoot()} with ip ".$this->machineIp->toString()
             );
-            $this->domain->create($host);
+            $this->domain->create($hostname);
         }
 
-        $this->configureDomainRecord($host);
+        $this->configureDomainRecord($hostname);
     }
 
-    private function configureDomainRecord(AppHost $host): void
+    private function configureDomainRecord(Hostname $hostname): void
     {
-        if ($this->domainRecord->exists($host)) {
-            if (!$this->domainRecord->isUpToDate($host)) {
-                $this->style->writeln(
-                    "Domain record '{$host}' exists. Updating its ip to ".$this->machineIp->value()
+        if ($this->domainRecord->exists($hostname)) {
+            if (!$this->domainRecord->isUpToDate($hostname)) {
+                $this->style->verbose(
+                    "Domain record '{$hostname}' exists. Updating its ip to ".$this->machineIp->toString()
                 );
-                $this->domainRecord->update($host);
+                $this->domainRecord->update($hostname);
             } else {
-                $this->style->writeln("Domain record '{$host}' exists and its ip is up-to-date.");
+                $this->style->verbose("Domain record '{$hostname}' exists and its ip is up-to-date.");
             }
         } else {
-            $this->style->writeln(
-                "Domain record '{$host}' does not exist. Creating it with ip ".$this->machineIp->value()
+            $this->style->verbose(
+                "Domain record '{$hostname}' does not exist. Creating it with ip ".$this->machineIp->toString()
             );
-            $this->domainRecord->create($host);
+            $this->domainRecord->create($hostname);
         }
     }
 
-    private function removeDomainRecord(AppHost $host): void
+    private function removeDomainRecord(Hostname $hostname): void
     {
-        if ($this->domainRecord->exists($host)) {
-            $this->style->writeln("Removing domain record '{$host}'");
-            $this->domainRecord->delete($host);
+        if ($this->domainRecord->exists($hostname)) {
+            $this->style->verbose("Removing domain record '{$hostname}'");
+            $this->domainRecord->delete($hostname);
         } else {
-            $this->style->writeln("Domain record '{$host}' was already removed");
+            $this->style->verbose("Domain record '{$hostname}' was already removed");
         }
     }
 

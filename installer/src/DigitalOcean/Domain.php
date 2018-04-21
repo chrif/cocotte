@@ -2,8 +2,7 @@
 
 namespace Chrif\Cocotte\DigitalOcean;
 
-use Chrif\Cocotte\Configuration\AppHost;
-use Chrif\Cocotte\Configuration\MachineIp;
+use Chrif\Cocotte\Machine\MachineIp;
 use DigitalOceanV2\Api;
 use DigitalOceanV2\Entity;
 
@@ -30,27 +29,27 @@ final class Domain
         $this->machineIp = $machineIp;
     }
 
-    public function create(AppHost $host): Entity\Domain
+    public function create(Hostname $hostname): Entity\Domain
     {
         return $this->domainApi->create(
-            $host->domainName(),
-            $this->machineIp->value()
+            $hostname->domainName(),
+            $this->machineIp->toString()
         );
     }
 
-    public function delete(AppHost $host): void
+    public function delete(Hostname $hostname): void
     {
         $this->domainApi->delete(
-            $host->domainName()
+            $hostname->domainName()
         );
     }
 
-    public function exists(AppHost $host): bool
+    public function exists(Hostname $hostname): bool
     {
         $domains = $this->domainApi->getAll();
 
         foreach ($domains as $domain) {
-            if ($domain->name === $host->domainName()) {
+            if ($domain->name === $hostname->domainName()) {
                 return true;
             }
         }

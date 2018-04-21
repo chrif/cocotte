@@ -1,0 +1,21 @@
+#!/bin/sh
+
+set -eu
+
+if [ "$1" = 'test' ]; then
+    set -a
+    . ../.env
+    set +a
+    shift
+fi
+
+docker run -it --rm \
+    -e ACME_ENABLED="${ACME_ENABLED:-true}" \
+    -v "$(pwd)":/host \
+    -v /var/run/docker.sock:/var/run/docker.sock:ro \
+    chrif/cocotte install \
+    --digital-ocean-api-token="${DIGITAL_OCEAN_API_TOKEN}" \
+    --machine-name="${MACHINE_NAME:-cocotte}" \
+    --traefik-ui-hostname="${TRAEFIK_UI_HOSTNAME}" \
+    --traefik-ui-password="${TRAEFIK_UI_PASSWORD}" \
+    --traefik-ui-username="${TRAEFIK_UI_USERNAME}" "$@"

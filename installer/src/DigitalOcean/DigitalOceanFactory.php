@@ -3,7 +3,6 @@
 namespace Chrif\Cocotte\DigitalOcean;
 
 use Assert\Assertion;
-use Chrif\Cocotte\Configuration\ApiToken;
 use DigitalOceanV2\Adapter\AdapterInterface;
 
 final class DigitalOceanFactory
@@ -13,7 +12,7 @@ final class DigitalOceanFactory
     {
         Assertion::implementsInterface($adapterClass, AdapterInterface::class);
 
-        return new $adapterClass($token->value());
+        return new $adapterClass($token->toString());
     }
 
 }

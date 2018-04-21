@@ -50,7 +50,7 @@ final class DumpFileSubstitution implements SubstitutionStrategy
 
     public function substitute(Process $envSubstProcess)
     {
-        $this->style->writeln('Substituting environment in STDIN and dumping to '.$this->filename);
+        $this->style->verbose('Substituting environment in STDIN and dumping to '.$this->filename);
 
         $envSubstProcess->setInput($this->contents);
         $this->processRunner->mustRun($envSubstProcess);

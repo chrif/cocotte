@@ -1,0 +1,18 @@
+#!/bin/sh
+
+set -eu
+
+if [ "$1" = 'test' ]; then
+    set -a
+    . ../.env
+    set +a
+    shift
+fi
+
+docker run -it --rm \
+    -e ACME_ENABLED="${ACME_ENABLED:-true}" \
+    -v "$(pwd)":/host \
+    -v /var/run/docker.sock:/var/run/docker.sock:ro \
+    chrif/cocotte static-site \
+    --digital-ocean-api-token="${DIGITAL_OCEAN_API_TOKEN}" \
+    --machine-name="${MACHINE_NAME:-cocotte}" "$@"

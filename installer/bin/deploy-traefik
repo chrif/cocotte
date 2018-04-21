@@ -2,5 +2,5 @@
 
 set -eu
 
-configure-networking ${TRAEFIK_UI_HOST}
+console networking ${TRAEFIK_UI_HOSTNAME}
 (cd /host/traefik; ./bin/prod)

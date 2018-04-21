@@ -2,7 +2,9 @@
 
 namespace Chrif\Cocotte\Console;
 
+use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Question\Question;
 use Symfony\Component\Console\Style\StyleInterface;
 
 interface Style extends OutputInterface, StyleInterface
@@ -18,4 +20,46 @@ interface Style extends OutputInterface, StyleInterface
      * @param bool $escape Whether to escape the message
      */
     public function block($messages, $type = null, $style = null, $prefix = ' ', $padding = false, $escape = true);
+
+    /**
+     * @param Question $question
+     * @return mixed
+     */
+    public function askQuestion(Question $question);
+
+    /**
+     * Formats a command comment.
+     *
+     * @param string|array $message
+     */
+    public function comment($message);
+
+    public function ok($message);
+
+    public function help($message);
+
+    public function complete($messages): void;
+
+    public function pause();
+
+    public function optionHelp(string $title, array $message): string;
+
+    public function quittableQuestion($message): string;
+
+    public function link(string $url): string;
+
+    public function hostnameHelp(string $name, string $subdomain): array;
+
+    public function verbose($messages): void;
+
+    public function veryVerbose($messages): void;
+
+    public function debug($messages): void;
+
+    /**
+     * @param int $max
+     *
+     * @return ProgressBar
+     */
+    public function createProgressBar($max = 0);
 }

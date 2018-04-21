@@ -2,10 +2,11 @@
 
 namespace Chrif\Cocotte;
 
-use Chrif\Cocotte\Configuration\MachineName;
 use Chrif\Cocotte\DependencyInjection\Application;
 use Chrif\Cocotte\DigitalOcean\Domain;
 use Chrif\Cocotte\DigitalOcean\DomainRecord;
+use Chrif\Cocotte\Machine\MachineName;
+use Chrif\Cocotte\Machine\MachineState;
 
 class TestCase extends \PHPUnit\Framework\TestCase
 {
@@ -16,7 +17,7 @@ class TestCase extends \PHPUnit\Framework\TestCase
 
     public static function setUpBeforeClass()
     {
-        if (!exec("machine-is-running")) {
+        if (!MachineState::fromEnv()->isRunning()) {
             self::fail("Machine is not running");
         }
     }

@@ -3,6 +3,8 @@ version: "3"
 services:
 
   installer:
+    image: chrif/cocotte
+    command: install
     volumes:
       - ./host:/host
       - ./installer:/installer
@@ -11,9 +13,19 @@ services:
     environment:
       XDEBUG_CONFIG: "remote_host=${HOST_IP}"
       PHP_IDE_CONFIG: "serverName=cocotte"
-      MACHINE_STORAGE_PATH: /absolute/path/to/host/pwd/machine
     env_file:
       .env
+
+  wizard:
+    image: chrif/cocotte
+    command: wizard
+    volumes:
+      - ./installer:/installer
+      - ./installer/etc/xdebug.ini:/etc/php7/conf.d/xdebug.ini
+      - ./installer/etc/php.ini:/etc/php7/conf.d/zzz-php.ini
+    environment:
+      XDEBUG_CONFIG: "remote_host=${HOST_IP}"
+      PHP_IDE_CONFIG: "serverName=cocotte"
 
   travis:
     image: chrif/travis-cli

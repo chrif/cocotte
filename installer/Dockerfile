@@ -24,6 +24,7 @@ ENV PATH="/installer/bin:/installer/vendor/bin:${PATH}"
 
 ARG GIT_COMMIT_ID=dev
 ENV GIT_COMMIT_ID ${GIT_COMMIT_ID}
+ENV MACHINE_NAME=cocotte
 
 ENTRYPOINT ["cocotte-entrypoint"]
-CMD ["install"]
+CMD ["console"]

@@ -18,11 +18,11 @@ rm -rf /tmp/traefik/.env \
 cp /tmp/traefik/docker-compose.override.yml.dist /tmp/traefik/docker-compose.override.yml
 
 cat << EOF > /tmp/traefik/.env
-APP_HOSTS=${TRAEFIK_UI_HOST}
+APP_HOSTS="${TRAEFIK_UI_HOSTNAME}"
 APP_AUTH_BASIC='$(htpasswd -bn ${TRAEFIK_UI_USERNAME} ${TRAEFIK_UI_PASSWORD})'
-ACME_EMAIL=${TRAEFIK_ACME_EMAIL}
-COCOTTE_MACHINE=${COCOTTE_MACHINE}
-MACHINE_STORAGE_PATH=${MACHINE_STORAGE_PATH}
+ACME_EMAIL="${TRAEFIK_ACME_EMAIL:-}"
+MACHINE_NAME="${MACHINE_NAME}"
+MACHINE_STORAGE_PATH="${MACHINE_STORAGE_PATH}"
 EOF
 
 rsync -rq /tmp/traefik /host

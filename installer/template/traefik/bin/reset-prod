@@ -7,9 +7,9 @@ set -a
 set +a
 
 # enforce that variables are set
-docker-machine -s "${MACHINE_STORAGE_PATH}" env ${COCOTTE_MACHINE} > /dev/null
+docker-machine -s "${MACHINE_STORAGE_PATH}" env "${MACHINE_NAME}" > /dev/null
 
-eval $(docker-machine -s "${MACHINE_STORAGE_PATH}" env ${COCOTTE_MACHINE})
+eval $(docker-machine -s "${MACHINE_STORAGE_PATH}" env "${MACHINE_NAME}")
 sh bin/backup
 docker stop traefik || true
 docker rm traefik || true

@@ -2,4 +2,4 @@
 /.env
 /composer.phar
 /docker-compose.override.yml
-/test/
+/installer/bin/test

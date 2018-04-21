@@ -7,10 +7,8 @@ services:
       autowire: true
       public: true
 
-  # configuration
-  Chrif\Cocotte\Configuration\:
-    resource: '../src/Configuration/*'
-    tags: ['configuration']
+  # acme
+  Chrif\Cocotte\Acme\CertificateChecker: ~
 
   # console
   Symfony\Component\Console\Input\InputInterface:
@@ -23,9 +21,51 @@ services:
     class: Chrif\Cocotte\Console\CocotteStyle
   Symfony\Component\Console\Application:
     class: Symfony\Component\Console\Application
+    arguments:
+      - "Cocotte Console"
   Chrif\Cocotte\Command\:
     resource: '../src/Command/*'
     tags: ['console.command']
+  Chrif\Cocotte\Console\InteractionOperator: ~
+  Chrif\Cocotte\Console\OptionProviderRegistry: ~
+  Chrif\Cocotte\Console\OptionProviderAutomation:
+    tags: ['event.subscriber']
+  Chrif\Cocotte\Console\HelperFactory: ~
+  Symfony\Component\Console\Helper\ProcessHelper:
+    factory: 'Chrif\Cocotte\Console\HelperFactory:processHelper'
+
+  # digital ocean
+  Chrif\Cocotte\DigitalOcean\ApiToken:
+    tags: ['lazy.environment']
+  Chrif\Cocotte\DigitalOcean\ApiTokenOptionProvider:
+    tags: ['option.provider']
+  Chrif\Cocotte\DigitalOcean\DigitalOceanFactory: ~
+  Iodev\Whois\Whois:
+    factory: 'Iodev\Whois\Whois::create'
+  Chrif\Cocotte\DigitalOcean\DnsValidator: ~
+  Chrif\Cocotte\DigitalOcean\Domain: ~
+  Chrif\Cocotte\DigitalOcean\DomainRecord: ~
+  Chrif\Cocotte\DigitalOcean\NetworkingConfigurator: ~
+  DigitalOceanV2\Adapter\AdapterInterface:
+    factory: 'Chrif\Cocotte\DigitalOcean\DigitalOceanFactory:adapter'
+    arguments: ["%api.adapter.class%"]
+    lazy: true
+  DigitalOceanV2\DigitalOceanV2: ~
+  DigitalOceanV2\Api\Droplet: ~
+  DigitalOceanV2\Api\Image: ~
+  DigitalOceanV2\Api\Region: ~
+  DigitalOceanV2\Api\Size: ~
+  DigitalOceanV2\Api\Key: ~
+  DigitalOceanV2\Api\Domain: ~
+  DigitalOceanV2\Api\DomainRecord: ~
+
+  # environment
+  Chrif\Cocotte\Environment\LazyEnvironmentLoader:
+    tags: ['event.subscriber']
+
+  # event
+  Symfony\Component\EventDispatcher\EventDispatcherInterface:
+    class: Symfony\Component\EventDispatcher\EventDispatcher
 
   # filesystem
   Chrif\Cocotte\Filesystem\Filesystem:
@@ -35,25 +75,56 @@ services:
   Chrif\Cocotte\Finder\Finder:
     class: Chrif\Cocotte\Finder\CocotteFinder
 
+  # host
+  Chrif\Cocotte\Host\HostMount:
+    tags: ['lazy.environment']
+  Chrif\Cocotte\Host\Mounts:
+    tags: ['lazy.environment']
+  Chrif\Cocotte\Host\HostMountRequiredListener:
+    tags: ['event.subscriber']
+
+  # machine
+  Chrif\Cocotte\Machine\MachineCreator: ~
+  Chrif\Cocotte\Machine\MachineIp:
+    tags: ['lazy.environment']
+  Chrif\Cocotte\Machine\MachineName:
+    tags: ['lazy.environment']
+  Chrif\Cocotte\Machine\MachineNameOptionProvider:
+    tags: ['option.provider']
+  Chrif\Cocotte\Machine\MachineState: ~
+  Chrif\Cocotte\Machine\MachineStoragePath:
+    tags: ['lazy.environment']
+
   # shell
   Chrif\Cocotte\Shell\ProcessRunner: ~
   Chrif\Cocotte\Shell\VariableReplacer: ~
   Chrif\Cocotte\Shell\EnvironmentSubstitution\SubstitutionFactory: ~
+  Chrif\Cocotte\Shell\BasicAuth: ~
 
   # template
-  Chrif\Cocotte\Template\StaticTemplateExporter: ~
+  ## static site
+  Chrif\Cocotte\Template\StaticSite\StaticSiteCreator: ~
+  Chrif\Cocotte\Template\StaticSite\StaticSiteHostname:
+    tags: ['lazy.environment']
+  Chrif\Cocotte\Template\StaticSite\StaticSiteHostnameOptionProvider:
+    tags: ['option.provider']
+  Chrif\Cocotte\Template\StaticSite\StaticSiteNamespace:
+    tags: ['lazy.environment']
+  Chrif\Cocotte\Template\StaticSite\StaticSiteNamespaceOptionProvider:
+    tags: ['option.provider']
+  ## traefik
+  Chrif\Cocotte\Template\Traefik\TraefikCreator: ~
+  Chrif\Cocotte\Template\Traefik\TraefikHostname:
+    tags: ['lazy.environment']
+  Chrif\Cocotte\Template\Traefik\TraefikHostnameOptionProvider:
+    tags: ['option.provider']
+  Chrif\Cocotte\Template\Traefik\TraefikPassword:
+    tags: ['lazy.environment']
+  Chrif\Cocotte\Template\Traefik\TraefikPasswordOptionProvider:
+    tags: ['option.provider']
+  Chrif\Cocotte\Template\Traefik\TraefikUsername:
+    tags: ['lazy.environment']
+  Chrif\Cocotte\Template\Traefik\TraefikUsernameOptionProvider:
+    tags: ['option.provider']
+  Chrif\Cocotte\Template\Traefik\TraefikDeploymentValidator: ~
 
-  # api
-  Chrif\Cocotte\DigitalOcean\:
-    resource: '../src/DigitalOcean/*'
-  DigitalOceanV2\Adapter\AdapterInterface:
-    factory: 'Chrif\Cocotte\DigitalOcean\DigitalOceanFactory:adapter'
-    arguments: ["%api.adapter.class%"]
-  DigitalOceanV2\DigitalOceanV2: ~
-  DigitalOceanV2\Api\Droplet: ~
-  DigitalOceanV2\Api\Image: ~
-  DigitalOceanV2\Api\Region: ~
-  DigitalOceanV2\Api\Size: ~
-  DigitalOceanV2\Api\Key: ~
-  DigitalOceanV2\Api\Domain: ~
-  DigitalOceanV2\Api\DomainRecord: ~

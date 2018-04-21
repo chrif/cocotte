@@ -24,9 +24,9 @@ restore() {
 }
 
 # enforce that variables are set
-docker-machine -s "${MACHINE_STORAGE_PATH}" env ${COCOTTE_MACHINE} > /dev/null
+docker-machine -s "${MACHINE_STORAGE_PATH}" env "${MACHINE_NAME}" > /dev/null
 
-eval $(docker-machine -s "${MACHINE_STORAGE_PATH}" env ${COCOTTE_MACHINE})
+eval $(docker-machine -s "${MACHINE_STORAGE_PATH}" env "${MACHINE_NAME}")
 docker volume create traefikssl
 docker run --rm \
 	-v traefikssl:/opt/ssl \
