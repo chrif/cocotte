@@ -22,7 +22,7 @@ before_install:
 
 install:
 - chmod +x bin/*
-- docker-compose build installer
+- docker-compose build cocotte
 
 script:
 - ./bin/command phpunit --exclude-group=functional
