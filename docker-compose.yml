@@ -5,6 +5,7 @@ services:
   cocotte:
     build:
       context: ./installer
+      dockerfile: ./Dockerfile
       args:
         - GIT_COMMIT_ID
     image: "chrif/cocotte:${INSTALLER_VERSION}"
