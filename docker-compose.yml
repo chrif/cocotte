@@ -8,7 +8,7 @@ services:
       dockerfile: ./Dockerfile
       args:
         - GIT_COMMIT_ID
-    image: "chrif/cocotte:${INSTALLER_VERSION}"
+    image: "chrif/cocotte"
 
   install:
     extends:
