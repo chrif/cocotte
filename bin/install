@@ -11,7 +11,6 @@ fi
 
 docker run -it --rm \
     -e ACME_ENABLED="${ACME_ENABLED:-true}" \
-    -e TRAEFIK_ACME_EMAIL="${TRAEFIK_ACME_EMAIL:-}" \
     -v "$(pwd)":/host \
     -v /var/run/docker.sock:/var/run/docker.sock:ro \
     chrif/cocotte install \
@@ -19,4 +18,4 @@ docker run -it --rm \
     --machine-name="${MACHINE_NAME:-cocotte}" \
     --traefik-ui-hostname="${TRAEFIK_UI_HOSTNAME}" \
     --traefik-ui-password="${TRAEFIK_UI_PASSWORD}" \
-    --traefik-ui-username="${TRAEFIK_UI_USERNAME}"
+    --traefik-ui-username="${TRAEFIK_UI_USERNAME}" "$@"
