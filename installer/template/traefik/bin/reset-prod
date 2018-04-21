@@ -11,8 +11,6 @@ docker-machine -s "${MACHINE_STORAGE_PATH}" env "${MACHINE_NAME}" > /dev/null
 
 eval $(docker-machine -s "${MACHINE_STORAGE_PATH}" env "${MACHINE_NAME}")
 sh bin/backup
-docker stop traefik || true
-docker rm traefik || true
 docker-compose down -v --remove-orphans
 docker volume rm traefikssl || true
 docker network rm traefik || true

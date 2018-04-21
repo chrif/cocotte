@@ -1,6 +1,0 @@
-#!/bin/sh
-
-set -eu
-
-console networking ${TRAEFIK_UI_HOSTNAME}
-(cd /host/traefik; ./bin/prod)

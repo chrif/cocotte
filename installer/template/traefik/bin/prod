@@ -22,8 +22,6 @@ END
 )
 
 # take down
-docker stop traefik || true
-docker rm traefik || true
 docker-compose down -v --remove-orphans
 
 # build

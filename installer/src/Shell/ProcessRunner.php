@@ -28,6 +28,14 @@ final class ProcessRunner
 
     public function mustRun(Process $process, $displayProgressText = false)
     {
+        $this->run($process, $displayProgressText);
+        if (!$process->isSuccessful()) {
+            throw new ProcessFailedException($process);
+        }
+    }
+
+    public function run(Process $process, $displayProgressText = false)
+    {
         $useProgress = !$this->style->isVerbose();
         $progressBar = $this->style->createProgressBar();
         $progressBar->setFormat('[%bar%] %message%');
@@ -55,10 +63,6 @@ final class ProcessRunner
         if ($useProgress) {
             $progressBar->finish();
             $progressBar->clear();
-        }
-
-        if (!$process->isSuccessful()) {
-            throw new ProcessFailedException($process);
         }
     }
 }

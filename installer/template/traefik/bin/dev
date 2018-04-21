@@ -20,8 +20,6 @@ set +a
 eval $(docker-machine env -u)
 
 # take down
-docker stop traefik || true
-docker rm traefik || true
 docker-compose down -v --remove-orphans
 
 # build
@@ -31,4 +29,4 @@ docker-compose -f docker-compose.yml build
 
 # bring up
 docker-compose up -d traefik
-docker logs -f traefik
+docker-compose logs -f traefik

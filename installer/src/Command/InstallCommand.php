@@ -154,10 +154,13 @@ final class InstallCommand extends AbstractCommand implements LazyEnvironment, H
         $this->networkingConfigurator->configure($this->traefikHostname->toHostnameCollection());
 
         $this->style->writeln('Deploying Traefik to cloud machine');
+//        $this->processRunner->run(new Process('../bin/reset-prod 2>/dev/stdout', $this->traefikCreator->hostAppPath()));
         $this->processRunner->mustRun(new Process('./bin/prod 2>/dev/stdout', $this->traefikCreator->hostAppPath()));
 
         $this->style->writeln('Waiting for Traefik to start');
         $this->traefikDeploymentValidator->validate();
+
+        $this->processRunner->mustRun(new Process('./bin/logs -t', $this->traefikCreator->hostAppPath()));
 
         $this->style->complete([
             "Installation successful.",
