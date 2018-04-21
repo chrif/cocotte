@@ -32,7 +32,7 @@ class TraefikHostname implements LazyExportableOption
      */
     public static function fromEnv(): LazyEnvironmentValue
     {
-        return new self(HostnameCollection::fromString(Env::get(self::TRAEFIK_UI_HOSTNAME)));
+        return new self(HostnameCollection::fromString(Env::get(self::TRAEFIK_UI_HOSTNAME, "")));
     }
 
     public static function toEnv(string $value): void

@@ -38,7 +38,7 @@ class MachineName implements LazyExportableOption
      */
     public static function fromEnv(): LazyEnvironmentValue
     {
-        return new self(Env::get(self::MACHINE_NAME));
+        return new self(Env::get(self::MACHINE_NAME, ""));
     }
 
     public static function toEnv(string $value): void

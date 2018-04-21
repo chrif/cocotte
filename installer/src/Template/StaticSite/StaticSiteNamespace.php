@@ -39,7 +39,7 @@ class StaticSiteNamespace implements LazyExportableOption
      */
     public static function fromEnv(): LazyEnvironmentValue
     {
-        return new self(Env::get(self::STATIC_SITE_NAMESPACE));
+        return new self(Env::get(self::STATIC_SITE_NAMESPACE, ""));
     }
 
     public static function toEnv(string $value): void

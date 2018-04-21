@@ -38,7 +38,7 @@ class TraefikPassword implements LazyExportableOption
      */
     public static function fromEnv(): LazyEnvironmentValue
     {
-        return new self(Env::get(self::TRAEFIK_UI_PASSWORD));
+        return new self(Env::get(self::TRAEFIK_UI_PASSWORD, ""));
     }
 
     public static function toEnv(string $value): void

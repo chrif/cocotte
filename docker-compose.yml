@@ -62,13 +62,10 @@ services:
       - ./installer/etc/xdebug.ini:/etc/php7/conf.d/xdebug.ini:ro
       - ./installer/etc/php.ini:/etc/php7/conf.d/zzz-php.ini:ro
     environment:
-      ACME_ENABLED: ${ACME_ENABLED}
-      MACHINE_NAME: ${MACHINE_NAME}
       PHP_IDE_CONFIG: "serverName=cocotte"
-      SHOW_HIDDEN_COMMANDS: ${SHOW_HIDDEN_COMMANDS}
-      STATIC_SITE_HOSTNAME: ${STATIC_SITE_HOSTNAME}
-      STATIC_SITE_NAMESPACE: ${STATIC_SITE_NAMESPACE}
       XDEBUG_CONFIG: "remote_host=${HOST_IP}"
+    env_file:
+      - .env
 
   hostmount:
     extends:

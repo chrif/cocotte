@@ -38,7 +38,7 @@ class TraefikUsername implements LazyExportableOption
      */
     public static function fromEnv(): LazyEnvironmentValue
     {
-        return new self(Env::get(self::TRAEFIK_UI_USERNAME));
+        return new self(Env::get(self::TRAEFIK_UI_USERNAME, ""));
     }
 
     public static function toEnv(string $value): void

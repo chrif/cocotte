@@ -6,8 +6,6 @@ use Assert\Assertion;
 use Chrif\Cocotte\Environment\LazyEnvironmentValue;
 use Chrif\Cocotte\Environment\LazyExportableOption;
 use Chrif\Cocotte\Shell\Env;
-use DigitalOceanV2\Adapter\GuzzleHttpAdapter;
-use DigitalOceanV2\DigitalOceanV2;
 
 class ApiToken implements LazyExportableOption
 {
@@ -27,7 +25,7 @@ class ApiToken implements LazyExportableOption
 
     public static function fromEnv(): LazyEnvironmentValue
     {
-        return new self(Env::get(self::DIGITAL_OCEAN_API_TOKEN));
+        return new self(Env::get(self::DIGITAL_OCEAN_API_TOKEN, ""));
     }
 
     public static function toEnv(string $value): void

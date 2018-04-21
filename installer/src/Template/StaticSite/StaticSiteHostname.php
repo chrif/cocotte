@@ -32,7 +32,7 @@ class StaticSiteHostname implements LazyExportableOption
      */
     public static function fromEnv(): LazyEnvironmentValue
     {
-        return new self(HostnameCollection::fromString(Env::get(self::STATIC_SITE_HOSTNAME)));
+        return new self(HostnameCollection::fromString(Env::get(self::STATIC_SITE_HOSTNAME, "")));
     }
 
     public static function toEnv(string $value): void
