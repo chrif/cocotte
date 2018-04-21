@@ -12,9 +12,12 @@ fi
 docker run --rm \
     -e ACME_ENABLED="${ACME_ENABLED:-true}" \
     -e DIGITAL_OCEAN_API_TOKEN="${DIGITAL_OCEAN_API_TOKEN}" \
-    -e MACHINE_NAME="${MACHINE_NAME:-cocotte}" \
+    -e MACHINE_NAME="${MACHINE_NAME}" \
+    -e STATIC_SITE_HOSTNAME="${STATIC_SITE_HOSTNAME}" \
+    -e STATIC_SITE_NAMESPACE="${STATIC_SITE_NAMESPACE}" \
     -e TRAEFIK_UI_HOSTNAME="${TRAEFIK_UI_HOSTNAME}" \
     -e TRAEFIK_UI_PASSWORD="${TRAEFIK_UI_PASSWORD}" \
     -e TRAEFIK_UI_USERNAME="${TRAEFIK_UI_USERNAME}" \
     -v "$(pwd)":/host \
-    chrif/cocotte "$@"
+    chrif/cocotte \
+    "$@"

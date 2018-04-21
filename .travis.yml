@@ -25,12 +25,11 @@ install:
 - docker-compose build cocotte
 
 script:
-- ./bin/command phpunit --exclude-group=functional
-- ./bin/install -n -vvv
-- ./bin/static-site -n -vvv --namespace=test --hostname=${STATIC_TEST_HOST}
-- ./bin/command check-online ${STATIC_TEST_HOST} 6
-- if [ "${ACME_ENABLED:-true}" = true ]; then ./bin/command check-certificate ${STATIC_TEST_HOST} 6; else echo "Skipping SSL verification"; fi
-- if [ "${KEEP_MACHINE_AFTER:-false}" = false ]; then ./bin/command console networking -n -vvv --remove ${STATIC_TEST_HOST}; else true; fi
+- ./bin/cmd phpunit --exclude-group=functional
+- ./bin/install -n -vvv && ./bin/static-site -n -vvv
+- ./bin/cmd check-online ${STATIC_SITE_HOSTNAME} 6
+- if [ "${ACME_ENABLED:-true}" = true ]; then ./bin/cmd check-certificate ${STATIC_SITE_HOSTNAME} 6; else echo "Skipping SSL verification"; fi
+- if [ "${KEEP_MACHINE_AFTER:-false}" = false ]; then ./bin/cmd console networking -n -vvv --remove ${STATIC_SITE_HOSTNAME}; else true; fi
 - if [ "${KEEP_MACHINE_AFTER:-false}" = false ]; then ./bin/uninstall -n -vvv; else echo "Machine not removed."; fi
 
 env:
@@ -38,7 +37,8 @@ env:
     - MACHINE_NAME=cocotte-travis-${TRAVIS_BUILD_ID}
     # DIGITAL_OCEAN_API_TOKEN (set in in repo settings)
     - GIT_COMMIT_ID=${TRAVIS_COMMIT}
-    # STATIC_TEST_HOST (set in in repo settings)
+    # STATIC_SITE_HOSTNAME (set in in repo settings)
+    - STATIC_SITE_NAMESPACE=static-site
     # TRAEFIK_UI_HOSTNAME (set in in repo settings)
     # TRAEFIK_UI_PASSWORD
     - secure: "vDD7Z8hwwiVC8ervHXFoLQt4SPP1mTqHt2E/SchSxGIqk2WszsvL9NYfgu+cB/6JrxjL/25LcXgqH4qJPXs66I/p0Kx/ALj1RvD/6Pkh3OeDH3fWc6Bgoe90+uiGg5kaP/XtyEiD4lthug7vxOXsW/3W+CEC06jEb9bxvSW54xa38AmbSkZ5LcT+gWMOk2I48HfdmsGS2K6zFacjAexJ2P3TVz46ttDzwE2hB7vWiuhtpPv8BfhvGTKhNgquWOQUdPm2vA+Rx9pY733yl1XXJr/OYlaxrKu5JjimmQV3wMgZMZe4PqrRYIpZo1q7dVdlePwAhU5H57zjkuHMzUDgu0rfCW7S1+cooybrO2BGM0n/Bee5HN549GkFjGhNlvaV/uk0Wu03L9xkwria8OFM9mRLnOuSDHa2GK9TvYZ1RAVB1QsjcApIEIpLS7R5PFxPzVFIaBvPgD1OFhL+CU0BfVtWeGZLV93zxiWkm3fbzP+dMDnzl/Mx+mHe+yBTkGheMelzlHYGGSwY/DDWJ2/i8fc3wgvp0fLV8fhSY3HmAwt3lKnEMjMURt+2zI2/fOMk9WtJF1oxxlMhTYaY2/Dc9OsVpV1rIdjDXY2CmwA7ZxPwmrpxvLFRD7CIAn9HdVHpDpgTkQv/3u7F/7h4/qIiKXmRQjIS4j5Jjykj/NBWHSA="

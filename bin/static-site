@@ -11,8 +11,11 @@ fi
 
 docker run -it --rm \
     -e ACME_ENABLED="${ACME_ENABLED:-true}" \
+    -e MACHINE_NAME="${MACHINE_NAME}" \
     -v "$(pwd)":/host \
     -v /var/run/docker.sock:/var/run/docker.sock:ro \
     chrif/cocotte static-site \
     --digital-ocean-api-token="${DIGITAL_OCEAN_API_TOKEN}" \
-    --machine-name="${MACHINE_NAME:-cocotte}" "$@"
+    --namespace="${STATIC_SITE_NAMESPACE}" \
+    --hostname="${STATIC_SITE_HOSTNAME}" \
+    "$@"

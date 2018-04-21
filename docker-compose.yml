@@ -1,4 +1,4 @@
-version: "3"
+version: "2"
 
 services:
 
@@ -6,5 +6,72 @@ services:
     build:
       context: installer
       args:
-        GIT_COMMIT_ID:
-    image: "chrif/cocotte:${INSTALLER_VERSION:-latest}"
+        - GIT_COMMIT_ID
+    image: "chrif/cocotte:${INSTALLER_VERSION}"
+
+  install:
+    extends:
+      service: hostmount
+    command: install
+      --digital-ocean-api-token="${DIGITAL_OCEAN_API_TOKEN}"
+      --traefik-ui-hostname="${TRAEFIK_UI_HOSTNAME}"
+      --traefik-ui-password="${TRAEFIK_UI_PASSWORD}"
+      --traefik-ui-username="${TRAEFIK_UI_USERNAME}"
+
+  uninstall:
+    extends:
+      service: hostmount
+    command: uninstall
+      --digital-ocean-api-token="${DIGITAL_OCEAN_API_TOKEN}"
+      --traefik-ui-hostname="${TRAEFIK_UI_HOSTNAME}"
+
+  static-site:
+    extends:
+      service: hostmount
+    command: static-site
+      --digital-ocean-api-token="${DIGITAL_OCEAN_API_TOKEN}"
+      --hostname="${STATIC_SITE_HOSTNAME}"
+      --namespace="${STATIC_SITE_NAMESPACE}"
+
+  wizard:
+    extends:
+      service: dev
+    command: wizard
+
+  help:
+    extends:
+      service: dev
+    command: help
+
+  cmd:
+    extends:
+      service: hostmount
+
+  travis:
+    image: chrif/travis-cli
+    volumes:
+      - .:/opt/project
+    environment:
+      TRAVIS_TOKEN: ${TRAVIS_TOKEN}
+
+  dev:
+    image: chrif/cocotte
+    volumes:
+      - ./installer:/installer
+      - ./installer/etc/xdebug.ini:/etc/php7/conf.d/xdebug.ini:ro
+      - ./installer/etc/php.ini:/etc/php7/conf.d/zzz-php.ini:ro
+    environment:
+      ACME_ENABLED: ${ACME_ENABLED}
+      MACHINE_NAME: ${MACHINE_NAME}
+      PHP_IDE_CONFIG: "serverName=cocotte"
+      SHOW_HIDDEN_COMMANDS: ${SHOW_HIDDEN_COMMANDS}
+      STATIC_SITE_HOSTNAME: ${STATIC_SITE_HOSTNAME}
+      STATIC_SITE_NAMESPACE: ${STATIC_SITE_NAMESPACE}
+      XDEBUG_CONFIG: "remote_host=${HOST_IP}"
+
+  hostmount:
+    extends:
+      service: dev
+    volumes:
+      - ./host:/host
+      - /var/run/docker.sock:/var/run/docker.sock:ro
