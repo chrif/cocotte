@@ -45,7 +45,7 @@ Meet Cocotte, a 4th option.
 
 Cocotte is a free cloud installer for hosting multiple containerized applications, each accessible through https with a different hostname, but all hosted on one cloud machine at 5$ a month. This is the only cost for the infrastructure that Cocotte puts in place.
 
-As opposed to a solution that would lock you in for further maintenance, Cocotte is just an one-time installer. Once the cloud machine is provisioned, you don't need Cocotte anymore. So you will have to RTFM eventually, but when you do, you will have full control over every aspect of your installation.
+As opposed to a solution that would lock you in for further maintenance, Cocotte is just a one-time installer. Once the cloud machine is provisioned, you don't need Cocotte anymore. So you'll need to read the manuals eventually, but when you do, you'll have full control over every aspect of your installation.
 
 Optionally, and in the hope to get you started even faster, Cocotte has a template feature for adding new Docker applications to your infrastructure. It generates deployment scripts for a https web server, in a folder ready for source control. Two templates are available, a simple web server with a "Hello world" page, and a Symfony 4 application. The intended way of developing and deploying with these application models is <a href="#documentation">documented</a>.
 
@@ -55,7 +55,7 @@ Cocotte is fully tested on [Travis CI](https://travis-ci.org/chrif/cocotte), so 
 
 Trying out Cocotte is completely free if you don't have a Digital Ocean account and create one with [this link](https://m.do.co/c/c25ed78e51c5) which gives you a 10$ credit.
 
-If you already have a Digital Ocean account, then you probably know about cloud pricing. For those that don't, you are charged $0.007/hour by Digital Ocean for the machine that Cocotte creates. So just testing Cocotte and then destroying the machine costs less than 1 cent. Keeping the machine online for a month costs 5$. 
+If you already have a Digital Ocean account, then you probably know about cloud pricing. For those who don't, you are charged $0.007/hour by Digital Ocean for the machine that Cocotte creates. So just testing Cocotte and then destroying the machine costs less than 1 cent. Keeping the machine online for a month costs 5$. 
 
 [Read about Digital Ocean pricing](https://www.digitalocean.com/pricing/).
 
@@ -79,7 +79,8 @@ If you already have a Digital Ocean account, then you probably know about cloud 
 ## Usage
 
 ```
-$ docker run --rm chrif/cocotte 
+$ docker run -it --rm chrif/cocotte wizard
 ```
 
 ## Documentation
+
