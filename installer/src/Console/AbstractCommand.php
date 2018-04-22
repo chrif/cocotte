@@ -26,10 +26,14 @@ abstract class AbstractCommand extends Command implements CommandInterface
 
     final protected function configure()
     {
-        $this->doConfigure();
         $this->eventDispatcher()->dispatch(
             CommandEventStore::COMMAND_CONFIGURE,
             new CommandConfigureEvent($this, $this->getDefinition())
+        );
+        $this->doConfigure();
+        $this->eventDispatcher()->dispatch(
+            CommandEventStore::COMMAND_CONFIGURED,
+            new CommandConfiguredEvent($this, $this->getDefinition())
         );
     }
 

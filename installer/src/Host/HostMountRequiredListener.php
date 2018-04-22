@@ -2,7 +2,7 @@
 
 namespace Chrif\Cocotte\Host;
 
-use Chrif\Cocotte\Console\CommandConfigureEvent;
+use Chrif\Cocotte\Console\CommandConfiguredEvent;
 use Chrif\Cocotte\Console\CommandEventStore;
 use Chrif\Cocotte\Console\CommandInitializeEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -12,12 +12,12 @@ final class HostMountRequiredListener implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return [
-            CommandEventStore::COMMAND_CONFIGURE => 'onCommandConfigure',
+            CommandEventStore::COMMAND_CONFIGURED => 'onCommandConfigured',
             CommandEventStore::COMMAND_INITIALIZE => 'onCommandInitialize',
         ];
     }
 
-    public function onCommandConfigure(CommandConfigureEvent $event)
+    public function onCommandConfigured(CommandConfiguredEvent $event)
     {
         $command = $event->command();
 
