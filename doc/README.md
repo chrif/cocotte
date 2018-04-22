@@ -79,8 +79,12 @@ If you already have a Digital Ocean account, then you probably know about cloud 
 ## Usage
 
 ```
-$ docker run -it --rm chrif/cocotte wizard
+$ docker run -it --rm chrif/cocotte
 ```
+
+## Advanced usage
+
+See the [Console API Reference](console.md)
 
 
 ## Documentation

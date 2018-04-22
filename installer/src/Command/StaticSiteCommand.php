@@ -129,13 +129,13 @@ final class StaticSiteCommand extends AbstractCommand implements LazyEnvironment
                 'skip-networking',
                 null,
                 InputOption::VALUE_NONE,
-                'Do not configure networking. Cannot be true if skip-deploy is true'
+                'Do not configure networking. Cannot be true if skip-deploy is true.'
             )
             ->addOption(
                 'skip-deploy',
                 null,
                 InputOption::VALUE_NONE,
-                'Do not deploy to prod after creation'
+                'Do not deploy to prod after creation.'
             )
             ->setDescription($description = 'Create a static website and deploy it to your Docker Machine.')
             ->setHelp(

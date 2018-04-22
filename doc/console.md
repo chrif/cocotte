@@ -1,10 +1,14 @@
-Cocotte Console
-===============
+Console API Reference
+=====================
 
 * [`install`](#install)
+  > Create a Docker machine on Digital Ocean and install the Traefik reverse proxy on it.
 * [`static-site`](#static-site)
+  > Create a static website and deploy it to your Docker Machine.
 * [`uninstall`](#uninstall)
+  > Destroy the Docker machine on Digital Ocean and remove the Traefik subdomain.
 * [`wizard`](#wizard)
+  > Interactively build a simple 'install' command for Cocotte.
 
 `install`
 ---------
@@ -35,7 +39,7 @@ This command requires 2 volumes:
 
 #### `--digital-ocean-api-token`
 
-__Digital Ocean API Token__
+##### Digital Ocean API Token
 If you don't have a Digital Ocean account yet, get one with a 10$ credit at
 digitalocean.com/?refcode=c25ed78e51c5 🔗
 Then generate a token at cloud.digitalocean.com/settings/api/tokens 🔗
@@ -49,7 +53,7 @@ Cocotte will make a call to Digital Ocean's API to validate the token.
 
 #### `--machine-name`
 
-__Machine Name__
+##### Machine Name
 This is both the name used for docker-machine commands and by Digital Ocean
 for the droplet name. Must match /^[a-zA-Z0-9][a-zA-Z0-9\-\.]*$/
 
@@ -61,7 +65,7 @@ for the droplet name. Must match /^[a-zA-Z0-9][a-zA-Z0-9\-\.]*$/
 
 #### `--traefik-ui-hostname`
 
-__Traefik UI hostname__
+##### Traefik UI hostname
 This the fully qualified domain name for your Traefik UI.
 It has to be with a subdomain like in 'traefik.mydomain.com', in which case
 'mydomain.com' must point to the name servers of Digital Ocean, and Cocotte
@@ -79,7 +83,7 @@ changed, you can expect a propagation time up to 24 hours.
 
 #### `--traefik-ui-username`
 
-__Traefik UI username__
+##### Traefik UI username
 Alphanumeric characters. Must match /^[a-zA-Z0-9]+$/
 
 
@@ -90,7 +94,7 @@ Alphanumeric characters. Must match /^[a-zA-Z0-9]+$/
 
 #### `--traefik-ui-password`
 
-__Traefik UI password__
+##### Traefik UI password
 Alphanumeric and some special characters. Must match /^[a-zA-Z0-9_@#%?&*+=!-]+$/
 
 
@@ -127,7 +131,7 @@ This command requires 2 volumes:
 
 #### `--namespace`
 
-__Static site namespace__
+##### Static site namespace
 Allowed characters are lowercase letters, digits and -. Must match /^[a-z0-9-]+$/
 
 
@@ -138,7 +142,7 @@ Allowed characters are lowercase letters, digits and -. Must match /^[a-z0-9-]+$
 
 #### `--hostname`
 
-__Static site hostname__
+##### Static site hostname
 This the fully qualified domain name for your website.
 It has to be with a subdomain like in 'mywebsite.mydomain.com', in which case
 'mydomain.com' must point to the name servers of Digital Ocean, and Cocotte
@@ -156,7 +160,7 @@ changed, you can expect a propagation time up to 24 hours.
 
 #### `--digital-ocean-api-token`
 
-__Digital Ocean API Token__
+##### Digital Ocean API Token
 If you don't have a Digital Ocean account yet, get one with a 10$ credit at
 digitalocean.com/?refcode=c25ed78e51c5 🔗
 Then generate a token at cloud.digitalocean.com/settings/api/tokens 🔗
@@ -170,7 +174,7 @@ Cocotte will make a call to Digital Ocean's API to validate the token.
 
 #### `--machine-name`
 
-__Machine Name__
+##### Machine Name
 This is both the name used for docker-machine commands and by Digital Ocean
 for the droplet name. Must match /^[a-zA-Z0-9][a-zA-Z0-9\-\.]*$/
 
@@ -225,7 +229,7 @@ This command requires 2 volumes:
 
 #### `--digital-ocean-api-token`
 
-__Digital Ocean API Token__
+##### Digital Ocean API Token
 If you don't have a Digital Ocean account yet, get one with a 10$ credit at
 digitalocean.com/?refcode=c25ed78e51c5 🔗
 Then generate a token at cloud.digitalocean.com/settings/api/tokens 🔗
@@ -239,7 +243,7 @@ Cocotte will make a call to Digital Ocean's API to validate the token.
 
 #### `--machine-name`
 
-__Machine Name__
+##### Machine Name
 This is both the name used for docker-machine commands and by Digital Ocean
 for the droplet name. Must match /^[a-zA-Z0-9][a-zA-Z0-9\-\.]*$/
 
@@ -251,7 +255,7 @@ for the droplet name. Must match /^[a-zA-Z0-9][a-zA-Z0-9\-\.]*$/
 
 #### `--traefik-ui-hostname`
 
-__Traefik UI hostname__
+##### Traefik UI hostname
 This the fully qualified domain name for your Traefik UI.
 It has to be with a subdomain like in 'traefik.mydomain.com', in which case
 'mydomain.com' must point to the name servers of Digital Ocean, and Cocotte
@@ -274,7 +278,7 @@ changed, you can expect a propagation time up to 24 hours.
 
 * `docker run -it --rm chrif/cocotte wizard`
 
-Interactively build a simple 'install' command for Cocotte
+Interactively build a simple 'install' command for Cocotte.
 
 Example:
 ```

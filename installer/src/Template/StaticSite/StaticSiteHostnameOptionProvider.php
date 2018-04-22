@@ -4,6 +4,7 @@ namespace Chrif\Cocotte\Template\StaticSite;
 
 use Chrif\Cocotte\Console\OptionProvider;
 use Chrif\Cocotte\Console\Style;
+use Chrif\Cocotte\Console\StyledInputOption;
 use Chrif\Cocotte\DigitalOcean\DnsValidator;
 use Chrif\Cocotte\DigitalOcean\Hostname;
 use Chrif\Cocotte\Shell\Env;
@@ -29,7 +30,7 @@ class StaticSiteHostnameOptionProvider implements OptionProvider
 
     public function option(): InputOption
     {
-        return new InputOption(
+        return new StyledInputOption(
             StaticSiteHostname::OPTION_NAME,
             null,
             InputOption::VALUE_REQUIRED,

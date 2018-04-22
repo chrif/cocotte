@@ -4,6 +4,7 @@ namespace Chrif\Cocotte\DigitalOcean;
 
 use Chrif\Cocotte\Console\OptionProvider;
 use Chrif\Cocotte\Console\Style;
+use Chrif\Cocotte\Console\StyledInputOption;
 use Chrif\Cocotte\Shell\Env;
 use DigitalOceanV2\Adapter\GuzzleHttpAdapter;
 use DigitalOceanV2\DigitalOceanV2;
@@ -24,7 +25,7 @@ class ApiTokenOptionProvider implements OptionProvider
 
     public function option(): InputOption
     {
-        return new InputOption(
+        return new StyledInputOption(
             ApiToken::OPTION_NAME,
             null,
             InputOption::VALUE_REQUIRED,

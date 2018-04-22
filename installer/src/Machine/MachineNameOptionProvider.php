@@ -4,6 +4,7 @@ namespace Chrif\Cocotte\Machine;
 
 use Chrif\Cocotte\Console\OptionProvider;
 use Chrif\Cocotte\Console\Style;
+use Chrif\Cocotte\Console\StyledInputOption;
 use Chrif\Cocotte\Shell\Env;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Question\Question;
@@ -22,7 +23,7 @@ class MachineNameOptionProvider implements OptionProvider
 
     public function option(): InputOption
     {
-        return new InputOption(
+        return new StyledInputOption(
             MachineName::OPTION_NAME,
             null,
             InputOption::VALUE_REQUIRED,

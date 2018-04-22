@@ -89,10 +89,12 @@ class MarkdownDescriptor implements DescriptorInterface
             $name .= '|-'.implode('|-', explode('|', $option->getShortcut())).'';
         }
 
+        $emphasis = $option instanceof StyledInputOption ? '##### ' : '';
+
         $description = $this->removeDecoration($option->getDescription());
         $this->write(
             '#### `'.$name.'`'."\n\n"
-            .($description ? preg_replace('/\s*[\r\n]\s*/', "\n", $description)."\n\n" : '')
+            .($description ? $emphasis.preg_replace('/\s*[\r\n]\s*/', "\n", $description)."\n\n" : '')
             .'* Accept value: '.($option->acceptValue() ? 'yes' : 'no')."\n"
             .'* Is value required: '.($option->isValueRequired() ? 'yes' : 'no')."\n"
             .'* Is multiple: '.($option->isArray() ? 'yes' : 'no')."\n"
@@ -154,7 +156,7 @@ class MarkdownDescriptor implements DescriptorInterface
     protected function describeApplication(Application $application)
     {
         $description = new ApplicationDescription($application);
-        $title = $this->getApplicationTitle($application);
+        $title = "Console API Reference";
 
         $this->write($title."\n".str_repeat('=', Helper::strlen($title)));
 
@@ -168,9 +170,10 @@ class MarkdownDescriptor implements DescriptorInterface
                 array_map(
                     function (Command $command) use ($description) {
                         return sprintf(
-                            '* [`%s`](#%s)',
+                            "* [`%s`](#%s)\n  > %s",
                             $command->getName(),
-                            str_replace(':', '', $command->getName())
+                            str_replace(':', '', $command->getName()),
+                            $this->removeDecoration($command->getDescription())
                         );
                     },
                     $commands
@@ -182,19 +185,6 @@ class MarkdownDescriptor implements DescriptorInterface
             $this->write("\n\n");
             $this->write($this->describeCommand($command));
         }
-    }
-
-    private function getApplicationTitle(Application $application)
-    {
-        if ('UNKNOWN' !== $application->getName()) {
-            if ('UNKNOWN' !== $application->getVersion()) {
-                return $this->removeDecoration(sprintf('%s %s', $application->getName(), $application->getVersion()));
-            }
-
-            return $this->removeDecoration($application->getName());
-        }
-
-        return 'Console Tool';
     }
 
     private function removeDecoration(string $string): string

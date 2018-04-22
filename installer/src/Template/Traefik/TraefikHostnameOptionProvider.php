@@ -4,6 +4,7 @@ namespace Chrif\Cocotte\Template\Traefik;
 
 use Chrif\Cocotte\Console\OptionProvider;
 use Chrif\Cocotte\Console\Style;
+use Chrif\Cocotte\Console\StyledInputOption;
 use Chrif\Cocotte\DigitalOcean\DnsValidator;
 use Chrif\Cocotte\DigitalOcean\Hostname;
 use Chrif\Cocotte\Shell\Env;
@@ -30,7 +31,7 @@ class TraefikHostnameOptionProvider implements OptionProvider
 
     public function option(): InputOption
     {
-        return new InputOption(
+        return new StyledInputOption(
             TraefikHostname::OPTION_NAME,
             null,
             InputOption::VALUE_REQUIRED,
