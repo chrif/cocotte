@@ -91,6 +91,6 @@ See the [Console API Reference](console.md).
 * [Static site](static-site.md)
 * [Symfony]()
 
-## Contributing to Cocotte
+## Contributing
 
 Pull requests are welcome. Take a look at the [development documentation](development.md) doc.
