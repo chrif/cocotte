@@ -3,6 +3,7 @@
 namespace Chrif\Cocotte\Command;
 
 use Chrif\Cocotte\Console\AbstractCommand;
+use Chrif\Cocotte\Console\DocumentedCommand;
 use Chrif\Cocotte\Console\Style;
 use Chrif\Cocotte\DigitalOcean\ApiToken;
 use Chrif\Cocotte\DigitalOcean\ApiTokenOptionProvider;
@@ -21,7 +22,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Process\Process;
 
-final class UninstallCommand extends AbstractCommand implements LazyEnvironment, HostMountRequired
+final class UninstallCommand extends AbstractCommand implements LazyEnvironment, HostMountRequired, DocumentedCommand
 {
     /**
      * @var ProcessRunner
@@ -105,7 +106,18 @@ final class UninstallCommand extends AbstractCommand implements LazyEnvironment,
     {
         $this
             ->setName('uninstall')
-            ->setDescription('Destroy the Docker machine on Digital Ocean and remove the Traefik subdomain.');
+            ->setDescription($description = 'Destroy the Docker machine on Digital Ocean and remove the Traefik subdomain.')
+            ->setHelp(
+                self::formatHelp(
+                    $description,
+                    '  docker run -it --rm \
+    -v "$(pwd)":/host \
+    -v /var/run/docker.sock:/var/run/docker.sock:ro \
+    chrif/cocotte uninstall \
+    --digital-ocean-api-token="xxxx" \
+    --traefik-ui-hostname="traefik.mydomain.com";'
+                )
+            );
     }
 
     protected function doExecute(InputInterface $input, OutputInterface $output)

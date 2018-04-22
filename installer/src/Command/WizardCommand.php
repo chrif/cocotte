@@ -3,6 +3,7 @@
 namespace Chrif\Cocotte\Command;
 
 use Chrif\Cocotte\Console\AbstractCommand;
+use Chrif\Cocotte\Console\DocumentedCommand;
 use Chrif\Cocotte\Console\InteractionOperator;
 use Chrif\Cocotte\Console\OptionProviderRegistry;
 use Chrif\Cocotte\Console\Style;
@@ -14,7 +15,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
-final class WizardCommand extends AbstractCommand
+final class WizardCommand extends AbstractCommand implements DocumentedCommand
 {
     /**
      * @var Style
@@ -63,8 +64,15 @@ final class WizardCommand extends AbstractCommand
     {
         $this
             ->setName('wizard')
-            ->setDescription(/** @lang text */
-                "Interactively build a simple '<info>install</info>' command for <options=bold>Cocotte</>");
+            ->setDescription(
+                $description = /** @lang text */
+                    "Interactively build a simple '<info>install</info>' command for <options=bold>Cocotte</>")
+            ->setHelp(
+                self::formatHelp(
+                    $description,
+                    '  docker run -it --rm chrif/cocotte wizard'
+                )
+            );
     }
 
     protected function doExecute(InputInterface $input, OutputInterface $output)
@@ -76,7 +84,7 @@ final class WizardCommand extends AbstractCommand
                 [
                     "This wizard helps you build a simple '<info>install</info>' command for Cocotte.",
                     "It assumes that you own a domain name and can change its name servers.",
-                    "Read Cocotte documentation at ".$this->style->link('github.com/chrif/cocotte'),
+                    "Cocotte documentation: ".$this->style->link('github.com/chrif/cocotte'),
                 ]
             )
         );
@@ -101,13 +109,13 @@ final class WizardCommand extends AbstractCommand
             <<<EOF
 <options=bold,underscore>Run this command:</>
 docker run -it --rm \
--v "$(pwd)":/host \
--v /var/run/docker.sock:/var/run/docker.sock:ro \
-chrif/cocotte install \
---digital-ocean-api-token="$token" \
---traefik-ui-hostname="$traefikHostname" \
---traefik-ui-password="$traefikPassword" \
---traefik-ui-username="$traefikUsername";
+    -v "$(pwd)":/host \
+    -v /var/run/docker.sock:/var/run/docker.sock:ro \
+    chrif/cocotte install \
+    --digital-ocean-api-token="$token" \
+    --traefik-ui-hostname="$traefikHostname" \
+    --traefik-ui-password="$traefikPassword" \
+    --traefik-ui-username="$traefikUsername";
 
 EOF
         );

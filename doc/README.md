@@ -82,5 +82,6 @@ If you already have a Digital Ocean account, then you probably know about cloud 
 $ docker run -it --rm chrif/cocotte wizard
 ```
 
+
 ## Documentation
 

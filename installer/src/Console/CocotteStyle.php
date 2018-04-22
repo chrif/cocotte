@@ -30,7 +30,7 @@ final class CocotteStyle extends SymfonyStyle implements Style
 
     public function optionHelp(string $title, array $message): string
     {
-        return "<options=bold,underscore>$title</>"."\n".implode("\n", $message)."\n";
+        return "<options=bold,underscore>__{$title}__</>"."\n".implode("\n", $message)."\n";
     }
 
     public function quittableQuestion($message): string

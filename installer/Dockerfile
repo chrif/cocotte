@@ -27,4 +27,4 @@ ENV GIT_COMMIT_ID ${GIT_COMMIT_ID}
 ENV MACHINE_NAME=cocotte
 
 ENTRYPOINT ["cocotte-entrypoint"]
-CMD ["console"]
+CMD ["wizard"]

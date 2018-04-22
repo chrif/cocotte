@@ -58,5 +58,4 @@ class HostMount implements LazyEnvironmentValue
     {
         return $this->value['Source'];
     }
-
 }

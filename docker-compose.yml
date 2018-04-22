@@ -9,9 +9,3 @@ services:
       args:
         - GIT_COMMIT_ID
     image: "chrif/cocotte"
-
-  hostmount:
-    image: chrif/cocotte
-
-  dev:
-    image: chrif/cocotte

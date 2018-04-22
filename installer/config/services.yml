@@ -22,7 +22,7 @@ services:
   Symfony\Component\Console\Application:
     class: Symfony\Component\Console\Application
     arguments:
-      - "Cocotte Console"
+      - "<fg=green;options=bold>Cocotte Console</>"
   Chrif\Cocotte\Command\:
     resource: '../src/Command/*'
     tags: ['console.command']

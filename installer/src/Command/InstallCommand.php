@@ -3,6 +3,7 @@
 namespace Chrif\Cocotte\Command;
 
 use Chrif\Cocotte\Console\AbstractCommand;
+use Chrif\Cocotte\Console\DocumentedCommand;
 use Chrif\Cocotte\Console\Style;
 use Chrif\Cocotte\DigitalOcean\ApiToken;
 use Chrif\Cocotte\DigitalOcean\ApiTokenOptionProvider;
@@ -28,7 +29,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Process\Process;
 
-final class InstallCommand extends AbstractCommand implements LazyEnvironment, HostMountRequired
+final class InstallCommand extends AbstractCommand implements LazyEnvironment, HostMountRequired, DocumentedCommand
 {
     /**
      * @var MachineCreator
@@ -137,8 +138,22 @@ final class InstallCommand extends AbstractCommand implements LazyEnvironment, H
     {
         $this
             ->setName('install')
-            ->setDescription('Create a <options=bold>Docker</> machine on <options=bold>Digital Ocean</> and '.
-                'install the <options=bold>Traefik</> reverse proxy on it.');
+            ->setDescription(
+                $description = 'Create a <options=bold>Docker</> machine on <options=bold>Digital Ocean</> and '.
+                    'install the <options=bold>Traefik</> reverse proxy on it.')
+            ->setHelp(
+                self::formatHelp(
+                    $description,
+                    '  docker run -it --rm \
+    -v "$(pwd)":/host \
+    -v /var/run/docker.sock:/var/run/docker.sock:ro \
+    chrif/cocotte install \
+    --digital-ocean-api-token="xxxx" \
+    --traefik-ui-hostname="traefik.mydomain.com" \
+    --traefik-ui-password="password" \
+    --traefik-ui-username="username";'
+                )
+            );
     }
 
     protected function doExecute(InputInterface $input, OutputInterface $output)

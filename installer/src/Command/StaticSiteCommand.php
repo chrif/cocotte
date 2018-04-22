@@ -3,6 +3,7 @@
 namespace Chrif\Cocotte\Command;
 
 use Chrif\Cocotte\Console\AbstractCommand;
+use Chrif\Cocotte\Console\DocumentedCommand;
 use Chrif\Cocotte\Console\Style;
 use Chrif\Cocotte\DigitalOcean\ApiToken;
 use Chrif\Cocotte\DigitalOcean\ApiTokenOptionProvider;
@@ -26,7 +27,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Process\Process;
 
-final class StaticSiteCommand extends AbstractCommand implements LazyEnvironment, HostMountRequired
+final class StaticSiteCommand extends AbstractCommand implements LazyEnvironment, HostMountRequired, DocumentedCommand
 {
     /**
      * @var StaticSiteCreator
@@ -128,15 +129,27 @@ final class StaticSiteCommand extends AbstractCommand implements LazyEnvironment
                 'skip-networking',
                 null,
                 InputOption::VALUE_NONE,
-                'Configure networking. Cannot be true if skip-deploy is true'
+                'Do not configure networking. Cannot be true if skip-deploy is true'
             )
             ->addOption(
                 'skip-deploy',
                 null,
                 InputOption::VALUE_NONE,
-                'Deploy to prod after exportation'
+                'Do not deploy to prod after creation'
             )
-            ->setDescription('Create a static website and deploy it to your Docker Machine.');
+            ->setDescription($description = 'Create a static website and deploy it to your Docker Machine.')
+            ->setHelp(
+                self::formatHelp(
+                    $description,
+                    '  docker run -it --rm \
+    -v "$(pwd)":/host \
+    -v /var/run/docker.sock:/var/run/docker.sock:ro \
+    chrif/cocotte static-site \
+    --digital-ocean-api-token="xxxx" \
+    --namespace="static-site" \
+    --hostname="static-site.mydomain.com";'
+                )
+            );
     }
 
     protected function doExecute(InputInterface $input, OutputInterface $output)

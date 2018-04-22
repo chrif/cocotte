@@ -9,6 +9,16 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 abstract class AbstractCommand extends Command implements CommandInterface
 {
+    public static function formatHelp(string $description, string $example): string
+    {
+        return $description."\n\n<info>Example:</info>\n```\n{$example}\n```";
+    }
+
+    public function getSynopsis($short = false)
+    {
+        return "docker run -it --rm chrif/cocotte ".parent::getSynopsis($short);
+    }
+
     /**
      * @return EventDispatcherInterface
      */
@@ -16,11 +26,11 @@ abstract class AbstractCommand extends Command implements CommandInterface
 
     final protected function configure()
     {
+        $this->doConfigure();
         $this->eventDispatcher()->dispatch(
             CommandEventStore::COMMAND_CONFIGURE,
             new CommandConfigureEvent($this, $this->getDefinition())
         );
-        $this->doConfigure();
     }
 
     abstract protected function doConfigure(): void;

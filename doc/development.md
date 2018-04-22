@@ -5,9 +5,6 @@
 1. Configure these dist files with 
 	* .env.dist
 	* docker-compose.override.yml.dist
-	* installer/template/traefik/docker-compose.override.yml.dist
-	* installer/template/traefik/.env-override.dist
-	* installer/template/traefik/.env.dist
 1. Build Cocotte
 	```
 	docker-compose build cocotte
@@ -15,41 +12,45 @@
 
 ## Running the installer
 ### Create machine and deploy traefik
-* with `docker-compose.override.yml` (with bind mount)
+* with `docker-compose.override.yml` (with project mount)
 	```
-	docker-compose run --rm installer
+	docker-compose run -it --rm install
 	```
-* with `docker run` (no mount, like prod)
+* test with `docker run` (no project mount, like prod)
 	```
-	(cd host; ../bin/installer test)
+	(cd host; ../bin/install test)
 	```
 ### Remove machine and networking for traefik
-* with `docker-compose.override.yml` (with bind mount)
+* with `docker-compose.override.yml` (with project mount)
 	```
-	docker-compose run --rm installer remove
+	docker-compose run -it --rm uninstall
 	```
-* with `docker run` (no mount, like prod)
+* test with `docker run` (no project mount, like prod)
 	```
-	(cd host; ../bin/installer test remove)
+	(cd host; ../bin/uninstall test)
 	```
-### Run PHP test suite
+### Run unit tests
 ```
-docker-compose run --rm installer test
+docker-compose run --rm cmd phpunit --exclude-group=functional
 ```
 ### Symfony console
 ```
-docker-compose run --rm installer console
+docker-compose run --rm cmd console
 ```
 ### Shell session
 ```
-docker-compose run --rm installer ash
+docker-compose run --rm cmd ash
 ```
 ## Running the wizard
-* with `docker-compose.override.yml` (with bind mount)
+* with `docker-compose.override.yml` (with project mount)
 	```
 	docker-compose run --rm wizard
 	```
-* with `docker run` (no mount, like prod)
+* with `docker run` (no project mount, like prod)
 	```
-	./bin/wizard
+	(cd host; ../bin/wizard)
 	```
+## Building the console documentation
+```
+docker-compose run --rm bare console doc > doc/console.md
+```

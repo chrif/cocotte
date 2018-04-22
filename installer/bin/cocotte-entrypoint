@@ -4,8 +4,22 @@ set -eu
 
 php /installer/bin/bootstrap-container
 
-if 	[ "$1" = "install" ] || [ "$1" = "wizard" ] || [ "$1" = "uninstall" ] || \
-	[ "$1" = "static-site" ] || [ "$1" = "help" ]; then
+if [ "$1" = "help" ] || [ "$1" = "--help" ] || [ "$1" = "-h" ]; then
+	cat <<END
+
+* For the list of available commands run:
+docker run -it --rm chrif/cocotte list
+
+* For help on a command, run:
+docker run -it --rm chrif/cocotte <command> --help
+
+* Cocotte documentation:
+https://github.com/chrif/cocotte
+
+END
+	exit 0
+elif [ "$1" = "install" ] || [ "$1" = "wizard" ] || [ "$1" = "uninstall" ] || \
+	[ "$1" = "static-site" ] || [ "$1" = "list" ]; then
 	exec console "$@"
 else
 	exec "$@"
