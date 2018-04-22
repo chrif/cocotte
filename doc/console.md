@@ -21,7 +21,7 @@ Create a Docker machine on Digital Ocean and install the Traefik reverse proxy o
 
 Example:
 ```
-  docker run -it --rm \
+$ docker run -it --rm \
     -v "$(pwd)":/host \
     -v /var/run/docker.sock:/var/run/docker.sock:ro \
     chrif/cocotte install \
@@ -114,7 +114,7 @@ Create a static website and deploy it to your Docker Machine.
 
 Example:
 ```
-  docker run -it --rm \
+$ docker run -it --rm \
     -v "$(pwd)":/host \
     -v /var/run/docker.sock:/var/run/docker.sock:ro \
     chrif/cocotte static-site \
@@ -213,7 +213,7 @@ Destroy the Docker machine on Digital Ocean and remove the Traefik subdomain.
 
 Example:
 ```
-  docker run -it --rm \
+$ docker run -it --rm \
     -v "$(pwd)":/host \
     -v /var/run/docker.sock:/var/run/docker.sock:ro \
     chrif/cocotte uninstall \
@@ -282,6 +282,6 @@ Interactively build a simple 'install' command for Cocotte.
 
 Example:
 ```
-  docker run -it --rm chrif/cocotte wizard
+$ docker run -it --rm chrif/cocotte wizard
 ```
 

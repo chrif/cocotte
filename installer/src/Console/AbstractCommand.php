@@ -16,7 +16,7 @@ abstract class AbstractCommand extends Command implements CommandInterface
 
     protected function formatHelp(string $description, string $example): string
     {
-        return $description."\n\n<info>Example:</info>\n```\n  {$example}\n```";
+        return $description."\n\n<info>Example:</info>\n```\n$ {$example}\n```";
     }
 
     /**
