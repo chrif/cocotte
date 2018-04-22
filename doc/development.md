@@ -14,7 +14,7 @@
 ### Create machine and deploy traefik
 * with `docker-compose.override.yml` (with project mount)
 	```
-	docker-compose run -it --rm install
+	docker-compose run --rm install
 	```
 * test with `docker run` (no project mount, like prod)
 	```
@@ -23,7 +23,7 @@
 ### Remove machine and networking for traefik
 * with `docker-compose.override.yml` (with project mount)
 	```
-	docker-compose run -it --rm uninstall
+	docker-compose run --rm uninstall
 	```
 * test with `docker run` (no project mount, like prod)
 	```
