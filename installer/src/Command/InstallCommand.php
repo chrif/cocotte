@@ -142,9 +142,9 @@ final class InstallCommand extends AbstractCommand implements LazyEnvironment, H
                 $description = 'Create a <options=bold>Docker</> machine on <options=bold>Digital Ocean</> and '.
                     'install the <options=bold>Traefik</> reverse proxy on it.')
             ->setHelp(
-                self::formatHelp(
+                $this->formatHelp(
                     $description,
-                    '  docker run -it --rm \
+                    'docker run -it --rm \
     -v "$(pwd)":/host \
     -v /var/run/docker.sock:/var/run/docker.sock:ro \
     chrif/cocotte install \

@@ -68,9 +68,9 @@ final class WizardCommand extends AbstractCommand implements DocumentedCommand
                 $description = /** @lang text */
                     "Interactively build a simple '<info>install</info>' command for <options=bold>Cocotte</>.")
             ->setHelp(
-                self::formatHelp(
+                $this->formatHelp(
                     $description,
-                    '  docker run -it --rm chrif/cocotte wizard'
+                    'docker run -it --rm chrif/cocotte wizard'
                 )
             );
     }

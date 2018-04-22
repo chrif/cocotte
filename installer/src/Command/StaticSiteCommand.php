@@ -139,9 +139,9 @@ final class StaticSiteCommand extends AbstractCommand implements LazyEnvironment
             )
             ->setDescription($description = 'Create a static website and deploy it to your Docker Machine.')
             ->setHelp(
-                self::formatHelp(
+                $this->formatHelp(
                     $description,
-                    '  docker run -it --rm \
+                    'docker run -it --rm \
     -v "$(pwd)":/host \
     -v /var/run/docker.sock:/var/run/docker.sock:ro \
     chrif/cocotte static-site \

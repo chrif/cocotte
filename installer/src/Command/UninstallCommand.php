@@ -108,9 +108,9 @@ final class UninstallCommand extends AbstractCommand implements LazyEnvironment,
             ->setName('uninstall')
             ->setDescription($description = 'Destroy the Docker machine on Digital Ocean and remove the Traefik subdomain.')
             ->setHelp(
-                self::formatHelp(
+                $this->formatHelp(
                     $description,
-                    '  docker run -it --rm \
+                    'docker run -it --rm \
     -v "$(pwd)":/host \
     -v /var/run/docker.sock:/var/run/docker.sock:ro \
     chrif/cocotte uninstall \
