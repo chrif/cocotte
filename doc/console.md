@@ -41,8 +41,8 @@ This command requires 2 volumes:
 
 ##### Digital Ocean API Token
 If you don't have a Digital Ocean account yet, get one with a 10$ credit at
-digitalocean.com/?refcode=c25ed78e51c5 🔗
-Then generate a token at cloud.digitalocean.com/settings/api/tokens 🔗
+https://digitalocean.com/?refcode=c25ed78e51c5 🔗
+Then generate a token at https://cloud.digitalocean.com/settings/api/tokens 🔗
 Cocotte will make a call to Digital Ocean's API to validate the token.
 
 
@@ -71,7 +71,7 @@ It has to be with a subdomain like in 'traefik.mydomain.com', in which case
 'mydomain.com' must point to the name servers of Digital Ocean, and Cocotte
 will create and configure the 'traefik' subdomain for you.
 Cocotte validates that the name servers of the domain you enter are Digital
-Ocean's. How to point to Digital Ocean name servers: goo.gl/SJnw2c 🔗
+Ocean's. How to point to Digital Ocean name servers: https://goo.gl/SJnw2c 🔗
 Please note that when a domain is newly registered, or the name servers are
 changed, you can expect a propagation time up to 24 hours.
 
@@ -148,7 +148,7 @@ It has to be with a subdomain like in 'mywebsite.mydomain.com', in which case
 'mydomain.com' must point to the name servers of Digital Ocean, and Cocotte
 will create and configure the 'mywebsite' subdomain for you.
 Cocotte validates that the name servers of the domain you enter are Digital
-Ocean's. How to point to Digital Ocean name servers: goo.gl/SJnw2c 🔗
+Ocean's. How to point to Digital Ocean name servers: https://goo.gl/SJnw2c 🔗
 Please note that when a domain is newly registered, or the name servers are
 changed, you can expect a propagation time up to 24 hours.
 
@@ -162,8 +162,8 @@ changed, you can expect a propagation time up to 24 hours.
 
 ##### Digital Ocean API Token
 If you don't have a Digital Ocean account yet, get one with a 10$ credit at
-digitalocean.com/?refcode=c25ed78e51c5 🔗
-Then generate a token at cloud.digitalocean.com/settings/api/tokens 🔗
+https://digitalocean.com/?refcode=c25ed78e51c5 🔗
+Then generate a token at https://cloud.digitalocean.com/settings/api/tokens 🔗
 Cocotte will make a call to Digital Ocean's API to validate the token.
 
 
@@ -186,7 +186,7 @@ for the droplet name. Must match /^[a-zA-Z0-9][a-zA-Z0-9\-\.]*$/
 
 #### `--skip-networking`
 
-Do not configure networking. Cannot be true if skip-deploy is true
+Do not configure networking. Cannot be true if skip-deploy is true.
 
 * Accept value: no
 * Is value required: no
@@ -195,7 +195,7 @@ Do not configure networking. Cannot be true if skip-deploy is true
 
 #### `--skip-deploy`
 
-Do not deploy to prod after creation
+Do not deploy to prod after creation.
 
 * Accept value: no
 * Is value required: no
@@ -231,8 +231,8 @@ This command requires 2 volumes:
 
 ##### Digital Ocean API Token
 If you don't have a Digital Ocean account yet, get one with a 10$ credit at
-digitalocean.com/?refcode=c25ed78e51c5 🔗
-Then generate a token at cloud.digitalocean.com/settings/api/tokens 🔗
+https://digitalocean.com/?refcode=c25ed78e51c5 🔗
+Then generate a token at https://cloud.digitalocean.com/settings/api/tokens 🔗
 Cocotte will make a call to Digital Ocean's API to validate the token.
 
 
@@ -261,7 +261,7 @@ It has to be with a subdomain like in 'traefik.mydomain.com', in which case
 'mydomain.com' must point to the name servers of Digital Ocean, and Cocotte
 will create and configure the 'traefik' subdomain for you.
 Cocotte validates that the name servers of the domain you enter are Digital
-Ocean's. How to point to Digital Ocean name servers: goo.gl/SJnw2c 🔗
+Ocean's. How to point to Digital Ocean name servers: https://goo.gl/SJnw2c 🔗
 Please note that when a domain is newly registered, or the name servers are
 changed, you can expect a propagation time up to 24 hours.
 
