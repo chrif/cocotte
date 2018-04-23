@@ -88,6 +88,7 @@ See the [Console API Reference](console.md).
 
 <a name="templates"></a>
 ## How to work with the application templates
+* [Traefik](traefik.md)
 * [Static site](static-site.md)
 * [Symfony]()
 
