@@ -9,7 +9,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-final class DocCommand extends Command
+final class BuildDocCommand extends Command
 {
 
     public function isHidden()
@@ -19,8 +19,7 @@ final class DocCommand extends Command
 
     protected function configure(): void
     {
-        $this
-            ->setName('doc');
+        $this->setName('build-doc');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
