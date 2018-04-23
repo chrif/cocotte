@@ -54,7 +54,7 @@ class ApiTokenOptionProvider implements OptionProvider
         $digitalOceanV2 = new DigitalOceanV2($adapter);
         try {
             $account = $digitalOceanV2->account()->getUserInformation();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             throw new \Exception(
                 "Failed to validate the Digital Ocean token with message:\n".
                 $e->getMessage()
