@@ -1,11 +1,11 @@
 <?php declare(strict_types=1);
 
-namespace Chrif\Cocotte\DigitalOcean;
+namespace Cocotte\DigitalOcean;
 
-use Chrif\Cocotte\Console\OptionProvider;
-use Chrif\Cocotte\Console\Style;
-use Chrif\Cocotte\Console\StyledInputOption;
-use Chrif\Cocotte\Shell\Env;
+use Cocotte\Console\OptionProvider;
+use Cocotte\Console\Style;
+use Cocotte\Console\StyledInputOption;
+use Cocotte\Shell\Env;
 use DigitalOceanV2\Adapter\GuzzleHttpAdapter;
 use DigitalOceanV2\DigitalOceanV2;
 use Symfony\Component\Console\Input\InputOption;

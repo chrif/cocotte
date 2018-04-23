@@ -94,4 +94,4 @@ See the [Console API Reference](console.md).
 
 ## Contributing
 
-Pull requests are welcome. Take a look at the [development documentation](development.md) doc.
+Pull requests are welcome. Take a look at the [development documentation](development.md).

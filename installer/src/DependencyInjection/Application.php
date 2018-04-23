@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Chrif\Cocotte\DependencyInjection;
+namespace Cocotte\DependencyInjection;
 
 use Symfony\Bridge\ProxyManager\LazyProxy\Instantiator\RuntimeInstantiator;
 use Symfony\Component\Config\FileLocator;

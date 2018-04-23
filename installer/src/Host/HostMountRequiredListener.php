@@ -1,10 +1,10 @@
 <?php declare(strict_types=1);
 
-namespace Chrif\Cocotte\Host;
+namespace Cocotte\Host;
 
-use Chrif\Cocotte\Console\CommandConfiguredEvent;
-use Chrif\Cocotte\Console\CommandEventStore;
-use Chrif\Cocotte\Console\CommandInitializeEvent;
+use Cocotte\Console\CommandConfiguredEvent;
+use Cocotte\Console\CommandEventStore;
+use Cocotte\Console\CommandInitializeEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 final class HostMountRequiredListener implements EventSubscriberInterface

@@ -1,13 +1,13 @@
 <?php declare(strict_types=1);
 
-namespace Chrif\Cocotte\Template\StaticSite;
+namespace Cocotte\Template\StaticSite;
 
-use Chrif\Cocotte\Console\Style;
-use Chrif\Cocotte\Filesystem\Filesystem;
-use Chrif\Cocotte\Finder\Finder;
-use Chrif\Cocotte\Shell\EnvironmentSubstitution\EnvironmentSubstitution;
-use Chrif\Cocotte\Shell\EnvironmentSubstitution\SubstitutionFactory;
-use Chrif\Cocotte\Shell\ProcessRunner;
+use Cocotte\Console\Style;
+use Cocotte\Filesystem\Filesystem;
+use Cocotte\Finder\Finder;
+use Cocotte\Shell\EnvironmentSubstitution\EnvironmentSubstitution;
+use Cocotte\Shell\EnvironmentSubstitution\SubstitutionFactory;
+use Cocotte\Shell\ProcessRunner;
 use Symfony\Component\Process\Process;
 
 final class StaticSiteCreator

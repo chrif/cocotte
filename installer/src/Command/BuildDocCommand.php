@@ -1,10 +1,10 @@
 <?php declare(strict_types=1);
 
-namespace Chrif\Cocotte\Command;
+namespace Cocotte\Command;
 
-use Chrif\Cocotte\Console\MarkdownDescriptor;
-use Chrif\Cocotte\DigitalOcean\ApiToken;
-use Chrif\Cocotte\Shell\Env;
+use Cocotte\Console\MarkdownDescriptor;
+use Cocotte\DigitalOcean\ApiToken;
+use Cocotte\Shell\Env;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;

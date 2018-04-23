@@ -1,16 +1,16 @@
 <?php
 
-namespace Chrif\Cocotte\Tests\DigitalOcean;
+namespace Cocotte\Tests\DigitalOcean;
 
-use Chrif\Cocotte\DigitalOcean\Hostname;
-use Chrif\Cocotte\DigitalOcean\HostnameCollection;
-use Chrif\Cocotte\DigitalOcean\NetworkingConfigurator;
-use Chrif\Cocotte\TestCase;
+use Cocotte\DigitalOcean\Hostname;
+use Cocotte\DigitalOcean\HostnameCollection;
+use Cocotte\DigitalOcean\NetworkingConfigurator;
+use Cocotte\FunctionalTestCase;
 
 /**
  * @group functional
  */
-class NetworkingConfiguratorTest extends TestCase
+class NetworkingConfiguratorTest extends FunctionalTestCase
 {
 
     /**

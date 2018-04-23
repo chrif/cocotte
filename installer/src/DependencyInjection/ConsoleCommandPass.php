@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Chrif\Cocotte\DependencyInjection;
+namespace Cocotte\DependencyInjection;
 
 use Symfony\Component\Console\Application;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;

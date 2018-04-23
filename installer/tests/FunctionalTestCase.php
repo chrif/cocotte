@@ -1,14 +1,15 @@
 <?php declare(strict_types=1);
 
-namespace Chrif\Cocotte;
+namespace Cocotte;
 
-use Chrif\Cocotte\DependencyInjection\Application;
-use Chrif\Cocotte\DigitalOcean\Domain;
-use Chrif\Cocotte\DigitalOcean\DomainRecord;
-use Chrif\Cocotte\Machine\MachineName;
-use Chrif\Cocotte\Machine\MachineState;
+use Cocotte\DependencyInjection\Application;
+use Cocotte\DigitalOcean\Domain;
+use Cocotte\DigitalOcean\DomainRecord;
+use Cocotte\Machine\MachineName;
+use Cocotte\Machine\MachineState;
+use PHPUnit\Framework\TestCase;
 
-class TestCase extends \PHPUnit\Framework\TestCase
+class FunctionalTestCase extends TestCase
 {
     /**
      * @var Application

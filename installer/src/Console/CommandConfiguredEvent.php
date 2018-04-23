@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Chrif\Cocotte\Console;
+namespace Cocotte\Console;
 
 use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\EventDispatcher\Event;

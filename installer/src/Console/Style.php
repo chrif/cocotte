@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Chrif\Cocotte\Console;
+namespace Cocotte\Console;
 
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Output\OutputInterface;

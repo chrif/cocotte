@@ -1,11 +1,11 @@
 <?php declare(strict_types=1);
 
-namespace Chrif\Cocotte\Environment;
+namespace Cocotte\Environment;
 
 use Assert\Assertion;
-use Chrif\Cocotte\Console\CommandEventStore;
-use Chrif\Cocotte\Console\CommandExecuteEvent;
-use Chrif\Cocotte\Console\Style;
+use Cocotte\Console\CommandEventStore;
+use Cocotte\Console\CommandExecuteEvent;
+use Cocotte\Console\Style;
 use ProxyManager\Proxy\LazyLoadingInterface;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;

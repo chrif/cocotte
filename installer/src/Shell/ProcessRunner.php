@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace Chrif\Cocotte\Shell;
+namespace Cocotte\Shell;
 
-use Chrif\Cocotte\Console\Style;
+use Cocotte\Console\Style;
 use Symfony\Component\Console\Helper\ProcessHelper;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Exception\ProcessFailedException;

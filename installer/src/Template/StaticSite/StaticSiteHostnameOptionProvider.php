@@ -1,13 +1,13 @@
 <?php declare(strict_types=1);
 
-namespace Chrif\Cocotte\Template\StaticSite;
+namespace Cocotte\Template\StaticSite;
 
-use Chrif\Cocotte\Console\OptionProvider;
-use Chrif\Cocotte\Console\Style;
-use Chrif\Cocotte\Console\StyledInputOption;
-use Chrif\Cocotte\DigitalOcean\DnsValidator;
-use Chrif\Cocotte\DigitalOcean\Hostname;
-use Chrif\Cocotte\Shell\Env;
+use Cocotte\Console\OptionProvider;
+use Cocotte\Console\Style;
+use Cocotte\Console\StyledInputOption;
+use Cocotte\DigitalOcean\DnsValidator;
+use Cocotte\DigitalOcean\Hostname;
+use Cocotte\Shell\Env;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Question\Question;
 

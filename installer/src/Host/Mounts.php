@@ -1,9 +1,9 @@
 <?php declare(strict_types=1);
 
-namespace Chrif\Cocotte\Host;
+namespace Cocotte\Host;
 
 use Assert\Assertion;
-use Chrif\Cocotte\Environment\LazyEnvironmentValue;
+use Cocotte\Environment\LazyEnvironmentValue;
 use Symfony\Component\Process\Process;
 
 class Mounts implements LazyEnvironmentValue

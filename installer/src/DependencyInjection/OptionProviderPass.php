@@ -1,9 +1,9 @@
 <?php declare(strict_types=1);
 
-namespace Chrif\Cocotte\DependencyInjection;
+namespace Cocotte\DependencyInjection;
 
-use Chrif\Cocotte\Console\OptionProvider;
-use Chrif\Cocotte\Console\OptionProviderRegistry;
+use Cocotte\Console\OptionProvider;
+use Cocotte\Console\OptionProviderRegistry;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;

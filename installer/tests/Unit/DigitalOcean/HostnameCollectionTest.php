@@ -1,9 +1,9 @@
 <?php
 
-namespace Chrif\Cocotte\Tests\DigitalOcean;
+namespace Cocotte\Tests\DigitalOcean;
 
-use Chrif\Cocotte\DigitalOcean\Hostname;
-use Chrif\Cocotte\DigitalOcean\HostnameCollection;
+use Cocotte\DigitalOcean\Hostname;
+use Cocotte\DigitalOcean\HostnameCollection;
 use PHPUnit\Framework\TestCase;
 
 class HostnameCollectionTest extends TestCase

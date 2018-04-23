@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Chrif\Cocotte\Shell;
+namespace Cocotte\Shell;
 
 use Assert\Assertion;
 

@@ -1,9 +1,9 @@
 <?php declare(strict_types=1);
 
-namespace Chrif\Cocotte\DigitalOcean;
+namespace Cocotte\DigitalOcean;
 
 use Assert\Assertion;
-use Chrif\Cocotte\Collection\GenericCollection;
+use Cocotte\Collection\GenericCollection;
 
 final class HostnameCollection extends GenericCollection
 {

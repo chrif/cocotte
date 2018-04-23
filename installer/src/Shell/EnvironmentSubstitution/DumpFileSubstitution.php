@@ -1,10 +1,10 @@
 <?php declare(strict_types=1);
 
-namespace Chrif\Cocotte\Shell\EnvironmentSubstitution;
+namespace Cocotte\Shell\EnvironmentSubstitution;
 
-use Chrif\Cocotte\Console\Style;
-use Chrif\Cocotte\Filesystem\Filesystem;
-use Chrif\Cocotte\Shell\ProcessRunner;
+use Cocotte\Console\Style;
+use Cocotte\Filesystem\Filesystem;
+use Cocotte\Shell\ProcessRunner;
 use Symfony\Component\Process\Process;
 
 final class DumpFileSubstitution implements SubstitutionStrategy

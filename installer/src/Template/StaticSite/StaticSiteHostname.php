@@ -1,12 +1,12 @@
 <?php declare(strict_types=1);
 
-namespace Chrif\Cocotte\Template\StaticSite;
+namespace Cocotte\Template\StaticSite;
 
-use Chrif\Cocotte\DigitalOcean\Hostname;
-use Chrif\Cocotte\DigitalOcean\HostnameCollection;
-use Chrif\Cocotte\Environment\LazyEnvironmentValue;
-use Chrif\Cocotte\Environment\LazyExportableOption;
-use Chrif\Cocotte\Shell\Env;
+use Cocotte\DigitalOcean\Hostname;
+use Cocotte\DigitalOcean\HostnameCollection;
+use Cocotte\Environment\LazyEnvironmentValue;
+use Cocotte\Environment\LazyExportableOption;
+use Cocotte\Shell\Env;
 
 class StaticSiteHostname implements LazyExportableOption
 {

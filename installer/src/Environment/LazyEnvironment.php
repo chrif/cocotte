@@ -1,6 +1,6 @@
 <?php
 
-namespace Chrif\Cocotte\Environment;
+namespace Cocotte\Environment;
 
 interface LazyEnvironment
 {

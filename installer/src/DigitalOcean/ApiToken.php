@@ -1,11 +1,11 @@
 <?php declare(strict_types=1);
 
-namespace Chrif\Cocotte\DigitalOcean;
+namespace Cocotte\DigitalOcean;
 
 use Assert\Assertion;
-use Chrif\Cocotte\Environment\LazyEnvironmentValue;
-use Chrif\Cocotte\Environment\LazyExportableOption;
-use Chrif\Cocotte\Shell\Env;
+use Cocotte\Environment\LazyEnvironmentValue;
+use Cocotte\Environment\LazyExportableOption;
+use Cocotte\Shell\Env;
 
 class ApiToken implements LazyExportableOption
 {

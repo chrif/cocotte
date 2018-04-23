@@ -1,16 +1,16 @@
 <?php declare(strict_types=1);
 
-namespace Chrif\Cocotte\Command;
+namespace Cocotte\Command;
 
-use Chrif\Cocotte\Console\AbstractCommand;
-use Chrif\Cocotte\Console\DocumentedCommand;
-use Chrif\Cocotte\Console\InteractionOperator;
-use Chrif\Cocotte\Console\OptionProviderRegistry;
-use Chrif\Cocotte\Console\Style;
-use Chrif\Cocotte\DigitalOcean\ApiToken;
-use Chrif\Cocotte\Template\Traefik\TraefikHostname;
-use Chrif\Cocotte\Template\Traefik\TraefikPassword;
-use Chrif\Cocotte\Template\Traefik\TraefikUsername;
+use Cocotte\Console\AbstractCommand;
+use Cocotte\Console\DocumentedCommand;
+use Cocotte\Console\InteractionOperator;
+use Cocotte\Console\OptionProviderRegistry;
+use Cocotte\Console\Style;
+use Cocotte\DigitalOcean\ApiToken;
+use Cocotte\Template\Traefik\TraefikHostname;
+use Cocotte\Template\Traefik\TraefikPassword;
+use Cocotte\Template\Traefik\TraefikUsername;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;

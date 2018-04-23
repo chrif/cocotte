@@ -1,6 +1,6 @@
 <?php
 
-namespace Chrif\Cocotte\Filesystem;
+namespace Cocotte\Filesystem;
 
 use Symfony\Component\Filesystem\Exception\FileNotFoundException;
 use Symfony\Component\Filesystem\Exception\IOException;
