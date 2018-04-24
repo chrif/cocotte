@@ -63,13 +63,13 @@ Use this command to:
 
 Use this command to:
 
-* Stop your local site and remove it from your local Docker engine. You can put it back with [`./bin/dev`](#./bin/dev).
+* Stop your local site and remove it from your local Docker engine. You can put it back with [`./bin/dev`](#bindev).
 
 ### ./bin/reset-prod
 
 Use this command to:
 
-* Stop your production site and remove it from your Digital Ocean Docker engine. You can put it back with [`./bin/prod`](#./bin/prod).
+* Stop your production site and remove it from your Digital Ocean Docker engine. You can put it back with [`./bin/prod`](#binprod).
 
 ## Reference
 
