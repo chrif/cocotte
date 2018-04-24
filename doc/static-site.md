@@ -1,6 +1,6 @@
 # How to work with the static site template
 
-Prerequisites:
+## Prerequisites
 
 * You successfully ran the [`install` command](console.md#install).
 * You are [running Traefik locally](traefik.md#running-traefik-locally).
