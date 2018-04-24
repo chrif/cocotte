@@ -10,7 +10,9 @@ Console API Reference
 * [`wizard`](#wizard)
   > Interactively build a simple 'install' command for Cocotte.
 
-`install`
+---
+
+install
 ---------
 
 ### Usage
@@ -103,7 +105,9 @@ Alphanumeric and some special characters. Must match /^[a-zA-Z0-9_@#%?&*+=!-]+$/
 * Is multiple: no
 * Default: `NULL`
 
-`static-site`
+---
+
+static-site
 -------------
 
 ### Usage
@@ -202,7 +206,9 @@ Do not deploy to prod after creation.
 * Is multiple: no
 * Default: `false`
 
-`uninstall`
+---
+
+uninstall
 -----------
 
 ### Usage
@@ -271,7 +277,9 @@ changed, you can expect a propagation time up to 24 hours.
 * Is multiple: no
 * Default: `NULL`
 
-`wizard`
+---
+
+wizard
 --------
 
 ### Usage

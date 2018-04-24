@@ -170,7 +170,7 @@ final class StaticSiteCommand extends AbstractCommand implements LazyEnvironment
         }
 
         $this->style->writeln(
-            "Exporting a new static site to {$this->sitePath()}"
+            "Creating a new static site in {$this->sitePath()}"
         );
         $this->staticSiteCreator->create();
 
@@ -180,7 +180,7 @@ final class StaticSiteCommand extends AbstractCommand implements LazyEnvironment
         }
 
         if (!$skipDeploy) {
-            $this->style->writeln('Deploying exported site to cloud machine');
+            $this->style->writeln('Deploying created site to cloud machine');
             $this->processRunner->mustRun(new Process('./bin/prod 2>/dev/stdout',
                 $this->staticSiteCreator->hostAppPath()));
             $this->style->complete([

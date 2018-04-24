@@ -162,7 +162,7 @@ final class InstallCommand extends AbstractCommand implements LazyEnvironment, H
         $this->style->writeln("Creating a Docker machine named '{$this->machineName}' on Digital Ocean.");
         $this->machineCreator->create();
 
-        $this->style->writeln("Exporting Traefik template to {$this->hostMount->sourcePath()}/traefik");
+        $this->style->writeln("Creating Traefik template in {$this->hostMount->sourcePath()}/traefik");
         $this->traefikCreator->create();
 
         $this->style->writeln("Configuring networking for {$this->traefikHostname->toString()}");

@@ -1,10 +1,8 @@
 # How to work with the Traefik app
 
-## Develop locally
-
-## Deploy to production
+## Running Traefik locally
 
 ## Reference
+* Traefik
 * Docker Compose
 * Docker
-* Traefik

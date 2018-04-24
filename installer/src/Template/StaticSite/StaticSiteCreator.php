@@ -78,6 +78,7 @@ final class StaticSiteCreator
         $this->removeIgnoredFiles();
         $this->createDockerComposeOverride();
         $this->createDotEnv();
+        $this->chmodBin();
         $this->substituteEnvInIndexHtml();
         $this->copyTmpToHost();
     }
@@ -228,6 +229,10 @@ final class StaticSiteCreator
     {
         $this->mustRun(['rm', '-rfv', $this->tmpAppPath()]);
         $this->mustRun(['rm', '-rfv', $this->tmpTemplatePath()]);
+    }
+
+    private function chmodBin() {
+        $this->mustRun("chmod +x {$this->hostAppPath()}/bin/*");
     }
 
     private function tmpAppPath(): string

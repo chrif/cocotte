@@ -131,7 +131,7 @@ class MarkdownDescriptor implements DescriptorInterface
         $synopsis = $command->getSynopsis(true);
 
         $this->write(
-            '`'.$command->getName()."`\n"
+            $command->getName()."\n"
             .str_repeat('-', Helper::strlen($command->getName()) + 2)."\n\n"
             .'### Usage'."\n\n"
             .array_reduce(array_merge(array($synopsis),
@@ -182,7 +182,7 @@ class MarkdownDescriptor implements DescriptorInterface
         );
 
         foreach ($commands as $command) {
-            $this->write("\n\n");
+            $this->write("\n\n---\n\n");
             $this->write($this->describeCommand($command));
         }
     }
