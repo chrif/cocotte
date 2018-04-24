@@ -21,7 +21,7 @@ The local URL is the value of `APP_HOSTS` in `.env-override`. By default Cocotte
 	```
 	./bin/dev
 	```
-1. The changes you make to your files in the `web` folder are live at `mysite.mydomain.local`
+1. The changes you make to your files in the `web` folder are live at http://mysite.mydomain.local
 
 ## Deploy to production
 1. When you are ready to publish your changes, run:  

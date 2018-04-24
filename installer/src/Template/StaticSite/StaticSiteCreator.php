@@ -78,9 +78,9 @@ final class StaticSiteCreator
         $this->removeIgnoredFiles();
         $this->createDockerComposeOverride();
         $this->createDotEnv();
-        $this->chmodBin();
         $this->substituteEnvInIndexHtml();
         $this->copyTmpToHost();
+        $this->chmodBin();
     }
 
     public function hostAppPath(): string

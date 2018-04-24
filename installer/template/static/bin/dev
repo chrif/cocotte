@@ -28,4 +28,4 @@ docker-compose -f docker-compose.yml build
 
 # bring up
 docker-compose up -d --scale nginx=1 nginx
-docker-compose logs -f nginx
+#docker-compose logs -f nginx
