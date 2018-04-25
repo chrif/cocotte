@@ -7,7 +7,7 @@
 
 When running the install command, Cocotte creates a directory named `traefik`. You can commit it to version control. This is yours to modify if and when necessary.
 
-Let's say you installed Cocotte with the Traefik UI hostname `traefik.mydomain.com`.
+Let's assume for the rest of this document that you installed Cocotte with the Traefik UI hostname `traefik.mydomain.com`...
 
 ## Develop locally
 
@@ -29,6 +29,7 @@ The local URL is the value of `APP_HOSTS` in `.env-override`. By default Cocotte
 	```
 	./bin/prod
 	```
+	* Your changes are deployed and your Traefik UI is available at `https://traefik.mydomain.com`.
 
 ## The commands
 
@@ -37,7 +38,7 @@ The local URL is the value of `APP_HOSTS` in `.env-override`. By default Cocotte
 Use this command to:
 
 * Deploy Traefik locally.
-* Restart Traefik.
+* Restart Traefik locally.
 
 ### ./bin/logs [options]
 
