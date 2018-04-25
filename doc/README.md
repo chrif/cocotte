@@ -104,3 +104,9 @@ Pull requests are welcome. Take a look at the [development documentation](develo
 * [Compose CLI](https://docs.docker.com/compose/reference/overview/)
 * [Machine CLI](https://docs.docker.com/machine/reference/)
 * [Traefik](https://docs.traefik.io/)
+
+## Useful commands
+
+* `docker-machine -s machine ssh cocotte` logs as root into your cloud machine.
+* `docker stats` shows you memory and CPU usage for your containers.
+* `docker ps` lists all your running containers.

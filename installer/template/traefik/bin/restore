@@ -23,9 +23,8 @@ restore() {
 	docker rm restore
 }
 
-# enforce that variables are set
+# enforce that variables are set before eval which would not fail
 docker-machine -s "${MACHINE_STORAGE_PATH}" env "${MACHINE_NAME}" > /dev/null
-
 eval $(docker-machine -s "${MACHINE_STORAGE_PATH}" env "${MACHINE_NAME}")
 docker volume create traefikssl
 docker run --rm \
