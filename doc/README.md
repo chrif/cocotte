@@ -88,6 +88,7 @@ See the [Console API Reference](console.md).
 
 <a name="templates"></a>
 ## How to work with the application templates
+
 * [Traefik](traefik.md)
 * [Static site](static-site.md)
 * [Symfony]()
@@ -95,3 +96,11 @@ See the [Console API Reference](console.md).
 ## Contributing
 
 Pull requests are welcome. Take a look at the [development documentation](development.md).
+
+## Reference manuals
+
+* [Dockerfile](https://docs.docker.com/engine/reference/builder/)
+* [Compose file](https://docs.docker.com/compose/compose-file/)
+* [Compose CLI](https://docs.docker.com/compose/reference/overview/)
+* [Machine CLI](https://docs.docker.com/machine/reference/)
+* [Traefik](https://docs.traefik.io/)

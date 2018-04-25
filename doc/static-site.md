@@ -3,7 +3,7 @@
 ## Prerequisites
 
 * You successfully ran the [`install` command](console.md#install).
-* You are [running Traefik locally](traefik.md#running-traefik-locally).
+* You are [running Traefik locally](traefik.md#develop-locally).
 * You successfully created a static site with the [`static-site` command](console.md#static-site).
 * Your working directory is the root of your static site.
 
@@ -21,13 +21,15 @@ The local URL is the value of `APP_HOSTS` in `.env-override`. By default Cocotte
 	```
 	./bin/dev
 	```
-1. The changes you make to your files in the `web` folder are live at http://mysite.mydomain.local
+1. The changes you make to your files in the `web` folder are live at `http://mysite.mydomain.local`.
+	* Note that the local version of the static site template is not using `https`.
 
 ## Deploy to production
 1. When you are ready to publish your changes, run:  
 	```
 	./bin/prod
 	```
+	* Your changes are deployed to `https://mysite.mydomain.com`.
 
 ## The commands
 
@@ -61,17 +63,15 @@ Use this command to:
 
 ### ./bin/reset-dev
 
-Use this command to:
+This command is only useful for debugging. Use this command to:
 
 * Stop your local site and remove it from your local Docker engine. You can put it back with [`./bin/dev`](#bindev).
 
 ### ./bin/reset-prod
 
-Use this command to:
+This command is only useful for debugging. Use this command to:
 
 * Stop your production site and remove it from your Digital Ocean Docker engine. You can put it back with [`./bin/prod`](#binprod).
 
-## Reference
+## The environment variables in .env
 
-* Docker Compose
-* Docker
