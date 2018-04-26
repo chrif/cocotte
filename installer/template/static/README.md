@@ -1,13 +1,6 @@
 # How to work with the static site template
 
-## Prerequisites
-
-* You successfully ran the [`install` command](console.md#install).
-* You are [running Traefik locally](traefik.md#develop-locally).
-* You successfully created a static site with the [`static-site` command](console.md#static-site).
-* Your working directory is the root of your static site.
-
-Let's say you created a static site with namespace `mysite` and hostname `mysite.mydomain.com`. You now have a directory on your computer named `mysite`. `cd` to this directory.
+The examples assume a static site created with namespace `mysite` and hostname `mysite.mydomain.com`.
 
 ## Develop locally
 
@@ -33,15 +26,18 @@ The local URL is the value of `APP_HOSTS` in `.env-override`. By default Cocotte
 
 ## The commands
 
-### ./bin/dev
+### dev
 
+```
+./bin/dev
+```
 Use this command to:
 
 * Deploy your local site.
 * Restart your local site.
 * Update your local site when you make changes that are not live automatically.
 
-### ./bin/logs [options]
+### logs
 
 Use this command to see the logs of your web server in production:
 
@@ -54,24 +50,37 @@ Use this command to see the logs of your web server in production:
 	./bin/logs -t
 	```
 
-### ./bin/prod
+### prod
+
+```
+./bin/prod
+```
 
 Use this command to:
 
 * Deploy your production site.
 * Restart your production site.
 
-### ./bin/reset-dev
+### reset-dev
+
+```
+./bin/reset-dev
+```
 
 This command is only useful for debugging. Use this command to:
 
-* Stop your local site and remove it from your local Docker engine. You can put it back with [`./bin/dev`](#bindev).
+* Stop your local site and remove it from your local Docker engine. You can put it back with [`./bin/dev`](#dev).
 
-### ./bin/reset-prod
+### reset-prod
+
+```
+./bin/reset-prod
+```
 
 This command is only useful for debugging. Use this command to:
 
-* Stop your production site and remove it from your Digital Ocean Docker engine. You can put it back with [`./bin/prod`](#binprod).
+* Stop your production site and remove it from your Digital Ocean Docker engine. You can put it back with [`./bin/prod`](#prod).
 
 ## The environment variables in .env
 
+TODO

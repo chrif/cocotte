@@ -87,17 +87,19 @@ $ docker run -it --rm chrif/cocotte
 See the [Console API Reference](console.md).
 
 <a name="templates"></a>
-## How to work with the application templates
+## The application templates
 
-* [Traefik](traefik.md)
-* [Static site](static-site.md)
+* Traefik
+	* When running the [`install`](console.md#install) command, Cocotte creates a directory named `traefik`. You can commit it to version control. This is yours to modify if and when necessary.
+	* This is a reverse proxy whose job is to listen to ports needed by more than one container in your Docker Engine, and route each request to its intended container based on conditions like the hostname of the request. 
+	* This particular reverse proxy uses Let's Encrypt to automatically generate and renew SSL certificates per hostname.
+	* Cocotte makes it work out of the box, but should you want to further develop for this application, check its [README](../installer/template/traefik/README.md).
+
+
+* [Static site](../installer/template/static/README.md)
 * [Symfony]()
 
-## Contributing
-
-Pull requests are welcome. Take a look at the [development documentation](development.md).
-
-## Reference manuals
+### Reference manuals
 
 * [Dockerfile](https://docs.docker.com/engine/reference/builder/)
 * [Compose file](https://docs.docker.com/compose/compose-file/)
@@ -105,8 +107,12 @@ Pull requests are welcome. Take a look at the [development documentation](develo
 * [Machine CLI](https://docs.docker.com/machine/reference/)
 * [Traefik](https://docs.traefik.io/)
 
-## Useful commands
+### Useful commands
 
 * `docker-machine -s machine ssh cocotte` logs as root into your cloud machine.
 * `docker stats` shows you memory and CPU usage for your containers.
 * `docker ps` lists all your running containers.
+
+## Contributing
+
+Pull requests are welcome. Take a look at the [development documentation](development.md).
