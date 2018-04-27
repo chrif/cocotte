@@ -89,18 +89,18 @@ See the [Console API Reference](console.md).
 <a name="templates"></a>
 ## The application templates
 
-* __Traefik__
-	* When running the [`install`](console.md#install) command, Cocotte creates a directory named `traefik`. You can commit it to version control. This is yours to modify if and when necessary.
-	* This is a reverse proxy whose job is to listen to ports needed by more than one container in your Docker Engine, and route each request to its intended container based on conditions like the hostname of the request. 
-	* This particular reverse proxy uses Let's Encrypt to automatically generate and renew SSL certificates per hostname.
-	* Cocotte makes it work out of the box, but should you want to further develop for this application, then check out its [README](../installer/template/traefik/README.md).
+### Traefik
+* When running the [`install`](console.md#install) command, Cocotte creates a directory named `traefik`. You can commit it to version control. This is yours to modify if and when necessary.
+* This is a reverse proxy whose job is to listen to ports needed by more than one container in your Docker Engine, and route each request to its intended container based on conditions like the hostname of the request. 
+* This particular reverse proxy uses Let's Encrypt to automatically generate and renew SSL certificates per hostname.
+* Cocotte makes it work out of the box, but should you want to further develop for this application, then check out its [README](../installer/template/traefik/README.md).
 	
-* __Static site__
-	* When running the [`static-site`](console.md#static-site) command, Cocotte creates a directory named after the namespace for your site.
-	* To develop locally for your static site, first make sure Traefik is [running locally](../installer/template/traefik/README.md#develop-locally).
-	* Then hop to the [README](../installer/template/static/README.md).
+### Static site
+* When running the [`static-site`](console.md#static-site) command, Cocotte creates a directory named after the namespace for your site.
+* To develop locally for your static site, first make sure Traefik is [running locally](../installer/template/traefik/README.md#develop-locally).
+* Then hop to the [README](../installer/template/static/README.md).
 	
-* __Symfony__ (coming soon)
+### Symfony (coming soon)
 
 ### Useful commands
 
