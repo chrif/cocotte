@@ -106,3 +106,7 @@ Should you need to redeploy Traefik after removing it completely with `./bin/res
 ## The environment variables in .env
 
 TODO
+
+## Reference manuals
+
+* [Traefik](https://docs.traefik.io/)

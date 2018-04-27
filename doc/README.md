@@ -86,21 +86,30 @@ $ docker run -it --rm chrif/cocotte
 
 See the [Console API Reference](console.md).
 
+## Contributing
+
+Pull requests are welcome. Take a look at the [development documentation](development.md).
+
 <a name="templates"></a>
 ## The application templates
 
-### Traefik
+### Unique and required
+
+#### Traefik
 * When running the [`install`](console.md#install) command, Cocotte creates a directory named `traefik`. You can commit it to version control. This is yours to modify if and when necessary.
-* This is a reverse proxy whose job is to listen to ports needed by more than one container in your Docker Engine, and route each request to its intended container based on conditions like the hostname of the request. 
+* There can only be one Traefik container running in your Docker Engine.
+* This is a reverse proxy whose job is to listen to ports needed by more than one container, and route each request to its intended container based on conditions like the hostname of the request. 
 * This particular reverse proxy uses Let's Encrypt to automatically generate and renew SSL certificates per hostname.
 * Cocotte makes it work out of the box, but should you want to further develop for this application, then check out its [README](../installer/template/traefik/README.md).
+
+### Optional templates
+
+#### Static site
+* When running the [`static-site`](console.md#static-site) command, Cocotte creates a directory named after the namespace your chose for your site.
+* You can create as many of them as you want.
+* To develop locally, first make sure Traefik is [running locally](../installer/template/traefik/README.md#develop-locally), then hop to the [README](../installer/template/static/README.md).
 	
-### Static site
-* When running the [`static-site`](console.md#static-site) command, Cocotte creates a directory named after the namespace for your site.
-* To develop locally for your static site, first make sure Traefik is [running locally](../installer/template/traefik/README.md#develop-locally).
-* Then hop to the [README](../installer/template/static/README.md).
-	
-### Symfony (coming soon)
+#### Symfony (coming soon)
 
 ### Useful commands
 
@@ -114,8 +123,3 @@ See the [Console API Reference](console.md).
 * [Compose file](https://docs.docker.com/compose/compose-file/)
 * [Compose CLI](https://docs.docker.com/compose/reference/overview/)
 * [Machine CLI](https://docs.docker.com/machine/reference/)
-* [Traefik](https://docs.traefik.io/)
-
-## Contributing
-
-Pull requests are welcome. Take a look at the [development documentation](development.md).
