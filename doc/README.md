@@ -47,7 +47,7 @@ Cocotte is a free cloud installer for hosting multiple containerized application
 
 As opposed to a solution that would lock you in for further maintenance, Cocotte is just a one-time installer. Once the cloud machine is provisioned, you don't need Cocotte anymore. So you'll need to read the manuals eventually, but when you do, you'll have full control over every aspect of your installation.
 
-Optionally, and in the hope to get you started even faster, Cocotte has a template feature for adding new Docker applications to your infrastructure. It generates deployment scripts for a https web server, in a folder ready for source control. Two templates are available, a simple web server with a "Hello world" page, and a Symfony 4 application. The intended way of developing and deploying with these application models is documented in <a href="#templates">How to work with the application templates</a>.
+Optionally, and in the hope to get you started even faster, Cocotte has a template feature for adding new Docker applications to your infrastructure. It generates deployment scripts for a https web server, in a folder ready for source control. Two templates are available, a simple web server with a "Hello world" page, and a Symfony 4 application. The intended way of developing and deploying with these application models is <a href="#templates">documented</a>.
 
 Cocotte is fully tested on [Travis CI](https://travis-ci.org/chrif/cocotte), so there is no surprises with tutorials that used to work when they were written but are now outdated. The build itself is the tutorial, and if it passes, you can be confident that Cocotte works.
 
@@ -89,15 +89,18 @@ See the [Console API Reference](console.md).
 <a name="templates"></a>
 ## The application templates
 
-* Traefik
+* __Traefik__
 	* When running the [`install`](console.md#install) command, Cocotte creates a directory named `traefik`. You can commit it to version control. This is yours to modify if and when necessary.
 	* This is a reverse proxy whose job is to listen to ports needed by more than one container in your Docker Engine, and route each request to its intended container based on conditions like the hostname of the request. 
 	* This particular reverse proxy uses Let's Encrypt to automatically generate and renew SSL certificates per hostname.
-	* Cocotte makes it work out of the box, but should you want to further develop for this application, check its [README](../installer/template/traefik/README.md).
-
-
-* [Static site](../installer/template/static/README.md)
-* [Symfony]()
+	* Cocotte makes it work out of the box, but should you want to further develop for this application, then check out its [README](../installer/template/traefik/README.md).
+	
+* __Static site__
+	* When running the [`static-site`](console.md#static-site) command, Cocotte creates a directory named after the namespace for your site.
+	* To develop locally for your static site, first make sure Traefik is [running locally](../installer/template/traefik/README.md#develop-locally).
+	* Then hop to the [README](../installer/template/static/README.md).
+	
+* __Symfony__ (coming soon)
 
 ### Reference manuals
 
@@ -109,9 +112,9 @@ See the [Console API Reference](console.md).
 
 ### Useful commands
 
+* `docker ps` lists all your running containers.
 * `docker-machine -s machine ssh cocotte` logs as root into your cloud machine.
 * `docker stats` shows you memory and CPU usage for your containers.
-* `docker ps` lists all your running containers.
 
 ## Contributing
 

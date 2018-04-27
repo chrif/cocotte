@@ -71,7 +71,7 @@ This command is only useful for debugging. Use this command to:
 
 * Stop your local Traefik and remove it from your local Docker engine. You can put it back with [`./bin/dev`](#dev).
 
-### ./bin/reset-prod
+### reset-prod
 
 ```
 ./bin/reset-prod

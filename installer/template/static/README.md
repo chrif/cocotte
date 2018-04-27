@@ -1,6 +1,6 @@
 # How to work with the static site template
 
-The examples assume a static site created with namespace `mysite` and hostname `mysite.mydomain.com`.
+The examples assume a static site created with namespace `mysite` and hostname `mysite.mydomain.com`. It is also assumed that Traefik is running locally.
 
 ## Develop locally
 
