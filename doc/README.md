@@ -102,6 +102,12 @@ See the [Console API Reference](console.md).
 	
 * __Symfony__ (coming soon)
 
+### Useful commands
+
+* `docker ps` lists all your running containers.
+* `docker-machine -s machine ssh cocotte` logs as root into your cloud machine.
+* `docker stats` shows you memory and CPU usage for your containers.
+
 ### Reference manuals
 
 * [Dockerfile](https://docs.docker.com/engine/reference/builder/)
@@ -109,12 +115,6 @@ See the [Console API Reference](console.md).
 * [Compose CLI](https://docs.docker.com/compose/reference/overview/)
 * [Machine CLI](https://docs.docker.com/machine/reference/)
 * [Traefik](https://docs.traefik.io/)
-
-### Useful commands
-
-* `docker ps` lists all your running containers.
-* `docker-machine -s machine ssh cocotte` logs as root into your cloud machine.
-* `docker stats` shows you memory and CPU usage for your containers.
 
 ## Contributing
 
