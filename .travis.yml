@@ -22,19 +22,36 @@ before_install:
 
 install:
 - chmod +x bin/*
-- docker-compose --verbose build cocotte
 
-script:
-- ./bin/cmd phpunit --exclude-group=functional
-- ./bin/install -n -vvv && ./bin/static-site -n -vvv
-- if [ "${KEEP_MACHINE_AFTER:-false}" = false ]; then ./bin/cmd console networking -n -vvv --remove ${STATIC_SITE_HOSTNAME}; else true; fi
-- if [ "${KEEP_MACHINE_AFTER:-false}" = false ]; then ./bin/uninstall -n -vvv; else echo "Machine not removed."; fi
+jobs:
+  include:
+    - stage: build docker image
+      script:
+      - docker-compose pull cocotte || true
+      - docker-compose --verbose build cocotte
+      - docker images | grep chrif
+      - echo "$DOCKER_PASSWORD" | docker login -u chrif --password-stdin
+      - docker-compose push cocotte
+    - stage: unit-test
+      script: ./bin/cmd phpunit --exclude-group=functional
+    - stage: install
+      script: ./bin/install -n -vvv
+    - stage: apps
+      script: ./bin/static-site -n -vvv
+    - stage: uninstall
+      script: [ "${KEEP_MACHINE_AFTER:-false}" = false ]; then ./bin/cmd console networking -n -vvv --remove ${STATIC_SITE_HOSTNAME}; else true; fi
+      script: [ "${KEEP_MACHINE_AFTER:-false}" = false ]; then ./bin/uninstall -n -vvv; else echo "Machine not removed."; fi
+
+after_script:
+  - if [ "${KEEP_MACHINE_AFTER:-false}" = false ]; then ./bin/cmd console networking -n -vvv --remove ${STATIC_SITE_HOSTNAME}; else true; fi
+  - if [ "${KEEP_MACHINE_AFTER:-false}" = false ]; then ./bin/uninstall -n -vvv; else echo "Machine not removed."; fi
 
 env:
   global:
     - MACHINE_NAME=cocotte-travis-${TRAVIS_BUILD_ID}
     # DIGITAL_OCEAN_API_TOKEN (set in in repo settings)
     - GIT_COMMIT_ID=${TRAVIS_COMMIT}
+    - INSTALLER_VERSION=travis-${TRAVIS_BUILD_ID}
     # STATIC_SITE_HOSTNAME (set in in repo settings)
     - STATIC_SITE_NAMESPACE=static-site
     # TRAEFIK_UI_HOSTNAME (set in in repo settings)

@@ -73,7 +73,7 @@ services:
 
   # docker run -it --rm chrif/cocotte
   bare:
-    image: chrif/cocotte
+    image: "chrif/cocotte:${INSTALLER_VERSION}"
     volumes:
       - ./installer:/installer
       - ./installer/etc/xdebug.ini:/etc/php7/conf.d/xdebug.ini:ro

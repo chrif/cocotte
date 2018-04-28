@@ -14,7 +14,7 @@ docker run -it --rm \
     -e MACHINE_NAME="${MACHINE_NAME}" \
     -v "$(pwd)":/host \
     -v /var/run/docker.sock:/var/run/docker.sock:ro \
-    chrif/cocotte static-site \
+    chrif/cocotte:${INSTALLER_VERSION} static-site \
     --digital-ocean-api-token="${DIGITAL_OCEAN_API_TOKEN}" \
     --namespace="${STATIC_SITE_NAMESPACE}" \
     --hostname="${STATIC_SITE_HOSTNAME}" \
