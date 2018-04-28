@@ -17,6 +17,7 @@ use Cocotte\Machine\MachineState;
 use Cocotte\Machine\MachineStoragePath;
 use Cocotte\Shell\ProcessRunner;
 use Cocotte\Template\StaticSite\StaticSiteCreator;
+use Cocotte\Template\StaticSite\StaticSiteDeploymentValidator;
 use Cocotte\Template\StaticSite\StaticSiteHostname;
 use Cocotte\Template\StaticSite\StaticSiteHostnameOptionProvider;
 use Cocotte\Template\StaticSite\StaticSiteNamespace;
@@ -71,6 +72,10 @@ final class StaticSiteCommand extends AbstractCommand implements LazyEnvironment
      * @var HostMount
      */
     private $hostMount;
+    /**
+     * @var StaticSiteDeploymentValidator
+     */
+    private $staticSiteDeploymentValidator;
 
     public function __construct(
         StaticSiteCreator $staticSiteCreator,
@@ -81,7 +86,8 @@ final class StaticSiteCommand extends AbstractCommand implements LazyEnvironment
         EventDispatcherInterface $eventDispatcher,
         MachineState $machineState,
         StaticSiteNamespace $staticSiteNamespace,
-        HostMount $hostMount
+        HostMount $hostMount,
+        StaticSiteDeploymentValidator $staticSiteDeploymentValidator
     ) {
         $this->staticSiteCreator = $staticSiteCreator;
         $this->networkingConfigurator = $networkingConfigurator;
@@ -92,6 +98,7 @@ final class StaticSiteCommand extends AbstractCommand implements LazyEnvironment
         $this->machineState = $machineState;
         $this->staticSiteNamespace = $staticSiteNamespace;
         $this->hostMount = $hostMount;
+        $this->staticSiteDeploymentValidator = $staticSiteDeploymentValidator;
         parent::__construct();
     }
 
@@ -183,6 +190,10 @@ final class StaticSiteCommand extends AbstractCommand implements LazyEnvironment
             $this->style->writeln('Deploying created site to cloud machine');
             $this->processRunner->mustRun(new Process('./bin/prod 2>/dev/stdout',
                 $this->staticSiteCreator->hostAppPath()));
+
+            $this->style->writeln('Waiting for site to respond');
+            $this->staticSiteDeploymentValidator->validate();
+
             $this->style->complete([
                 "Static site successfully deployed at ".
                 "<options=bold>https://{$this->staticSiteHostname->toString()}</>",

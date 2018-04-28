@@ -1,13 +1,13 @@
 <?php declare(strict_types=1);
 
-namespace Cocotte\Template\Traefik;
+namespace Cocotte\Template\StaticSite;
 
 use Cocotte\Acme\CertificateChecker;
 use Cocotte\Machine\MachineIp;
 use Cocotte\Shell\ProcessRunner;
 use Symfony\Component\Process\Process;
 
-final class TraefikDeploymentValidator
+final class StaticSiteDeploymentValidator
 {
     /**
      * @var ProcessRunner
@@ -15,9 +15,9 @@ final class TraefikDeploymentValidator
     private $processRunner;
 
     /**
-     * @var TraefikHostname
+     * @var StaticSiteHostname
      */
-    private $traefikHostname;
+    private $staticSiteHostname;
 
     /**
      * @var MachineIp
@@ -31,12 +31,12 @@ final class TraefikDeploymentValidator
 
     public function __construct(
         ProcessRunner $processRunner,
-        TraefikHostname $traefikHostname,
+        StaticSiteHostname $staticSiteHostname,
         MachineIp $machineIp,
         CertificateChecker $certificateChecker
     ) {
         $this->processRunner = $processRunner;
-        $this->traefikHostname = $traefikHostname;
+        $this->staticSiteHostname = $staticSiteHostname;
         $this->machineIp = $machineIp;
         $this->certificateChecker = $certificateChecker;
     }
@@ -44,12 +44,12 @@ final class TraefikDeploymentValidator
     public function validate()
     {
         // wait for ping, try 6 times
-        $process = new Process('ping-traefik 6 2> /dev/stdout');
+        $process = new Process("ping-app {$this->staticSiteHostname->toString()} 6 2> /dev/stdout");
         $this->processRunner->mustRun($process);
 
         // check cert if DNS is up to date
         $this->certificateChecker->check(
-            $this->traefikHostname->toString(),
+            $this->staticSiteHostname->toString(),
             $this->machineIp->toString()
         );
     }
