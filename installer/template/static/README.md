@@ -81,6 +81,22 @@ This command is only useful for debugging. Use this command to:
 
 * Stop your production site and remove it from your Digital Ocean Docker engine. You can put it back with [`./bin/prod`](#prod).
 
-## The environment variables in .env
+## Configuration
 
-TODO
+### The environment variables in `.env`
+
+This file is automatically used to populate environment at runtime when running [commands](#the-commands).
+
+* `APP_HOSTS`
+	* This is the hostname of your application in production. It is used by Traefik to route requests and generate SSL certificates. Be aware that it cannot be simply changed here. Digital Ocean networking would also have to be updated. Therefore consider this value read-only unless you know what you're doing.
+* `MACHINE_NAME`
+	* This is the name used by Docker Machine for Cocotte. This is a read-only value.
+* `MACHINE_STORAGE_PATH`
+	* This is the path where your cloud machine credentials are stored by Docker Machine. This is a read-only value.
+
+### The environment variables in `.env-override`
+
+This file is automatically used to override values from `.env` for the local development [commands](#the-commands).
+
+* `APP_HOSTS`
+	* This is the hostname of your application in development.
