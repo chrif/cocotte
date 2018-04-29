@@ -40,8 +40,9 @@ before_deploy:
 deploy:
   provider: script
   script: docker-compose push cocotte && docker push chrif/cocotte:latest
-#  on:
-#    branch: master
+  on:
+    all_branches: true
+    condition: true
 
 env:
   global:
