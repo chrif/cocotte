@@ -22,9 +22,9 @@ before_install:
 
 install:
 - chmod +x bin/*
-- docker-compose pull cocotte || true
-- docker-compose --verbose build cocotte
-- docker images | grep chrif
+- docker pull chrif/cocotte || true # reuse layers if possible
+- docker-compose build cocotte
+- docker images | grep chrif/cocotte
 
 script:
 - ./bin/cmd phpunit --exclude-group=functional
@@ -35,21 +35,20 @@ script:
 
 before_deploy:
 - echo "$DOCKER_PASSWORD" | docker login -u chrif --password-stdin
-- docker tag "chrif/cocotte:${INSTALLER_VERSION}" chrif/cocotte:latest
+- docker tag chrif/cocotte:latest "chrif/cocotte:${TRAVIS_TAG}"
 
 deploy:
   provider: script
-  script: docker-compose push cocotte && docker push chrif/cocotte:latest
+  script: docker push chrif/cocotte:latest && docker push "chrif/cocotte:${TRAVIS_TAG}"
   on:
-    all_branches: true
-    condition: true
+    tags: true
 
 env:
   global:
-    - MACHINE_NAME=cocotte-travis-${TRAVIS_BUILD_ID}
     # DIGITAL_OCEAN_API_TOKEN (set in in repo settings)
+    - COCOTTE_VERSION=${TRAVIS_TAG}
     - GIT_COMMIT_ID=${TRAVIS_COMMIT}
-    - INSTALLER_VERSION=travis-${TRAVIS_BUILD_ID}
+    - MACHINE_NAME=cocotte-travis-${TRAVIS_BUILD_ID}
     # STATIC_SITE_HOSTNAME (set in in repo settings)
     - STATIC_SITE_NAMESPACE=static-site
     # TRAEFIK_UI_HOSTNAME (set in in repo settings)

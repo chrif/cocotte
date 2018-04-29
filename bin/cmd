@@ -19,5 +19,5 @@ docker run --rm \
     -e TRAEFIK_UI_PASSWORD="${TRAEFIK_UI_PASSWORD}" \
     -e TRAEFIK_UI_USERNAME="${TRAEFIK_UI_USERNAME}" \
     -v "$(pwd)":/host \
-    chrif/cocotte:${INSTALLER_VERSION} \
+    chrif/cocotte \
     "$@"

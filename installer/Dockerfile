@@ -22,8 +22,12 @@ RUN composer install
 RUN chmod +x /installer/bin/* /installer/vendor/bin/*
 ENV PATH="/installer/bin:/installer/vendor/bin:${PATH}"
 
-ARG GIT_COMMIT_ID=dev
+ARG GIT_COMMIT_ID=""
 ENV GIT_COMMIT_ID ${GIT_COMMIT_ID}
+
+ARG COCOTTE_VERSION=""
+ENV COCOTTE_VERSION ${COCOTTE_VERSION}
+
 ENV MACHINE_NAME=cocotte
 
 ENTRYPOINT ["cocotte-entrypoint"]
