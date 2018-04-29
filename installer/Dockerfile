@@ -17,6 +17,7 @@ COPY ./tests ./tests
 COPY ./var ./var
 COPY ./etc/php.ini /etc/php7/conf.d/zzz-php.ini
 RUN composer install
+RUN composer clearcache
 
 # setup executables
 RUN chmod +x /installer/bin/* /installer/vendor/bin/*
