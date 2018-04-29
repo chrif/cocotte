@@ -1,4 +1,4 @@
-version: "2"
+version: "2.2"
 
 services:
 
@@ -6,6 +6,8 @@ services:
     build:
       context: ./installer
       dockerfile: ./Dockerfile
+      cache_from:
+        - chrif/cocotte
       args:
         - GIT_COMMIT_ID
         - COCOTTE_VERSION

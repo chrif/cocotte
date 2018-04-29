@@ -22,7 +22,7 @@ before_install:
 
 install:
 - chmod +x bin/*
-- docker pull chrif/cocotte:latest || true # reuse layers if possible
+- docker pull chrif/cocotte || true # reuse layers if possible
 - docker-compose build cocotte
 - docker images | grep chrif/cocotte
 
