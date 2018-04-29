@@ -26,12 +26,12 @@ install:
 - docker-compose build cocotte
 - docker images | grep chrif/cocotte
 
-script:
-- ./bin/cmd phpunit --exclude-group=functional
-- ./bin/install -n -vvv
-- ./bin/static-site -n -vvv
-- if [ "${KEEP_MACHINE_AFTER:-false}" = false ]; then ./bin/cmd console networking -n -vvv --remove ${STATIC_SITE_HOSTNAME}; else true; fi
-- if [ "${KEEP_MACHINE_AFTER:-false}" = false ]; then ./bin/uninstall -n -vvv; else echo "Machine not removed."; fi
+#script:
+#- ./bin/cmd phpunit --exclude-group=functional
+#- ./bin/install -n -vvv
+#- ./bin/static-site -n -vvv
+#- if [ "${KEEP_MACHINE_AFTER:-false}" = false ]; then ./bin/cmd console networking -n -vvv --remove ${STATIC_SITE_HOSTNAME}; else true; fi
+#- if [ "${KEEP_MACHINE_AFTER:-false}" = false ]; then ./bin/uninstall -n -vvv; else echo "Machine not removed."; fi
 
 before_deploy:
 - echo "$DOCKER_PASSWORD" | docker login -u chrif --password-stdin
