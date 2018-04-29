@@ -4,7 +4,8 @@ namespace Cocotte\Machine;
 
 use Cocotte\Console\CommandConfiguredEvent;
 use Cocotte\Console\CommandEventStore;
-use Cocotte\Console\CommandInitializeEvent;
+use Cocotte\Environment\EnvironmentEventStore;
+use Cocotte\Environment\EnvironmentLoadedEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 final class MachineRequiredListener implements EventSubscriberInterface
@@ -23,7 +24,7 @@ final class MachineRequiredListener implements EventSubscriberInterface
     {
         return [
             CommandEventStore::COMMAND_CONFIGURED => 'onCommandConfigured',
-            CommandEventStore::COMMAND_INITIALIZE => 'onCommandInitialize',
+            EnvironmentEventStore::ENVIRONMENT_LOADED => 'onEnvironmentLoaded',
         ];
     }
 
@@ -40,9 +41,9 @@ final class MachineRequiredListener implements EventSubscriberInterface
         }
     }
 
-    public function onCommandInitialize(CommandInitializeEvent $event)
+    public function onEnvironmentLoaded(EnvironmentLoadedEvent $event)
     {
-        if ($event->command() instanceof MachineRequired) {
+        if ($event->environment() instanceof MachineRequired) {
             if (!$this->machineState->exists()) {
                 throw new \Exception("Could not find a machine. ".
                     "Did you create a machine with the install command before? ".

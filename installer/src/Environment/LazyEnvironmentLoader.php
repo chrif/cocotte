@@ -8,6 +8,7 @@ use Cocotte\Console\CommandExecuteEvent;
 use Cocotte\Console\Style;
 use ProxyManager\Proxy\LazyLoadingInterface;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 final class LazyEnvironmentLoader implements EventSubscriberInterface
@@ -16,15 +17,19 @@ final class LazyEnvironmentLoader implements EventSubscriberInterface
      * @var LazyEnvironmentValue|LazyLoadingInterface[]
      */
     private $values = [];
-
     /**
      * @var Style
      */
     private $style;
+    /**
+     * @var EventDispatcherInterface
+     */
+    private $eventDispatcher;
 
-    public function __construct(Style $style)
+    public function __construct(Style $style, EventDispatcherInterface $eventDispatcher)
     {
         $this->style = $style;
+        $this->eventDispatcher = $eventDispatcher;
     }
 
     public static function getSubscribedEvents()
@@ -39,6 +44,10 @@ final class LazyEnvironmentLoader implements EventSubscriberInterface
         $command = $event->command();
         if ($command instanceof LazyEnvironment) {
             $this->load($command, $event->input());
+            $this->eventDispatcher->dispatch(
+                EnvironmentEventStore::ENVIRONMENT_LOADED,
+                new EnvironmentLoadedEvent($command)
+            );
         }
     }
 
