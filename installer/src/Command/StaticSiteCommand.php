@@ -13,6 +13,7 @@ use Cocotte\Host\HostMount;
 use Cocotte\Host\HostMountRequired;
 use Cocotte\Machine\MachineName;
 use Cocotte\Machine\MachineNameOptionProvider;
+use Cocotte\Machine\MachineRequired;
 use Cocotte\Machine\MachineState;
 use Cocotte\Machine\MachineStoragePath;
 use Cocotte\Shell\ProcessRunner;
@@ -28,7 +29,11 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Process\Process;
 
-final class StaticSiteCommand extends AbstractCommand implements LazyEnvironment, HostMountRequired, DocumentedCommand
+final class StaticSiteCommand extends AbstractCommand implements
+    LazyEnvironment,
+    HostMountRequired,
+    DocumentedCommand,
+    MachineRequired
 {
     /**
      * @var StaticSiteCreator

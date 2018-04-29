@@ -94,6 +94,8 @@ services:
   Cocotte\Machine\MachineState: ~
   Cocotte\Machine\MachineStoragePath:
     tags: ['lazy.environment']
+  Cocotte\Machine\MachineRequiredListener:
+    tags: ['event.subscriber']
 
   # shell
   Cocotte\Shell\ProcessRunner: ~

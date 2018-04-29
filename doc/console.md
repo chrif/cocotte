@@ -130,6 +130,8 @@ This command requires 2 volumes:
   * "$(pwd)":/host
   * /var/run/docker.sock:/var/run/docker.sock:ro
 
+This command requires the Docker Machine created by the `install` command.
+
 
 ### Options
 
