@@ -38,10 +38,15 @@ before_deploy:
 - docker tag chrif/cocotte:latest "chrif/cocotte:${TRAVIS_TAG}"
 
 deploy:
-  provider: script
-  script: docker push chrif/cocotte:latest && docker push "chrif/cocotte:${TRAVIS_TAG}"
-  on:
-    tags: true
+  - provider: script
+    script: docker push chrif/cocotte:latest && docker push "chrif/cocotte:${TRAVIS_TAG}"
+    on:
+      tags: true
+  - provider: releases
+    api_key:
+      secure: "tNIBJdbG1FBmoI79oxummUP8kOaqnvAD6WBtjfnSA35l7ff1R++7XziI82teyoWzC7r1oeQ36ByaJpG9bvrhXa9u6DHzWPSN4XkEWwwBZluXjwDEqnCH7nUaJNBTBt7ATAkI6g/VABrBpfQolsDGmVpFAhnDwVDL2LRMKF+SpzF3ejf8as23/8Eoixg6vwoWRLh8uKrb7hSgujO5OmXO4nMEEnWrrL2NxKMx59dnHRWNS7Xi7TvrQEWfTo2yDfxjMnmwCJpi12ovbvcWSBHdrfJ3wRxoFyvCBI3gdKZICdh9LMNWzrCPEAsflmqlIGz0kMLRz6zbvr56+fXO27BouaIF7NKE5IBAI3GhOmI6ogPU0Bcagad28BjRpKWnXfozg7BNDV9LdsEW1H1romMbWEmXcNDOjzdzD/pasK7Jfjf+cefjNcSj4gdv3bJMGPWpdq8wLK6eJHy+V4r1wvaB1mAXna0zV5AcDCp0yEQwU2ASdEL70lAuQfW0jG03CXDTfZyrKMCPFxhic0v4/2gq956wOfvFlNJWmswLAFHleRFAOVbRXI+p/sDCwmgAEMI1z8PoIj9U34WV0zpj9V/+UAyTewipHZauCJ1PFU4ZzsJm7iWDpWWzWb3cAlL6E4ALvAPzXo5t97ERajKLPzvMs5nkbDu9ElEuedBLLVojTj0="
+    on:
+      tags: true
 
 env:
   global:
