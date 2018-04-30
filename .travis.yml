@@ -40,6 +40,9 @@ script:
 # cleanup
 - if [ "${KEEP_MACHINE_AFTER:-false}" = false ]; then ./bin/cmd console networking -n -vvv --remove ${STATIC_SITE_HOSTNAME}; else true; fi
 - if [ "${KEEP_MACHINE_AFTER:-false}" = false ]; then ./bin/uninstall -n -vvv; else echo "Machine not removed."; fi
+after_failure:
+- if [ "${KEEP_MACHINE_AFTER:-false}" = false ]; then ./bin/cmd console networking -n -vvv --remove ${STATIC_SITE_HOSTNAME}; else true; fi
+- if [ "${KEEP_MACHINE_AFTER:-false}" = false ]; then ./bin/uninstall -n -vvv; else echo "Machine not removed."; fi
 
 deploy:
   # push image to docker hub
