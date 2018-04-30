@@ -30,7 +30,7 @@ install:
 
 script:
   # unit tests
-  - ./bin/cmd phpunit --exclude-group=functional
+  - ./bin/cmd phpunit --testsuite=unit
 
   # install and apps commands
   - ./bin/install -n -vvv

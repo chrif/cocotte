@@ -13,7 +13,7 @@ COPY ./config ./config
 COPY ./phpunit.xml.dist ./
 COPY ./src ./src
 COPY ./template ./template
-COPY ./tests ./tests
+COPY ./test ./test
 COPY ./var ./var
 COPY ./etc/php.ini /etc/php7/conf.d/zzz-php.ini
 RUN composer install

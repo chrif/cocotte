@@ -1,6 +1,6 @@
 <!-- https://phpunit.readthedocs.io/en/7.1/configuration.html#appendixes-configuration -->
 <!--suppress XmlUnboundNsPrefix -->
-<phpunit bootstrap="tests/bootstrap.php"
+<phpunit bootstrap="test/bootstrap.php"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/7.0/phpunit.xsd"
 >
@@ -11,8 +11,11 @@
     </filter>
 
     <testsuites>
-        <testsuite name="tests">
-            <directory>tests</directory>
+        <testsuite name="unit">
+            <directory>test/Unit</directory>
+        </testsuite>
+        <testsuite name="functional">
+            <directory>test/Functional</directory>
         </testsuite>
     </testsuites>
 

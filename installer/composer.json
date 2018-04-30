@@ -11,8 +11,8 @@
   },
   "autoload-dev": {
     "psr-4": {
-      "Cocotte\\Tests\\": [
-        "tests/"
+      "Cocotte\\Test\\": [
+        "test/"
       ]
     }
   },

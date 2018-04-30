@@ -43,7 +43,7 @@ docker-compose build --pull cocotte
 	```
 ### Unit tests
 ```
-docker-compose run --rm cmd phpunit --exclude-group=functional
+docker-compose run --rm cmd phpunit --testsuite=unit 
 ```
 ### Symfony console
 ```

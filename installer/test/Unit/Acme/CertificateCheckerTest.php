@@ -1,6 +1,6 @@
 <?php
 
-namespace Cocotte\Acme;
+namespace Cocotte\Test\Unit\Acme;
 
 use PHPUnit\Framework\TestCase;
 

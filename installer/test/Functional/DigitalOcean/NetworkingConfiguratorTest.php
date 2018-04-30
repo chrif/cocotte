@@ -1,15 +1,12 @@
 <?php
 
-namespace Cocotte\Tests\Functional\DigitalOcean;
+namespace Cocotte\Test\Functional\DigitalOcean;
 
 use Cocotte\DigitalOcean\Hostname;
 use Cocotte\DigitalOcean\HostnameCollection;
 use Cocotte\DigitalOcean\NetworkingConfigurator;
-use Cocotte\Tests\FunctionalTestCase;
+use Cocotte\Test\FunctionalTestCase;
 
-/**
- * @group functional
- */
 class NetworkingConfiguratorTest extends FunctionalTestCase
 {
 

@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Cocotte\Tests;
+namespace Cocotte\Test;
 
 use Cocotte\DependencyInjection\Application;
 use Cocotte\DigitalOcean\Domain;
