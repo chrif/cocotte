@@ -1,11 +1,11 @@
 <?php
 
-namespace Cocotte\Tests\DigitalOcean;
+namespace Cocotte\Tests\Functional\DigitalOcean;
 
 use Cocotte\DigitalOcean\Hostname;
 use Cocotte\DigitalOcean\HostnameCollection;
 use Cocotte\DigitalOcean\NetworkingConfigurator;
-use Cocotte\FunctionalTestCase;
+use Cocotte\Tests\FunctionalTestCase;
 
 /**
  * @group functional

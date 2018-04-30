@@ -1,6 +1,6 @@
 <?php
 
-namespace Cocotte\Tests\DigitalOcean;
+namespace Cocotte\Tests\Unit\DigitalOcean;
 
 use Cocotte\DigitalOcean\Hostname;
 use DigitalOceanV2\Entity\DomainRecord;

@@ -5,8 +5,14 @@
   "autoload": {
     "psr-4": {
       "Cocotte\\": [
-        "src",
-        "tests"
+        "src/"
+      ]
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Cocotte\\Tests\\": [
+        "tests/"
       ]
     }
   },
