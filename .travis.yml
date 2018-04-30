@@ -46,19 +46,14 @@ deploy:
   # prepare artifacts for github release
   - provider: script
     skip_cleanup: true
-    script: "docker save chrif/cocotte:${TRAVIS_TAG} | gzip -c > chrif-cocotte-${TRAVIS_TAG}.tar.gz && \
-            docker run -it --rm -v $(pwd):/usr/local/src/your-app ferrarimarco/github-changelog-generator \
-              -u chrif -p cocotte -t $GITHUB_TOKEN \
-              --release-branch $TRAVIS_TAG --future-release $TRAVIS_TAG \
-              --no-verbose"
+    script: "docker save chrif/cocotte:${TRAVIS_TAG} | gzip -c > chrif-cocotte-${TRAVIS_TAG}.tar.gz"
     on:
       tags: true
   # github release
   - provider: releases
     skip_cleanup: true
     file:
-      - CHANGELOG.md
-      - chrif-cocotte-${TRAVIS_TAG}.tar.gz
+      - "chrif-cocotte-${TRAVIS_TAG}.tar.gz"
     api_key: $GITHUB_TOKEN
     on:
       tags: true
