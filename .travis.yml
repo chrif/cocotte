@@ -47,14 +47,12 @@ deploy:
   - provider: script
     skip_cleanup: true
     script: "docker save chrif/cocotte:${TRAVIS_TAG} | gzip -c > chrif-cocotte-${TRAVIS_TAG}.tar.gz && \
-            docker run -it --rm -v $(pwd):/usr/local/src/your-app ferrarimarco/github-changelog-generator -u chrif -p cocotte && \
-            export RELEASE_BODY=$(cat CHANGELOG.md)"
+            docker run -it --rm -v $(pwd):/usr/local/src/your-app ferrarimarco/github-changelog-generator -u chrif -p cocotte"
     on:
       tags: true
   # github release
   - provider: releases
     skip_cleanup: true
-    body: "$RELEASE_BODY"
     file:
       - CHANGELOG.md
       - chrif-cocotte-${TRAVIS_TAG}.tar.gz
