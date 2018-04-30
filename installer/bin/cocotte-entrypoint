@@ -4,7 +4,12 @@ set -eu
 
 php /installer/bin/bootstrap-container
 
-if [ "$1" = "help" ] || [ "$1" = "--help" ] || [ "$1" = "-h" ]; then
+if [ "$1" = "version" ] || [ "$1" = "--version" ] || [ "$1" = "-v" ]; then
+	cat <<END
+Cocotte ${COCOTTE_VERSION}
+END
+	exit 0
+elif [ "$1" = "help" ] || [ "$1" = "--help" ] || [ "$1" = "-h" ]; then
 	cat <<END
 
 * For the list of available commands run:

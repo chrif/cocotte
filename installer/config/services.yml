@@ -23,6 +23,7 @@ services:
     class: Symfony\Component\Console\Application
     arguments:
       - "<fg=green;options=bold>Cocotte Console</>"
+      - '%env(COCOTTE_VERSION)%'
   Cocotte\Command\:
     resource: '../src/Command/*'
     tags: ['console.command']

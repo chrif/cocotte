@@ -6,7 +6,7 @@ use Cocotte\DigitalOcean\Hostname;
 use DigitalOceanV2\Entity\DomainRecord;
 use PHPUnit\Framework\TestCase;
 
-class AppHostTest extends TestCase
+class HostnameTest extends TestCase
 {
 
     public function test_domain()

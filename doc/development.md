@@ -10,7 +10,7 @@ Configure these dist files at the root
 
 ## Build
 ```
-docker-compose build cocotte
+docker-compose build --pull cocotte
 ```
 
 ## Useful commands
