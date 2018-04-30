@@ -12,9 +12,12 @@ Therefore, the cheapest solution is *one* instance of the smallest VM, and a gre
 
 ## Why not pushing images to a Docker Registry and pulling them in production?
 
-This is a continuation of the previous question about an orchestrator. Because Cocotte does not setup a cluster, the need for an image registry is not as important. With Cocotte, images are intended for only one remote Docker engine, and they might contain closed source code: the free Docker Hub plan would expose that code. 
+This is a continuation of the previous answer about an orchestrator...
 
-We could host the Docker Registry on our VM, but that would be the same VM as the only Docker Engine for which the images are intended. It would also add the overhead of installing and securing the registry, as opposed to a `docker-machine env` shell session which requires no installation and is already secure.
+Because Cocotte does not setup a cluster, the need for an image registry is not as important. With Cocotte, images are intended for only one remote Docker engine, and they might contain closed source code: the free Docker Hub plan would expose that code. 
 
-For these reasons, the introduction of an image registry is left to a more advanced version of Cocotte.
+We could host our own Docker Registry on the same VM as the only Docker Engine pulling them, but it would also add the overhead of installing and securing the registry, as opposed to a `docker-machine env` shell session which requires no installation and is already secure.
 
+There are third-parties offering free Docker Registry hosting, but their business model is most likely to have a free version just annoying enough so that people end-up paying.
+
+For all these reasons, the introduction of an image registry is left to a more advanced version of Cocotte.
