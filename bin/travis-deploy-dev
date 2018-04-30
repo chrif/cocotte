@@ -12,20 +12,21 @@ set -a
 set +a
 STATIC_LOCAL=${APP_HOSTS}
 
-echo "${TRAEFIK_LOCAL}\n"
-echo "${STATIC_LOCAL}\n"
-sudo -- sh -c "echo 127.0.0.1 ${TRAEFIK_LOCAL} >> /etc/hosts"
-sudo -- sh -c "echo 127.0.0.1 ${STATIC_LOCAL} >> /etc/hosts"
+echo ${TRAEFIK_LOCAL}
+echo ${STATIC_LOCAL}
+echo "\n" | sudo tee -a /etc/hosts
+echo "127.0.0.1 ${TRAEFIK_LOCAL}" | sudo tee -a /etc/hosts
+echo "127.0.0.1 ${STATIC_LOCAL}" | sudo tee -a /etc/hosts
 sudo cat /etc/hosts
 
 (cd traefik; ./bin/dev)
 (cd static-site; ./bin/dev)
 
-bash -c 'while [[ "$(curl -s -o /dev/null -w ''%{http_code}'' ${TRAEFIK_LOCAL})" != "200" ]]; do sleep 5; done'
-bash -c 'while [[ "$(curl -s -o /dev/null -w ''%{http_code}'' ${STATIC_LOCAL})" != "200" ]]; do sleep 5; done'
+bash -c 'while [[ "$(curl -s -o /dev/null -w ''%{http_code}'' http://${TRAEFIK_LOCAL})" != "200" ]]; do sleep 5; done'
+bash -c 'while [[ "$(curl -s -o /dev/null -w ''%{http_code}'' http://${STATIC_LOCAL})" != "200" ]]; do sleep 5; done'
 
-curl ${TRAEFIK_LOCAL} -v
-curl ${STATIC_LOCAL} -v
+curl http://${TRAEFIK_LOCAL} -v
+curl http://${STATIC_LOCAL} -v
 
 (cd traefik; docker-compose logs -t traefik)
 (cd static-site; docker-compose logs -t nginx)
