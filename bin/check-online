@@ -17,7 +17,7 @@ function ping($host)
 }
 
 $host = $argv[1];
-$try = $argv[2] ?? 1;
+$try = $argv[2] ?: 1;
 
 echo "Trying up to $try times\n";
 
