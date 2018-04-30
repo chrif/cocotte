@@ -27,9 +27,17 @@ install:
 - docker images | grep chrif/cocotte
 
 script:
+# unit tests
 - ./bin/cmd phpunit --exclude-group=functional
+
+# install and apps commands
 - ./bin/install -n -vvv
 - ./bin/static-site -n -vvv
+
+# test local deployment
+- ./bin/travis-deploy-dev
+
+# cleanup
 - if [ "${KEEP_MACHINE_AFTER:-false}" = false ]; then ./bin/cmd console networking -n -vvv --remove ${STATIC_SITE_HOSTNAME}; else true; fi
 - if [ "${KEEP_MACHINE_AFTER:-false}" = false ]; then ./bin/uninstall -n -vvv; else echo "Machine not removed."; fi
 
@@ -52,8 +60,7 @@ deploy:
   # github release
   - provider: releases
     skip_cleanup: true
-    file:
-      - "chrif-cocotte-${TRAVIS_TAG}.tar.gz"
+    file: "chrif-cocotte-${TRAVIS_TAG}.tar.gz"
     api_key: $GITHUB_TOKEN
     on:
       tags: true

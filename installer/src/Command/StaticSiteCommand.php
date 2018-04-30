@@ -199,6 +199,8 @@ final class StaticSiteCommand extends AbstractCommand implements
             $this->style->writeln('Waiting for site to respond');
             $this->staticSiteDeploymentValidator->validate();
 
+            $this->processRunner->mustRun(new Process('./bin/logs -t', $this->staticSiteCreator->hostAppPath()));
+
             $this->style->complete([
                 "Static site successfully deployed at ".
                 "<options=bold>https://{$this->staticSiteHostname->toString()}</>",
