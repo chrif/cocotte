@@ -12,9 +12,6 @@ set -a
 set +a
 STATIC_LOCAL=${APP_HOSTS}
 
-echo ${TRAEFIK_LOCAL}
-echo ${STATIC_LOCAL}
-echo "\n" | sudo tee -a /etc/hosts
 echo "127.0.0.1 ${TRAEFIK_LOCAL}" | sudo tee -a /etc/hosts
 echo "127.0.0.1 ${STATIC_LOCAL}" | sudo tee -a /etc/hosts
 sudo cat /etc/hosts
@@ -22,11 +19,10 @@ sudo cat /etc/hosts
 (cd traefik; ./bin/dev)
 (cd static-site; ./bin/dev)
 
-bash -c 'while [[ "$(curl -s -o /dev/null -w ''%{http_code}'' http://${TRAEFIK_LOCAL})" != "200" ]]; do sleep 5; done'
-bash -c 'while [[ "$(curl -s -o /dev/null -w ''%{http_code}'' http://${STATIC_LOCAL})" != "200" ]]; do sleep 5; done'
+./bin/check-online ${TRAEFIK_LOCAL} 6
+./bin/check-online ${STATIC_LOCAL} 6
 
-curl http://${TRAEFIK_LOCAL} -v
-curl http://${STATIC_LOCAL} -v
+curl http://${STATIC_LOCAL}
 
 (cd traefik; docker-compose logs -t traefik)
 (cd static-site; docker-compose logs -t nginx)

@@ -3,10 +3,11 @@
 
 function ping($host)
 {
-    $url = "https://$host";
+    $url = "http://$host";
     echo "Making request to $url\n";
     $httpStatus = exec(
         'curl -S --insecure --silent --output /dev/null --write-out "%{http_code}" ' .
+        '--user "${TRAEFIK_UI_USERNAME}":"${TRAEFIK_UI_PASSWORD}"' .
         $url,
         $out,
         $ret
