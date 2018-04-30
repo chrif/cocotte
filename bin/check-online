@@ -5,15 +5,19 @@ function ping($host)
 {
     $url = "http://$host";
     echo "Making request to $url\n";
+    $command = 'curl -S --silent --output /dev/null --write-out "%{http_code}" '.
+        '--user "${TRAEFIK_UI_USERNAME}":"${TRAEFIK_UI_PASSWORD}" '.
+        $url;
+
+//    echo $command;
+
     $httpStatus = exec(
-        'curl -S --insecure --silent --output /dev/null --write-out "%{http_code}" ' .
-        '--user "${TRAEFIK_UI_USERNAME}":"${TRAEFIK_UI_PASSWORD}" ' .
-        $url,
+        $command,
         $out,
         $ret
     );
 
-    return $ret === 0 && $httpStatus == 200;
+    return $ret === 0 && ($httpStatus == 200 || $httpStatus == 302);
 }
 
 $host = $argv[1];
