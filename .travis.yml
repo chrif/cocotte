@@ -1,45 +1,47 @@
-language: generic
+language: php
+php:
+  - 7.1.16
 sudo: required
 dist: trusty
 
 before_install:
-  # install docker
-- curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-- sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu
-  $(lsb_release -cs) stable"
-- sudo apt-get update
-- sudo apt-get -y install docker-ce=18.03.1~ce-0~ubuntu
-  # install docker-machine
-- curl -L https://github.com/docker/machine/releases/download/v0.14.0/docker-machine-`uname
-  -s`-`uname -m` >/tmp/docker-machine
-- sudo install /tmp/docker-machine /usr/local/bin/docker-machine
-  # install docker-compose
-- sudo rm /usr/local/bin/docker-compose
-- curl -L https://github.com/docker/compose/releases/download/1.21.0/docker-compose-`uname
-  -s`-`uname -m` > docker-compose
-- chmod +x docker-compose
-- sudo mv docker-compose /usr/local/bin
+    # install docker
+  - curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+  - sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu
+    $(lsb_release -cs) stable"
+  - sudo apt-get update
+  - sudo apt-get -y install docker-ce=18.03.1~ce-0~ubuntu
+    # install docker-machine
+  - curl -L https://github.com/docker/machine/releases/download/v0.14.0/docker-machine-`uname
+    -s`-`uname -m` >/tmp/docker-machine
+  - sudo install /tmp/docker-machine /usr/local/bin/docker-machine
+    # install docker-compose
+  - sudo rm /usr/local/bin/docker-compose
+  - curl -L https://github.com/docker/compose/releases/download/1.21.0/docker-compose-`uname
+    -s`-`uname -m` > docker-compose
+  - chmod +x docker-compose
+  - sudo mv docker-compose /usr/local/bin
 
 install:
-- chmod +x bin/*
-- docker pull chrif/cocotte || true # reuse layers if possible
-- docker-compose build cocotte
-- docker images | grep chrif/cocotte
+  - chmod +x bin/*
+  - docker pull chrif/cocotte || true # reuse layers if possible
+  - docker-compose build cocotte
+  - docker images | grep chrif/cocotte
 
 script:
-# unit tests
-- ./bin/cmd phpunit --exclude-group=functional
+  # unit tests
+  - ./bin/cmd phpunit --exclude-group=functional
 
-# install and apps commands
-- ./bin/install -n -vvv
-- ./bin/static-site -n -vvv
+  # install and apps commands
+  - ./bin/install -n -vvv
+  - ./bin/static-site -n -vvv
 
-# test local deployment
-- ./bin/travis-deploy-dev
+  # test local deployment
+  - ./bin/travis-deploy-dev
 
-# cleanup
-- if [ "${KEEP_MACHINE_AFTER:-false}" = false ]; then ./bin/cmd console networking -n -vvv --remove ${STATIC_SITE_HOSTNAME}; else true; fi
-- if [ "${KEEP_MACHINE_AFTER:-false}" = false ]; then ./bin/uninstall -n -vvv; else echo "Machine not removed."; fi
+  # cleanup
+  - if [ "${KEEP_MACHINE_AFTER:-false}" = false ]; then ./bin/cmd console networking -n -vvv --remove ${STATIC_SITE_HOSTNAME}; else true; fi
+  - if [ "${KEEP_MACHINE_AFTER:-false}" = false ]; then ./bin/uninstall -n -vvv; else echo "Machine not removed."; fi
 
 deploy:
   # push image to docker hub
