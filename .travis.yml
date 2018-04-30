@@ -47,7 +47,10 @@ deploy:
   - provider: script
     skip_cleanup: true
     script: "docker save chrif/cocotte:${TRAVIS_TAG} | gzip -c > chrif-cocotte-${TRAVIS_TAG}.tar.gz && \
-            docker run -it --rm -v $(pwd):/usr/local/src/your-app ferrarimarco/github-changelog-generator -u chrif -p cocotte"
+            docker run -it --rm -v $(pwd):/usr/local/src/your-app ferrarimarco/github-changelog-generator \
+              -u chrif -p cocotte -t $GITHUB_TOKEN \
+              --release-branch $TRAVIS_TAG --future-release $TRAVIS_TAG \
+              --no-verbose"
     on:
       tags: true
   # github release
@@ -56,8 +59,7 @@ deploy:
     file:
       - CHANGELOG.md
       - chrif-cocotte-${TRAVIS_TAG}.tar.gz
-    api_key:
-      secure: "uU933GDZmaJvcYw3L4keVYgEAUAn/ZEMI9YmeoRSSQi+MUht3cKWpeBMH4buXJ50CcGKRthnuCveDQLcv2VlD5BglqxHXzjIGts6/3kPAxnJztrzFYrNp0r0Hm596k1c4xEwlDd6+1GoGRf+SEoLC7YsOsa394HQbSx5D4CqQBzLFxHMraHfcOLlkA17QRgtu221ZwV/avkd/z7YIvNOC9hgGPh5exFGSqhXLHPnkIArozzO18KeUrsIbrL7oYEgzIZEoWWuQr3VPjdX1SCxmn3/vUOzevQBHP226Ny2Ry+/WAfXeyFfRiggwUJd0gDgmMkbyGB2E3rRJ3ZlIPhtwJkjhYN9N6OS5RGbZojh4dEc9Y+fZGgigGyZLPiTP2+1miD0vVDIXlsw8ILi3qOGGeJAqMtYyUjLkOz17k8hN9OFQRSFuphy2dgHsgWg9NIzwVxqJk/3Qsq6xpi3rucOxxq9kst5wxi91+fUEd/ifeEnuJFSu7ySrocapipB+gu/Tg4MT3MdpMd9vfwbo31eLlJKtQN4fVFUt9rx/GIBPQloYVK/QCMH6nrMUu1ytUIT/AGT8dDGqRV6G3FS0i8trSvsj5dTuB4fNYlL1o3cWz7SAk4vWN4oO+bePk1322ULZPUuyfPuBN4aItHJRwG3OD2JwlahkrqA42vB8xCD1NE="
+    api_key: $GITHUB_TOKEN
     on:
       tags: true
 
@@ -66,6 +68,7 @@ env:
     # DIGITAL_OCEAN_API_TOKEN (set in in repo settings)
     - COCOTTE_VERSION=${TRAVIS_TAG}
     - GIT_COMMIT_ID=${TRAVIS_COMMIT}
+    # GITHUB_TOKEN (set in in repo settings)
     - MACHINE_NAME=cocotte-travis-${TRAVIS_BUILD_ID}
     # STATIC_SITE_HOSTNAME (set in in repo settings)
     - STATIC_SITE_NAMESPACE=static-site
