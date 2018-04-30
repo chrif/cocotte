@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -euo pipefail
+set -euox pipefail
 
 set -a
 . traefik/.env-override
@@ -20,10 +20,10 @@ sudo cat /etc/hosts
 (cd traefik; ./bin/dev)
 (cd static-site; ./bin/dev)
 
+(cd traefik; docker-compose logs -t traefik)
+(cd static-site; docker-compose logs -t nginx)
+
 ./bin/check-online ${TRAEFIK_LOCAL} 6
 ./bin/check-online ${STATIC_LOCAL} 6
 
 curl http://${STATIC_LOCAL}
-
-(cd traefik; docker-compose logs -t traefik)
-(cd static-site; docker-compose logs -t nginx)
