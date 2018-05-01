@@ -29,7 +29,7 @@ install:
   - docker images | grep chrif/cocotte
 
 before_script:
-  - sudo ln -s $PWD/installer /installer && ls -la /installer
+  - sudo ln -s $PWD/installer /installer && ls -la $PWD/installer /installer
   # https://github.com/codeclimate/test-reporter
   - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
   - chmod +x ./cc-test-reporter
