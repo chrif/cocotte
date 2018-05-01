@@ -33,17 +33,15 @@ before_script:
   # https://github.com/codeclimate/test-reporter
   - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
   - chmod +x ./cc-test-reporter
-  - ./cc-test-reporter before-build --debug
+  - ./cc-test-reporter before-build
 
 script:
   # unit tests
-  - ./bin/cmd phpunit --testsuite=unit --coverage-text --coverage-clover=/host/clover.xml
-  - ./cc-test-reporter format-coverage --debug --output=coverage/codeclimate.unit.json --input-type=clover host/clover.xml
-#  - cat coverage/codeclimate.unit.json
+  - ./bin/cmd phpunit --testsuite=unit --coverage-clover=/host/clover.xml
+  - ./cc-test-reporter format-coverage --output=coverage/codeclimate.unit.json --input-type=clover host/clover.xml
   # functional tests
-  - ./bin/cmd phpunit --testsuite=functional --coverage-text --coverage-clover=/host/clover.xml
-  - ./cc-test-reporter format-coverage --debug --output=coverage/codeclimate.functional.json --input-type=clover host/clover.xml
-#  - cat coverage/codeclimate.functional.json
+  - ./bin/cmd phpunit --testsuite=functional --coverage-clover=/host/clover.xml
+  - ./cc-test-reporter format-coverage --output=coverage/codeclimate.functional.json --input-type=clover host/clover.xml
 
 #  # install and apps commands
 #  - ./bin/install -n -vvv
@@ -57,8 +55,7 @@ script:
 #  - if [ "${KEEP_MACHINE_AFTER:-false}" = false ]; then ./bin/uninstall -n -vvv; else echo "Machine not removed."; fi
 
 after_success:
-  - ./cc-test-reporter sum-coverage --debug coverage/codeclimate.*.json
-#  - cat coverage/codeclimate.json
+  - ./cc-test-reporter sum-coverage coverage/codeclimate.*.json
   - ./cc-test-reporter upload-coverage --debug
 
 deploy:
