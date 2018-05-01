@@ -33,12 +33,13 @@ before_script:
   - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
   - chmod +x ./cc-test-reporter
   - ./cc-test-reporter before-build
+  - cp docker-compose.override.yml.dist docker-compose.override.yml
 
 script:
   # tests
-  - ./bin/cmd phpunit --testsuite=unit --coverage-text --coverage-clover clover.xml
+  - docker-compose run --rm cmd phpunit --testsuite=unit --coverage-text --coverage-clover clover.xml
   - ./cc-test-reporter format-coverage --output coverage/codeclimate.unit.json
-  - ./bin/cmd phpunit --testsuite=functional --coverage-text --coverage-clover clover.xml
+  - docker-compose run --rm cmd phpunit --testsuite=functional --coverage-text --coverage-clover clover.xml
   - ./cc-test-reporter format-coverage --output coverage/codeclimate.functional.json
 
   # install and apps commands
