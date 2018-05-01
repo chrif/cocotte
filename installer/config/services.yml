@@ -99,8 +99,7 @@ services:
     tags: ['event.subscriber']
 
   # shell
-  Cocotte\Shell\ProcessRunner:
-    class: Cocotte\Shell\OsProcessRunner
+  Cocotte\Shell\ProcessRunner: ~
   Cocotte\Shell\VariableReplacer: ~
   Cocotte\Shell\EnvironmentSubstitution\SubstitutionFactory: ~
   Cocotte\Shell\BasicAuth: ~

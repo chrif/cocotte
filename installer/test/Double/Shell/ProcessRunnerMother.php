@@ -2,12 +2,9 @@
 
 namespace Cocotte\Test\Double\Shell;
 
-use Cocotte\Shell\OsProcessRunner;
 use Cocotte\Shell\ProcessRunner;
-use Cocotte\Test\Double\Console\StyleOutputSpy;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\Console\Helper\ProcessHelper;
 use Symfony\Component\Process\Process;
 
 final class ProcessRunnerMother
@@ -34,13 +31,11 @@ final class ProcessRunnerMother
      */
     public function mustNotRunMock(): ProcessRunner
     {
-        $mockObject = $this->testCase->getMockBuilder(ProcessRunner::class)
-            ->getMock();
-
-        $mockObject->expects(TestCase::never())
+        ($mock = $this->mock())
+            ->expects(TestCase::never())
             ->method('mustRun');
 
-        return $mockObject;
+        return $mock;
     }
 
     /**
@@ -49,10 +44,7 @@ final class ProcessRunnerMother
      */
     public function mustRunCommandMock(string $command): ProcessRunner
     {
-        $mockObject = $this->testCase->getMockBuilder(ProcessRunner::class)
-            ->getMock();
-
-        $mockObject
+        ($mock = $this->mock())
             ->expects(TestCase::once())
             ->method('mustRun')
             ->with(TestCase::callback(function (Process $process) use ($command) {
@@ -64,7 +56,7 @@ final class ProcessRunnerMother
                 return true;
             }));
 
-        return $mockObject;
+        return $mock;
     }
 
     /**
@@ -72,14 +64,9 @@ final class ProcessRunnerMother
      */
     public function mock(): ProcessRunner
     {
-        return $this->testCase->getMockBuilder(ProcessRunner::class)->getMock();
+        return $this->testCase->getMockBuilder(ProcessRunner::class)
+            ->disableOriginalConstructor()
+            ->getMock();
     }
 
-    public function fixture(): ProcessRunner
-    {
-        return new OsProcessRunner(
-            new StyleOutputSpy(),
-            new ProcessHelper()
-        );
-    }
 }
