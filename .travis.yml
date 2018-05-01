@@ -38,10 +38,10 @@ before_script:
 script:
   # unit tests
   - ./bin/cmd phpunit --testsuite=unit --coverage-clover=/host/clover.xml
-  - ./cc-test-reporter format-coverage --output=coverage/codeclimate.unit.json --input-type=clover host/clover.xml
+  - ./cc-test-reporter format-coverage --output=coverage/codeclimate.json --input-type=clover host/clover.xml
   # functional tests
   - ./bin/cmd phpunit --testsuite=functional --coverage-clover=/host/clover.xml
-  - ./cc-test-reporter format-coverage --output=coverage/codeclimate.functional.json --input-type=clover host/clover.xml
+#  - ./cc-test-reporter format-coverage --output=coverage/codeclimate.functional.json --input-type=clover host/clover.xml
 
 #  # install and apps commands
 #  - ./bin/install -n -vvv
@@ -55,7 +55,7 @@ script:
 #  - if [ "${KEEP_MACHINE_AFTER:-false}" = false ]; then ./bin/uninstall -n -vvv; else echo "Machine not removed."; fi
 
 after_success:
-  - ./cc-test-reporter sum-coverage coverage/codeclimate.*.json
+#  - ./cc-test-reporter sum-coverage coverage/codeclimate.*.json
   - ./cc-test-reporter upload-coverage --debug
 
 deploy:
