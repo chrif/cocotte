@@ -34,6 +34,7 @@ before_script:
   - chmod +x ./cc-test-reporter
   - ./cc-test-reporter before-build
   - cp docker-compose.override.yml.dist docker-compose.override.yml
+  - touch .env
 
 script:
   # tests
