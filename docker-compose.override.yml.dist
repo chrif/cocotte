@@ -75,6 +75,7 @@ services:
   bare:
     image: chrif/cocotte
     volumes:
+      - ./doc:/doc
       - ./installer:/installer
       - ./installer/etc/xdebug.ini:/etc/php7/conf.d/xdebug.ini:ro
       - ./installer/etc/php.ini:/etc/php7/conf.d/zzz-php.ini:ro
