@@ -7,7 +7,7 @@ use Symfony\Component\Console\Formatter\OutputFormatterInterface;
 use Symfony\Component\Console\Output\Output;
 use Symfony\Component\Console\Question\Question;
 
-final class TestStyle extends Output implements Style
+final class StyleOutputSpy extends Output implements Style
 {
     public $output = '';
 
