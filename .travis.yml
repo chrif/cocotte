@@ -29,18 +29,21 @@ install:
   - docker images | grep chrif/cocotte
 
 before_script:
+  - sudo ln -s $PWD/installer /installer && ls -la /installer
   # https://github.com/codeclimate/test-reporter
   - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
   - chmod +x ./cc-test-reporter
-  - sudo ln -s $PWD/installer /installer && ls -la /installer
   - ./cc-test-reporter before-build
 
 script:
-  # tests
+  # unit tests
   - ./bin/cmd phpunit --testsuite=unit --coverage-text --coverage-clover=/host/clover.xml
   - ./cc-test-reporter format-coverage --output=coverage/codeclimate.unit.json --input-type=clover host/clover.xml
+  - cat coverage/codeclimate.unit.json
+  # functional tests
   - ./bin/cmd phpunit --testsuite=functional --coverage-text --coverage-clover=/host/clover.xml
   - ./cc-test-reporter format-coverage --output=coverage/codeclimate.functional.json --input-type=clover host/clover.xml
+  - cat coverage/codeclimate.functional.json
 
 #  # install and apps commands
 #  - ./bin/install -n -vvv
@@ -55,6 +58,7 @@ script:
 
 after_success:
   - ./cc-test-reporter sum-coverage coverage/codeclimate.*.json
+  - cat coverage/codeclimate.json
   - ./cc-test-reporter upload-coverage
 
 deploy:
