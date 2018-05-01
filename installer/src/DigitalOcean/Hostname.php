@@ -64,14 +64,6 @@ final class Hostname
         return self::fromString(implode('.', $domains));
     }
 
-    /**
-     * @codeCoverageIgnore
-     */
-    public static function fixture(): self
-    {
-        return self::parse(uniqid('hostname-').'.org');
-    }
-
     public function domainName(): string
     {
         return sprintf(

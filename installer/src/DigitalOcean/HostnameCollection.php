@@ -32,14 +32,6 @@ final class HostnameCollection extends GenericCollection
         return self::fromScalarArray(array_map('trim', explode(',', $string)));
     }
 
-    /**
-     * @codeCoverageIgnore
-     */
-    public static function fixture(): self
-    {
-        return new self(Hostname::fixture());
-    }
-
     public function toString(): string
     {
         return implode(',', $this->values);
