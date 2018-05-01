@@ -28,10 +28,18 @@ install:
   - docker-compose build cocotte
   - docker images | grep chrif/cocotte
 
+before_script:
+  # https://github.com/codeclimate/test-reporter
+  - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+  - chmod +x ./cc-test-reporter
+  - ./cc-test-reporter before-build
+
 script:
   # tests
-  - ./bin/cmd phpunit --testsuite=unit
-  - ./bin/cmd phpunit --testsuite=functional
+  - ./bin/cmd phpunit --testsuite=unit --coverage-text --coverage-clover clover.xml
+  - ./cc-test-reporter format-coverage --output coverage/codeclimate.unit.json
+  - ./bin/cmd phpunit --testsuite=functional --coverage-text --coverage-clover clover.xml
+  - ./cc-test-reporter format-coverage --output coverage/codeclimate.functional.json
 
   # install and apps commands
   - ./bin/install -n -vvv
@@ -43,6 +51,10 @@ script:
   # cleanup
   - if [ "${KEEP_MACHINE_AFTER:-false}" = false ]; then ./bin/cmd console networking -n -vvv --remove ${STATIC_SITE_HOSTNAME}; else true; fi
   - if [ "${KEEP_MACHINE_AFTER:-false}" = false ]; then ./bin/uninstall -n -vvv; else echo "Machine not removed."; fi
+
+after_success:
+  - ./cc-test-reporter sum-coverage coverage/codeclimate.*.json
+  - ./cc-test-reporter upload-coverage
 
 deploy:
   # push image to docker hub
@@ -72,6 +84,7 @@ deploy:
 
 env:
   global:
+    # CC_TEST_REPORTER_ID (set in in repo settings)
     # DIGITAL_OCEAN_API_TOKEN (set in in repo settings)
     - COCOTTE_VERSION=${TRAVIS_TAG}
     - GIT_COMMIT_ID=${TRAVIS_COMMIT}
