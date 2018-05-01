@@ -188,7 +188,7 @@ final class TestStyle extends Output implements Style
 
     public function note($message)
     {
-        throw new \RuntimeException('Method '.__METHOD__.' not implemented yet.');
+        $this->doWrite($message);
     }
 
     public function caution($message)
@@ -241,7 +241,7 @@ final class TestStyle extends Output implements Style
         throw new \RuntimeException('Method '.__METHOD__.' not implemented yet.');
     }
 
-    protected function doWrite($message, $newline)
+    protected function doWrite($message, $newline = false)
     {
         $this->output .= $message.($newline ? "\n" : '');
     }
