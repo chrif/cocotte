@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Chrif\Cocotte\Environment;
+namespace Cocotte\Environment;
 
 interface LazyExportableOption extends LazyEnvironmentValue
 {

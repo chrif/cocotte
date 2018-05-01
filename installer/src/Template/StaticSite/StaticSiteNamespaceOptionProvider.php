@@ -1,10 +1,11 @@
 <?php declare(strict_types=1);
 
-namespace Chrif\Cocotte\Template\StaticSite;
+namespace Cocotte\Template\StaticSite;
 
-use Chrif\Cocotte\Console\OptionProvider;
-use Chrif\Cocotte\Console\Style;
-use Chrif\Cocotte\Shell\Env;
+use Cocotte\Console\OptionProvider;
+use Cocotte\Console\Style;
+use Cocotte\Console\StyledInputOption;
+use Cocotte\Shell\Env;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Question\Question;
 
@@ -22,7 +23,7 @@ class StaticSiteNamespaceOptionProvider implements OptionProvider
 
     public function option(): InputOption
     {
-        return new InputOption(
+        return new StyledInputOption(
             StaticSiteNamespace::OPTION_NAME,
             null,
             InputOption::VALUE_REQUIRED,

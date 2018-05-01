@@ -1,14 +1,14 @@
 <?php declare(strict_types=1);
 
-namespace Chrif\Cocotte\Machine;
+namespace Cocotte\Machine;
 
 use Assert\Assertion;
-use Chrif\Cocotte\Environment\LazyEnvironmentValue;
-use Chrif\Cocotte\Environment\LazyLoadAware;
-use Chrif\Cocotte\Filesystem\CocotteFilesystem;
-use Chrif\Cocotte\Filesystem\Filesystem;
-use Chrif\Cocotte\Host\HostMount;
-use Chrif\Cocotte\Shell\Env;
+use Cocotte\Environment\LazyEnvironmentValue;
+use Cocotte\Environment\LazyLoadAware;
+use Cocotte\Filesystem\CocotteFilesystem;
+use Cocotte\Filesystem\Filesystem;
+use Cocotte\Host\HostMount;
+use Cocotte\Shell\Env;
 
 class MachineStoragePath implements LazyEnvironmentValue, LazyLoadAware
 {

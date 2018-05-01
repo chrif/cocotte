@@ -1,6 +1,6 @@
 <?php
 
-namespace Chrif\Cocotte\Shell\EnvironmentSubstitution;
+namespace Cocotte\Shell\EnvironmentSubstitution;
 
 use Symfony\Component\Process\Process;
 

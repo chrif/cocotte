@@ -1,14 +1,14 @@
 <?php declare(strict_types=1);
 
-namespace Chrif\Cocotte\Command;
+namespace Cocotte\Command;
 
-use Chrif\Cocotte\Console\AbstractCommand;
-use Chrif\Cocotte\Console\Style;
-use Chrif\Cocotte\DigitalOcean\ApiToken;
-use Chrif\Cocotte\DigitalOcean\ApiTokenOptionProvider;
-use Chrif\Cocotte\DigitalOcean\HostnameCollection;
-use Chrif\Cocotte\DigitalOcean\NetworkingConfigurator;
-use Chrif\Cocotte\Environment\LazyEnvironment;
+use Cocotte\Console\AbstractCommand;
+use Cocotte\Console\Style;
+use Cocotte\DigitalOcean\ApiToken;
+use Cocotte\DigitalOcean\ApiTokenOptionProvider;
+use Cocotte\DigitalOcean\HostnameCollection;
+use Cocotte\DigitalOcean\NetworkingConfigurator;
+use Cocotte\Environment\LazyEnvironment;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;

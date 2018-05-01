@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Chrif\Cocotte\Console;
+namespace Cocotte\Console;
 
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
@@ -30,7 +30,7 @@ final class CocotteStyle extends SymfonyStyle implements Style
 
     public function optionHelp(string $title, array $message): string
     {
-        return "<options=bold,underscore>$title</>"."\n".implode("\n", $message)."\n";
+        return "<options=bold,underscore>{$title}</>"."\n".implode("\n", $message)."\n";
     }
 
     public function quittableQuestion($message): string
@@ -51,7 +51,7 @@ final class CocotteStyle extends SymfonyStyle implements Style
             "'<info>mydomain.com</info>' must point to the name servers of Digital Ocean, and Cocotte \n".
             "will create and configure the '<info>$subdomain</info>' subdomain for you.",
             "Cocotte validates that the name servers of the domain you enter are Digital \nOcean's. ".
-            "How to point to Digital Ocean name servers: ".$this->link('goo.gl/SJnw2c')."\n".
+            "How to point to Digital Ocean name servers: ".$this->link('https://goo.gl/SJnw2c')."\n".
             "Please note that when a domain is newly registered, or the name servers are \nchanged, you can expect ".
             "a propagation time up to 24 hours.",
         ];

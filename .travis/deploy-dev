@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+set -a
+. traefik/.env-override
+set +a
+TRAEFIK_LOCAL=${APP_HOSTS}
+
+set -a
+. static-site/.env-override
+set +a
+STATIC_LOCAL=${APP_HOSTS}
+
+echo " " | sudo tee -a /etc/hosts
+echo "127.0.0.1 ${TRAEFIK_LOCAL}" | sudo tee -a /etc/hosts
+echo "127.0.0.1 ${STATIC_LOCAL}" | sudo tee -a /etc/hosts
+sudo cat /etc/hosts
+
+(cd traefik; ./bin/dev)
+(cd static-site; ./bin/dev)
+
+(cd traefik; docker-compose logs -t traefik)
+(cd static-site; docker-compose logs -t nginx)
+
+./.travis/check-online ${TRAEFIK_LOCAL} 6
+./.travis/check-online ${STATIC_LOCAL} 6
+
+curl http://${STATIC_LOCAL}

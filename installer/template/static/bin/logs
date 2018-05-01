@@ -10,4 +10,4 @@ set +a
 docker-machine -s "${MACHINE_STORAGE_PATH}" env "${MACHINE_NAME}" > /dev/null
 
 eval $(docker-machine -s "${MACHINE_STORAGE_PATH}" env "${MACHINE_NAME}")
-docker logs -f ${APP_NAME}nginx
+docker-compose logs "$@" nginx

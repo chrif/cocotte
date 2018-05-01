@@ -3,7 +3,6 @@ version: '3'
 services:
   traefik:
     build: .
-    container_name: traefik
     restart: always
     command: "
               -c /opt/app/traefik.prod.toml

@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Chrif\Cocotte\Host;
+namespace Cocotte\Host;
 
 final class HostException extends \Exception
 {
@@ -19,6 +19,5 @@ final class HostException extends \Exception
             "with a volume like this:\n-v /var/run/docker.sock:/var/run/docker.sock:ro"
         );
     }
-
 
 }
