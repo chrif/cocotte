@@ -38,10 +38,10 @@ before_script:
 
 script:
   # tests
-  - docker-compose run --rm cmd phpunit --testsuite=unit --coverage-text --coverage-clover clover.xml
-  - ./cc-test-reporter format-coverage --output coverage/codeclimate.unit.json
-  - docker-compose run --rm cmd phpunit --testsuite=functional --coverage-text --coverage-clover clover.xml
-  - ./cc-test-reporter format-coverage --output coverage/codeclimate.functional.json
+  - docker-compose run --rm cmd phpunit --testsuite=unit --coverage-text --coverage-clover=clover.xml
+  - ./cc-test-reporter format-coverage --output=coverage/codeclimate.unit.json --input-type=clover
+  - docker-compose run --rm cmd phpunit --testsuite=functional --coverage-text --coverage-clover=clover.xml
+  - ./cc-test-reporter format-coverage --output=coverage/codeclimate.functional.json --input-type=clover
 
   # install and apps commands
   - ./bin/install -n -vvv
