@@ -29,21 +29,21 @@ install:
   - docker images | grep chrif/cocotte
 
 before_script:
-  - sudo ln -s $PWD/installer /installer && ls -la $PWD/installer /installer
+  - sudo ln -s $PWD/installer /installer && sudo chown -R travis:travis /installer && ls -laR /installer
   # https://github.com/codeclimate/test-reporter
   - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
   - chmod +x ./cc-test-reporter
-  - ./cc-test-reporter before-build
+  - ./cc-test-reporter before-build --debug
 
 script:
   # unit tests
   - ./bin/cmd phpunit --testsuite=unit --coverage-text --coverage-clover=/host/clover.xml
-  - ./cc-test-reporter format-coverage --output=coverage/codeclimate.unit.json --input-type=clover host/clover.xml
-  - cat coverage/codeclimate.unit.json
+  - ./cc-test-reporter format-coverage --debug --output=coverage/codeclimate.unit.json --input-type=clover host/clover.xml
+#  - cat coverage/codeclimate.unit.json
   # functional tests
   - ./bin/cmd phpunit --testsuite=functional --coverage-text --coverage-clover=/host/clover.xml
-  - ./cc-test-reporter format-coverage --output=coverage/codeclimate.functional.json --input-type=clover host/clover.xml
-  - cat coverage/codeclimate.functional.json
+  - ./cc-test-reporter format-coverage --debug --output=coverage/codeclimate.functional.json --input-type=clover host/clover.xml
+#  - cat coverage/codeclimate.functional.json
 
 #  # install and apps commands
 #  - ./bin/install -n -vvv
@@ -57,9 +57,9 @@ script:
 #  - if [ "${KEEP_MACHINE_AFTER:-false}" = false ]; then ./bin/uninstall -n -vvv; else echo "Machine not removed."; fi
 
 after_success:
-  - ./cc-test-reporter sum-coverage coverage/codeclimate.*.json
-  - cat coverage/codeclimate.json
-  - ./cc-test-reporter upload-coverage
+  - ./cc-test-reporter sum-coverage --debug coverage/codeclimate.*.json
+#  - cat coverage/codeclimate.json
+  - ./cc-test-reporter upload-coverage --debug
 
 deploy:
   # push image to docker hub
@@ -89,7 +89,10 @@ deploy:
 
 env:
   global:
+    # code climate vars
     # CC_TEST_REPORTER_ID (set in in repo settings)
+    - GIT_COMMITTED_AT=$(if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then git log -1 --pretty=format:%ct; else git log -1 --skip 1 --pretty=format:%ct; fi)
+
     # DIGITAL_OCEAN_API_TOKEN (set in in repo settings)
     - COCOTTE_VERSION=${TRAVIS_TAG}
     - GIT_COMMIT_ID=${TRAVIS_COMMIT}
