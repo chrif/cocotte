@@ -1,12 +1,10 @@
 <?php declare(strict_types=1);
 
-namespace Chrif\Cocotte\Template\Traefik;
+namespace Cocotte\Template\Traefik;
 
-use Chrif\Cocotte\Acme\CertificateChecker;
-use Chrif\Cocotte\Console\Style;
-use Chrif\Cocotte\Filesystem\Filesystem;
-use Chrif\Cocotte\Machine\MachineIp;
-use Chrif\Cocotte\Shell\ProcessRunner;
+use Cocotte\Acme\CertificateChecker;
+use Cocotte\Machine\MachineIp;
+use Cocotte\Shell\ProcessRunner;
 use Symfony\Component\Process\Process;
 
 final class TraefikDeploymentValidator
@@ -15,11 +13,6 @@ final class TraefikDeploymentValidator
      * @var ProcessRunner
      */
     private $processRunner;
-
-    /**
-     * @var Filesystem
-     */
-    private $filesystem;
 
     /**
      * @var TraefikHostname
@@ -32,27 +25,19 @@ final class TraefikDeploymentValidator
     private $machineIp;
 
     /**
-     * @var Style
-     */
-    private $style;
-    /**
      * @var CertificateChecker
      */
     private $certificateChecker;
 
     public function __construct(
         ProcessRunner $processRunner,
-        Filesystem $filesystem,
         TraefikHostname $traefikHostname,
         MachineIp $machineIp,
-        Style $style,
         CertificateChecker $certificateChecker
     ) {
         $this->processRunner = $processRunner;
-        $this->filesystem = $filesystem;
         $this->traefikHostname = $traefikHostname;
         $this->machineIp = $machineIp;
-        $this->style = $style;
         $this->certificateChecker = $certificateChecker;
     }
 

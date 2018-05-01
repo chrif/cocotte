@@ -1,26 +1,22 @@
 <?php declare(strict_types=1);
 
-namespace Chrif\Cocotte;
+namespace Cocotte\Test;
 
-use Chrif\Cocotte\DependencyInjection\Application;
-use Chrif\Cocotte\DigitalOcean\Domain;
-use Chrif\Cocotte\DigitalOcean\DomainRecord;
-use Chrif\Cocotte\Machine\MachineName;
-use Chrif\Cocotte\Machine\MachineState;
+use Cocotte\DependencyInjection\Application;
+use Cocotte\DigitalOcean\Domain;
+use Cocotte\DigitalOcean\DomainRecord;
+use Cocotte\Environment\LazyEnvironment;
+use Cocotte\Environment\LazyEnvironmentLoader;
+use Cocotte\Machine\MachineName;
+use Cocotte\Test\Double\Console\HasAllOptionsWithNullValuesInput;
+use PHPUnit\Framework\TestCase;
 
-class TestCase extends \PHPUnit\Framework\TestCase
+class FunctionalTestCase extends TestCase
 {
     /**
      * @var Application
      */
     private $application;
-
-    public static function setUpBeforeClass()
-    {
-        if (!MachineState::fromEnv()->isRunning()) {
-            self::fail("Machine is not running");
-        }
-    }
 
     protected function application(): Application
     {
@@ -51,4 +47,17 @@ class TestCase extends \PHPUnit\Framework\TestCase
         return $this->application()->container()->get(MachineName::class);
     }
 
+    protected function environmentLoader(): LazyEnvironmentLoader
+    {
+        return $this->application()->container()->get(LazyEnvironmentLoader::class);
+    }
+
+    protected function loadEnvironment()
+    {
+        if ($this instanceof LazyEnvironment) {
+            $this->environmentLoader()->load($this, new HasAllOptionsWithNullValuesInput());
+        } else {
+            throw new \Exception(get_class($this).' does not implement '.LazyEnvironment::class);
+        }
+    }
 }

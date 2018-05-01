@@ -1,10 +1,11 @@
 <?php declare(strict_types=1);
 
-namespace Chrif\Cocotte\DigitalOcean;
+namespace Cocotte\DigitalOcean;
 
-use Chrif\Cocotte\Console\OptionProvider;
-use Chrif\Cocotte\Console\Style;
-use Chrif\Cocotte\Shell\Env;
+use Cocotte\Console\OptionProvider;
+use Cocotte\Console\Style;
+use Cocotte\Console\StyledInputOption;
+use Cocotte\Shell\Env;
 use DigitalOceanV2\Adapter\GuzzleHttpAdapter;
 use DigitalOceanV2\DigitalOceanV2;
 use Symfony\Component\Console\Input\InputOption;
@@ -24,7 +25,7 @@ class ApiTokenOptionProvider implements OptionProvider
 
     public function option(): InputOption
     {
-        return new InputOption(
+        return new StyledInputOption(
             ApiToken::OPTION_NAME,
             null,
             InputOption::VALUE_REQUIRED,
@@ -39,8 +40,8 @@ class ApiTokenOptionProvider implements OptionProvider
             "Digital Ocean API Token",
             [
                 "If you don't have a Digital Ocean account yet, get one with a 10$ credit at\n".
-                $this->style->link('digitalocean.com/?refcode=c25ed78e51c5')."",
-                "Then generate a token at ".$this->style->link('cloud.digitalocean.com/settings/api/tokens'),
+                $this->style->link('https://m.do.co/c/c25ed78e51c5'),
+                "Then generate a token at ".$this->style->link('https://cloud.digitalocean.com/settings/api/tokens'),
                 "Cocotte will make a call to Digital Ocean's API to validate the token.",
             ]
         );
@@ -53,7 +54,7 @@ class ApiTokenOptionProvider implements OptionProvider
         $digitalOceanV2 = new DigitalOceanV2($adapter);
         try {
             $account = $digitalOceanV2->account()->getUserInformation();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             throw new \Exception(
                 "Failed to validate the Digital Ocean token with message:\n".
                 $e->getMessage()

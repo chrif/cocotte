@@ -5,6 +5,8 @@ checkNewVersion = true
 defaultEntryPoints = ["http", "https"]
 sendAnonymousUsage = true
 
+[accessLog]
+
 [entryPoints]
 	[entryPoints.http]
 		address = ":80"

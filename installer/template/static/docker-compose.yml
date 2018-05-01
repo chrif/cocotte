@@ -3,7 +3,6 @@ version: "3"
 services:
   nginx:
     build: .
-    container_name: "${APP_NAME}nginx"
     restart: always
     volumes:
       - src:/opt/app

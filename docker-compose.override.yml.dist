@@ -1,31 +1,87 @@
-version: "3"
+version: "2.2"
 
 services:
 
-  installer:
-    image: chrif/cocotte
+  # docker run -it --rm [-v=host] [-e=.env] chrif/cocotte install [options]
+  install:
+    extends:
+      service: cmd
+      file: docker-compose.override.yml
     command: install
+      --digital-ocean-api-token="${DIGITAL_OCEAN_API_TOKEN}"
+      --traefik-ui-hostname="${TRAEFIK_UI_HOSTNAME}"
+      --traefik-ui-password="${TRAEFIK_UI_PASSWORD}"
+      --traefik-ui-username="${TRAEFIK_UI_USERNAME}"
+
+  # docker run -it --rm [-v=host] [-e=.env] chrif/cocotte uninstall [options]
+  uninstall:
+    extends:
+      service: cmd
+      file: docker-compose.override.yml
+    command: uninstall
+      --digital-ocean-api-token="${DIGITAL_OCEAN_API_TOKEN}"
+      --traefik-ui-hostname="${TRAEFIK_UI_HOSTNAME}"
+
+  # docker run -it --rm [-v=host] [-e=.env] chrif/cocotte static-site [options]
+  static-site:
+    extends:
+      service: cmd
+      file: docker-compose.override.yml
+    command: static-site
+      --digital-ocean-api-token="${DIGITAL_OCEAN_API_TOKEN}"
+      --hostname="${STATIC_SITE_HOSTNAME}"
+      --namespace="${STATIC_SITE_NAMESPACE}"
+
+  # docker run -it --rm chrif/cocotte wizard
+  wizard:
+    extends:
+      service: bare
+      file: docker-compose.override.yml
+    command: wizard
+
+  # docker run -it --rm chrif/cocotte help
+  help:
+    extends:
+      service: bare
+      file: docker-compose.override.yml
+    command: help
+
+  # docker run -it --rm [-v=host] [-e=.env] chrif/cocotte
+  cmd: # full kit
+    extends:
+      service: host
+      file: docker-compose.override.yml
+    env_file:
+      - .env
+
+  # docker run -it --rm [-v=host] chrif/cocotte
+  host:
+    extends:
+      service: bare
+      file: docker-compose.override.yml
     volumes:
       - ./host:/host
-      - ./installer:/installer
-      - ./installer/etc/xdebug.ini:/etc/php7/conf.d/xdebug.ini
-      - ./installer/etc/php.ini:/etc/php7/conf.d/zzz-php.ini
-    environment:
-      XDEBUG_CONFIG: "remote_host=${HOST_IP}"
-      PHP_IDE_CONFIG: "serverName=cocotte"
-    env_file:
-      .env
+      - /var/run/docker.sock:/var/run/docker.sock:ro
 
-  wizard:
+  # docker run -it --rm [-e=.env] chrif/cocotte
+  env:
+    extends:
+      service: bare
+      file: docker-compose.override.yml
+    env_file:
+      - .env
+
+  # docker run -it --rm chrif/cocotte
+  bare:
     image: chrif/cocotte
-    command: wizard
     volumes:
+      - ./doc:/doc
       - ./installer:/installer
-      - ./installer/etc/xdebug.ini:/etc/php7/conf.d/xdebug.ini
-      - ./installer/etc/php.ini:/etc/php7/conf.d/zzz-php.ini
+      - ./installer/etc/xdebug.ini:/etc/php7/conf.d/xdebug.ini:ro
+      - ./installer/etc/php.ini:/etc/php7/conf.d/zzz-php.ini:ro
     environment:
-      XDEBUG_CONFIG: "remote_host=${HOST_IP}"
       PHP_IDE_CONFIG: "serverName=cocotte"
+      XDEBUG_CONFIG: "remote_host=${HOST_IP}"
 
   travis:
     image: chrif/travis-cli

@@ -1,9 +1,9 @@
 <?php
 
-namespace Chrif\Cocotte\Tests\DigitalOcean;
+namespace Cocotte\Test\Unit\DigitalOcean;
 
-use Chrif\Cocotte\DigitalOcean\Hostname;
-use Chrif\Cocotte\DigitalOcean\HostnameCollection;
+use Cocotte\DigitalOcean\Hostname;
+use Cocotte\DigitalOcean\HostnameCollection;
 use PHPUnit\Framework\TestCase;
 
 class HostnameCollectionTest extends TestCase
@@ -35,6 +35,13 @@ class HostnameCollectionTest extends TestCase
     {
         $collection = HostnameCollection::fromString("bar.org,foo.bar.org,www.bar.org");
         self::assertCount(3, $collection);
+    }
+
+    public function testToString()
+    {
+        $string = "bar.org,foo.bar.org,www.bar.org";
+        $collection = HostnameCollection::fromString($string);
+        self::assertSame($string, (string)$collection);
     }
 
     public function testToLocal()
