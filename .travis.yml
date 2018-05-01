@@ -37,7 +37,7 @@ script:
   - ./bin/static-site -n -vvv
 
   # test local deployment
-  - ./bin/travis-deploy-dev
+  - ./.travis/deploy-dev
 
   # cleanup
   - if [ "${KEEP_MACHINE_AFTER:-false}" = false ]; then ./bin/cmd console networking -n -vvv --remove ${STATIC_SITE_HOSTNAME}; else true; fi

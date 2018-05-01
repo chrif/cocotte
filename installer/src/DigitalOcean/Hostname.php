@@ -33,19 +33,10 @@ final class Hostname
         $this->topLevelDomain = $topLevelDomain;
     }
 
-    public static function fromString(string $value): self
-    {
-        $domains = explode('.', $value);
-        Assertion::count($domains, 3);
-        Assertion::allString($domains);
-        Assertion::allNotEmpty($domains);
-        list($lowerLevelDomains, $secondLevelDomain, $topLevelDomain) = $domains;
-
-        return new self($lowerLevelDomains, $secondLevelDomain, $topLevelDomain);
-    }
-
     public static function parse(string $value): self
     {
+        $value = trim($value);
+
         Assertion::notEmpty($value, "The hostname is empty");
 
         $domains = explode('.', $value);
@@ -61,7 +52,7 @@ final class Hostname
             array_unshift($domains, self::DIGITAL_OCEAN_ROOT_RECORD);
         }
 
-        return self::fromString(implode('.', $domains));
+        return new self($domains[0], $domains[1], $domains[2]);
     }
 
     public function domainName(): string

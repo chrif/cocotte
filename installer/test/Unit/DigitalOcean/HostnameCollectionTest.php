@@ -37,6 +37,13 @@ class HostnameCollectionTest extends TestCase
         self::assertCount(3, $collection);
     }
 
+    public function testToString()
+    {
+        $string = "bar.org,foo.bar.org,www.bar.org";
+        $collection = HostnameCollection::fromString($string);
+        self::assertSame($string, (string)$collection);
+    }
+
     public function testToLocal()
     {
         $collection = HostnameCollection::fromScalarArray(

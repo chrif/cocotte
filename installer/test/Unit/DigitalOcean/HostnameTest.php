@@ -81,22 +81,6 @@ class HostnameTest extends TestCase
         self::assertTrue($hostname->isRoot());
     }
 
-    /**
-     * @expectedException \Assert\AssertionFailedException
-     * @expectedExceptionMessage List does not contain exactly 3 elements (2 given).
-     */
-    public function test_from_string_invalid_root_syntax()
-    {
-        Hostname::fromString("bar.org");
-    }
-
-    public function test_from_string_syntax()
-    {
-        $hostname = Hostname::fromString("@.bar.org");
-        self::assertTrue($hostname->isRoot());
-        self::assertSame("@.bar.org", $hostname->rawValue());
-    }
-
     public function test_to_local()
     {
         $hostname = Hostname::parse("foo.bar.org");
@@ -104,6 +88,10 @@ class HostnameTest extends TestCase
         self::assertSame('foo.bar.local', $local->toString());
 
         $hostname = Hostname::parse("bar.org");
+        $local = $hostname->toLocal();
+        self::assertSame('bar.local', $local->toString());
+
+        $hostname = Hostname::parse("bar.local");
         $local = $hostname->toLocal();
         self::assertSame('bar.local', $local->toString());
     }
@@ -124,6 +112,20 @@ class HostnameTest extends TestCase
     public function test_exception_on_more_than_3_levels()
     {
         Hostname::parse("a.b.c.d");
+    }
+
+    /**
+     * @expectedException \Exception
+     * @expectedExceptionMessage The hostname is empty
+     */
+    public function test_exception_on_empty_string()
+    {
+        Hostname::parse("");
+    }
+
+    public function test_parsed_value_is_trimmed()
+    {
+        self::assertSame("a.b.c", Hostname::parse(" a.b.c ")->toString());
     }
 
 }
