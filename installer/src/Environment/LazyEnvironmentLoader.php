@@ -44,10 +44,6 @@ final class LazyEnvironmentLoader implements EventSubscriberInterface
         $command = $event->command();
         if ($command instanceof LazyEnvironment) {
             $this->load($command, $event->input());
-            $this->eventDispatcher->dispatch(
-                EnvironmentEventStore::ENVIRONMENT_LOADED,
-                new EnvironmentLoadedEvent($command)
-            );
         }
     }
 
@@ -65,6 +61,10 @@ final class LazyEnvironmentLoader implements EventSubscriberInterface
             }
             $this->initializeProxy($lazyValue);
         }
+        $this->eventDispatcher->dispatch(
+            EnvironmentEventStore::ENVIRONMENT_LOADED,
+            new EnvironmentLoadedEvent($environment)
+        );
         $this->style->debug("Lazy loaded env:\n".print_r(getenv(), true));
     }
 

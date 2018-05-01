@@ -1,7 +1,7 @@
 <!-- https://phpunit.readthedocs.io/en/7.1/configuration.html#appendixes-configuration -->
 <!--suppress XmlUnboundNsPrefix -->
-<phpunit bootstrap="test/bootstrap.php"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         bootstrap="test/bootstrap.php"
          xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/7.0/phpunit.xsd"
 >
     <filter>

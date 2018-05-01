@@ -29,8 +29,9 @@ install:
   - docker images | grep chrif/cocotte
 
 script:
-  # unit tests
+  # tests
   - ./bin/cmd phpunit --testsuite=unit
+  - ./bin/cmd phpunit --testsuite=functional
 
   # install and apps commands
   - ./bin/install -n -vvv

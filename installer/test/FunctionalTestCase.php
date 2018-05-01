@@ -5,8 +5,10 @@ namespace Cocotte\Test;
 use Cocotte\DependencyInjection\Application;
 use Cocotte\DigitalOcean\Domain;
 use Cocotte\DigitalOcean\DomainRecord;
+use Cocotte\Environment\LazyEnvironment;
+use Cocotte\Environment\LazyEnvironmentLoader;
 use Cocotte\Machine\MachineName;
-use Cocotte\Machine\MachineState;
+use Cocotte\Test\Double\Console\HasAllOptionsWithNullValuesInput;
 use PHPUnit\Framework\TestCase;
 
 class FunctionalTestCase extends TestCase
@@ -15,13 +17,6 @@ class FunctionalTestCase extends TestCase
      * @var Application
      */
     private $application;
-
-    public static function setUpBeforeClass()
-    {
-        if (!MachineState::fromEnv()->isRunning()) {
-            self::fail("Machine is not running");
-        }
-    }
 
     protected function application(): Application
     {
@@ -52,4 +47,17 @@ class FunctionalTestCase extends TestCase
         return $this->application()->container()->get(MachineName::class);
     }
 
+    protected function environmentLoader(): LazyEnvironmentLoader
+    {
+        return $this->application()->container()->get(LazyEnvironmentLoader::class);
+    }
+
+    protected function loadEnvironment()
+    {
+        if ($this instanceof LazyEnvironment) {
+            $this->environmentLoader()->load($this, new HasAllOptionsWithNullValuesInput());
+        } else {
+            throw new \Exception(get_class($this).' does not implement '.LazyEnvironment::class);
+        }
+    }
 }

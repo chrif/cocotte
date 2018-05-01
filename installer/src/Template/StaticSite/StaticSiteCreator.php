@@ -231,7 +231,8 @@ final class StaticSiteCreator
         $this->mustRun(['rm', '-rfv', $this->tmpTemplatePath()]);
     }
 
-    private function chmodBin() {
+    private function chmodBin()
+    {
         $this->mustRun("chmod +x {$this->hostAppPath()}/bin/*");
     }
 

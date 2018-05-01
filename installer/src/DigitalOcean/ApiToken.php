@@ -23,6 +23,9 @@ class ApiToken implements LazyExportableOption
         $this->value = $value;
     }
 
+    /**
+     * @return LazyEnvironmentValue|ApiToken
+     */
     public static function fromEnv(): LazyEnvironmentValue
     {
         return new self(Env::get(self::DIGITAL_OCEAN_API_TOKEN, ""));

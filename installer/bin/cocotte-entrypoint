@@ -2,7 +2,7 @@
 
 set -eu
 
-php /installer/bin/bootstrap-container
+sh /installer/bin/bootstrap-container
 
 if [ "$1" = "version" ] || [ "$1" = "--version" ] || [ "$1" = "-v" ]; then
 	cat <<END
