@@ -14,7 +14,7 @@ if [ "$1" = 'test' ]; then
     GIT_COMMIT_SHA=$(git rev-parse HEAD)
     GIT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
 else
-    GIT_COMMITTED_AT=$(if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then git log -1 --pretty=format:%ct; else git log -1 --skip 1 --pretty=format:%ct; fi)
+    GIT_COMMITTED_AT=$(if [ "$TRAVIS_PULL_REQUEST" = false ]; then git log -1 --pretty=format:%ct; else git log -1 --skip 1 --pretty=format:%ct; fi)
     GIT_COMMIT_SHA=$TRAVIS_COMMIT
     GIT_BRANCH=$TRAVIS_BRANCH
 fi
