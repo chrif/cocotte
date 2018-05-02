@@ -38,11 +38,10 @@ before_script:
 script:
   # unit tests
   - ./bin/cmd phpunit --testsuite=unit --coverage-clover=/host/unit.xml
-  - ls -la host
-  - ./cc-test-reporter format-coverage --output=coverage/codeclimate.unit.json --input-type=clover host/unit.xml
+  - ./cc-test-reporter format-coverage --output=coverage/codeclimate.unit.json --input-type=clover unit.xml
   # functional tests
   - ./bin/cmd phpunit --testsuite=functional --coverage-clover=/host/functional.xml
-  - ./cc-test-reporter format-coverage --output=coverage/codeclimate.functional.json --input-type=clover host/functional.xml
+  - ./cc-test-reporter format-coverage --output=coverage/codeclimate.functional.json --input-type=clover functional.xml
 
 #  # install and apps commands
 #  - ./bin/install -n -vvv
@@ -61,8 +60,8 @@ after_success:
   - ./cc-test-reporter upload-coverage
   # upload scrutinizer coverage
   - wget https://scrutinizer-ci.com/ocular.phar
-  - php ocular.phar code-coverage:upload --format=php-clover host/unit.xml
-  - php ocular.phar code-coverage:upload --format=php-clover host/functional.xml
+  - php ocular.phar code-coverage:upload --format=php-clover unit.xml
+  - php ocular.phar code-coverage:upload --format=php-clover functional.xml
 
 deploy:
   # push image to docker hub
