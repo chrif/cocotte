@@ -1,11 +1,11 @@
 <?php declare(strict_types=1);
 
-namespace Chrif\Cocotte\Template\Traefik;
+namespace Cocotte\Template\Traefik;
 
 use Assert\Assertion;
-use Chrif\Cocotte\Environment\LazyEnvironmentValue;
-use Chrif\Cocotte\Environment\LazyExportableOption;
-use Chrif\Cocotte\Shell\Env;
+use Cocotte\Environment\LazyEnvironmentValue;
+use Cocotte\Environment\LazyExportableOption;
+use Cocotte\Shell\Env;
 
 class TraefikUsername implements LazyExportableOption
 {
@@ -38,7 +38,7 @@ class TraefikUsername implements LazyExportableOption
      */
     public static function fromEnv(): LazyEnvironmentValue
     {
-        return new self(Env::get(self::TRAEFIK_UI_USERNAME));
+        return new self(Env::get(self::TRAEFIK_UI_USERNAME, ""));
     }
 
     public static function toEnv(string $value): void

@@ -1,10 +1,10 @@
 <?php declare(strict_types=1);
 
-namespace Chrif\Cocotte\Machine;
+namespace Cocotte\Machine;
 
-use Chrif\Cocotte\Console\Style;
-use Chrif\Cocotte\DigitalOcean\ApiToken;
-use Chrif\Cocotte\Shell\ProcessRunner;
+use Cocotte\Console\Style;
+use Cocotte\DigitalOcean\ApiToken;
+use Cocotte\Shell\ProcessRunner;
 use Symfony\Component\Process\Process;
 
 final class MachineCreator

@@ -1,10 +1,5 @@
-#!/usr/bin/env php
-<?php
+#!/bin/sh
 
-require __DIR__.'/../vendor/autoload.php';
+set -eu
 
-use Symfony\Component\Process\Process;
-
-# for mounted files in dev (does nothing in prod, they are already executable)
-$process = new Process("chmod +x /installer/bin/* /installer/vendor/bin/*");
-$process->mustRun();
+chmod +x /installer/bin/* /installer/vendor/bin/*

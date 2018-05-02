@@ -27,5 +27,5 @@ docker network create traefik  || true
 docker-compose -f docker-compose.yml build
 
 # bring up
-docker-compose up -d nginx
-docker logs -f ${APP_NAME}nginx
+docker-compose up -d --scale nginx=1 nginx
+#docker-compose logs -f nginx

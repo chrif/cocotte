@@ -1,12 +1,13 @@
 <?php declare(strict_types=1);
 
-namespace Chrif\Cocotte\Template\Traefik;
+namespace Cocotte\Template\Traefik;
 
-use Chrif\Cocotte\Console\OptionProvider;
-use Chrif\Cocotte\Console\Style;
-use Chrif\Cocotte\DigitalOcean\DnsValidator;
-use Chrif\Cocotte\DigitalOcean\Hostname;
-use Chrif\Cocotte\Shell\Env;
+use Cocotte\Console\OptionProvider;
+use Cocotte\Console\Style;
+use Cocotte\Console\StyledInputOption;
+use Cocotte\DigitalOcean\DnsValidator;
+use Cocotte\DigitalOcean\Hostname;
+use Cocotte\Shell\Env;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Question\Question;
 
@@ -30,7 +31,7 @@ class TraefikHostnameOptionProvider implements OptionProvider
 
     public function option(): InputOption
     {
-        return new InputOption(
+        return new StyledInputOption(
             TraefikHostname::OPTION_NAME,
             null,
             InputOption::VALUE_REQUIRED,

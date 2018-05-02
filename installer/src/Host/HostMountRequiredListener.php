@@ -1,9 +1,10 @@
 <?php declare(strict_types=1);
 
-namespace Chrif\Cocotte\Host;
+namespace Cocotte\Host;
 
-use Chrif\Cocotte\Console\CommandEventStore;
-use Chrif\Cocotte\Console\CommandInitializeEvent;
+use Cocotte\Console\CommandConfiguredEvent;
+use Cocotte\Console\CommandEventStore;
+use Cocotte\Console\CommandInitializeEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 final class HostMountRequiredListener implements EventSubscriberInterface
@@ -11,8 +12,24 @@ final class HostMountRequiredListener implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return [
+            CommandEventStore::COMMAND_CONFIGURED => 'onCommandConfigured',
             CommandEventStore::COMMAND_INITIALIZE => 'onCommandInitialize',
         ];
+    }
+
+    public function onCommandConfigured(CommandConfiguredEvent $event)
+    {
+        $command = $event->command();
+
+        if ($command instanceof HostMountRequired) {
+            $command->setHelp(
+                $command->getHelp().
+                '
+<info>This command requires 2 volumes:</info>
+  * "$(pwd)":/host
+  * /var/run/docker.sock:/var/run/docker.sock:ro
+');
+        }
     }
 
     public function onCommandInitialize(CommandInitializeEvent $event)

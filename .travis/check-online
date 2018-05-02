@@ -1,0 +1,39 @@
+#!/usr/bin/env php
+<?php
+
+function ping($host)
+{
+    $url = "http://$host";
+    echo "Making request to $url\n";
+    $command = 'curl -S --silent --output /dev/null --write-out "%{http_code}" '.
+        '--user "${TRAEFIK_UI_USERNAME}":"${TRAEFIK_UI_PASSWORD}" '.
+        $url;
+
+//    echo $command;
+
+    $httpStatus = exec(
+        $command,
+        $out,
+        $ret
+    );
+
+    return $ret === 0 && ($httpStatus == 200 || $httpStatus == 302);
+}
+
+$host = $argv[1];
+$try = $argv[2] ?: 1;
+
+echo "Trying up to $try times\n";
+
+for ($i = 0; $i < $try; $i++) {
+    if (ping($host)) {
+        echo "OK\n";
+        exit(0);
+    } elseif (($i + 1) == $try) {
+        fwrite(STDERR, "Error: timeout waiting for $host.\n");
+        exit(1);
+    } else {
+        echo "Waiting 5 seconds before trying again\n";
+        sleep(5);
+    }
+}

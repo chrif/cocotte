@@ -1,9 +1,9 @@
 <?php declare(strict_types=1);
 
-namespace Chrif\Cocotte\Acme;
+namespace Cocotte\Acme;
 
-use Chrif\Cocotte\Console\Style;
-use Chrif\Cocotte\Shell\ProcessRunner;
+use Cocotte\Console\Style;
+use Cocotte\Shell\ProcessRunner;
 use Symfony\Component\Process\Process;
 
 final class CertificateChecker

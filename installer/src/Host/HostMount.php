@@ -1,11 +1,11 @@
 <?php declare(strict_types=1);
 
-namespace Chrif\Cocotte\Host;
+namespace Cocotte\Host;
 
 use Assert\Assertion;
-use Chrif\Cocotte\Environment\LazyEnvironmentValue;
-use Chrif\Cocotte\Filesystem\CocotteFilesystem;
-use Chrif\Cocotte\Filesystem\Filesystem;
+use Cocotte\Environment\LazyEnvironmentValue;
+use Cocotte\Filesystem\CocotteFilesystem;
+use Cocotte\Filesystem\Filesystem;
 
 class HostMount implements LazyEnvironmentValue
 {
@@ -58,5 +58,4 @@ class HostMount implements LazyEnvironmentValue
     {
         return $this->value['Source'];
     }
-
 }

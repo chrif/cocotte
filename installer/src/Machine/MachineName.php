@@ -1,11 +1,11 @@
 <?php declare(strict_types=1);
 
-namespace Chrif\Cocotte\Machine;
+namespace Cocotte\Machine;
 
 use Assert\Assertion;
-use Chrif\Cocotte\Environment\LazyEnvironmentValue;
-use Chrif\Cocotte\Environment\LazyExportableOption;
-use Chrif\Cocotte\Shell\Env;
+use Cocotte\Environment\LazyEnvironmentValue;
+use Cocotte\Environment\LazyExportableOption;
+use Cocotte\Shell\Env;
 
 class MachineName implements LazyExportableOption
 {
@@ -38,7 +38,7 @@ class MachineName implements LazyExportableOption
      */
     public static function fromEnv(): LazyEnvironmentValue
     {
-        return new self(Env::get(self::MACHINE_NAME));
+        return new self(Env::get(self::MACHINE_NAME, ""));
     }
 
     public static function toEnv(string $value): void

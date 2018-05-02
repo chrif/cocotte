@@ -1,9 +1,9 @@
 <?php declare(strict_types=1);
 
-namespace Chrif\Cocotte\DigitalOcean;
+namespace Cocotte\DigitalOcean;
 
 use Assert\Assertion;
-use Chrif\Cocotte\Collection\GenericCollection;
+use Cocotte\Collection\GenericCollection;
 
 final class HostnameCollection extends GenericCollection
 {
@@ -32,14 +32,6 @@ final class HostnameCollection extends GenericCollection
         return self::fromScalarArray(array_map('trim', explode(',', $string)));
     }
 
-    /**
-     * @codeCoverageIgnore
-     */
-    public static function fixture(): self
-    {
-        return new self(Hostname::fixture());
-    }
-
     public function toString(): string
     {
         return implode(',', $this->values);
@@ -58,10 +50,5 @@ final class HostnameCollection extends GenericCollection
         }
 
         return self::fromArray($localHosts);
-    }
-
-    public function formatSecureUrl(): string
-    {
-        return 'https://' . $this->values[0]->toString();
     }
 }

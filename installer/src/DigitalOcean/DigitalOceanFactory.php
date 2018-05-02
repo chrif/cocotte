@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Chrif\Cocotte\DigitalOcean;
+namespace Cocotte\DigitalOcean;
 
 use Assert\Assertion;
 use DigitalOceanV2\Adapter\AdapterInterface;

@@ -1,13 +1,12 @@
 #!/usr/bin/env php
 <?php
 
-function ping($host)
+function appIsReady($host)
 {
-    $url = "https://$host";
-    echo "Making request to $url\n";
     $httpStatus = exec(
-        'curl -S --insecure --silent --output /dev/null --write-out "%{http_code}" ' .
-        $url,
+        'curl -S --insecure --silent --output /dev/stderr --write-out "%{http_code}" '.
+        '--header "Host: '.$host.'" '.
+        'https://$(docker-machine -s /host/machine ip $MACHINE_NAME):443',
         $out,
         $ret
     );
@@ -15,14 +14,15 @@ function ping($host)
     return $ret === 0 && $httpStatus == 200;
 }
 
+if (!isset($argv[1])) {
+    throw new \Exception("host is not set");
+}
 $host = $argv[1];
 $try = $argv[2] ?? 1;
 
-echo "Trying up to $try times\n";
-
 for ($i = 0; $i < $try; $i++) {
-    if (ping($host)) {
-        echo "OK\n";
+    if (appIsReady($host)) {
+        echo "\n";
         exit(0);
     } elseif (($i + 1) == $try) {
         fwrite(STDERR, "Error: timeout waiting for $host.\n");

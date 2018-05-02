@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Chrif\Cocotte\Console;
+namespace Cocotte\Console;
 
 use Symfony\Component\Console\Input\InputInterface;
 
@@ -26,7 +26,7 @@ final class InteractionOperator
 
         try {
             $optionProvider->validate($input->getOption($name) ?? "");
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->style->error($e->getMessage());
             $input->setOption($name, $this->ask($optionProvider));
         }

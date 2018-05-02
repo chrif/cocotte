@@ -1,9 +1,9 @@
 <?php declare(strict_types=1);
 
-namespace Chrif\Cocotte\DigitalOcean;
+namespace Cocotte\DigitalOcean;
 
-use Chrif\Cocotte\Console\Style;
-use Chrif\Cocotte\Machine\MachineIp;
+use Cocotte\Console\Style;
+use Cocotte\Machine\MachineIp;
 
 final class NetworkingConfigurator
 {

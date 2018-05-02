@@ -1,11 +1,11 @@
 <?php declare(strict_types=1);
 
-namespace Chrif\Cocotte\Template\StaticSite;
+namespace Cocotte\Template\StaticSite;
 
 use Assert\Assertion;
-use Chrif\Cocotte\Environment\LazyEnvironmentValue;
-use Chrif\Cocotte\Environment\LazyExportableOption;
-use Chrif\Cocotte\Shell\Env;
+use Cocotte\Environment\LazyEnvironmentValue;
+use Cocotte\Environment\LazyExportableOption;
+use Cocotte\Shell\Env;
 
 class StaticSiteNamespace implements LazyExportableOption
 {
@@ -39,7 +39,7 @@ class StaticSiteNamespace implements LazyExportableOption
      */
     public static function fromEnv(): LazyEnvironmentValue
     {
-        return new self(Env::get(self::STATIC_SITE_NAMESPACE));
+        return new self(Env::get(self::STATIC_SITE_NAMESPACE, ""));
     }
 
     public static function toEnv(string $value): void

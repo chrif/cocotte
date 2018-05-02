@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Chrif\Cocotte\Shell\EnvironmentSubstitution;
+namespace Cocotte\Shell\EnvironmentSubstitution;
 
 use Assert\Assertion;
 use Symfony\Component\Process\Process;
