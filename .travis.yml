@@ -33,16 +33,16 @@ script:
   - ./bin/cmd phpunit --testsuite=unit --coverage-clover /host/coverage/unit.xml
   - ./bin/cmd phpunit --testsuite=functional --coverage-clover /host/coverage/functional.xml
 
-#  # the install and apps commands
-#  - ./bin/install -n -vvv
-#  - ./bin/static-site -n -vvv
-#
-#  # test local deployment
-#  - ./.travis/deploy-dev
-#
-#  # cleanup
-#  - if [ "${KEEP_MACHINE_AFTER:-false}" = false ]; then ./bin/cmd console networking -n -vvv --remove ${STATIC_SITE_HOSTNAME}; else true; fi
-#  - if [ "${KEEP_MACHINE_AFTER:-false}" = false ]; then ./bin/uninstall -n -vvv; else echo "Machine not removed."; fi
+  # the install and apps commands
+  - ./bin/install -n -vvv
+  - ./bin/static-site -n -vvv
+
+  # test local deployment
+  - ./.travis/deploy-dev
+
+  # cleanup
+  - if [ "${KEEP_MACHINE_AFTER:-false}" = false ]; then ./bin/cmd console networking -n -vvv --remove ${STATIC_SITE_HOSTNAME}; else true; fi
+  - if [ "${KEEP_MACHINE_AFTER:-false}" = false ]; then ./bin/uninstall -n -vvv; else echo "Machine not removed."; fi
 
 after_success:
   - bash <(curl -s https://codecov.io/bash) -f host/coverage/unit.xml -F unit

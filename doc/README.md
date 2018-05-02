@@ -1,4 +1,4 @@
-# Cocotte [![Build Status](https://travis-ci.org/chrif/cocotte.svg?branch=master)](https://travis-ci.org/chrif/cocotte)
+# Cocotte [![Build Status](https://travis-ci.org/chrif/cocotte.svg?branch=master)](https://travis-ci.org/chrif/cocotte) [![codecov](https://codecov.io/gh/chrif/cocotte/branch/master/graph/badge.svg)](https://codecov.io/gh/chrif/cocotte)
 
 Cocotte aims at easing the learning curve for web developers starting with cloud hosting and application containerization. You get a basic and [affordable](#pricing) installation, allowing you to focus on your project(s) first, and learn about your infrastructure later:
 
