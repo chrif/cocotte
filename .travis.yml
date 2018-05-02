@@ -38,7 +38,7 @@ before_script:
 
 script:
   # tests
-  - ./bin/cmd phpunit --coverage-clover build/logs/clover.xml
+  - ./bin/cmd phpunit --coverage-clover /host/build/logs/clover.xml
 
 #  # the install and apps commands
 #  - ./bin/install -n -vvv
