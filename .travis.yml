@@ -75,8 +75,8 @@ deploy:
 after_script:
   - if [ "$TRAVIS_PULL_REQUEST" = false ]; then wget https://scrutinizer-ci.com/ocular.phar; fi
   - if [ "$TRAVIS_PULL_REQUEST" = false ]; then php ocular.phar code-coverage:upload --format=php-clover host/build/logs/clover.xml || echo "Skipping Scrutinizer coverage upload"; fi
-  - if [ "$TRAVIS_PULL_REQUEST" = false ]; then ./bin/cmd test cc-test-reporter format-coverage --output=/host/build/logs/codeclimate.json --input-type=clover /host/build/logs/clover.xml; fi
-  - if [ "$TRAVIS_PULL_REQUEST" = false ]; then ./bin/cmd test cc-test-reporter upload-coverage --input=/host/build/logs/codeclimate.json || echo "Skipping CC coverage upload"; fi
+  - if [ "$TRAVIS_PULL_REQUEST" = false ]; then ./bin/cmd cc-test-reporter format-coverage --output=/host/build/logs/codeclimate.json --input-type=clover /host/build/logs/clover.xml; fi
+  - if [ "$TRAVIS_PULL_REQUEST" = false ]; then ./bin/cmd cc-test-reporter upload-coverage --input=/host/build/logs/codeclimate.json || echo "Skipping CC coverage upload"; fi
 
 env:
   global:
