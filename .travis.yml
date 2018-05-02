@@ -80,15 +80,16 @@ after_script:
   - if [ "$TRAVIS_PULL_REQUEST" = false ]; then sudo ln -s $PWD/installer /installer && sudo chown travis:travis /installer; fi
   # https://scrutinizer-ci.com/docs/tools/external-code-coverage/
   - if [ "$TRAVIS_PULL_REQUEST" = false ]; then wget https://scrutinizer-ci.com/ocular.phar; fi
-  - if [ "$TRAVIS_PULL_REQUEST" = false ]; then php ocular.phar code-coverage:upload --format=php-clover build/logs/clover.xml; fi
+  - if [ "$TRAVIS_PULL_REQUEST" = false ]; then php ocular.phar code-coverage:upload --access-token="$SCRUTINIZER_TOKEN" --format=php-clover build/logs/clover.xml; fi
   # code climate
   - if [ "$TRAVIS_PULL_REQUEST" = false ]; then ./cc-test-reporter after-build --coverage-input-type=clover --exit-code=$TRAVIS_TEST_RESULT --debug; fi
 
 env:
   global:
-    # code climate vars
+    # code coverage vars
     # CC_TEST_REPORTER_ID (set in in repo settings)
     - GIT_COMMITTED_AT=$(if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then git log -1 --pretty=format:%ct; else git log -1 --skip 1 --pretty=format:%ct; fi)
+    # SCRUTINIZER_TOKEN (set in repo settings)
 
     # DIGITAL_OCEAN_API_TOKEN (set in in repo settings)
     - COCOTTE_VERSION=${TRAVIS_TAG}
