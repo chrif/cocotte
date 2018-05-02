@@ -38,6 +38,7 @@ before_script:
 script:
   # unit tests
   - ./bin/cmd phpunit --testsuite=unit --coverage-clover=/host/unit.xml
+  - ls -la host
   - ./cc-test-reporter format-coverage --output=coverage/codeclimate.unit.json --input-type=clover host/unit.xml
   # functional tests
   - ./bin/cmd phpunit --testsuite=functional --coverage-clover=/host/functional.xml
