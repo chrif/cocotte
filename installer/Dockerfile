@@ -19,6 +19,9 @@ COPY ./etc/php.ini /etc/php7/conf.d/zzz-php.ini
 RUN composer install
 RUN composer clearcache
 
+RUN curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > /usr/local/bin/cc-test-reporter && \
+	chmod +x /usr/local/bin/cc-test-reporter
+
 # setup executables
 RUN chmod +x /installer/bin/* /installer/vendor/bin/*
 ENV PATH="/installer/bin:/installer/vendor/bin:${PATH}"
