@@ -29,33 +29,32 @@ install:
   - docker images | grep chrif/cocotte
 
 before_script:
-  - sudo ln -s $PWD/installer /installer && sudo chown -R travis:travis /installer
-  # https://github.com/codeclimate/test-reporter
+  # install code climate https://github.com/codeclimate/test-reporter
+  - sudo ln -s $PWD/installer /installer && sudo chown travis:travis /installer
   - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
   - chmod +x ./cc-test-reporter
   - ./cc-test-reporter before-build
 
 script:
-  # unit tests
+  # tests
   - ./bin/cmd phpunit --testsuite=unit --coverage-clover=/host/unit.xml
-  - ./cc-test-reporter format-coverage --output=coverage/codeclimate.unit.json --input-type=clover unit.xml
-  # functional tests
   - ./bin/cmd phpunit --testsuite=functional --coverage-clover=/host/functional.xml
-  - ./cc-test-reporter format-coverage --output=coverage/codeclimate.functional.json --input-type=clover functional.xml
 
-#  # install and apps commands
-#  - ./bin/install -n -vvv
-#  - ./bin/static-site -n -vvv
-#
-#  # test local deployment
-#  - ./.travis/deploy-dev
-#
-#  # cleanup
-#  - if [ "${KEEP_MACHINE_AFTER:-false}" = false ]; then ./bin/cmd console networking -n -vvv --remove ${STATIC_SITE_HOSTNAME}; else true; fi
-#  - if [ "${KEEP_MACHINE_AFTER:-false}" = false ]; then ./bin/uninstall -n -vvv; else echo "Machine not removed."; fi
+  # the install and apps commands
+  - ./bin/install -n -vvv
+  - ./bin/static-site -n -vvv
+
+  # test local deployment
+  - ./.travis/deploy-dev
+
+  # cleanup
+  - if [ "${KEEP_MACHINE_AFTER:-false}" = false ]; then ./bin/cmd console networking -n -vvv --remove ${STATIC_SITE_HOSTNAME}; else true; fi
+  - if [ "${KEEP_MACHINE_AFTER:-false}" = false ]; then ./bin/uninstall -n -vvv; else echo "Machine not removed."; fi
 
 after_success:
   # upload code climate coverage
+  - ./cc-test-reporter format-coverage --output=coverage/codeclimate.functional.json --input-type=clover functional.xml
+  - ./cc-test-reporter format-coverage --output=coverage/codeclimate.unit.json --input-type=clover unit.xml
   - ./cc-test-reporter sum-coverage coverage/codeclimate.*.json
   - ./cc-test-reporter upload-coverage
   # upload scrutinizer coverage
