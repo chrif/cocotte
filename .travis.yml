@@ -34,33 +34,24 @@ before_script:
   - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
   - chmod +x ./cc-test-reporter
   - ./cc-test-reporter before-build
+  - wget https://scrutinizer-ci.com/ocular.phar
 
 script:
   # tests
-  - ./bin/cmd phpunit --testsuite=unit --coverage-clover=/host/unit.xml
-  - ./bin/cmd phpunit --testsuite=functional --coverage-clover=/host/functional.xml
+  - ./bin/cmd phpunit --coverage-clover build/logs/clover.xml
+  - if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT; fi
+  - if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then php ocular.phar code-coverage:upload --format=php-clover build/logs/clover.xml; fi
 
-  # the install and apps commands
-  - ./bin/install -n -vvv
-  - ./bin/static-site -n -vvv
-
-  # test local deployment
-  - ./.travis/deploy-dev
-
-  # cleanup
-  - if [ "${KEEP_MACHINE_AFTER:-false}" = false ]; then ./bin/cmd console networking -n -vvv --remove ${STATIC_SITE_HOSTNAME}; else true; fi
-  - if [ "${KEEP_MACHINE_AFTER:-false}" = false ]; then ./bin/uninstall -n -vvv; else echo "Machine not removed."; fi
-
-after_success:
-  # upload code climate coverage
-  - ./cc-test-reporter format-coverage --output=coverage/codeclimate.functional.json --input-type=clover functional.xml
-  - ./cc-test-reporter format-coverage --output=coverage/codeclimate.unit.json --input-type=clover unit.xml
-  - ./cc-test-reporter sum-coverage coverage/codeclimate.*.json
-  - ./cc-test-reporter upload-coverage
-  # upload scrutinizer coverage
-  - wget https://scrutinizer-ci.com/ocular.phar
-  - php ocular.phar code-coverage:upload --format=php-clover unit.xml
-  - php ocular.phar code-coverage:upload --format=php-clover functional.xml
+#  # the install and apps commands
+#  - ./bin/install -n -vvv
+#  - ./bin/static-site -n -vvv
+#
+#  # test local deployment
+#  - ./.travis/deploy-dev
+#
+#  # cleanup
+#  - if [ "${KEEP_MACHINE_AFTER:-false}" = false ]; then ./bin/cmd console networking -n -vvv --remove ${STATIC_SITE_HOSTNAME}; else true; fi
+#  - if [ "${KEEP_MACHINE_AFTER:-false}" = false ]; then ./bin/uninstall -n -vvv; else echo "Machine not removed."; fi
 
 deploy:
   # push image to docker hub
