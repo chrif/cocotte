@@ -10,9 +10,10 @@ if [ "$1" = 'test' ]; then
 fi
 
 docker run -it --rm \
+    -e MACHINE_NAME="${MACHINE_NAME}" \
     -v "$(pwd)":/host \
     -v /var/run/docker.sock:/var/run/docker.sock:ro \
     chrif/cocotte uninstall \
     --digital-ocean-api-token="${DIGITAL_OCEAN_API_TOKEN}" \
-    --machine-name="${MACHINE_NAME:-cocotte}" \
-    --traefik-ui-hostname="${TRAEFIK_UI_HOSTNAME}" "$@"
+    --traefik-ui-hostname="${TRAEFIK_UI_HOSTNAME}" \
+    "$@"

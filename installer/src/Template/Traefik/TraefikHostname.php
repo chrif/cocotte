@@ -1,38 +1,36 @@
 <?php declare(strict_types=1);
 
-namespace Chrif\Cocotte\Template\Traefik;
+namespace Cocotte\Template\Traefik;
 
-use Chrif\Cocotte\DigitalOcean\HostnameCollection;
-use Chrif\Cocotte\Environment\LazyEnvironmentValue;
-use Chrif\Cocotte\Environment\LazyExportableOption;
-use Chrif\Cocotte\Shell\Env;
+use Cocotte\DigitalOcean\Hostname;
+use Cocotte\DigitalOcean\HostnameCollection;
+use Cocotte\Environment\LazyEnvironmentValue;
+use Cocotte\Environment\LazyExportableOption;
+use Cocotte\Shell\Env;
 
 class TraefikHostname implements LazyExportableOption
 {
     const TRAEFIK_UI_HOSTNAME = 'TRAEFIK_UI_HOSTNAME';
     const OPTION_NAME = 'traefik-ui-hostname';
     const REGEX = '/^[a-zA-Z0-9_@#%?&*+=!-]+$/';
+
     /**
-     * @var HostnameCollection
+     * @var Hostname
      */
-    private $hostnameCollection;
+    private $hostname;
 
-    public function __construct(HostnameCollection $hostnameCollection)
+    public function __construct(Hostname $hostname)
     {
-        $this->hostnameCollection = $hostnameCollection;
-    }
-
-    public static function fromString(string $value): self
-    {
-        return new self(HostnameCollection::fromString($value));
+        $this->hostname = $hostname;
     }
 
     /**
      * @return LazyEnvironmentValue|self
+     * @throws \Exception
      */
     public static function fromEnv(): LazyEnvironmentValue
     {
-        return new self(HostnameCollection::fromString(Env::get(self::TRAEFIK_UI_HOSTNAME)));
+        return new self(Hostname::parse(Env::get(self::TRAEFIK_UI_HOSTNAME, "")));
     }
 
     public static function toEnv(string $value): void
@@ -45,28 +43,23 @@ class TraefikHostname implements LazyExportableOption
         return self::OPTION_NAME;
     }
 
-    public function toLocalHostnameCollection(): HostnameCollection
-    {
-        return $this->hostnameCollection->toLocal();
-    }
-
     public function __toString()
     {
         return $this->toString();
     }
 
-    public function toString()
+    public function toString(): string
     {
-        return $this->hostnameCollection->toString();
+        return $this->hostname->toString();
     }
 
     public function toHostnameCollection(): HostnameCollection
     {
-        return $this->hostnameCollection;
+        return HostnameCollection::fromArray([$this->hostname]);
     }
 
-    public function formatSecureUrl(): string
+    public function toLocal(): Hostname
     {
-        return $this->hostnameCollection->formatSecureUrl();
+        return $this->hostname->toLocal();
     }
 }

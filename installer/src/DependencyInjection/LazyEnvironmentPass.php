@@ -1,10 +1,10 @@
 <?php declare(strict_types=1);
 
-namespace Chrif\Cocotte\DependencyInjection;
+namespace Cocotte\DependencyInjection;
 
 use Assert\Assertion;
-use Chrif\Cocotte\Environment\LazyEnvironmentLoader;
-use Chrif\Cocotte\Environment\LazyEnvironmentValue;
+use Cocotte\Environment\LazyEnvironmentLoader;
+use Cocotte\Environment\LazyEnvironmentValue;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;

@@ -1,13 +1,13 @@
 <?php declare(strict_types=1);
 
-namespace Chrif\Cocotte\Template\StaticSite;
+namespace Cocotte\Template\StaticSite;
 
-use Chrif\Cocotte\Console\Style;
-use Chrif\Cocotte\Filesystem\Filesystem;
-use Chrif\Cocotte\Finder\Finder;
-use Chrif\Cocotte\Shell\EnvironmentSubstitution\EnvironmentSubstitution;
-use Chrif\Cocotte\Shell\EnvironmentSubstitution\SubstitutionFactory;
-use Chrif\Cocotte\Shell\ProcessRunner;
+use Cocotte\Console\Style;
+use Cocotte\Filesystem\Filesystem;
+use Cocotte\Finder\Finder;
+use Cocotte\Shell\EnvironmentSubstitution\EnvironmentSubstitution;
+use Cocotte\Shell\EnvironmentSubstitution\SubstitutionFactory;
+use Cocotte\Shell\ProcessRunner;
 use Symfony\Component\Process\Process;
 
 final class StaticSiteCreator
@@ -80,6 +80,7 @@ final class StaticSiteCreator
         $this->createDotEnv();
         $this->substituteEnvInIndexHtml();
         $this->copyTmpToHost();
+        $this->chmodBin();
     }
 
     public function hostAppPath(): string
@@ -172,7 +173,7 @@ final class StaticSiteCreator
         EnvironmentSubstitution::withDefaults()
             ->export(
                 [
-                    'APP_HOSTS' => $this->staticSiteHostname->toLocalHostnameCollection()->toString(),
+                    'APP_HOSTS' => $this->staticSiteHostname->toLocal()->toString(),
                 ]
             )->substitute(
                 $this->substitutionFactory->dumpFile(
@@ -228,6 +229,11 @@ final class StaticSiteCreator
     {
         $this->mustRun(['rm', '-rfv', $this->tmpAppPath()]);
         $this->mustRun(['rm', '-rfv', $this->tmpTemplatePath()]);
+    }
+
+    private function chmodBin()
+    {
+        $this->mustRun("chmod +x {$this->hostAppPath()}/bin/*");
     }
 
     private function tmpAppPath(): string

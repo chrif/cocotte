@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Chrif\Cocotte\Collection;
+namespace Cocotte\Collection;
 
 use ArrayIterator;
 use IteratorAggregate;

@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Chrif\Cocotte\Console;
+namespace Cocotte\Console;
 
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -9,6 +9,16 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 abstract class AbstractCommand extends Command implements CommandInterface
 {
+    public function getSynopsis($short = false)
+    {
+        return "docker run -it --rm chrif/cocotte ".parent::getSynopsis($short);
+    }
+
+    protected function formatHelp(string $description, string $example): string
+    {
+        return $description."\n\n<info>Example:</info>\n```\n$ {$example}\n```";
+    }
+
     /**
      * @return EventDispatcherInterface
      */
@@ -21,6 +31,10 @@ abstract class AbstractCommand extends Command implements CommandInterface
             new CommandConfigureEvent($this, $this->getDefinition())
         );
         $this->doConfigure();
+        $this->eventDispatcher()->dispatch(
+            CommandEventStore::COMMAND_CONFIGURED,
+            new CommandConfiguredEvent($this, $this->getDefinition())
+        );
     }
 
     abstract protected function doConfigure(): void;

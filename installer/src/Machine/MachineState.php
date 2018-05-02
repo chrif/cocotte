@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Chrif\Cocotte\Machine;
+namespace Cocotte\Machine;
 
 use Symfony\Component\Process\Process;
 

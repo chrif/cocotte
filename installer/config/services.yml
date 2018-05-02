@@ -8,7 +8,7 @@ services:
       public: true
 
   # acme
-  Chrif\Cocotte\Acme\CertificateChecker: ~
+  Cocotte\Acme\CertificateChecker: ~
 
   # console
   Symfony\Component\Console\Input\InputInterface:
@@ -17,37 +17,38 @@ services:
     class: Symfony\Component\Console\Output\ConsoleOutput
     arguments:
       - '%console.output.verbosity%'
-  Chrif\Cocotte\Console\Style:
-    class: Chrif\Cocotte\Console\CocotteStyle
+  Cocotte\Console\Style:
+    class: Cocotte\Console\CocotteStyle
   Symfony\Component\Console\Application:
     class: Symfony\Component\Console\Application
     arguments:
-      - "Cocotte Console"
-  Chrif\Cocotte\Command\:
+      - "<fg=green;options=bold>Cocotte Console</>"
+      - '%env(COCOTTE_VERSION)%'
+  Cocotte\Command\:
     resource: '../src/Command/*'
     tags: ['console.command']
-  Chrif\Cocotte\Console\InteractionOperator: ~
-  Chrif\Cocotte\Console\OptionProviderRegistry: ~
-  Chrif\Cocotte\Console\OptionProviderAutomation:
+  Cocotte\Console\InteractionOperator: ~
+  Cocotte\Console\OptionProviderRegistry: ~
+  Cocotte\Console\OptionProviderAutomation:
     tags: ['event.subscriber']
-  Chrif\Cocotte\Console\HelperFactory: ~
+  Cocotte\Console\HelperFactory: ~
   Symfony\Component\Console\Helper\ProcessHelper:
-    factory: 'Chrif\Cocotte\Console\HelperFactory:processHelper'
+    factory: 'Cocotte\Console\HelperFactory:processHelper'
 
   # digital ocean
-  Chrif\Cocotte\DigitalOcean\ApiToken:
+  Cocotte\DigitalOcean\ApiToken:
     tags: ['lazy.environment']
-  Chrif\Cocotte\DigitalOcean\ApiTokenOptionProvider:
+  Cocotte\DigitalOcean\ApiTokenOptionProvider:
     tags: ['option.provider']
-  Chrif\Cocotte\DigitalOcean\DigitalOceanFactory: ~
+  Cocotte\DigitalOcean\DigitalOceanFactory: ~
   Iodev\Whois\Whois:
     factory: 'Iodev\Whois\Whois::create'
-  Chrif\Cocotte\DigitalOcean\DnsValidator: ~
-  Chrif\Cocotte\DigitalOcean\Domain: ~
-  Chrif\Cocotte\DigitalOcean\DomainRecord: ~
-  Chrif\Cocotte\DigitalOcean\NetworkingConfigurator: ~
+  Cocotte\DigitalOcean\DnsValidator: ~
+  Cocotte\DigitalOcean\Domain: ~
+  Cocotte\DigitalOcean\DomainRecord: ~
+  Cocotte\DigitalOcean\NetworkingConfigurator: ~
   DigitalOceanV2\Adapter\AdapterInterface:
-    factory: 'Chrif\Cocotte\DigitalOcean\DigitalOceanFactory:adapter'
+    factory: 'Cocotte\DigitalOcean\DigitalOceanFactory:adapter'
     arguments: ["%api.adapter.class%"]
     lazy: true
   DigitalOceanV2\DigitalOceanV2: ~
@@ -60,7 +61,7 @@ services:
   DigitalOceanV2\Api\DomainRecord: ~
 
   # environment
-  Chrif\Cocotte\Environment\LazyEnvironmentLoader:
+  Cocotte\Environment\LazyEnvironmentLoader:
     tags: ['event.subscriber']
 
   # event
@@ -68,63 +69,68 @@ services:
     class: Symfony\Component\EventDispatcher\EventDispatcher
 
   # filesystem
-  Chrif\Cocotte\Filesystem\Filesystem:
-    class: Chrif\Cocotte\Filesystem\CocotteFilesystem
+  Cocotte\Filesystem\Filesystem:
+    class: Cocotte\Filesystem\CocotteFilesystem
 
   # finder
-  Chrif\Cocotte\Finder\Finder:
-    class: Chrif\Cocotte\Finder\CocotteFinder
+  Cocotte\Finder\Finder:
+    class: Cocotte\Finder\CocotteFinder
 
   # host
-  Chrif\Cocotte\Host\HostMount:
+  Cocotte\Host\HostMount:
     tags: ['lazy.environment']
-  Chrif\Cocotte\Host\Mounts:
+  Cocotte\Host\Mounts:
     tags: ['lazy.environment']
-  Chrif\Cocotte\Host\HostMountRequiredListener:
+  Cocotte\Host\HostMountRequiredListener:
     tags: ['event.subscriber']
 
   # machine
-  Chrif\Cocotte\Machine\MachineCreator: ~
-  Chrif\Cocotte\Machine\MachineIp:
+  Cocotte\Machine\MachineCreator: ~
+  Cocotte\Machine\MachineIp:
     tags: ['lazy.environment']
-  Chrif\Cocotte\Machine\MachineName:
+  Cocotte\Machine\MachineName:
     tags: ['lazy.environment']
-  Chrif\Cocotte\Machine\MachineNameOptionProvider:
+  Cocotte\Machine\MachineNameOptionProvider:
     tags: ['option.provider']
-  Chrif\Cocotte\Machine\MachineState: ~
-  Chrif\Cocotte\Machine\MachineStoragePath:
+  Cocotte\Machine\MachineState: ~
+  Cocotte\Machine\MachineStoragePath:
     tags: ['lazy.environment']
+  Cocotte\Machine\MachineRequiredListener:
+    tags: ['event.subscriber']
 
   # shell
-  Chrif\Cocotte\Shell\ProcessRunner: ~
-  Chrif\Cocotte\Shell\VariableReplacer: ~
-  Chrif\Cocotte\Shell\EnvironmentSubstitution\SubstitutionFactory: ~
-  Chrif\Cocotte\Shell\BasicAuth: ~
+  Cocotte\Shell\ProcessRunner: ~
+  Cocotte\Shell\VariableReplacer: ~
+  Cocotte\Shell\EnvironmentSubstitution\SubstitutionFactory: ~
+  Cocotte\Shell\BasicAuth: ~
 
   # template
+
   ## static site
-  Chrif\Cocotte\Template\StaticSite\StaticSiteCreator: ~
-  Chrif\Cocotte\Template\StaticSite\StaticSiteHostname:
+  Cocotte\Template\StaticSite\StaticSiteCreator: ~
+  Cocotte\Template\StaticSite\StaticSiteHostname:
     tags: ['lazy.environment']
-  Chrif\Cocotte\Template\StaticSite\StaticSiteHostnameOptionProvider:
+  Cocotte\Template\StaticSite\StaticSiteHostnameOptionProvider:
     tags: ['option.provider']
-  Chrif\Cocotte\Template\StaticSite\StaticSiteNamespace:
+  Cocotte\Template\StaticSite\StaticSiteNamespace:
     tags: ['lazy.environment']
-  Chrif\Cocotte\Template\StaticSite\StaticSiteNamespaceOptionProvider:
+  Cocotte\Template\StaticSite\StaticSiteNamespaceOptionProvider:
     tags: ['option.provider']
+  Cocotte\Template\StaticSite\StaticSiteDeploymentValidator: ~
+
   ## traefik
-  Chrif\Cocotte\Template\Traefik\TraefikCreator: ~
-  Chrif\Cocotte\Template\Traefik\TraefikHostname:
+  Cocotte\Template\Traefik\TraefikCreator: ~
+  Cocotte\Template\Traefik\TraefikHostname:
     tags: ['lazy.environment']
-  Chrif\Cocotte\Template\Traefik\TraefikHostnameOptionProvider:
+  Cocotte\Template\Traefik\TraefikHostnameOptionProvider:
     tags: ['option.provider']
-  Chrif\Cocotte\Template\Traefik\TraefikPassword:
+  Cocotte\Template\Traefik\TraefikPassword:
     tags: ['lazy.environment']
-  Chrif\Cocotte\Template\Traefik\TraefikPasswordOptionProvider:
+  Cocotte\Template\Traefik\TraefikPasswordOptionProvider:
     tags: ['option.provider']
-  Chrif\Cocotte\Template\Traefik\TraefikUsername:
+  Cocotte\Template\Traefik\TraefikUsername:
     tags: ['lazy.environment']
-  Chrif\Cocotte\Template\Traefik\TraefikUsernameOptionProvider:
+  Cocotte\Template\Traefik\TraefikUsernameOptionProvider:
     tags: ['option.provider']
-  Chrif\Cocotte\Template\Traefik\TraefikDeploymentValidator: ~
+  Cocotte\Template\Traefik\TraefikDeploymentValidator: ~
 

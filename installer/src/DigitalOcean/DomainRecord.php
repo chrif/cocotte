@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace Chrif\Cocotte\DigitalOcean;
+namespace Cocotte\DigitalOcean;
 
-use Chrif\Cocotte\Machine\MachineIp;
+use Cocotte\Machine\MachineIp;
 use DigitalOceanV2\Api;
 use DigitalOceanV2\Entity;
 

@@ -1,7 +1,11 @@
 # https://docs.traefik.io/
 
 logLevel = "INFO"
+checkNewVersion = false
 defaultEntryPoints = ["http"]
+sendAnonymousUsage = false
+
+[accessLog]
 
 [entryPoints]
 	[entryPoints.http]

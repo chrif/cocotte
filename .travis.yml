@@ -1,44 +1,106 @@
-language: generic
+language: php
+php:
+  - 7.1.16
 sudo: required
 dist: trusty
 
 before_install:
-  # install docker
-- curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-- sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu
-  $(lsb_release -cs) stable"
-- sudo apt-get update
-- sudo apt-get -y install docker-ce=17.12.0~ce-0~ubuntu
-  # install docker-machine
-- curl -L https://github.com/docker/machine/releases/download/v0.13.0/docker-machine-`uname
-  -s`-`uname -m` >/tmp/docker-machine
-- sudo install /tmp/docker-machine /usr/local/bin/docker-machine
-  # install docker-compose
-- sudo rm /usr/local/bin/docker-compose
-- curl -L https://github.com/docker/compose/releases/download/1.18.0/docker-compose-`uname
-  -s`-`uname -m` > docker-compose
-- chmod +x docker-compose
-- sudo mv docker-compose /usr/local/bin
+    # install docker
+  - curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+  - sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu
+    $(lsb_release -cs) stable"
+  - sudo apt-get update
+  - sudo apt-get -y install docker-ce=18.03.1~ce-0~ubuntu
+    # install docker-machine
+  - curl -L https://github.com/docker/machine/releases/download/v0.14.0/docker-machine-`uname
+    -s`-`uname -m` >/tmp/docker-machine
+  - sudo install /tmp/docker-machine /usr/local/bin/docker-machine
+    # install docker-compose
+  - sudo rm /usr/local/bin/docker-compose
+  - curl -L https://github.com/docker/compose/releases/download/1.21.0/docker-compose-`uname
+    -s`-`uname -m` > docker-compose
+  - chmod +x docker-compose
+  - sudo mv docker-compose /usr/local/bin
 
 install:
-- chmod +x bin/*
-- docker-compose build cocotte
+  - chmod +x bin/*
+  - docker pull chrif/cocotte || true # reuse layers if possible
+  - docker-compose build cocotte
+  - docker images | grep chrif/cocotte
+
+before_script:
+  # install code climate https://github.com/codeclimate/test-reporter
+  - sudo ln -s $PWD/installer /installer && sudo chown travis:travis /installer
+  - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+  - chmod +x ./cc-test-reporter
+  - ./cc-test-reporter before-build
 
 script:
-- ./bin/command phpunit --exclude-group=functional
-- ./bin/install -n -vvv
-- ./bin/static-site -n -vvv --namespace=test --hostname=${STATIC_TEST_HOST}
-- ./bin/command check-online ${STATIC_TEST_HOST} 6
-- if [ "${ACME_ENABLED:-true}" = true ]; then ./bin/command check-certificate ${STATIC_TEST_HOST} 6; else echo "Skipping SSL verification"; fi
-- if [ "${KEEP_MACHINE_AFTER:-false}" = false ]; then ./bin/command console networking -n -vvv --remove ${STATIC_TEST_HOST}; else true; fi
-- if [ "${KEEP_MACHINE_AFTER:-false}" = false ]; then ./bin/uninstall -n -vvv; else echo "Machine not removed."; fi
+  # tests
+  - ./bin/cmd phpunit --testsuite=unit --coverage-clover=/host/unit.xml
+  - ./bin/cmd phpunit --testsuite=functional --coverage-clover=/host/functional.xml
+
+  # the install and apps commands
+  - ./bin/install -n -vvv
+  - ./bin/static-site -n -vvv
+
+  # test local deployment
+  - ./.travis/deploy-dev
+
+  # cleanup
+  - if [ "${KEEP_MACHINE_AFTER:-false}" = false ]; then ./bin/cmd console networking -n -vvv --remove ${STATIC_SITE_HOSTNAME}; else true; fi
+  - if [ "${KEEP_MACHINE_AFTER:-false}" = false ]; then ./bin/uninstall -n -vvv; else echo "Machine not removed."; fi
+
+after_success:
+  # upload code climate coverage
+  - ./cc-test-reporter format-coverage --output=coverage/codeclimate.functional.json --input-type=clover functional.xml
+  - ./cc-test-reporter format-coverage --output=coverage/codeclimate.unit.json --input-type=clover unit.xml
+  - ./cc-test-reporter sum-coverage coverage/codeclimate.*.json
+  - ./cc-test-reporter upload-coverage
+  # upload scrutinizer coverage
+  - wget https://scrutinizer-ci.com/ocular.phar
+  - php ocular.phar code-coverage:upload --format=php-clover unit.xml
+  - php ocular.phar code-coverage:upload --format=php-clover functional.xml
+
+deploy:
+  # push image to docker hub
+  - provider: script
+    skip_cleanup: true
+    script: "echo $DOCKER_PASSWORD | docker login -u chrif --password-stdin && \
+            docker tag chrif/cocotte:latest chrif/cocotte:${TRAVIS_TAG} && \
+            docker push chrif/cocotte:latest && \
+            docker push chrif/cocotte:${TRAVIS_TAG}"
+    on:
+      tags: true
+
+  # prepare artifacts for github release
+  - provider: script
+    skip_cleanup: true
+    script: "docker save chrif/cocotte:${TRAVIS_TAG} | gzip -c > chrif-cocotte-${TRAVIS_TAG}.tar.gz"
+    on:
+      tags: true
+
+  # github release
+  - provider: releases
+    skip_cleanup: true
+    file: "chrif-cocotte-${TRAVIS_TAG}.tar.gz"
+    api_key: $GITHUB_TOKEN
+    on:
+      tags: true
 
 env:
   global:
-    - MACHINE_NAME=cocotte-travis-${TRAVIS_BUILD_ID}
+    # code climate vars
+    # CC_TEST_REPORTER_ID (set in in repo settings)
+    - GIT_COMMITTED_AT=$(if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then git log -1 --pretty=format:%ct; else git log -1 --skip 1 --pretty=format:%ct; fi)
+
     # DIGITAL_OCEAN_API_TOKEN (set in in repo settings)
+    - COCOTTE_VERSION=${TRAVIS_TAG}
     - GIT_COMMIT_ID=${TRAVIS_COMMIT}
-    # STATIC_TEST_HOST (set in in repo settings)
+    # GITHUB_TOKEN (set in in repo settings)
+    - MACHINE_NAME=cocotte-travis-${TRAVIS_BUILD_ID}
+    # STATIC_SITE_HOSTNAME (set in in repo settings)
+    - STATIC_SITE_NAMESPACE=static-site
     # TRAEFIK_UI_HOSTNAME (set in in repo settings)
     # TRAEFIK_UI_PASSWORD
     - secure: "vDD7Z8hwwiVC8ervHXFoLQt4SPP1mTqHt2E/SchSxGIqk2WszsvL9NYfgu+cB/6JrxjL/25LcXgqH4qJPXs66I/p0Kx/ALj1RvD/6Pkh3OeDH3fWc6Bgoe90+uiGg5kaP/XtyEiD4lthug7vxOXsW/3W+CEC06jEb9bxvSW54xa38AmbSkZ5LcT+gWMOk2I48HfdmsGS2K6zFacjAexJ2P3TVz46ttDzwE2hB7vWiuhtpPv8BfhvGTKhNgquWOQUdPm2vA+Rx9pY733yl1XXJr/OYlaxrKu5JjimmQV3wMgZMZe4PqrRYIpZo1q7dVdlePwAhU5H57zjkuHMzUDgu0rfCW7S1+cooybrO2BGM0n/Bee5HN549GkFjGhNlvaV/uk0Wu03L9xkwria8OFM9mRLnOuSDHa2GK9TvYZ1RAVB1QsjcApIEIpLS7R5PFxPzVFIaBvPgD1OFhL+CU0BfVtWeGZLV93zxiWkm3fbzP+dMDnzl/Mx+mHe+yBTkGheMelzlHYGGSwY/DDWJ2/i8fc3wgvp0fLV8fhSY3HmAwt3lKnEMjMURt+2zI2/fOMk9WtJF1oxxlMhTYaY2/Dc9OsVpV1rIdjDXY2CmwA7ZxPwmrpxvLFRD7CIAn9HdVHpDpgTkQv/3u7F/7h4/qIiKXmRQjIS4j5Jjykj/NBWHSA="

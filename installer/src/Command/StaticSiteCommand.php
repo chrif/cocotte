@@ -1,32 +1,39 @@
 <?php declare(strict_types=1);
 
-namespace Chrif\Cocotte\Command;
+namespace Cocotte\Command;
 
-use Chrif\Cocotte\Console\AbstractCommand;
-use Chrif\Cocotte\Console\Style;
-use Chrif\Cocotte\DigitalOcean\ApiToken;
-use Chrif\Cocotte\DigitalOcean\ApiTokenOptionProvider;
-use Chrif\Cocotte\DigitalOcean\NetworkingConfigurator;
-use Chrif\Cocotte\Environment\LazyEnvironment;
-use Chrif\Cocotte\Host\HostMount;
-use Chrif\Cocotte\Host\HostMountRequired;
-use Chrif\Cocotte\Machine\MachineName;
-use Chrif\Cocotte\Machine\MachineNameOptionProvider;
-use Chrif\Cocotte\Machine\MachineState;
-use Chrif\Cocotte\Machine\MachineStoragePath;
-use Chrif\Cocotte\Shell\ProcessRunner;
-use Chrif\Cocotte\Template\StaticSite\StaticSiteCreator;
-use Chrif\Cocotte\Template\StaticSite\StaticSiteHostname;
-use Chrif\Cocotte\Template\StaticSite\StaticSiteHostnameOptionProvider;
-use Chrif\Cocotte\Template\StaticSite\StaticSiteNamespace;
-use Chrif\Cocotte\Template\StaticSite\StaticSiteNamespaceOptionProvider;
+use Cocotte\Console\AbstractCommand;
+use Cocotte\Console\DocumentedCommand;
+use Cocotte\Console\Style;
+use Cocotte\DigitalOcean\ApiToken;
+use Cocotte\DigitalOcean\ApiTokenOptionProvider;
+use Cocotte\DigitalOcean\NetworkingConfigurator;
+use Cocotte\Environment\LazyEnvironment;
+use Cocotte\Host\HostMount;
+use Cocotte\Host\HostMountRequired;
+use Cocotte\Machine\MachineName;
+use Cocotte\Machine\MachineNameOptionProvider;
+use Cocotte\Machine\MachineRequired;
+use Cocotte\Machine\MachineState;
+use Cocotte\Machine\MachineStoragePath;
+use Cocotte\Shell\ProcessRunner;
+use Cocotte\Template\StaticSite\StaticSiteCreator;
+use Cocotte\Template\StaticSite\StaticSiteDeploymentValidator;
+use Cocotte\Template\StaticSite\StaticSiteHostname;
+use Cocotte\Template\StaticSite\StaticSiteHostnameOptionProvider;
+use Cocotte\Template\StaticSite\StaticSiteNamespace;
+use Cocotte\Template\StaticSite\StaticSiteNamespaceOptionProvider;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Process\Process;
 
-final class StaticSiteCommand extends AbstractCommand implements LazyEnvironment, HostMountRequired
+final class StaticSiteCommand extends AbstractCommand implements
+    LazyEnvironment,
+    HostMountRequired,
+    DocumentedCommand,
+    MachineRequired
 {
     /**
      * @var StaticSiteCreator
@@ -70,6 +77,10 @@ final class StaticSiteCommand extends AbstractCommand implements LazyEnvironment
      * @var HostMount
      */
     private $hostMount;
+    /**
+     * @var StaticSiteDeploymentValidator
+     */
+    private $staticSiteDeploymentValidator;
 
     public function __construct(
         StaticSiteCreator $staticSiteCreator,
@@ -80,7 +91,8 @@ final class StaticSiteCommand extends AbstractCommand implements LazyEnvironment
         EventDispatcherInterface $eventDispatcher,
         MachineState $machineState,
         StaticSiteNamespace $staticSiteNamespace,
-        HostMount $hostMount
+        HostMount $hostMount,
+        StaticSiteDeploymentValidator $staticSiteDeploymentValidator
     ) {
         $this->staticSiteCreator = $staticSiteCreator;
         $this->networkingConfigurator = $networkingConfigurator;
@@ -91,6 +103,7 @@ final class StaticSiteCommand extends AbstractCommand implements LazyEnvironment
         $this->machineState = $machineState;
         $this->staticSiteNamespace = $staticSiteNamespace;
         $this->hostMount = $hostMount;
+        $this->staticSiteDeploymentValidator = $staticSiteDeploymentValidator;
         parent::__construct();
     }
 
@@ -128,15 +141,27 @@ final class StaticSiteCommand extends AbstractCommand implements LazyEnvironment
                 'skip-networking',
                 null,
                 InputOption::VALUE_NONE,
-                'Configure networking. Cannot be true if skip-deploy is true'
+                'Do not configure networking. Cannot be true if skip-deploy is true.'
             )
             ->addOption(
                 'skip-deploy',
                 null,
                 InputOption::VALUE_NONE,
-                'Deploy to prod after exportation'
+                'Do not deploy to prod after creation.'
             )
-            ->setDescription('Create a static website and deploy it to your Docker Machine.');
+            ->setDescription($description = 'Create a static website and deploy it to your Docker Machine.')
+            ->setHelp(
+                $this->formatHelp(
+                    $description,
+                    'docker run -it --rm \
+    -v "$(pwd)":/host \
+    -v /var/run/docker.sock:/var/run/docker.sock:ro \
+    chrif/cocotte static-site \
+    --digital-ocean-api-token="xxxx" \
+    --namespace="static-site" \
+    --hostname="static-site.mydomain.com";'
+                )
+            );
     }
 
     protected function doExecute(InputInterface $input, OutputInterface $output)
@@ -157,7 +182,7 @@ final class StaticSiteCommand extends AbstractCommand implements LazyEnvironment
         }
 
         $this->style->writeln(
-            "Exporting a new static site to {$this->sitePath()}"
+            "Creating a new static site in {$this->sitePath()}"
         );
         $this->staticSiteCreator->create();
 
@@ -167,12 +192,18 @@ final class StaticSiteCommand extends AbstractCommand implements LazyEnvironment
         }
 
         if (!$skipDeploy) {
-            $this->style->writeln('Deploying exported site to cloud machine');
+            $this->style->writeln('Deploying created site to cloud machine');
             $this->processRunner->mustRun(new Process('./bin/prod 2>/dev/stdout',
                 $this->staticSiteCreator->hostAppPath()));
+
+            $this->style->writeln('Waiting for site to respond');
+            $this->staticSiteDeploymentValidator->validate();
+
+            $this->processRunner->mustRun(new Process('./bin/logs -t', $this->staticSiteCreator->hostAppPath()));
+
             $this->style->complete([
                 "Static site successfully deployed at ".
-                "<options=bold>{$this->staticSiteHostname->formatSecureUrl()}</>",
+                "<options=bold>https://{$this->staticSiteHostname->toString()}</>",
             ]);
         } else {
             $this->style->complete("Deployment has been skipped.");
