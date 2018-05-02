@@ -28,12 +28,10 @@ install:
   - docker-compose build cocotte
   - docker images | grep chrif/cocotte
 
-before_script:
-  - if [ "$TRAVIS_PULL_REQUEST" = false ]; then ./bin/cmd cc-test-reporter before-build; fi
-
 script:
   # tests
-  - ./bin/cmd phpunit --coverage-text --coverage-clover /host/build/logs/clover.xml
+  - ./bin/cmd phpunit --testsuite=unit --coverage-clover /host/coverage/unit.xml
+  - ./bin/cmd phpunit --testsuite=functional --coverage-clover /host/coverage/functional.xml
 
 #  # the install and apps commands
 #  - ./bin/install -n -vvv
@@ -47,7 +45,7 @@ script:
 #  - if [ "${KEEP_MACHINE_AFTER:-false}" = false ]; then ./bin/uninstall -n -vvv; else echo "Machine not removed."; fi
 
 after_success:
-  - bash <(curl -s https://codecov.io/bash) -s host/build/logs -v
+  - bash <(curl -s https://codecov.io/bash) -s host/coverage
 
 deploy:
   # push image to docker hub
@@ -75,15 +73,8 @@ deploy:
     on:
       tags: true
 
-after_script:
-  - if [ "$TRAVIS_PULL_REQUEST" = false ]; then wget https://scrutinizer-ci.com/ocular.phar; fi
-  - if [ "$TRAVIS_PULL_REQUEST" = false ]; then php ocular.phar code-coverage:upload --format=php-clover host/build/logs/clover.xml || echo "Skipping Scrutinizer coverage upload"; fi
-  - if [ "$TRAVIS_PULL_REQUEST" = false ]; then ./bin/cmd cc-test-reporter format-coverage --output=/host/build/logs/codeclimate.json --input-type=clover /host/build/logs/clover.xml; fi
-  - if [ "$TRAVIS_PULL_REQUEST" = false ]; then ./bin/cmd cc-test-reporter upload-coverage --input=/host/build/logs/codeclimate.json || echo "Skipping CC coverage upload"; fi
-
 env:
   global:
-    # CC_TEST_REPORTER_ID (set in in repo settings)
     # DIGITAL_OCEAN_API_TOKEN (set in in repo settings)
     - COCOTTE_VERSION=${TRAVIS_TAG}
     - GIT_COMMIT_ID=${TRAVIS_COMMIT}
