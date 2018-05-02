@@ -45,7 +45,8 @@ script:
 #  - if [ "${KEEP_MACHINE_AFTER:-false}" = false ]; then ./bin/uninstall -n -vvv; else echo "Machine not removed."; fi
 
 after_success:
-  - bash <(curl -s https://codecov.io/bash) -s host/coverage
+  - bash <(curl -s https://codecov.io/bash) -f host/coverage/unit.xml -F unit
+  - bash <(curl -s https://codecov.io/bash) -f host/coverage/functional.xml -F functional
 
 deploy:
   # push image to docker hub
