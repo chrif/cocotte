@@ -9,6 +9,17 @@ use PHPUnit\Framework\TestCase;
 
 class ApiTokenTest extends TestCase
 {
+    private $realToken;
+
+    public function setUp()
+    {
+        $this->realToken = Env::get(ApiToken::DIGITAL_OCEAN_API_TOKEN);
+    }
+
+    public function tearDown()
+    {
+        Env::put(ApiToken::DIGITAL_OCEAN_API_TOKEN, $this->realToken);
+    }
 
     public function testOptionName()
     {
