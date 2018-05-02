@@ -30,17 +30,15 @@ install:
 
 before_script:
   # install code climate https://github.com/codeclimate/test-reporter
-  - sudo ln -s $PWD/installer /installer && sudo chown travis:travis /installer
-  - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
-  - chmod +x ./cc-test-reporter
-  - ./cc-test-reporter before-build
-  - wget https://scrutinizer-ci.com/ocular.phar
+  - if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then sudo ln -s $PWD/installer /installer && sudo chown travis:travis /installer; fi
+  - if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter; fi
+  - if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then chmod +x ./cc-test-reporter; fi
+  - if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then ./cc-test-reporter before-build; fi
+  - if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then wget https://scrutinizer-ci.com/ocular.phar; fi
 
 script:
   # tests
   - ./bin/cmd phpunit --coverage-clover build/logs/clover.xml
-  - if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then ./cc-test-reporter after-build --coverage-input-type=clover --exit-code=$TRAVIS_TEST_RESULT; fi
-  - if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then php ocular.phar code-coverage:upload --format=php-clover build/logs/clover.xml; fi
 
 #  # the install and apps commands
 #  - ./bin/install -n -vvv
@@ -52,6 +50,10 @@ script:
 #  # cleanup
 #  - if [ "${KEEP_MACHINE_AFTER:-false}" = false ]; then ./bin/cmd console networking -n -vvv --remove ${STATIC_SITE_HOSTNAME}; else true; fi
 #  - if [ "${KEEP_MACHINE_AFTER:-false}" = false ]; then ./bin/uninstall -n -vvv; else echo "Machine not removed."; fi
+
+after_success:
+  - if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then ./cc-test-reporter after-build --coverage-input-type=clover --exit-code=$TRAVIS_TEST_RESULT; fi
+  - if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then php ocular.phar code-coverage:upload --format=php-clover build/logs/clover.xml; fi
 
 deploy:
   # push image to docker hub
