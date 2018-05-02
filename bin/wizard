@@ -2,4 +2,6 @@
 
 set -eu
 
+cd host
+
 docker run -it --rm chrif/cocotte wizard "$@"

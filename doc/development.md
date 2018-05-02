@@ -21,7 +21,7 @@ docker-compose build --pull cocotte
 	```
 * test with `docker run` (no project mount, like prod)
 	```
-	(cd host; ../bin/install test)
+	./bin/install test
 	```
 ### Uninstall
 * with `docker-compose.override.yml` (with project mount)
@@ -30,7 +30,7 @@ docker-compose build --pull cocotte
 	```
 * test with `docker run` (no project mount, like prod)
 	```
-	(cd host; ../bin/uninstall test)
+	./bin/uninstall test
 	```
 ## Wizard
 * with `docker-compose.override.yml` (with project mount)
@@ -39,7 +39,7 @@ docker-compose build --pull cocotte
 	```
 * with `docker run` (no project mount, like prod)
 	```
-	(cd host; ../bin/wizard)
+	./bin/wizard
 	```
 ### Unit tests
 ```

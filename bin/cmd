@@ -2,18 +2,17 @@
 
 set -eu
 
-XDEBUG_INI=$PWD/installer/etc/xdebug.ini
-
 if [ "$1" = 'test' ]; then
     set -a
-    . ../.env
+    . .env
     set +a
     shift
-
-    XDEBUG_INI=$PWD/../installer/etc/xdebug.ini
 fi
 
-docker run --rm \
+XDEBUG_INI=$PWD/installer/etc/xdebug.ini
+cd host
+
+docker run -it --rm \
     -e ACME_ENABLED="${ACME_ENABLED:-true}" \
     -e DIGITAL_OCEAN_API_TOKEN="${DIGITAL_OCEAN_API_TOKEN}" \
     -e MACHINE_NAME="${MACHINE_NAME}" \

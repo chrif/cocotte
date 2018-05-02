@@ -4,10 +4,12 @@ set -eu
 
 if [ "$1" = 'test' ]; then
     set -a
-    . ../.env
+    . .env
     set +a
     shift
 fi
+
+cd host
 
 docker run -it --rm \
     -e MACHINE_NAME="${MACHINE_NAME}" \
