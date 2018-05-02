@@ -29,10 +29,7 @@ install:
   - docker images | grep chrif/cocotte
 
 before_script:
-  # install code climate https://github.com/codeclimate/test-reporter
-  - if [ "$TRAVIS_PULL_REQUEST" = false ]; then curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter; fi
-  - if [ "$TRAVIS_PULL_REQUEST" = false ]; then chmod +x ./cc-test-reporter; fi
-  - if [ "$TRAVIS_PULL_REQUEST" = false ]; then ./cc-test-reporter before-build --debug; fi
+  - if [ "$TRAVIS_PULL_REQUEST" = false ]; then ./bin/cmd cc-test-reporter before-build; fi
 
 script:
   # tests
@@ -76,21 +73,14 @@ deploy:
       tags: true
 
 after_script:
-  # symbolic link to resolve paths in coverage report
-  - if [ "$TRAVIS_PULL_REQUEST" = false ]; then sudo ln -s $PWD/installer /installer && sudo chown travis:travis /installer; fi
-  # https://scrutinizer-ci.com/docs/tools/external-code-coverage/
   - if [ "$TRAVIS_PULL_REQUEST" = false ]; then wget https://scrutinizer-ci.com/ocular.phar; fi
-  - if [ "$TRAVIS_PULL_REQUEST" = false ]; then php ocular.phar code-coverage:upload --access-token="$SCRUTINIZER_TOKEN" --format=php-clover build/logs/clover.xml; fi
-  # code climate
-  - if [ "$TRAVIS_PULL_REQUEST" = false ]; then ./cc-test-reporter after-build --coverage-input-type=clover --exit-code=$TRAVIS_TEST_RESULT --debug; fi
+  - if [ "$TRAVIS_PULL_REQUEST" = false ]; then php ocular.phar code-coverage:upload --format=php-clover host/build/logs/clover.xml || echo "Skipping Scrutinizer coverage upload"; fi
+  - if [ "$TRAVIS_PULL_REQUEST" = false ]; then ./bin/cmd test cc-test-reporter format-coverage --output=/host/build/logs/codeclimate.json --input-type=clover /host/build/logs/clover.xml; fi
+  - if [ "$TRAVIS_PULL_REQUEST" = false ]; then ./bin/cmd test cc-test-reporter upload-coverage --input=/host/build/logs/codeclimate.json || echo "Skipping CC coverage upload"; fi
 
 env:
   global:
-    # code coverage vars
     # CC_TEST_REPORTER_ID (set in in repo settings)
-    - GIT_COMMITTED_AT=$(if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then git log -1 --pretty=format:%ct; else git log -1 --skip 1 --pretty=format:%ct; fi)
-    # SCRUTINIZER_TOKEN (set in repo settings)
-
     # DIGITAL_OCEAN_API_TOKEN (set in in repo settings)
     - COCOTTE_VERSION=${TRAVIS_TAG}
     - GIT_COMMIT_ID=${TRAVIS_COMMIT}

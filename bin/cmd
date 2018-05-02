@@ -6,14 +6,22 @@ XDEBUG_INI=$PWD/installer/etc/xdebug.ini
 
 if [ "$1" = 'test' ]; then
     set -a
-    . ../.env
+    . .env
     set +a
     shift
 
-    XDEBUG_INI=$PWD/../installer/etc/xdebug.ini
+    GIT_COMMITTED_AT=$(git log -1 --pretty=format:%ct)
+    GIT_COMMIT_SHA=$(git rev-parse HEAD)
+    GIT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
+else
+    GIT_COMMITTED_AT=$(if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then git log -1 --pretty=format:%ct; else git log -1 --skip 1 --pretty=format:%ct; fi)
+    GIT_COMMIT_SHA=$TRAVIS_COMMIT
+    GIT_BRANCH=$TRAVIS_BRANCH
 fi
 
-docker run --rm \
+cd host
+
+docker run -it --rm \
     -e ACME_ENABLED="${ACME_ENABLED:-true}" \
     -e DIGITAL_OCEAN_API_TOKEN="${DIGITAL_OCEAN_API_TOKEN}" \
     -e MACHINE_NAME="${MACHINE_NAME}" \
@@ -22,6 +30,10 @@ docker run --rm \
     -e TRAEFIK_UI_HOSTNAME="${TRAEFIK_UI_HOSTNAME}" \
     -e TRAEFIK_UI_PASSWORD="${TRAEFIK_UI_PASSWORD}" \
     -e TRAEFIK_UI_USERNAME="${TRAEFIK_UI_USERNAME}" \
+    -e GIT_COMMITTED_AT="${GIT_COMMITTED_AT}" \
+    -e GIT_COMMIT_SHA="${GIT_COMMIT_SHA}" \
+    -e GIT_BRANCH="${GIT_BRANCH}" \
+    -e CC_TEST_REPORTER_ID="${CC_TEST_REPORTER_ID}" \
     -v "$(pwd)":/host \
     -v ${XDEBUG_INI}:/etc/php7/conf.d/xdebug.ini:ro \
     chrif/cocotte \
