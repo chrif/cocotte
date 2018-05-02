@@ -2,6 +2,8 @@
 
 set -euo pipefail
 
+cd host
+
 set -a
 . traefik/.env-override
 set +a
