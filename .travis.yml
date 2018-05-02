@@ -29,7 +29,7 @@ install:
   - docker images | grep chrif/cocotte
 
 before_script:
-  - sudo ln -s $PWD/installer /installer && sudo chown -R travis:travis /installer && ls -laR /installer
+  - sudo ln -s $PWD/installer /installer && sudo chown -R travis:travis /installer
   # https://github.com/codeclimate/test-reporter
   - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
   - chmod +x ./cc-test-reporter
@@ -37,11 +37,11 @@ before_script:
 
 script:
   # unit tests
-  - ./bin/cmd phpunit --testsuite=unit --coverage-clover=/host/clover.xml
-  - ./cc-test-reporter format-coverage --output=coverage/codeclimate.json --input-type=clover host/clover.xml
+  - ./bin/cmd phpunit --testsuite=unit --coverage-clover=/host/unit.xml
+  - ./cc-test-reporter format-coverage --output=coverage/codeclimate.unit.json --input-type=clover host/unit.xml
   # functional tests
-  - ./bin/cmd phpunit --testsuite=functional --coverage-clover=/host/clover.xml
-#  - ./cc-test-reporter format-coverage --output=coverage/codeclimate.functional.json --input-type=clover host/clover.xml
+  - ./bin/cmd phpunit --testsuite=functional --coverage-clover=/host/functional.xml
+  - ./cc-test-reporter format-coverage --output=coverage/codeclimate.functional.json --input-type=clover host/functional.xml
 
 #  # install and apps commands
 #  - ./bin/install -n -vvv
@@ -55,8 +55,13 @@ script:
 #  - if [ "${KEEP_MACHINE_AFTER:-false}" = false ]; then ./bin/uninstall -n -vvv; else echo "Machine not removed."; fi
 
 after_success:
-#  - ./cc-test-reporter sum-coverage coverage/codeclimate.*.json
-  - ./cc-test-reporter upload-coverage --debug
+  # upload code climate coverage
+  - ./cc-test-reporter sum-coverage coverage/codeclimate.*.json
+  - ./cc-test-reporter upload-coverage
+  # upload scrutinizer coverage
+  - wget https://scrutinizer-ci.com/ocular.phar
+  - php ocular.phar code-coverage:upload --format=php-clover host/unit.xml
+  - php ocular.phar code-coverage:upload --format=php-clover host/functional.xml
 
 deploy:
   # push image to docker hub
