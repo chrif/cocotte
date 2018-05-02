@@ -1,3 +1,2 @@
 tools:
-    external_code_coverage:
-        runs: 2    # Scrutinizer will wait for two code coverage submissions
+    external_code_coverage: true
