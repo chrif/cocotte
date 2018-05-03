@@ -1,6 +1,6 @@
 <?php
 
-namespace Cocotte\Test\Functional\DigitalOcean;
+namespace Cocotte\Test\Integration\DigitalOcean;
 
 use Cocotte\DigitalOcean\ApiToken;
 use Cocotte\DigitalOcean\Domain;
@@ -10,10 +10,11 @@ use Cocotte\DigitalOcean\HostnameCollection;
 use Cocotte\DigitalOcean\NetworkingConfigurator;
 use Cocotte\Environment\LazyEnvironment;
 use Cocotte\Machine\MachineIp;
+use Cocotte\Machine\MachineName;
+use Cocotte\Test\ApplicationTestCase;
 use Cocotte\Test\Double\Console\StyleMother;
-use Cocotte\Test\FunctionalTestCase;
 
-class NetworkingConfiguratorTest extends FunctionalTestCase implements LazyEnvironment
+class NetworkingConfiguratorTest extends ApplicationTestCase implements LazyEnvironment
 {
     /**
      * @var NetworkingConfigurator
@@ -54,7 +55,7 @@ class NetworkingConfiguratorTest extends FunctionalTestCase implements LazyEnvir
 
     public function test_it_creates_and_removes_domain_record()
     {
-        $hostname = Hostname::parse($this->machineName()->toString().'.cocotte.test');
+        $hostname = Hostname::parse(MachineName::fromEnv()->toString().'.cocotte.test');
         $hostnameCollection = HostnameCollection::fromArray([$hostname]);
 
         // assert it doesn't exist from a previous test
@@ -80,7 +81,7 @@ class NetworkingConfiguratorTest extends FunctionalTestCase implements LazyEnvir
 
     public function test_it_handles_root_record_correctly()
     {
-        $hostname = Hostname::parse($this->machineName()->toString().'.test');
+        $hostname = Hostname::parse(MachineName::fromEnv()->toString().'.test');
         $hostCollection = HostnameCollection::fromArray([$hostname]);
 
         // this is a root hostname

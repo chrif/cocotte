@@ -11,12 +11,19 @@
     </filter>
 
     <testsuites>
+
         <testsuite name="unit">
             <directory>test/Unit</directory>
         </testsuite>
-        <testsuite name="functional">
-            <directory>test/Functional</directory>
+
+        <testsuite name="integration">
+            <directory>test/Integration</directory>
         </testsuite>
+
+        <testsuite name="system">
+            <directory>test/System</directory>
+        </testsuite>
+
     </testsuites>
 
 </phpunit>

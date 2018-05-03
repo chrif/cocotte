@@ -31,22 +31,20 @@ install:
 script:
   # tests
   - ./bin/cmd phpunit --testsuite=unit --coverage-clover /host/coverage/unit.xml
-  - ./bin/cmd phpunit --testsuite=functional --coverage-clover /host/coverage/functional.xml
-
-  # the install and apps commands
-  - ./bin/install -n -vvv
-  - ./bin/static-site -n -vvv
+  - ./bin/cmd phpunit --testsuite=integration --coverage-clover /host/coverage/integration.xml
+  - ./bin/cmd phpunit --testsuite=system --group=install --coverage-clover /host/coverage/install.xml
+  - ./bin/cmd phpunit --testsuite=system --group=template --coverage-clover /host/coverage/template.xml
+  - ./bin/cmd phpunit --testsuite=system --group=uninstall --coverage-clover /host/coverage/uninstall.xml
 
   # test local deployment
   - ./.travis/deploy-dev
 
-  # cleanup
-  - if [ "${KEEP_MACHINE_AFTER:-false}" = false ]; then ./bin/cmd console networking -n -vvv --remove ${STATIC_SITE_HOSTNAME}; else true; fi
-  - if [ "${KEEP_MACHINE_AFTER:-false}" = false ]; then ./bin/uninstall -n -vvv; else echo "Machine not removed."; fi
-
 after_success:
   - bash <(curl -s https://codecov.io/bash) -f host/coverage/unit.xml -F unit
-  - bash <(curl -s https://codecov.io/bash) -f host/coverage/functional.xml -F functional
+  - bash <(curl -s https://codecov.io/bash) -f host/coverage/integration.xml -F integration
+  - bash <(curl -s https://codecov.io/bash) -f host/coverage/install.xml -F system
+  - bash <(curl -s https://codecov.io/bash) -f host/coverage/template.xml -F system
+  - bash <(curl -s https://codecov.io/bash) -f host/coverage/uninstall.xml -F system
 
 deploy:
   # push image to docker hub
