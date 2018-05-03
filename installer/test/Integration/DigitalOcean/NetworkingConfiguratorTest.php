@@ -11,6 +11,7 @@ use Cocotte\DigitalOcean\NetworkingConfigurator;
 use Cocotte\Environment\LazyEnvironment;
 use Cocotte\Machine\MachineIp;
 use Cocotte\Machine\MachineName;
+use Cocotte\Shell\DefaultEnv;
 use Cocotte\Test\Actual\ApplicationTestCase;
 use Cocotte\Test\Double\Console\StyleDouble;
 
@@ -55,7 +56,7 @@ class NetworkingConfiguratorTest extends ApplicationTestCase implements LazyEnvi
 
     public function test_it_creates_and_removes_domain_record()
     {
-        $hostname = Hostname::parse(MachineName::fromEnv()->toString().'.cocotte.test');
+        $hostname = Hostname::parse(MachineName::fromEnv(new DefaultEnv())->toString().'.cocotte.test');
         $hostnameCollection = HostnameCollection::fromArray([$hostname]);
 
         // assert it doesn't exist from a previous test
@@ -81,7 +82,7 @@ class NetworkingConfiguratorTest extends ApplicationTestCase implements LazyEnvi
 
     public function test_it_handles_root_record_correctly()
     {
-        $hostname = Hostname::parse(MachineName::fromEnv()->toString().'.test');
+        $hostname = Hostname::parse(MachineName::fromEnv(new DefaultEnv())->toString().'.test');
         $hostCollection = HostnameCollection::fromArray([$hostname]);
 
         // this is a root hostname

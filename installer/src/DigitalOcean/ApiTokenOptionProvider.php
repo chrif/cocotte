@@ -23,14 +23,14 @@ class ApiTokenOptionProvider implements OptionProvider
         $this->style = $style;
     }
 
-    public function option(): InputOption
+    public function option(Env $env): InputOption
     {
         return new StyledInputOption(
             ApiToken::OPTION_NAME,
             null,
             InputOption::VALUE_REQUIRED,
             $this->helpMessage(),
-            Env::get(ApiToken::DIGITAL_OCEAN_API_TOKEN)
+            $env->get(ApiToken::DIGITAL_OCEAN_API_TOKEN)
         );
     }
 

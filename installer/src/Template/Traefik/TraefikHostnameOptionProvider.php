@@ -29,14 +29,14 @@ class TraefikHostnameOptionProvider implements OptionProvider
         $this->dnsValidator = $dnsValidator;
     }
 
-    public function option(): InputOption
+    public function option(Env $env): InputOption
     {
         return new StyledInputOption(
             TraefikHostname::OPTION_NAME,
             null,
             InputOption::VALUE_REQUIRED,
             $this->helpMessage(),
-            Env::get(TraefikHostname::TRAEFIK_UI_HOSTNAME)
+            $env->get(TraefikHostname::TRAEFIK_UI_HOSTNAME)
         );
     }
 

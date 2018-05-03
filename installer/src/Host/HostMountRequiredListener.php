@@ -9,6 +9,16 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 final class HostMountRequiredListener implements EventSubscriberInterface
 {
+    /**
+     * @var HostMountFactory
+     */
+    private $hostMountFactory;
+
+    public function __construct(HostMountFactory $hostMountFactory)
+    {
+        $this->hostMountFactory = $hostMountFactory;
+    }
+
     public static function getSubscribedEvents()
     {
         return [
@@ -36,7 +46,7 @@ final class HostMountRequiredListener implements EventSubscriberInterface
     {
         if ($event->command() instanceof HostMountRequired) {
             try {
-                HostMount::fromEnv();
+                $this->hostMountFactory->fromDocker();
             } catch (HostException $e) {
                 throw new \Exception($e->getMessage());
             }

@@ -11,6 +11,10 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 final class BuildDocCommand extends Command
 {
+    /**
+     * @var Env
+     */
+    private $env;
 
     public function isHidden()
     {
@@ -24,7 +28,7 @@ final class BuildDocCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        if (Env::get(ApiToken::DIGITAL_OCEAN_API_TOKEN)) {
+        if ($this->env->get(ApiToken::DIGITAL_OCEAN_API_TOKEN)) {
             throw new \Exception("Environment is populated. This command needs to run on a bare environment.");
         }
 

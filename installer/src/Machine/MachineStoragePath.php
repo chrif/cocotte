@@ -5,9 +5,7 @@ namespace Cocotte\Machine;
 use Assert\Assertion;
 use Cocotte\Environment\LazyEnvironmentValue;
 use Cocotte\Environment\LazyLoadAware;
-use Cocotte\Filesystem\CocotteFilesystem;
 use Cocotte\Filesystem\Filesystem;
-use Cocotte\Host\HostMount;
 use Cocotte\Shell\Env;
 
 class MachineStoragePath implements LazyEnvironmentValue, LazyLoadAware
@@ -41,16 +39,6 @@ class MachineStoragePath implements LazyEnvironmentValue, LazyLoadAware
         $this->value = $value;
     }
 
-    /**
-     * @return self|LazyEnvironmentValue
-     * @throws \Assert\AssertionFailedException
-     * @throws \Exception
-     */
-    public static function fromEnv(): LazyEnvironmentValue
-    {
-        return new self(HostMount::fromEnv()->sourcePath().'/machine', CocotteFilesystem::create());
-    }
-
     public function toString(): string
     {
         return $this->value;
@@ -61,9 +49,9 @@ class MachineStoragePath implements LazyEnvironmentValue, LazyLoadAware
         return $this->toString();
     }
 
-    public function onLazyLoad(): void
+    public function onLazyLoad(Env $env): void
     {
-        Env::put(self::MACHINE_STORAGE_PATH, $this->toString());
+        $env->put(self::MACHINE_STORAGE_PATH, $this->toString());
         $this->symLink();
     }
 

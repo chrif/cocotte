@@ -28,14 +28,14 @@ class StaticSiteHostnameOptionProvider implements OptionProvider
         $this->dnsValidator = $dnsValidator;
     }
 
-    public function option(): InputOption
+    public function option(Env $env): InputOption
     {
         return new StyledInputOption(
             StaticSiteHostname::OPTION_NAME,
             null,
             InputOption::VALUE_REQUIRED,
             $this->helpMessage(),
-            Env::get(StaticSiteHostname::STATIC_SITE_HOSTNAME)
+            $env->get(StaticSiteHostname::STATIC_SITE_HOSTNAME)
         );
     }
 

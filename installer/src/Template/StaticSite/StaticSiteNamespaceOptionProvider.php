@@ -21,14 +21,14 @@ class StaticSiteNamespaceOptionProvider implements OptionProvider
         $this->style = $style;
     }
 
-    public function option(): InputOption
+    public function option(Env $env): InputOption
     {
         return new StyledInputOption(
             StaticSiteNamespace::OPTION_NAME,
             null,
             InputOption::VALUE_REQUIRED,
             $this->helpMessage(),
-            Env::get(StaticSiteNamespace::STATIC_SITE_NAMESPACE)
+            $env->get(StaticSiteNamespace::STATIC_SITE_NAMESPACE)
         );
     }
 

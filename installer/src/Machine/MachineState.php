@@ -16,11 +16,6 @@ final class MachineState
         $this->machineName = $machineName;
     }
 
-    public static function fromEnv()
-    {
-        return new self(MachineName::fromEnv());
-    }
-
     public function exists(): bool
     {
         $process = new Process('docker-machine ls -q "${MACHINE_NAME}"');

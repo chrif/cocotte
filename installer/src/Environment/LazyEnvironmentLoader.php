@@ -6,6 +6,7 @@ use Assert\Assertion;
 use Cocotte\Console\CommandEventStore;
 use Cocotte\Console\CommandExecuteEvent;
 use Cocotte\Console\Style;
+use Cocotte\Shell\Env;
 use ProxyManager\Proxy\LazyLoadingInterface;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -25,11 +26,16 @@ final class LazyEnvironmentLoader implements EventSubscriberInterface
      * @var EventDispatcherInterface
      */
     private $eventDispatcher;
+    /**
+     * @var Env
+     */
+    private $env;
 
-    public function __construct(Style $style, EventDispatcherInterface $eventDispatcher)
+    public function __construct(Style $style, EventDispatcherInterface $eventDispatcher, Env $env)
     {
         $this->style = $style;
         $this->eventDispatcher = $eventDispatcher;
+        $this->env = $env;
     }
 
     public static function getSubscribedEvents()
@@ -91,7 +97,7 @@ final class LazyEnvironmentLoader implements EventSubscriberInterface
         }
         $lazyValue->initializeProxy();
         if ($lazyValue instanceof LazyLoadAware) {
-            $lazyValue->onLazyLoad();
+            $lazyValue->onLazyLoad($this->env);
         }
     }
 
@@ -101,7 +107,7 @@ final class LazyEnvironmentLoader implements EventSubscriberInterface
         Assertion::true($input->hasOption($name), sprintf("input does not have an option named '%s'", $name));
         $value = $input->getOption($name);
         if (null !== $value) {
-            $optionExportValue::toEnv($value);
+            $optionExportValue::toEnv($value, $this->env);
         }
     }
 

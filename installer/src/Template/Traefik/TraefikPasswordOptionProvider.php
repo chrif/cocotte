@@ -21,14 +21,14 @@ class TraefikPasswordOptionProvider implements OptionProvider
         $this->style = $style;
     }
 
-    public function option(): InputOption
+    public function option(Env $env): InputOption
     {
         return new StyledInputOption(
             TraefikPassword::OPTION_NAME,
             null,
             InputOption::VALUE_REQUIRED,
             $this->helpMessage(),
-            Env::get(TraefikPassword::TRAEFIK_UI_PASSWORD)
+            $env->get(TraefikPassword::TRAEFIK_UI_PASSWORD)
         );
     }
 

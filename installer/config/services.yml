@@ -79,15 +79,21 @@ services:
   # host
   Cocotte\Host\HostMount:
     tags: ['lazy.environment']
+    factory: ['@Cocotte\Host\HostMountFactory', fromDocker]
   Cocotte\Host\Mounts:
     tags: ['lazy.environment']
+    factory: ['@Cocotte\Host\MountsFactory', fromDocker]
   Cocotte\Host\HostMountRequiredListener:
     tags: ['event.subscriber']
+  Cocotte\Host\HostMountFactory: ~
+  Cocotte\Host\MountsFactory: ~
 
   # machine
   Cocotte\Machine\MachineCreator: ~
   Cocotte\Machine\MachineIp:
     tags: ['lazy.environment']
+    factory: [ '@Cocotte\Machine\MachineIp', fromMachine ]
+    arguments: [ '@Cocotte\Shell\ProcessRunner' ]
   Cocotte\Machine\MachineName:
     tags: ['lazy.environment']
   Cocotte\Machine\MachineNameOptionProvider:
@@ -95,13 +101,17 @@ services:
   Cocotte\Machine\MachineState: ~
   Cocotte\Machine\MachineStoragePath:
     tags: ['lazy.environment']
+    factory: ['@Cocotte\Machine\MachineStoragePathFactory', fromEnv]
   Cocotte\Machine\MachineRequiredListener:
     tags: ['event.subscriber']
+  Cocotte\Machine\MachineStoragePathFactory: ~
 
   # shell
   Cocotte\Shell\ProcessRunner: ~
   Cocotte\Shell\EnvironmentSubstitution\SubstitutionFactory: ~
   Cocotte\Shell\BasicAuth: ~
+  Cocotte\Shell\Env:
+    class: Cocotte\Shell\DefaultEnv
 
   # template
 

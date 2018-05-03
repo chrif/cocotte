@@ -21,14 +21,14 @@ class MachineNameOptionProvider implements OptionProvider
         $this->style = $style;
     }
 
-    public function option(): InputOption
+    public function option(Env $env): InputOption
     {
         return new StyledInputOption(
             MachineName::OPTION_NAME,
             null,
             InputOption::VALUE_REQUIRED,
             $this->helpMessage(),
-            Env::get(MachineName::MACHINE_NAME)
+            $env->get(MachineName::MACHINE_NAME)
         );
     }
 

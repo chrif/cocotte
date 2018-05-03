@@ -4,6 +4,7 @@ namespace Cocotte\Machine;
 
 use Assert\Assertion;
 use Cocotte\Environment\LazyEnvironmentValue;
+use Cocotte\Shell\ProcessRunner;
 use Symfony\Component\Process\Process;
 
 class MachineIp implements LazyEnvironmentValue
@@ -25,16 +26,17 @@ class MachineIp implements LazyEnvironmentValue
     }
 
     /**
-     * @return LazyEnvironmentValue|self
+     * @param ProcessRunner $processRunner
+     * @return MachineIp
      */
-    public static function fromEnv(): LazyEnvironmentValue
+    public static function fromMachine(ProcessRunner $processRunner): MachineIp
     {
         $process = new Process(
             'docker-machine inspect '.
             '--format=\'{{.Driver.IPAddress}}\' "${MACHINE_NAME}"'
         );
 
-        $process->mustRun();
+        $processRunner->mustRun($process);
 
         return new self(trim($process->getOutput()));
     }

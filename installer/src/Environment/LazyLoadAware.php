@@ -2,7 +2,9 @@
 
 namespace Cocotte\Environment;
 
+use Cocotte\Shell\Env;
+
 interface LazyLoadAware
 {
-    public function onLazyLoad(): void;
+    public function onLazyLoad(Env $env): void;
 }

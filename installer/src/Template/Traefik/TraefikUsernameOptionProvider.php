@@ -21,14 +21,14 @@ class TraefikUsernameOptionProvider implements OptionProvider
         $this->style = $style;
     }
 
-    public function option(): InputOption
+    public function option(Env $env): InputOption
     {
         return new StyledInputOption(
             TraefikUsername::OPTION_NAME,
             null,
             InputOption::VALUE_REQUIRED,
             $this->helpMessage(),
-            Env::get(TraefikUsername::TRAEFIK_UI_USERNAME)
+            $env->get(TraefikUsername::TRAEFIK_UI_USERNAME)
         );
     }
 
