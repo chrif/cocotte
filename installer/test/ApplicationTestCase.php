@@ -1,11 +1,11 @@
 <?php declare(strict_types=1);
 
-namespace Cocotte\Test\Actual;
+namespace Cocotte\Test;
 
 use Cocotte\DependencyInjection\Application;
 use Cocotte\Environment\LazyEnvironment;
 use Cocotte\Environment\LazyEnvironmentLoader;
-use Cocotte\Test\Double\Console\HasAllOptionsWithNullValuesInput;
+use Cocotte\Test\Collaborator\Console\HasAllOptionsWithNullValuesInputStub;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -41,7 +41,7 @@ class ApplicationTestCase extends TestCase
     {
         if (!$this->application) {
             $this->application = new Application(
-                __DIR__.'/../../config/services_test.yml'
+                __DIR__.'/../config/services_test.yml'
             );
         }
 
@@ -56,7 +56,7 @@ class ApplicationTestCase extends TestCase
     protected function loadEnvironment()
     {
         if ($this instanceof LazyEnvironment) {
-            $this->environmentLoader()->load($this, new HasAllOptionsWithNullValuesInput());
+            $this->environmentLoader()->load($this, new HasAllOptionsWithNullValuesInputStub());
         } else {
             throw new \Exception(get_class($this).' does not implement '.LazyEnvironment::class);
         }

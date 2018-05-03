@@ -1,11 +1,11 @@
 <?php declare(strict_types=1);
 
-namespace Cocotte\Test\Actual\Command;
+namespace Cocotte\Test\Collaborator\Command;
 
-use Cocotte\Command\StaticSiteCommand;
+use Cocotte\Command\NetworkingCommand;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
-final class StaticSiteCommandActual
+final class NetworkingCommandActual
 {
     /**
      * @var ContainerInterface
@@ -24,10 +24,9 @@ final class StaticSiteCommandActual
         return $actual;
     }
 
-    public function service(): StaticSiteCommand
+    public function service(): NetworkingCommand
     {
         /** @noinspection PhpIncompatibleReturnTypeInspection */
-        return $this->container->get(StaticSiteCommand::class);
+        return $this->container->get(NetworkingCommand::class);
     }
-
 }

@@ -1,12 +1,12 @@
 <?php declare(strict_types=1);
 
-namespace Cocotte\Test\Double\Console;
+namespace Cocotte\Test\Collaborator\Console;
 
+use Cocotte\Console\Style;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\Console\Helper\ProcessHelper;
 
-final class ProcessHelperDouble
+final class StyleDouble
 {
     /**
      * @var TestCase
@@ -25,11 +25,17 @@ final class ProcessHelperDouble
         return $double;
     }
 
+    public function outputSpy(): StyleOutputSpy
+    {
+        return new StyleOutputSpy();
+    }
+
     /**
-     * @return MockObject|ProcessHelper
+     * @return MockObject|Style
      */
     public function mock(): MockObject
     {
-        return $this->testCase->getMockBuilder(ProcessHelper::class)->getMock();
+        return $this->testCase->getMockBuilder(Style::class)->getMock();
     }
+
 }

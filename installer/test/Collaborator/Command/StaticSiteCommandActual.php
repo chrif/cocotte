@@ -1,11 +1,11 @@
 <?php declare(strict_types=1);
 
-namespace Cocotte\Test\Actual\Command;
+namespace Cocotte\Test\Collaborator\Command;
 
-use Cocotte\Command\UninstallCommand;
+use Cocotte\Command\StaticSiteCommand;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
-final class UninstallCommandActual
+final class StaticSiteCommandActual
 {
     /**
      * @var ContainerInterface
@@ -24,10 +24,10 @@ final class UninstallCommandActual
         return $actual;
     }
 
-    public function service(): UninstallCommand
+    public function service(): StaticSiteCommand
     {
         /** @noinspection PhpIncompatibleReturnTypeInspection */
-        return $this->container->get(UninstallCommand::class);
+        return $this->container->get(StaticSiteCommand::class);
     }
 
 }

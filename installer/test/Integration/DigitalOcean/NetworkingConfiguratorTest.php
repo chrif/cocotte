@@ -12,8 +12,8 @@ use Cocotte\Environment\LazyEnvironment;
 use Cocotte\Machine\MachineIp;
 use Cocotte\Machine\MachineName;
 use Cocotte\Shell\DefaultEnv;
-use Cocotte\Test\Actual\ApplicationTestCase;
-use Cocotte\Test\Double\Console\StyleDouble;
+use Cocotte\Test\ApplicationTestCase;
+use Cocotte\Test\Collaborator\Console\StyleDouble;
 
 class NetworkingConfiguratorTest extends ApplicationTestCase implements LazyEnvironment
 {

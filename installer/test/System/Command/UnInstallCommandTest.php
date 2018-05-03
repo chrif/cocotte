@@ -2,8 +2,8 @@
 
 namespace Cocotte\Test\System\Command;
 
-use Cocotte\Test\Actual\ApplicationTestCase;
-use Cocotte\Test\Actual\Command\UninstallCommandActual;
+use Cocotte\Test\ApplicationTestCase;
+use Cocotte\Test\Collaborator\Command\UninstallCommandActual;
 
 class UnInstallCommandTest extends ApplicationTestCase
 {

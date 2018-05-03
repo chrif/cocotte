@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Cocotte\Test\Double\Filesystem;
+namespace Cocotte\Test\Collaborator\Filesystem;
 
 use Cocotte\Filesystem\Filesystem;
 use PHPUnit\Framework\MockObject\MockObject;

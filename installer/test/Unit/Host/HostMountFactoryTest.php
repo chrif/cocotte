@@ -6,8 +6,8 @@ use Assert\AssertionFailedException;
 use Cocotte\Host\HostException;
 use Cocotte\Host\HostMountFactory;
 use Cocotte\Host\Mounts;
-use Cocotte\Test\Double\Filesystem\FilesystemDouble;
-use Cocotte\Test\Double\Host\MountsFactoryDouble;
+use Cocotte\Test\Collaborator\Filesystem\FilesystemDouble;
+use Cocotte\Test\Collaborator\Host\MountsFactoryDouble;
 use PHPUnit\Framework\TestCase;
 
 class HostMountFactoryTest extends TestCase

@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Cocotte\Test\Double\Shell;
+namespace Cocotte\Test\Collaborator\Shell;
 
 use Cocotte\Shell\ProcessRunner;
 use PHPUnit\Framework\MockObject\MockObject;

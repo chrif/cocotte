@@ -1,11 +1,11 @@
 <?php declare(strict_types=1);
 
-namespace Cocotte\Test\Double\Console;
+namespace Cocotte\Test\Collaborator\Console;
 
 use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputInterface;
 
-final class HasAllOptionsWithNullValuesInput implements InputInterface
+final class HasAllOptionsWithNullValuesInputStub implements InputInterface
 {
     public function getFirstArgument()
     {

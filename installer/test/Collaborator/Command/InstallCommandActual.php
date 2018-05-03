@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Cocotte\Test\Actual\Command;
+namespace Cocotte\Test\Collaborator\Command;
 
 use Cocotte\Command\InstallCommand;
 use Symfony\Component\DependencyInjection\ContainerInterface;

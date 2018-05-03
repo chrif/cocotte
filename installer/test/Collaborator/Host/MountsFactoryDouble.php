@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Cocotte\Test\Double\Host;
+namespace Cocotte\Test\Collaborator\Host;
 
 use Cocotte\Host\Mounts;
 use Cocotte\Host\MountsFactory;

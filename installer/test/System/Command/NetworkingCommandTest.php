@@ -2,8 +2,8 @@
 
 namespace Cocotte\Test\System\Command;
 
-use Cocotte\Test\Actual\ApplicationTestCase;
-use Cocotte\Test\Actual\Command\NetworkingCommandActual;
+use Cocotte\Test\ApplicationTestCase;
+use Cocotte\Test\Collaborator\Command\NetworkingCommandActual;
 
 class NetworkingCommandTest extends ApplicationTestCase
 {

@@ -4,7 +4,7 @@ namespace Cocotte\Test\Unit\DigitalOcean;
 
 use Assert\InvalidArgumentException;
 use Cocotte\DigitalOcean\ApiToken;
-use Cocotte\Test\Double\Shell\FakeEnv;
+use Cocotte\Test\Collaborator\Shell\FakeEnv;
 use PHPUnit\Framework\TestCase;
 
 class ApiTokenTest extends TestCase

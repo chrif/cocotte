@@ -1,11 +1,11 @@
 <?php declare(strict_types=1);
 
-namespace Cocotte\Test\Actual\Command;
+namespace Cocotte\Test\Collaborator\Command;
 
-use Cocotte\Command\NetworkingCommand;
+use Cocotte\Command\UninstallCommand;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
-final class NetworkingCommandActual
+final class UninstallCommandActual
 {
     /**
      * @var ContainerInterface
@@ -24,9 +24,10 @@ final class NetworkingCommandActual
         return $actual;
     }
 
-    public function service(): NetworkingCommand
+    public function service(): UninstallCommand
     {
         /** @noinspection PhpIncompatibleReturnTypeInspection */
-        return $this->container->get(NetworkingCommand::class);
+        return $this->container->get(UninstallCommand::class);
     }
+
 }

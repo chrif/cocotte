@@ -3,8 +3,8 @@
 namespace Cocotte\Test\Unit\Acme;
 
 use Cocotte\Acme\CertificateChecker;
-use Cocotte\Test\Double\Console\StyleDouble;
-use Cocotte\Test\Double\Shell\ProcessRunnerDouble;
+use Cocotte\Test\Collaborator\Console\StyleDouble;
+use Cocotte\Test\Collaborator\Shell\ProcessRunnerDouble;
 use PHPUnit\Framework\TestCase;
 
 class CertificateCheckerTest extends TestCase

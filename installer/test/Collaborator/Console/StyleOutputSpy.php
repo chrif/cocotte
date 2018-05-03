@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Cocotte\Test\Double\Console;
+namespace Cocotte\Test\Collaborator\Console;
 
 use Cocotte\Console\Style;
 use Symfony\Component\Console\Formatter\OutputFormatterInterface;
