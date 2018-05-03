@@ -2,8 +2,8 @@
 
 namespace Cocotte\Test\System\Command;
 
-use Cocotte\Test\ApplicationTestCase;
-use Cocotte\Test\Double\Command\InstallCommandMother;
+use Cocotte\Test\Actual\ApplicationTestCase;
+use Cocotte\Test\Actual\Command\InstallCommandActual;
 
 class InstallCommandTest extends ApplicationTestCase
 {
@@ -13,7 +13,7 @@ class InstallCommandTest extends ApplicationTestCase
     public function testExecute()
     {
         $this->assertCommandExecutes(
-            InstallCommandMother::get($this)->service($this->container()),
+            InstallCommandActual::get($this->container())->service(),
             [
                 '--digital-ocean-api-token' => getenv('DIGITAL_OCEAN_API_TOKEN'),
                 '--traefik-ui-hostname' => getenv('TRAEFIK_UI_HOSTNAME'),

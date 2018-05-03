@@ -6,7 +6,7 @@ use Cocotte\Console\Style;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
-final class StyleMother
+final class StyleDouble
 {
     /**
      * @var TestCase

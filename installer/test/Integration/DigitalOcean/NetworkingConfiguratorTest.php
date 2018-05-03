@@ -11,8 +11,8 @@ use Cocotte\DigitalOcean\NetworkingConfigurator;
 use Cocotte\Environment\LazyEnvironment;
 use Cocotte\Machine\MachineIp;
 use Cocotte\Machine\MachineName;
-use Cocotte\Test\ApplicationTestCase;
-use Cocotte\Test\Double\Console\StyleMother;
+use Cocotte\Test\Actual\ApplicationTestCase;
+use Cocotte\Test\Double\Console\StyleDouble;
 
 class NetworkingConfiguratorTest extends ApplicationTestCase implements LazyEnvironment
 {
@@ -49,7 +49,7 @@ class NetworkingConfiguratorTest extends ApplicationTestCase implements LazyEnvi
             ),
             $this->domainApi,
             $this->machineIp,
-            StyleMother::create($this)->mock()
+            StyleDouble::create($this)->mock()
         );
     }
 

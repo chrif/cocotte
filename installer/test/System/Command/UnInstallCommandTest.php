@@ -2,8 +2,8 @@
 
 namespace Cocotte\Test\System\Command;
 
-use Cocotte\Test\ApplicationTestCase;
-use Cocotte\Test\Double\Command\UninstallCommandMother;
+use Cocotte\Test\Actual\ApplicationTestCase;
+use Cocotte\Test\Actual\Command\UninstallCommandActual;
 
 class UnInstallCommandTest extends ApplicationTestCase
 {
@@ -17,7 +17,7 @@ class UnInstallCommandTest extends ApplicationTestCase
         }
 
         $this->assertCommandExecutes(
-            UninstallCommandMother::get($this)->service($this->container()),
+            UninstallCommandActual::get($this->container())->service(),
             [
                 '--digital-ocean-api-token' => getenv('DIGITAL_OCEAN_API_TOKEN'),
                 '--traefik-ui-hostname' => getenv('TRAEFIK_UI_HOSTNAME'),

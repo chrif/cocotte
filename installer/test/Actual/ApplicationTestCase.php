@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Cocotte\Test;
+namespace Cocotte\Test\Actual;
 
 use Cocotte\DependencyInjection\Application;
 use Cocotte\Environment\LazyEnvironment;
@@ -41,7 +41,7 @@ class ApplicationTestCase extends TestCase
     {
         if (!$this->application) {
             $this->application = new Application(
-                __DIR__.'/../config/services_test.yml'
+                __DIR__.'/../../config/services_test.yml'
             );
         }
 
@@ -62,9 +62,6 @@ class ApplicationTestCase extends TestCase
         }
     }
 
-    /**
-     * @return LazyEnvironmentLoader
-     */
     private function environmentLoader(): LazyEnvironmentLoader
     {
         /** @noinspection PhpIncompatibleReturnTypeInspection */

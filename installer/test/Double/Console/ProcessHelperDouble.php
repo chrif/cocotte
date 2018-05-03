@@ -1,11 +1,12 @@
 <?php declare(strict_types=1);
 
-namespace Cocotte\Test\Double\DigitalOcean;
+namespace Cocotte\Test\Double\Console;
 
-use Cocotte\DigitalOcean\Hostname;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Console\Helper\ProcessHelper;
 
-final class HostnameMother
+final class ProcessHelperDouble
 {
     /**
      * @var TestCase
@@ -24,9 +25,11 @@ final class HostnameMother
         return $mother;
     }
 
-    public function fixture(): Hostname
+    /**
+     * @return MockObject|ProcessHelper
+     */
+    public function mock(): MockObject
     {
-        return Hostname::parse(uniqid('hostname-').'.org');
+        return $this->testCase->getMockBuilder(ProcessHelper::class)->getMock();
     }
-
 }

@@ -2,8 +2,8 @@
 
 namespace Cocotte\Test\System\Command;
 
-use Cocotte\Test\ApplicationTestCase;
-use Cocotte\Test\Double\Command\NetworkingCommandMother;
+use Cocotte\Test\Actual\ApplicationTestCase;
+use Cocotte\Test\Actual\Command\NetworkingCommandActual;
 
 class NetworkingCommandTest extends ApplicationTestCase
 {
@@ -19,7 +19,7 @@ class NetworkingCommandTest extends ApplicationTestCase
         }
 
         $this->assertCommandExecutes(
-            NetworkingCommandMother::get($this)->service($this->container()),
+            NetworkingCommandActual::get($this->container())->service(),
             [
                 'hostnames' => $hostname,
                 '--remove' => true,
