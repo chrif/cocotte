@@ -100,7 +100,6 @@ services:
 
   # shell
   Cocotte\Shell\ProcessRunner: ~
-  Cocotte\Shell\VariableReplacer: ~
   Cocotte\Shell\EnvironmentSubstitution\SubstitutionFactory: ~
   Cocotte\Shell\BasicAuth: ~
 

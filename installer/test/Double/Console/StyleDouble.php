@@ -19,10 +19,10 @@ final class StyleDouble
 
     public static function create(TestCase $testCase): self
     {
-        $mother = new self();
-        $mother->testCase = $testCase;
+        $double = new self();
+        $double->testCase = $testCase;
 
-        return $mother;
+        return $double;
     }
 
     public function outputSpy(): StyleOutputSpy
