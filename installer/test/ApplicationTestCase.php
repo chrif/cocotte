@@ -20,7 +20,7 @@ class ApplicationTestCase extends TestCase
      */
     private $application;
 
-    protected function assertCommandExecutes(Command $command, $input = []): CommandTester
+    protected function assertCommandExecutes(Command $command, array $input = []): CommandTester
     {
         $this->container()->get(InputInterface::class)->setInteractive(false);
         $this->container()->get(OutputInterface::class)->setVerbosity(OutputInterface::VERBOSITY_DEBUG);

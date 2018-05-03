@@ -23,7 +23,7 @@ before_install:
   - sudo mv docker-compose /usr/local/bin
 
 install:
-  - chmod +x bin/*
+  - chmod +x bin/* ./.travis/*
   - docker pull chrif/cocotte || true # reuse layers if possible
   - docker-compose build cocotte
   - docker images | grep chrif/cocotte
