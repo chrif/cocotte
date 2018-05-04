@@ -1,17 +1,21 @@
 # Development
 
 ## Setup
-Configure these dist files at the root
-* `.env.dist` 
-	* copy to `.env`
-	* some values need to be customized
-* `docker-compose.override.yml.dist`
-	* copy to `docker-compose.override.yml`
 
-## Build
-```
-docker-compose build --pull cocotte
-```
+1. Configure these dist files at the root
+	* `.env.dist` 
+		* copy to `.env`
+		* some values need to be customized
+	* `docker-compose.override.yml.dist`
+		* copy to `docker-compose.override.yml`
+1. Build
+	```
+	docker-compose build --pull cocotte
+	```
+1. Install dependencies locally
+	```
+	docker-compose run --rm cmd composer install
+	```
 
 ## Useful commands
 ### Install
