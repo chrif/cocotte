@@ -10,6 +10,7 @@ COPY ./composer.lock ./
 RUN composer install --no-scripts --no-autoloader
 COPY ./bin ./bin
 COPY ./config ./config
+COPY ./doc ./doc
 COPY ./phpunit.xml.dist ./
 COPY ./src ./src
 COPY ./template ./template
