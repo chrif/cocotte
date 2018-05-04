@@ -133,17 +133,17 @@ final class StyleOutputSpy extends Output implements Style
 
     public function verbose($messages): void
     {
-        throw new \RuntimeException('Method '.__METHOD__.' not implemented yet.');
+        $this->doWrite($messages, true);
     }
 
     public function veryVerbose($messages): void
     {
-        throw new \RuntimeException('Method '.__METHOD__.' not implemented yet.');
+        $this->doWrite($messages, true);
     }
 
     public function debug($messages): void
     {
-        throw new \RuntimeException('Method '.__METHOD__.' not implemented yet.');
+        $this->doWrite($messages, true);
     }
 
     public function createProgressBar($max = 0)
@@ -188,7 +188,7 @@ final class StyleOutputSpy extends Output implements Style
 
     public function note($message)
     {
-        $this->doWrite($message);
+        $this->doWrite($message, true);
     }
 
     public function caution($message)
@@ -243,7 +243,11 @@ final class StyleOutputSpy extends Output implements Style
 
     protected function doWrite($message, $newline = false)
     {
-        $this->output .= $message.($newline ? "\n" : '');
+        $line = $newline ? "\n" : '';
+        if (is_array($message)) {
+            $message = implode($line, $message);
+        }
+        $this->output .= $message.($line);
     }
 
 }

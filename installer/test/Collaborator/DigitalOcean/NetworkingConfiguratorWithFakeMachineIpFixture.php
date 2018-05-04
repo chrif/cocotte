@@ -6,8 +6,7 @@ use Cocotte\DigitalOcean\Domain;
 use Cocotte\DigitalOcean\DomainRecord;
 use Cocotte\DigitalOcean\NetworkingConfigurator;
 use Cocotte\Machine\MachineIp;
-use Cocotte\Test\Collaborator\Console\StyleDouble;
-use PHPUnit\Framework\TestCase;
+use Cocotte\Test\Collaborator\Console\StyleOutputSpy;
 use Psr\Container\ContainerInterface;
 
 final class NetworkingConfiguratorWithFakeMachineIpFixture
@@ -28,8 +27,12 @@ final class NetworkingConfiguratorWithFakeMachineIpFixture
      * @var Domain
      */
     private $domainApi;
+    /**
+     * @var StyleOutputSpy
+     */
+    private $style;
 
-    public function __construct(TestCase $testCase, ContainerInterface $container, MachineIp $machineIp)
+    public function __construct(ContainerInterface $container, MachineIp $machineIp)
     {
         $this->configurator = new NetworkingConfigurator(
             $this->domainRecordApi = new DomainRecord(
@@ -42,8 +45,16 @@ final class NetworkingConfiguratorWithFakeMachineIpFixture
             ),
             $this->domainApi,
             $this->machineIp,
-            StyleDouble::create($testCase)->mock()
+            $this->style = new StyleOutputSpy()
         );
+    }
+
+    /**
+     * @return StyleOutputSpy
+     */
+    public function style(): StyleOutputSpy
+    {
+        return $this->style;
     }
 
     /**

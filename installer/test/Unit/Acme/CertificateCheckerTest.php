@@ -38,8 +38,8 @@ class CertificateCheckerTest extends TestCase
         $checker->check('localhost', '0.0.0.0');
 
         self::assertSame(
-            'Skipping SSL verification because localhost resolves to 127.0.0.1 instead of machine ip which is 0.0.0.0
-You should wait for DNS to update or force localhost to 0.0.0.0 in your /etc/hosts file.',
+            "Skipping SSL verification because localhost resolves to 127.0.0.1 instead of machine ip which is 0.0.0.0
+You should wait for DNS to update or force localhost to 0.0.0.0 in your /etc/hosts file.\n",
             $style->output);
     }
 
