@@ -63,6 +63,7 @@ services:
   # environment
   Cocotte\Environment\LazyEnvironmentLoader:
     tags: ['event.subscriber']
+  Cocotte\Environment\EnvironmentState: ~
 
   # event
   Symfony\Component\EventDispatcher\EventDispatcherInterface:

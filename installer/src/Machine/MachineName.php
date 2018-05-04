@@ -10,6 +10,7 @@ use Cocotte\Shell\Env;
 
 class MachineName implements LazyExportableOption, FromEnvLazyFactory
 {
+    const DEFAULT_VALUE = 'cocotte';
     const MACHINE_NAME = 'MACHINE_NAME';
     const OPTION_NAME = 'machine-name';
     /**

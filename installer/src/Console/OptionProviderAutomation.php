@@ -73,5 +73,4 @@ final class OptionProviderAutomation implements EventSubscriberInterface
             $this->operator->interact($event->input(), $optionProvider);
         }
     }
-
 }

@@ -5,6 +5,7 @@ namespace Cocotte\Template\StaticSite;
 use Cocotte\Console\OptionProvider;
 use Cocotte\Console\Style;
 use Cocotte\Console\StyledInputOption;
+use Cocotte\Environment\EnvironmentState;
 use Cocotte\Shell\Env;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Question\Question;
@@ -28,7 +29,7 @@ class StaticSiteNamespaceOptionProvider implements OptionProvider
             null,
             InputOption::VALUE_REQUIRED,
             $this->helpMessage(),
-            $env->get(StaticSiteNamespace::STATIC_SITE_NAMESPACE)
+            EnvironmentState::defaultValue($env, StaticSiteNamespace::STATIC_SITE_NAMESPACE)
         );
     }
 

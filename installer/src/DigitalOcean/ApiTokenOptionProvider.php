@@ -5,6 +5,7 @@ namespace Cocotte\DigitalOcean;
 use Cocotte\Console\OptionProvider;
 use Cocotte\Console\Style;
 use Cocotte\Console\StyledInputOption;
+use Cocotte\Environment\EnvironmentState;
 use Cocotte\Shell\Env;
 use DigitalOceanV2\Adapter\GuzzleHttpAdapter;
 use DigitalOceanV2\DigitalOceanV2;
@@ -30,7 +31,7 @@ class ApiTokenOptionProvider implements OptionProvider
             null,
             InputOption::VALUE_REQUIRED,
             $this->helpMessage(),
-            $env->get(ApiToken::DIGITAL_OCEAN_API_TOKEN)
+            EnvironmentState::defaultValue($env, ApiToken::DIGITAL_OCEAN_API_TOKEN)
         );
     }
 

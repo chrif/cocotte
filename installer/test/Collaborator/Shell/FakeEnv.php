@@ -17,5 +17,4 @@ final class FakeEnv implements Env
     {
         return $this->env[$name] ?? $default;
     }
-
 }

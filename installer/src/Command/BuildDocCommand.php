@@ -3,8 +3,7 @@
 namespace Cocotte\Command;
 
 use Cocotte\Console\MarkdownDescriptor;
-use Cocotte\DigitalOcean\ApiToken;
-use Cocotte\Shell\Env;
+use Cocotte\Environment\EnvironmentState;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -12,9 +11,15 @@ use Symfony\Component\Console\Output\OutputInterface;
 final class BuildDocCommand extends Command
 {
     /**
-     * @var Env
+     * @var EnvironmentState
      */
-    private $env;
+    private $environmentState;
+
+    public function __construct(EnvironmentState $environmentState)
+    {
+        $this->environmentState = $environmentState;
+        parent::__construct();
+    }
 
     public function isHidden()
     {
@@ -28,7 +33,7 @@ final class BuildDocCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        if ($this->env->get(ApiToken::DIGITAL_OCEAN_API_TOKEN)) {
+        if (!$this->environmentState->isBare()) {
             throw new \Exception("Environment is populated. This command needs to run on a bare environment.");
         }
 

@@ -17,7 +17,10 @@ final class DefaultEnv implements Env
             "Failed asserting that value '$value' for env with name '$name' has been preserved when putting it. ".
             "Retrieved value was '$retrieved'."
         );
-        $_SERVER[$name] = $value; // for \Symfony\Component\Process\Process::getDefaultEnv
+        /**
+         * @see \Symfony\Component\Process\Process::getDefaultEnv
+         */
+        $_SERVER[$name] = $value;
     }
 
     public function get(string $name, $default = null): ?string
@@ -29,4 +32,5 @@ final class DefaultEnv implements Env
 
         return $default;
     }
+
 }

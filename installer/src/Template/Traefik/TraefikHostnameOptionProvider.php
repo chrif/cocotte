@@ -7,6 +7,7 @@ use Cocotte\Console\Style;
 use Cocotte\Console\StyledInputOption;
 use Cocotte\DigitalOcean\DnsValidator;
 use Cocotte\DigitalOcean\Hostname;
+use Cocotte\Environment\EnvironmentState;
 use Cocotte\Shell\Env;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Question\Question;
@@ -36,7 +37,7 @@ class TraefikHostnameOptionProvider implements OptionProvider
             null,
             InputOption::VALUE_REQUIRED,
             $this->helpMessage(),
-            $env->get(TraefikHostname::TRAEFIK_UI_HOSTNAME)
+            EnvironmentState::defaultValue($env, TraefikHostname::TRAEFIK_UI_HOSTNAME)
         );
     }
 
