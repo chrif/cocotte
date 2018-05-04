@@ -91,8 +91,8 @@ class NetworkingConfiguratorTest extends ApplicationTestCase implements LazyEnvi
         $this->style->clear();
         $this->configurator->remove($this->hostnameCollection);
         self::assertSame(
-            "Configuring networking for all the hostnames supplied: {$this->hostname}\n".
-            "Configuring {$this->hostname}\n".
+            "Removing networking for all the hostnames supplied: {$this->hostnameCollection}\n".
+            "Removing {$this->hostname}\n".
             "Domain record '{$this->hostname}' was already removed\n",
             $this->style->output
         );
