@@ -7,7 +7,6 @@
     <filter>
         <whitelist>
             <directory suffix=".php">src</directory>
-            <file>bin/console</file>
         </whitelist>
     </filter>
 

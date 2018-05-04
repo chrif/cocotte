@@ -2,14 +2,16 @@
 
 namespace Cocotte\Test\Integration;
 
-use Cocotte\Test\ApplicationTestCase;
+use PHPUnit\Framework\TestCase;
+use Symfony\Component\Process\Process;
 
-final class ConsoleRunnerTest extends ApplicationTestCase
+final class ConsoleRunnerTest extends TestCase
 {
 
     public function test_it_runs()
     {
-        exec(__DIR__.'/../../bin/console', $out, $ret);
-        self::assertSame(0, $ret);
+        $process = new Process(__DIR__.'/../../bin/console');
+        $process->run();
+        self::assertTrue($process->isSuccessful());
     }
 }
