@@ -61,6 +61,9 @@ class NetworkingConfiguratorTest extends ApplicationTestCase implements LazyEnvi
         // clean up domain for next test run because command does not remove domains
         $fixture2->domainApi()->delete($hostname);
         self::assertFalse($fixture2->domainApi()->exists($hostname));
+
+        // it does not error when removing a domain already removed
+        $fixture2->configurator()->configure($hostnameCollection, true);
     }
 
     public function test_it_handles_root_record_correctly()
