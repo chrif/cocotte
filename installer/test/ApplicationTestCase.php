@@ -13,6 +13,9 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Tester\CommandTester;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
+/**
+ * This is the base class for all system tests.
+ */
 class ApplicationTestCase extends TestCase
 {
     /**

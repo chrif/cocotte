@@ -1,6 +1,6 @@
 <?php
 
-namespace Cocotte\Test\System\Install;
+namespace Cocotte\Test\Integration\Command;
 
 use Cocotte\Test\ApplicationTestCase;
 use Cocotte\Test\Collaborator\Command\BuildDocCommandActual;
