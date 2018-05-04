@@ -10,6 +10,7 @@ use Cocotte\DigitalOcean\ApiTokenOptionProvider;
 use Cocotte\DigitalOcean\NetworkingConfigurator;
 use Cocotte\Environment\LazyEnvironment;
 use Cocotte\Host\HostMountRequired;
+use Cocotte\Machine\MachineIp;
 use Cocotte\Machine\MachineName;
 use Cocotte\Machine\MachineNameOptionProvider;
 use Cocotte\Machine\MachineState;
@@ -58,6 +59,10 @@ final class UninstallCommand extends AbstractCommand implements LazyEnvironment,
      * @var MachineState
      */
     private $machineState;
+    /**
+     * @var MachineIp
+     */
+    private $machineIp;
 
     public function __construct(
         ProcessRunner $processRunner,
@@ -66,7 +71,8 @@ final class UninstallCommand extends AbstractCommand implements LazyEnvironment,
         Style $style,
         MachineName $machineName,
         EventDispatcherInterface $eventDispatcher,
-        MachineState $machineState
+        MachineState $machineState,
+        MachineIp $machineIp
     ) {
         $this->processRunner = $processRunner;
         $this->networkingConfigurator = $networkingConfigurator;
@@ -76,6 +82,7 @@ final class UninstallCommand extends AbstractCommand implements LazyEnvironment,
         $this->eventDispatcher = $eventDispatcher;
         $this->machineState = $machineState;
         parent::__construct();
+        $this->machineIp = $machineIp;
     }
 
     public function lazyEnvironmentValues(): array
@@ -123,7 +130,11 @@ final class UninstallCommand extends AbstractCommand implements LazyEnvironment,
     protected function doExecute(InputInterface $input, OutputInterface $output)
     {
         $this->confirm();
-        $this->networkingConfigurator->configure($this->traefikHostname->toHostnameCollection(), true);
+        $this->networkingConfigurator->configure(
+            $this->traefikHostname->toHostnameCollection(),
+            $this->machineIp->toIP(),
+            true
+        );
         if (!$this->machineState->exists()) {
             $this->style->verbose("Machine '{$this->machineName->toString()}' did not exist");
         } else {

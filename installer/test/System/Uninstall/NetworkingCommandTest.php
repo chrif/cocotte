@@ -1,15 +1,12 @@
 <?php
 
-namespace Cocotte\Test\System\Command;
+namespace Cocotte\Test\System\Uninstall;
 
 use Cocotte\Test\ApplicationTestCase;
 use Cocotte\Test\Collaborator\Command\NetworkingCommandActual;
 
 class NetworkingCommandTest extends ApplicationTestCase
 {
-    /**
-     * @group uninstall
-     */
     public function testRemoveStaticSite()
     {
         $hostname = getenv('STATIC_SITE_HOSTNAME');
@@ -26,5 +23,4 @@ class NetworkingCommandTest extends ApplicationTestCase
             ]
         );
     }
-
 }

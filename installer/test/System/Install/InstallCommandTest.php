@@ -1,15 +1,12 @@
 <?php
 
-namespace Cocotte\Test\System\Command;
+namespace Cocotte\Test\System\Install;
 
 use Cocotte\Test\ApplicationTestCase;
 use Cocotte\Test\Collaborator\Command\InstallCommandActual;
 
 class InstallCommandTest extends ApplicationTestCase
 {
-    /**
-     * @group install
-     */
     public function testExecute()
     {
         $this->assertCommandExecutes(
@@ -22,5 +19,4 @@ class InstallCommandTest extends ApplicationTestCase
             ]
         );
     }
-
 }

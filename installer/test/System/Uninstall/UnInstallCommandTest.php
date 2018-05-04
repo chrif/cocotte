@@ -1,15 +1,12 @@
 <?php
 
-namespace Cocotte\Test\System\Command;
+namespace Cocotte\Test\System\Uninstall;
 
 use Cocotte\Test\ApplicationTestCase;
 use Cocotte\Test\Collaborator\Command\UninstallCommandActual;
 
 class UnInstallCommandTest extends ApplicationTestCase
 {
-    /**
-     * @group uninstall
-     */
     public function testExecute()
     {
         if (getenv('KEEP_MACHINE_AFTER')) {
@@ -24,5 +21,4 @@ class UnInstallCommandTest extends ApplicationTestCase
             ]
         );
     }
-
 }

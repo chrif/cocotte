@@ -2,7 +2,7 @@
 
 namespace Cocotte\DigitalOcean;
 
-use Cocotte\Machine\MachineIp;
+use Darsyn\IP\IP;
 use DigitalOceanV2\Api;
 use DigitalOceanV2\Entity;
 
@@ -15,25 +15,18 @@ final class Domain
     private $domainApi;
 
     /**
-     * @var MachineIp
-     */
-    private $machineIp;
-
-    /**
      * @param Api\Domain $domainApi
-     * @param MachineIp $machineIp
      */
-    public function __construct(Api\Domain $domainApi, MachineIp $machineIp)
+    public function __construct(Api\Domain $domainApi)
     {
         $this->domainApi = $domainApi;
-        $this->machineIp = $machineIp;
     }
 
-    public function create(Hostname $hostname): Entity\Domain
+    public function create(Hostname $hostname, IP $ip): Entity\Domain
     {
         return $this->domainApi->create(
             $hostname->domainName(),
-            $this->machineIp->toString()
+            $ip->getShortAddress()
         );
     }
 

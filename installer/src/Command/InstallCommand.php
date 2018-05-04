@@ -12,6 +12,7 @@ use Cocotte\Environment\LazyEnvironment;
 use Cocotte\Host\HostMount;
 use Cocotte\Host\HostMountRequired;
 use Cocotte\Machine\MachineCreator;
+use Cocotte\Machine\MachineIp;
 use Cocotte\Machine\MachineName;
 use Cocotte\Machine\MachineNameOptionProvider;
 use Cocotte\Machine\MachineStoragePath;
@@ -80,6 +81,10 @@ final class InstallCommand extends AbstractCommand implements LazyEnvironment, H
      * @var TraefikDeploymentValidator
      */
     private $traefikDeploymentValidator;
+    /**
+     * @var MachineIp
+     */
+    private $machineIp;
 
     public function __construct(
         MachineCreator $machineCreator,
@@ -91,7 +96,8 @@ final class InstallCommand extends AbstractCommand implements LazyEnvironment, H
         NetworkingConfigurator $networkingConfigurator,
         ProcessRunner $processRunner,
         HostMount $hostMount,
-        TraefikDeploymentValidator $traefikDeploymentValidator
+        TraefikDeploymentValidator $traefikDeploymentValidator,
+        MachineIp $machineIp
     ) {
         $this->machineCreator = $machineCreator;
         $this->traefikCreator = $traefikCreator;
@@ -104,6 +110,7 @@ final class InstallCommand extends AbstractCommand implements LazyEnvironment, H
         $this->hostMount = $hostMount;
         $this->traefikDeploymentValidator = $traefikDeploymentValidator;
         parent::__construct();
+        $this->machineIp = $machineIp;
     }
 
     public function lazyEnvironmentValues(): array
@@ -166,7 +173,10 @@ final class InstallCommand extends AbstractCommand implements LazyEnvironment, H
         $this->traefikCreator->create();
 
         $this->style->writeln("Configuring networking for {$this->traefikHostname->toString()}");
-        $this->networkingConfigurator->configure($this->traefikHostname->toHostnameCollection());
+        $this->networkingConfigurator->configure(
+            $this->traefikHostname->toHostnameCollection(),
+            $this->machineIp->toIP()
+        );
 
         $this->style->writeln('Deploying Traefik to cloud machine');
 //        $this->processRunner->run(new Process('./bin/reset-prod 2>/dev/stdout', $this->traefikCreator->hostAppPath()));

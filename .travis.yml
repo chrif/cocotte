@@ -32,9 +32,7 @@ script:
   # tests
   - ./bin/cmd phpunit --testsuite=unit --coverage-clover /host/coverage/unit.xml
   - ./bin/cmd phpunit --testsuite=integration --coverage-clover /host/coverage/integration.xml
-  - ./bin/cmd phpunit --testsuite=system --group=install --coverage-clover /host/coverage/install.xml
-  - ./bin/cmd phpunit --testsuite=system --group=template --coverage-clover /host/coverage/template.xml
-  - ./bin/cmd phpunit --testsuite=system --group=uninstall --coverage-clover /host/coverage/uninstall.xml
+  - ./bin/cmd phpunit --testsuite=system --coverage-clover /host/coverage/system.xml
 
   # test local deployment
   - ./.travis/deploy-dev
@@ -42,9 +40,7 @@ script:
 after_success:
   - bash <(curl -s https://codecov.io/bash) -f host/coverage/unit.xml -F unit
   - bash <(curl -s https://codecov.io/bash) -f host/coverage/integration.xml -F integration
-  - bash <(curl -s https://codecov.io/bash) -f host/coverage/install.xml -F system
-  - bash <(curl -s https://codecov.io/bash) -f host/coverage/template.xml -F system
-  - bash <(curl -s https://codecov.io/bash) -f host/coverage/uninstall.xml -F system
+  - bash <(curl -s https://codecov.io/bash) -f host/coverage/system.xml -F system
 
 deploy:
   # push image to docker hub

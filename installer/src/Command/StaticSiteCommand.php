@@ -11,6 +11,7 @@ use Cocotte\DigitalOcean\NetworkingConfigurator;
 use Cocotte\Environment\LazyEnvironment;
 use Cocotte\Host\HostMount;
 use Cocotte\Host\HostMountRequired;
+use Cocotte\Machine\MachineIp;
 use Cocotte\Machine\MachineName;
 use Cocotte\Machine\MachineNameOptionProvider;
 use Cocotte\Machine\MachineRequired;
@@ -81,6 +82,10 @@ final class StaticSiteCommand extends AbstractCommand implements
      * @var StaticSiteDeploymentValidator
      */
     private $staticSiteDeploymentValidator;
+    /**
+     * @var MachineIp
+     */
+    private $machineIp;
 
     public function __construct(
         StaticSiteCreator $staticSiteCreator,
@@ -92,7 +97,8 @@ final class StaticSiteCommand extends AbstractCommand implements
         MachineState $machineState,
         StaticSiteNamespace $staticSiteNamespace,
         HostMount $hostMount,
-        StaticSiteDeploymentValidator $staticSiteDeploymentValidator
+        StaticSiteDeploymentValidator $staticSiteDeploymentValidator,
+        MachineIp $machineIp
     ) {
         $this->staticSiteCreator = $staticSiteCreator;
         $this->networkingConfigurator = $networkingConfigurator;
@@ -105,6 +111,7 @@ final class StaticSiteCommand extends AbstractCommand implements
         $this->hostMount = $hostMount;
         $this->staticSiteDeploymentValidator = $staticSiteDeploymentValidator;
         parent::__construct();
+        $this->machineIp = $machineIp;
     }
 
     public function lazyEnvironmentValues(): array
@@ -188,7 +195,10 @@ final class StaticSiteCommand extends AbstractCommand implements
 
         if (!$skipNetworking) {
             $this->style->writeln("Configuring networking for {$this->staticSiteHostname}");
-            $this->networkingConfigurator->configure($this->staticSiteHostname->toHostnameCollection());
+            $this->networkingConfigurator->configure(
+                $this->staticSiteHostname->toHostnameCollection(),
+                $this->machineIp->toIP()
+            );
         }
 
         if (!$skipDeploy) {

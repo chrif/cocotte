@@ -9,6 +9,8 @@ use Cocotte\DigitalOcean\ApiTokenOptionProvider;
 use Cocotte\DigitalOcean\HostnameCollection;
 use Cocotte\DigitalOcean\NetworkingConfigurator;
 use Cocotte\Environment\LazyEnvironment;
+use Cocotte\Machine\MachineIp;
+use Darsyn\IP\IP;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -35,7 +37,8 @@ final class NetworkingCommand extends AbstractCommand implements LazyEnvironment
     public function __construct(
         NetworkingConfigurator $networkingConfigurator,
         EventDispatcherInterface $eventDispatcher,
-        Style $style
+        Style $style,
+        MachineIp $machineIp
     ) {
         $this->networkingConfigurator = $networkingConfigurator;
         $this->eventDispatcher = $eventDispatcher;
@@ -73,15 +76,28 @@ final class NetworkingCommand extends AbstractCommand implements LazyEnvironment
             ->setName('networking')
             ->setDescription('Configure networking of Digital Ocean')
             ->addArgument('hostnames', InputArgument::REQUIRED, 'Comma-separated list of hostnames')
+            ->addOption('ip',
+                null,
+                InputOption::VALUE_REQUIRED,
+                'IP to use for hostnames (required without the --remove option)')
             ->addOption('remove', null, InputOption::VALUE_NONE, 'Remove networking for hostnames');
     }
 
     protected function doExecute(InputInterface $input, OutputInterface $output)
     {
+        $remove = $input->getOption('remove');
+        if (!$remove) {
+            $ip = new IP($input->getOption('ip'));
+        } else {
+            $ip = new IP('127.0.0.1');
+        }
+
         $this->networkingConfigurator->configure(
             HostnameCollection::fromString($input->getArgument('hostnames')),
+            $ip,
             $input->getOption('remove')
         );
+
         $this->style->success("Networking successfully configured.");
     }
 

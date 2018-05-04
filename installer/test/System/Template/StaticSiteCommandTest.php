@@ -1,15 +1,12 @@
 <?php
 
-namespace Cocotte\Test\System\Command;
+namespace Cocotte\Test\System\Template;
 
 use Cocotte\Test\ApplicationTestCase;
 use Cocotte\Test\Collaborator\Command\StaticSiteCommandActual;
 
 class StaticSiteCommandTest extends ApplicationTestCase
 {
-    /**
-     * @group template
-     */
     public function testExecute()
     {
         $this->assertCommandExecutes(
@@ -21,5 +18,4 @@ class StaticSiteCommandTest extends ApplicationTestCase
             ]
         );
     }
-
 }

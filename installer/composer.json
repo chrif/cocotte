@@ -33,6 +33,7 @@
     "io-developer/php-whois": "^2.3",
     "symfony/proxy-manager-bridge": "^4.0",
     "ocramius/proxy-manager": "^2.1",
-    "symfony/event-dispatcher": "^4.0"
+    "symfony/event-dispatcher": "^4.0",
+    "darsyn/ip": "^3.3"
   }
 }
