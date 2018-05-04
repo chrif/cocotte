@@ -85,20 +85,16 @@ final class NetworkingCommand extends AbstractCommand implements LazyEnvironment
 
     protected function doExecute(InputInterface $input, OutputInterface $output)
     {
-        $remove = $input->getOption('remove');
-        if (!$remove) {
-            $ip = new IP($input->getOption('ip'));
+        $hostnames = HostnameCollection::fromString($input->getArgument('hostnames'));
+
+        if ($input->getOption('remove')) {
+            $this->networkingConfigurator->remove($hostnames);
+            $this->style->success("Networking successfully removed.");
         } else {
-            $ip = new IP('127.0.0.1');
+            $ip = new IP($input->getOption('ip'));
+            $this->networkingConfigurator->configure($hostnames, $ip);
+            $this->style->success("Networking successfully configured.");
         }
-
-        $this->networkingConfigurator->configure(
-            HostnameCollection::fromString($input->getArgument('hostnames')),
-            $ip,
-            $input->getOption('remove')
-        );
-
-        $this->style->success("Networking successfully configured.");
     }
 
 }

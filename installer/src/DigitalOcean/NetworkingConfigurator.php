@@ -32,18 +32,25 @@ final class NetworkingConfigurator
     /**
      * @param HostnameCollection|Hostname[] $hostnames
      * @param IP $ip
-     * @param bool $remove
      */
-    public function configure(HostnameCollection $hostnames, IP $ip, $remove = false)
+    public function configure(HostnameCollection $hostnames, IP $ip)
     {
         $this->style->veryVerbose('Configuring networking for all the hostnames supplied: '.$hostnames->toString());
         foreach ($hostnames as $host) {
             $this->style->veryVerbose('Configuring '.$host);
-            if ($remove) {
-                $this->removeDomainRecord($host);
-            } else {
-                $this->configureDomain($host, $ip);
-            }
+            $this->configureDomain($host, $ip);
+        }
+    }
+
+    /**
+     * @param HostnameCollection|Hostname[] $hostnames
+     */
+    public function remove(HostnameCollection $hostnames)
+    {
+        $this->style->veryVerbose('Removing networking for all the hostnames supplied: '.$hostnames->toString());
+        foreach ($hostnames as $host) {
+            $this->style->veryVerbose('Removing '.$host);
+            $this->removeDomainRecord($host);
         }
     }
 

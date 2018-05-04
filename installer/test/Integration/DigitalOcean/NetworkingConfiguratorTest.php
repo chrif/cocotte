@@ -82,14 +82,14 @@ class NetworkingConfiguratorTest extends ApplicationTestCase implements LazyEnvi
         self::assertTrue($this->domainRecordApi->isUpToDate($this->hostname, $ip2));
 
         // command should remove domain record for sub-domain, but not domain and domain record for root
-        $this->configurator->configure($this->hostnameCollection, $ip2, true);
+        $this->configurator->remove($this->hostnameCollection);
         self::assertFalse($this->domainRecordApi->exists($this->hostname));
         self::assertTrue($this->domainRecordApi->exists($this->hostname->toRoot()));
         self::assertTrue($this->domainApi->exists($this->hostname));
 
         // it does not error when removing a domain already removed
         $this->style->clear();
-        $this->configurator->configure($this->hostnameCollection, $ip2, true);
+        $this->configurator->remove($this->hostnameCollection);
         self::assertSame(
             "Configuring networking for all the hostnames supplied: {$this->hostname}\n".
             "Configuring {$this->hostname}\n".
@@ -114,7 +114,7 @@ class NetworkingConfiguratorTest extends ApplicationTestCase implements LazyEnvi
         self::assertTrue($this->domainRecordApi->isUpToDate($root, $ip));
 
         // command should remove domain record for root
-        $this->configurator->configure($hostnameCollection, $ip, true);
+        $this->configurator->remove($hostnameCollection);
         self::assertFalse($this->domainRecordApi->exists($root));
         self::assertTrue($this->domainApi->exists($root));
     }

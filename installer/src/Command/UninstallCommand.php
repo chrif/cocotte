@@ -10,7 +10,6 @@ use Cocotte\DigitalOcean\ApiTokenOptionProvider;
 use Cocotte\DigitalOcean\NetworkingConfigurator;
 use Cocotte\Environment\LazyEnvironment;
 use Cocotte\Host\HostMountRequired;
-use Cocotte\Machine\MachineIp;
 use Cocotte\Machine\MachineName;
 use Cocotte\Machine\MachineNameOptionProvider;
 use Cocotte\Machine\MachineState;
@@ -59,10 +58,6 @@ final class UninstallCommand extends AbstractCommand implements LazyEnvironment,
      * @var MachineState
      */
     private $machineState;
-    /**
-     * @var MachineIp
-     */
-    private $machineIp;
 
     public function __construct(
         ProcessRunner $processRunner,
@@ -71,8 +66,7 @@ final class UninstallCommand extends AbstractCommand implements LazyEnvironment,
         Style $style,
         MachineName $machineName,
         EventDispatcherInterface $eventDispatcher,
-        MachineState $machineState,
-        MachineIp $machineIp
+        MachineState $machineState
     ) {
         $this->processRunner = $processRunner;
         $this->networkingConfigurator = $networkingConfigurator;
@@ -82,7 +76,6 @@ final class UninstallCommand extends AbstractCommand implements LazyEnvironment,
         $this->eventDispatcher = $eventDispatcher;
         $this->machineState = $machineState;
         parent::__construct();
-        $this->machineIp = $machineIp;
     }
 
     public function lazyEnvironmentValues(): array
@@ -130,10 +123,8 @@ final class UninstallCommand extends AbstractCommand implements LazyEnvironment,
     protected function doExecute(InputInterface $input, OutputInterface $output)
     {
         $this->confirm();
-        $this->networkingConfigurator->configure(
-            $this->traefikHostname->toHostnameCollection(),
-            $this->machineIp->toIP(),
-            true
+        $this->networkingConfigurator->remove(
+            $this->traefikHostname->toHostnameCollection()
         );
         if (!$this->machineState->exists()) {
             $this->style->verbose("Machine '{$this->machineName->toString()}' did not exist");

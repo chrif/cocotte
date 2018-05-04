@@ -5,7 +5,6 @@ namespace Cocotte\Console;
 use InvalidArgumentException;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Descriptor\ApplicationDescription;
 use Symfony\Component\Console\Descriptor\DescriptorInterface;
 use Symfony\Component\Console\Formatter\OutputFormatter;
 use Symfony\Component\Console\Helper\Helper;
@@ -155,7 +154,7 @@ class MarkdownDescriptor implements DescriptorInterface
 
     protected function describeApplication(Application $application)
     {
-        $description = new ApplicationDescription($application);
+        $description = new \Symfony\Component\Console\Descriptor\ApplicationDescription($application);
         $title = "Console API Reference";
 
         $this->write($title."\n".str_repeat('=', Helper::strlen($title)));
