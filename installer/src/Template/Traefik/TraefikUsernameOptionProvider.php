@@ -6,7 +6,6 @@ use Cocotte\Console\OptionProvider;
 use Cocotte\Console\Style;
 use Cocotte\Console\StyledInputOption;
 use Cocotte\Environment\EnvironmentState;
-use Cocotte\Shell\Env;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Question\Question;
 
@@ -22,14 +21,14 @@ class TraefikUsernameOptionProvider implements OptionProvider
         $this->style = $style;
     }
 
-    public function option(Env $env): InputOption
+    public function option(EnvironmentState $environmentState): InputOption
     {
         return new StyledInputOption(
-            TraefikUsername::OPTION_NAME,
+            $this->optionName(),
             null,
             InputOption::VALUE_REQUIRED,
             $this->helpMessage(),
-            EnvironmentState::defaultValue($env, TraefikUsername::TRAEFIK_UI_USERNAME)
+            $environmentState->defaultValue(TraefikUsername::TRAEFIK_UI_USERNAME)
         );
     }
 

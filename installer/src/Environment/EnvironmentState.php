@@ -23,14 +23,9 @@ final class EnvironmentState
         $this->env = $env;
     }
 
-    public static function defaultValue(Env $env, $name, $default = null)
+    public function defaultValue(string $name, $default = null): ?string
     {
-        $value = $env->get($name, $default);
-        if ($value === '') {
-            return null;
-        }
-
-        return $value;
+        return $this->env->get($name, $default);
     }
 
     public function isBare(): bool
@@ -49,8 +44,8 @@ final class EnvironmentState
 
     private function hasBareValue(string $name, $default = null): bool
     {
-        $value = self::defaultValue($this->env, $name, $default);
+        $value = $this->defaultValue($name, $default);
 
-        return $value === $default || null === $value;
+        return $value === $default;
     }
 }

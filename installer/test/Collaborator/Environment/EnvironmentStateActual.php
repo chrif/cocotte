@@ -47,13 +47,13 @@ final class EnvironmentStateActual
 
         TestCase::assertFalse($this->service()->isBare());
 
-        $env->put(ApiToken::DIGITAL_OCEAN_API_TOKEN, '');
         $env->put(MachineName::MACHINE_NAME, MachineName::DEFAULT_VALUE);
-        $env->put(StaticSiteHostname::STATIC_SITE_HOSTNAME, '');
-        $env->put(StaticSiteNamespace::STATIC_SITE_NAMESPACE, '');
-        $env->put(TraefikHostname::TRAEFIK_UI_HOSTNAME, '');
-        $env->put(TraefikPassword::TRAEFIK_UI_PASSWORD, '');
-        $env->put(TraefikUsername::TRAEFIK_UI_USERNAME, '');
+        $env->unset(ApiToken::DIGITAL_OCEAN_API_TOKEN);
+        $env->unset(StaticSiteHostname::STATIC_SITE_HOSTNAME);
+        $env->unset(StaticSiteNamespace::STATIC_SITE_NAMESPACE);
+        $env->unset(TraefikHostname::TRAEFIK_UI_HOSTNAME);
+        $env->unset(TraefikPassword::TRAEFIK_UI_PASSWORD);
+        $env->unset(TraefikUsername::TRAEFIK_UI_USERNAME);
 
         TestCase::assertTrue($this->service()->isBare());
     }

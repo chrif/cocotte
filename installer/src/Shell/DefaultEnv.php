@@ -33,4 +33,25 @@ final class DefaultEnv implements Env
         return $default;
     }
 
+    public function unset(string $name)
+    {
+        global $_SERVER;
+        Assertion::true(putenv($name), "Could not unset env with name '$name'.");
+        Assertion::same(
+            null,
+            $retrieved = self::get($name),
+            "Failed asserting that env with name '$name' has been unset. ".
+            "Retrieved value was '$retrieved'."
+        );
+        /**
+         * @see \Symfony\Component\Process\Process::getDefaultEnv
+         */
+        unset($_SERVER[$name]);
+        Assertion::keyNotExists(
+            $_SERVER,
+            $name,
+            "Failed asserting that env with name '$name' has been unset in global _SERVER."
+        );
+    }
+
 }

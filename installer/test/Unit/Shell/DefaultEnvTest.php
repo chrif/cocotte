@@ -12,4 +12,14 @@ class DefaultEnvTest extends TestCase
     {
         self::assertSame('foo', (new DefaultEnv())->get('bar', 'foo'));
     }
+
+    public function test_it_unset_value()
+    {
+        $env = new DefaultEnv();
+        $env->put('foo', 'bar');
+        self::assertSame('bar', $env->get('foo'));
+        $env->unset('foo');
+        self::assertSame(null, $env->get('foo'));
+    }
+
 }

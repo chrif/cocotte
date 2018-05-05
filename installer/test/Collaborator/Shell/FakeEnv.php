@@ -17,4 +17,10 @@ final class FakeEnv implements Env
     {
         return $this->env[$name] ?? $default;
     }
+
+    public function unset(string $name)
+    {
+        throw new \RuntimeException('Method '.__METHOD__.' not implemented yet.');
+    }
+
 }

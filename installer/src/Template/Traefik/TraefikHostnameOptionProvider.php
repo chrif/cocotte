@@ -8,7 +8,6 @@ use Cocotte\Console\StyledInputOption;
 use Cocotte\DigitalOcean\DnsValidator;
 use Cocotte\DigitalOcean\Hostname;
 use Cocotte\Environment\EnvironmentState;
-use Cocotte\Shell\Env;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Question\Question;
 
@@ -30,14 +29,14 @@ class TraefikHostnameOptionProvider implements OptionProvider
         $this->dnsValidator = $dnsValidator;
     }
 
-    public function option(Env $env): InputOption
+    public function option(EnvironmentState $environmentState): InputOption
     {
         return new StyledInputOption(
-            TraefikHostname::OPTION_NAME,
+            $this->optionName(),
             null,
             InputOption::VALUE_REQUIRED,
             $this->helpMessage(),
-            EnvironmentState::defaultValue($env, TraefikHostname::TRAEFIK_UI_HOSTNAME)
+            $environmentState->defaultValue(TraefikHostname::TRAEFIK_UI_HOSTNAME)
         );
     }
 

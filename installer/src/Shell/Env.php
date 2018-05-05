@@ -8,4 +8,5 @@ interface Env
 
     public function get(string $name, $default = null): ?string;
 
+    public function unset(string $name);
 }

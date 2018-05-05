@@ -6,7 +6,6 @@ use Cocotte\Console\OptionProvider;
 use Cocotte\Console\Style;
 use Cocotte\Console\StyledInputOption;
 use Cocotte\Environment\EnvironmentState;
-use Cocotte\Shell\Env;
 use DigitalOceanV2\Adapter\GuzzleHttpAdapter;
 use DigitalOceanV2\DigitalOceanV2;
 use Symfony\Component\Console\Input\InputOption;
@@ -24,14 +23,14 @@ class ApiTokenOptionProvider implements OptionProvider
         $this->style = $style;
     }
 
-    public function option(Env $env): InputOption
+    public function option(EnvironmentState $environmentState): InputOption
     {
         return new StyledInputOption(
-            ApiToken::OPTION_NAME,
+            $this->optionName(),
             null,
             InputOption::VALUE_REQUIRED,
             $this->helpMessage(),
-            EnvironmentState::defaultValue($env, ApiToken::DIGITAL_OCEAN_API_TOKEN)
+            $environmentState->defaultValue(ApiToken::DIGITAL_OCEAN_API_TOKEN)
         );
     }
 
