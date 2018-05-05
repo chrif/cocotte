@@ -10,6 +10,7 @@ use Cocotte\Shell\Env;
 
 class TraefikUsername implements LazyExportableOption, FromEnvLazyFactory
 {
+    const SUGGESTED_VALUE = 'admin';
     const TRAEFIK_UI_USERNAME = 'TRAEFIK_UI_USERNAME';
     const OPTION_NAME = 'traefik-ui-username';
     const REGEX = '/^[a-zA-Z0-9]+$/';

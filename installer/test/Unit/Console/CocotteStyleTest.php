@@ -27,10 +27,10 @@ final class CocotteStyleTest extends TestCase
     {
         $this->assertInteractiveMode(
             [
-                "foo",
+                "\r",
             ],
             function (CocotteStyle $style) {
-                self::assertSame("foo", $style->pause());
+                self::assertSame(null, $style->pause());
             },
             function (string $display) {
                 self::assertSame(
@@ -39,27 +39,6 @@ final class CocotteStyleTest extends TestCase
                 );
             }
         );
-    }
-
-    private function normalizeDisplay(string $display): string
-    {
-        /**
-         * strip container output line prefix:
-         *
-         * Sample:
-         *
-         * cmd_1          |
-         * cmd_1          | cmd_1          |
-         * cmd_1          | cmd_1          |
-         * cmd_1          |
-         *
-         */
-        // https://github.com/moby/moby/blob/master/daemon/names/names.go#L6
-        $containerName = '[a-zA-Z0-9][a-zA-Z0-9_\.-]';
-        $space = ' ';
-        $display = preg_replace("/^({$containerName}{$space}{10}|{$space})+/", '', $display);
-
-        return $display;
     }
 
     private function assertInteractiveMode(array $inputs, \Closure $runInteractive, \Closure $assertDisplay): void
@@ -74,7 +53,7 @@ final class CocotteStyleTest extends TestCase
         $tester = new CommandTester($command);
         $tester->setInputs($inputs);
         $tester->execute([], ['interactive' => true, 'decorated' => false]);
-        $assertDisplay($this->normalizeDisplay($tester->getDisplay()));
+        $assertDisplay($tester->getDisplay());
     }
 
 }

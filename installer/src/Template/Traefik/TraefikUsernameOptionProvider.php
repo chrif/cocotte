@@ -57,7 +57,7 @@ class TraefikUsernameOptionProvider implements OptionProvider
     {
         return new Question(
             $this->style->quittableQuestion("Choose a <options=bold>username for your Traefik UI</>"),
-            "admin"
+            TraefikUsername::SUGGESTED_VALUE
         );
     }
 

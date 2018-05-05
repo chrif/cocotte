@@ -1,7 +1,3 @@
-parameters:
-  api.adapter.class: DigitalOceanV2\Adapter\GuzzleHttpAdapter
-  console.output.verbosity: !php/const Symfony\Component\Console\Output\OutputInterface::VERBOSITY_NORMAL
-
 services:
   _defaults:
       autowire: true
@@ -15,8 +11,6 @@ services:
     class: Symfony\Component\Console\Input\ArgvInput
   Symfony\Component\Console\Output\OutputInterface:
     class: Symfony\Component\Console\Output\ConsoleOutput
-    arguments:
-      - '%console.output.verbosity%'
   Cocotte\Console\Style:
     class: Cocotte\Console\CocotteStyle
   Symfony\Component\Console\Application:
@@ -49,7 +43,7 @@ services:
   Cocotte\DigitalOcean\NetworkingConfigurator: ~
   DigitalOceanV2\Adapter\AdapterInterface:
     factory: 'Cocotte\DigitalOcean\DigitalOceanFactory:adapter'
-    arguments: ["%api.adapter.class%"]
+    arguments: ['DigitalOceanV2\Adapter\GuzzleHttpAdapter']
     lazy: true
   DigitalOceanV2\DigitalOceanV2: ~
   DigitalOceanV2\Api\Droplet: ~

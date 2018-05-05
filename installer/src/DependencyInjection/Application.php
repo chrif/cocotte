@@ -5,6 +5,7 @@ namespace Cocotte\DependencyInjection;
 use Symfony\Bridge\ProxyManager\LazyProxy\Instantiator\RuntimeInstantiator;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Console\Application as Console;
+use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
@@ -18,7 +19,12 @@ final class Application
      */
     private $container;
 
-    public function __construct(string $serviceResource)
+    /**
+     * @param string $serviceResource
+     * @param CompilerPassInterface[] $extraPasses
+     * @throws \Exception
+     */
+    public function __construct(string $serviceResource, array $extraPasses = [])
     {
         $container = new ContainerBuilder();
         $container->setProxyInstantiator(new RuntimeInstantiator());
@@ -34,6 +40,10 @@ final class Application
             'event.listener',
             'event.subscriber'
         ));
+
+        foreach ($extraPasses as $pass) {
+            $container->addCompilerPass($pass);
+        }
 
         $container->compile(true);
 
