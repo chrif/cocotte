@@ -61,13 +61,16 @@ final class MachineCreator
         }
 
         $process = new Process(
-            'docker-machine create \
-                --driver digitalocean \
-                --digitalocean-access-token "${DIGITAL_OCEAN_API_TOKEN}" \
-                --engine-opt log-driver="json-file" \
-                --engine-opt log-opt="max-size=1m" \
-                --engine-opt log-opt="max-file=10" \
-                "${MACHINE_NAME}"' // @codeCoverageIgnore
+            <<<'TAG'
+docker-machine create \
+    --driver digitalocean \
+    --digitalocean-access-token "${DIGITAL_OCEAN_API_TOKEN}" \
+    --engine-opt log-driver="json-file" \
+    --engine-opt log-opt="max-size=1m" \
+    --engine-opt log-opt="max-file=10" \
+    "${MACHINE_NAME}"
+TAG
+
         );
 
         $process->setTimeout(300);
