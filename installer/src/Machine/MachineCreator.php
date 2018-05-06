@@ -35,15 +35,22 @@ final class MachineCreator
      */
     private $style;
 
+    /**
+     * @codeCoverageIgnore
+     *
+     * @param ProcessRunner $processRunner
+     * @param MachineState $machineState
+     * @param MachineName $machineName
+     * @param ApiToken $token
+     * @param Style $style
+     */
     public function __construct(
-        // @codeCoverageIgnoreStart
         ProcessRunner $processRunner,
         MachineState $machineState,
         MachineName $machineName,
         ApiToken $token,
         Style $style
     ) {
-        // @codeCoverageIgnoreEnd
         $this->processRunner = $processRunner;
         $this->machineState = $machineState;
         $this->machineName = $machineName;
@@ -60,7 +67,21 @@ final class MachineCreator
             );
         }
 
-        $process = new Process(
+        $process = $this->createCommand();
+
+        $process->setTimeout(300);
+
+        $this->processRunner->mustRun($process, true);
+    }
+
+    /**
+     * @codeCoverageIgnore
+     *
+     * @return Process
+     */
+    private function createCommand(): Process
+    {
+        return new Process(
             <<<'TAG'
 docker-machine create \
     --driver digitalocean \
@@ -70,12 +91,7 @@ docker-machine create \
     --engine-opt log-opt="max-file=10" \
     "${MACHINE_NAME}"
 TAG
-
         );
-
-        $process->setTimeout(300);
-
-        $this->processRunner->mustRun($process, true);
     }
 
 }
