@@ -69,8 +69,7 @@ final class WizardCommandTest extends ApplicationTestCase
         $command .= " --dry-run";
 
         $process = new Process($command);
-        $process->run();
-        self::assertTrue($process->isSuccessful(), $process->getErrorOutput());
+        $process->mustRun();
         self::assertContains(
             "Would have created a Docker machine named 'cocotte' on Digital Ocean.",
             $process->getOutput()

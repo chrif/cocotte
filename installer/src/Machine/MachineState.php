@@ -30,7 +30,7 @@ final class MachineState
     public function isRunning(): bool
     {
         $process = new Process(
-            'docker-machine ls -q --filter="state=running" "${MACHINE_NAME}"'
+            'docker-machine ls -q --filter="state=running" --filter="name=${MACHINE_NAME}"'
         );
         $process->run();
         if ($process->isSuccessful()) {
