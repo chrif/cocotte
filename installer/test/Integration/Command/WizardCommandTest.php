@@ -40,10 +40,11 @@ final class WizardCommandTest extends ApplicationTestCase
         ]);
 
         // run
-        WizardCommandActual::get($this->container())->service()->run(
+        $exitCode = WizardCommandActual::get($this->container())->service()->run(
             InputActual::get($this->container())->service(),
             OutputActual::get($this->container())->service());
 
+        self::assertSame(0, $exitCode);
         $display = OutputActual::get($this->container())->getDisplay();
 
         self::assertSame(

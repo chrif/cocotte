@@ -36,12 +36,14 @@ final class MachineCreator
     private $style;
 
     public function __construct(
+        // @codeCoverageIgnoreStart
         ProcessRunner $processRunner,
         MachineState $machineState,
         MachineName $machineName,
         ApiToken $token,
         Style $style
     ) {
+        // @codeCoverageIgnoreEnd
         $this->processRunner = $processRunner;
         $this->machineState = $machineState;
         $this->machineName = $machineName;
@@ -59,6 +61,7 @@ final class MachineCreator
         }
 
         $process = new Process(
+        // @codeCoverageIgnoreStart
             'docker-machine create \
                 --driver digitalocean \
                 --digitalocean-access-token "${DIGITAL_OCEAN_API_TOKEN}" \
@@ -66,6 +69,7 @@ final class MachineCreator
                 --engine-opt log-opt="max-size=1m" \
                 --engine-opt log-opt="max-file=10" \
                 "${MACHINE_NAME}"'
+        // @codeCoverageIgnoreEnd
         );
 
         $process->setTimeout(300);
