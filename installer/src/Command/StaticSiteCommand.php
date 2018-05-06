@@ -164,8 +164,7 @@ final class StaticSiteCommand extends AbstractCommand implements
 
     protected function doConfigure(): void
     {
-        $this
-            ->setName('static-site')
+        $this->setName('static-site')
             ->addOption(
                 'skip-networking',
                 null,
@@ -216,12 +215,7 @@ final class StaticSiteCommand extends AbstractCommand implements
 
             $this->processRunner->mustRun(new Process('./bin/logs -t', $this->staticSiteCreator->hostAppPath()));
 
-            $this->style->complete(
-                [
-                    "Static site successfully deployed at ".
-                    "<options=bold>https://{$this->staticSiteHostname->toString()}</>",
-                ]
-            );
+            $this->style->complete($this->completeMessage());
         } else {
             $this->style->complete("Deployment has been skipped.");
         }
@@ -266,6 +260,18 @@ TAG;
             "'<options=bold>{$this->sitePath()}</>'\n".
             " and deploy it to Digital Ocean at ".
             "'<options=bold>{$this->staticSiteHostname->toString()}</>'.";
+    }
+
+    /**
+     * @codeCoverageIgnore
+     * @return array
+     */
+    private function completeMessage(): array
+    {
+        return [
+            "Static site successfully deployed at ".
+            "<options=bold>https://{$this->staticSiteHostname->toString()}</>",
+        ];
     }
 
 }

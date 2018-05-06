@@ -80,14 +80,7 @@ final class WizardCommand extends AbstractCommand implements DocumentedCommand
     {
         $input->setInteractive(true);
         $this->style->help(
-            $this->style->optionHelp(
-                "Cocotte Wizard",
-                [
-                    "This wizard helps you build a simple '<info>install</info>' command for Cocotte.",
-                    "It assumes that you own a domain name and can change its name servers.",
-                    "Cocotte documentation: ".$this->style->link('https://github.com/chrif/cocotte'),
-                ]
-            )
+            $this->style->optionHelp("Cocotte Wizard", $this->optionHelpMessage())
         );
         $this->style->pause();
 
@@ -169,5 +162,18 @@ EOF;
     private function example(): string
     {
         return 'docker run -it --rm chrif/cocotte wizard';
+    }
+
+    /**
+     * @codeCoverageIgnore
+     * @return array
+     */
+    private function optionHelpMessage(): array
+    {
+        return [
+            "This wizard helps you build a simple '<info>install</info>' command for Cocotte.",
+            "It assumes that you own a domain name and can change its name servers.",
+            "Cocotte documentation: ".$this->style->link('https://github.com/chrif/cocotte'),
+        ];
     }
 }

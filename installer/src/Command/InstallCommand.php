@@ -166,8 +166,7 @@ final class InstallCommand extends AbstractCommand implements LazyEnvironment, H
 
     protected function doConfigure(): void
     {
-        $this
-            ->setName('install')
+        $this->setName('install')
             ->addOption('dry-run',
                 null,
                 InputOption::VALUE_NONE,
@@ -210,15 +209,7 @@ final class InstallCommand extends AbstractCommand implements LazyEnvironment, H
 
         $this->processRunner->mustRun(new Process('./bin/logs -t', $this->traefikCreator->hostAppPath()));
 
-        $this->style->complete(
-            [
-                "Installation successful.",
-                "You can now:\n".
-                "- visit your Traefik UI at <options=bold>https://{$this->traefikHostname->toString()}</>\n".
-                "- use docker-machine commands (e.g. <options=bold>docker-machine -s machine ssh {$this->machineName}</>)\n".
-                "- deploy a static website on your cloud machine with the <options=bold>static-site</> Cocotte command.",
-            ]
-        );
+        $this->style->complete($this->completeMessage());
     }
 
     private function confirm(): void
@@ -258,6 +249,21 @@ TAG;
     {
         return 'Create a <options=bold>Docker</> machine on <options=bold>Digital Ocean</> and '.
             'install the <options=bold>Traefik</> reverse proxy on it.';
+    }
+
+    /**
+     * @codeCoverageIgnore
+     * @return array
+     */
+    private function completeMessage(): array
+    {
+        return [
+            "Installation successful.",
+            "You can now:\n".
+            "- visit your Traefik UI at <options=bold>https://{$this->traefikHostname->toString()}</>\n".
+            "- use docker-machine commands (e.g. <options=bold>docker-machine -s machine ssh {$this->machineName}</>)\n".
+            "- deploy a static website on your cloud machine with the <options=bold>static-site</> Cocotte command.",
+        ];
     }
 
 }
