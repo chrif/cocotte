@@ -18,7 +18,7 @@ final class MachineState
 
     public function exists(): bool
     {
-        $process = new Process('docker-machine ls -q "${MACHINE_NAME}"');
+        $process = new Process('docker-machine ls -q --filter="name=${MACHINE_NAME}"');
         $process->run();
         if ($process->isSuccessful()) {
             return $this->machineName->toString() === trim($process->getOutput());

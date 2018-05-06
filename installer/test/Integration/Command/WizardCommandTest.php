@@ -44,9 +44,36 @@ final class WizardCommandTest extends ApplicationTestCase
             InputActual::get($this->container())->service(),
             OutputActual::get($this->container())->service());
 
+        $display = OutputActual::get($this->container())->getDisplay();
+
         self::assertSame(
             $this->rightTrimAllLines($this->formatExpectedDisplay()),
-            $this->rightTrimAllLines(OutputActual::get($this->container())->getDisplay())
+            $this->rightTrimAllLines($display)
+        );
+
+        // parse command
+        self::assertSame(1, preg_match('/Run this command:\s+(docker run[^;]+);/', $display, $matches));
+
+        return $matches[1];
+    }
+
+    /**
+     * @depends testExecute
+     * @param string $command
+     */
+    public function testCommand(string $command)
+    {
+        // do not allocate a pseudo-TTY
+        self::assertContains(' -it ', $command);
+        $command = str_replace(' -it ', ' ', $command);
+        $command .= " --dry-run";
+
+        $process = new Process($command);
+        $process->run();
+        self::assertTrue($process->isSuccessful(), $process->getErrorOutput());
+        self::assertContains(
+            "Would have created a Docker machine named 'cocotte' on Digital Ocean.",
+            $process->getOutput()
         );
     }
 
@@ -72,4 +99,5 @@ final class WizardCommandTest extends ApplicationTestCase
     {
         return implode("\n", array_map('rtrim', explode("\n", $string)));
     }
+
 }

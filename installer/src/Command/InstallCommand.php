@@ -26,6 +26,7 @@ use Cocotte\Template\Traefik\TraefikPasswordOptionProvider;
 use Cocotte\Template\Traefik\TraefikUsername;
 use Cocotte\Template\Traefik\TraefikUsernameOptionProvider;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Process\Process;
@@ -145,6 +146,10 @@ final class InstallCommand extends AbstractCommand implements LazyEnvironment, H
     {
         $this
             ->setName('install')
+            ->addOption('dry-run',
+                null,
+                InputOption::VALUE_NONE,
+                'Validate all options but do not proceed with installation.')
             ->setDescription(
                 $description = 'Create a <options=bold>Docker</> machine on <options=bold>Digital Ocean</> and '.
                     'install the <options=bold>Traefik</> reverse proxy on it.')
@@ -165,6 +170,14 @@ final class InstallCommand extends AbstractCommand implements LazyEnvironment, H
 
     protected function doExecute(InputInterface $input, OutputInterface $output)
     {
+        if ($input->getOption('dry-run')) {
+            $this->style->writeln(
+                "Would have created a Docker machine named '{$this->machineName}' on Digital Ocean."
+            );
+
+            return;
+        }
+
         $this->confirm();
         $this->style->writeln("Creating a Docker machine named '{$this->machineName}' on Digital Ocean.");
         $this->machineCreator->create();

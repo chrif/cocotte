@@ -175,12 +175,6 @@ final class StaticSiteCommand extends AbstractCommand implements
     {
         $this->confirm();
 
-        if (!$this->machineState->exists()) {
-            $this->style->warning("Could not find a machine. ".
-                "Did you create a machine with the install command before ? ".
-                "Did you provide the correct machine name ?");
-        }
-
         $skipNetworking = $input->getOption('skip-networking');
         $skipDeploy = $input->getOption('skip-deploy');
 

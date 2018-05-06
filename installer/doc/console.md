@@ -105,6 +105,15 @@ Alphanumeric and some special characters. Must match /^[a-zA-Z0-9_@#%?&*+=!-]+$/
 * Is multiple: no
 * Default: `NULL`
 
+#### `--dry-run`
+
+Validate all options but do not proceed with installation.
+
+* Accept value: no
+* Is value required: no
+* Is multiple: no
+* Default: `false`
+
 ---
 
 static-site

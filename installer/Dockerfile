@@ -3,6 +3,8 @@ FROM chrif/cocotte-base
 # for detection to work in https://github.com/docker/machine/blob/3f20d202a2dad68f3c8d745f99f2439fb79454c9/commands/env.go#L223
 ENV SHELL /bin/sh
 
+RUN mkdir /host
+
 WORKDIR /installer
 COPY ./composer.json ./
 COPY ./composer.lock ./
@@ -19,9 +21,6 @@ COPY ./var ./var
 COPY ./etc/php.ini /etc/php7/conf.d/zzz-php.ini
 RUN composer install
 RUN composer clearcache
-
-RUN curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > /usr/local/bin/cc-test-reporter && \
-	chmod +x /usr/local/bin/cc-test-reporter
 
 # setup executables
 RUN chmod +x /installer/bin/* /installer/vendor/bin/*
