@@ -59,6 +59,17 @@ final class UninstallCommand extends AbstractCommand implements LazyEnvironment,
      */
     private $machineState;
 
+    /**
+     * @codeCoverageIgnore
+     *
+     * @param ProcessRunner $processRunner
+     * @param NetworkingConfigurator $networkingConfigurator
+     * @param TraefikHostname $traefikHostname
+     * @param Style $style
+     * @param MachineName $machineName
+     * @param EventDispatcherInterface $eventDispatcher
+     * @param MachineState $machineState
+     */
     public function __construct(
         ProcessRunner $processRunner,
         NetworkingConfigurator $networkingConfigurator,
@@ -78,6 +89,10 @@ final class UninstallCommand extends AbstractCommand implements LazyEnvironment,
         parent::__construct();
     }
 
+    /**
+     * @codeCoverageIgnore
+     * @return array
+     */
     public function lazyEnvironmentValues(): array
     {
         return [
@@ -88,6 +103,10 @@ final class UninstallCommand extends AbstractCommand implements LazyEnvironment,
         ];
     }
 
+    /**
+     * @codeCoverageIgnore
+     * @return array
+     */
     public function optionProviders(): array
     {
         return [
@@ -110,12 +129,7 @@ final class UninstallCommand extends AbstractCommand implements LazyEnvironment,
             ->setHelp(
                 $this->formatHelp(
                     $description,
-                    'docker run -it --rm \
-    -v "$(pwd)":/host \
-    -v /var/run/docker.sock:/var/run/docker.sock:ro \
-    chrif/cocotte uninstall \
-    --digital-ocean-api-token="xxxx" \
-    --traefik-ui-hostname="traefik.mydomain.com";'
+                    $this->example()
                 )
             );
     }
@@ -143,5 +157,22 @@ final class UninstallCommand extends AbstractCommand implements LazyEnvironment,
         )) {
             throw new \Exception('Cancelled');
         };
+    }
+
+    /**
+     * @codeCoverageIgnore
+     *
+     * @return string
+     */
+    private function example(): string
+    {
+        return <<<'TAG'
+docker run -it --rm \
+    -v "$(pwd)":/host \
+    -v /var/run/docker.sock:/var/run/docker.sock:ro \
+    chrif/cocotte uninstall \
+    --digital-ocean-api-token="xxxx" \
+    --traefik-ui-hostname="traefik.mydomain.com";
+TAG;
     }
 }

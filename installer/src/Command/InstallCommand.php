@@ -87,6 +87,20 @@ final class InstallCommand extends AbstractCommand implements LazyEnvironment, H
      */
     private $machineIp;
 
+    /**
+     * @codeCoverageIgnore
+     * @param MachineCreator $machineCreator
+     * @param TraefikCreator $traefikCreator
+     * @param Style $style
+     * @param MachineName $machineName
+     * @param TraefikHostname $traefikHostname
+     * @param EventDispatcherInterface $eventDispatcher
+     * @param NetworkingConfigurator $networkingConfigurator
+     * @param ProcessRunner $processRunner
+     * @param HostMount $hostMount
+     * @param TraefikDeploymentValidator $traefikDeploymentValidator
+     * @param MachineIp $machineIp
+     */
     public function __construct(
         MachineCreator $machineCreator,
         TraefikCreator $traefikCreator,
@@ -114,6 +128,10 @@ final class InstallCommand extends AbstractCommand implements LazyEnvironment, H
         $this->machineIp = $machineIp;
     }
 
+    /**
+     * @codeCoverageIgnore
+     * @return array
+     */
     public function lazyEnvironmentValues(): array
     {
         return [
@@ -126,6 +144,10 @@ final class InstallCommand extends AbstractCommand implements LazyEnvironment, H
         ];
     }
 
+    /**
+     * @codeCoverageIgnore
+     * @return array
+     */
     public function optionProviders(): array
     {
         return [
@@ -156,14 +178,7 @@ final class InstallCommand extends AbstractCommand implements LazyEnvironment, H
             ->setHelp(
                 $this->formatHelp(
                     $description,
-                    'docker run -it --rm \
-    -v "$(pwd)":/host \
-    -v /var/run/docker.sock:/var/run/docker.sock:ro \
-    chrif/cocotte install \
-    --digital-ocean-api-token="xxxx" \
-    --traefik-ui-hostname="traefik.mydomain.com" \
-    --traefik-ui-password="password" \
-    --traefik-ui-username="username";'
+                    $this->example()
                 )
             );
     }
@@ -218,6 +233,24 @@ final class InstallCommand extends AbstractCommand implements LazyEnvironment, H
         )) {
             throw new \Exception('Cancelled');
         };
+    }
+
+    /**
+     * @codeCoverageIgnore
+     * @return string
+     */
+    private function example(): string
+    {
+        return <<<'TAG'
+docker run -it --rm \
+    -v "$(pwd)":/host \
+    -v /var/run/docker.sock:/var/run/docker.sock:ro \
+    chrif/cocotte install \
+    --digital-ocean-api-token="xxxx" \
+    --traefik-ui-hostname="traefik.mydomain.com" \
+    --traefik-ui-password="password" \
+    --traefik-ui-username="username";
+TAG;
     }
 
 }

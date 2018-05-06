@@ -34,6 +34,13 @@ final class NetworkingCommand extends AbstractCommand implements LazyEnvironment
      */
     private $style;
 
+    /**
+     * @codeCoverageIgnore
+     * @param NetworkingConfigurator $networkingConfigurator
+     * @param EventDispatcherInterface $eventDispatcher
+     * @param Style $style
+     * @param MachineIp $machineIp
+     */
     public function __construct(
         NetworkingConfigurator $networkingConfigurator,
         EventDispatcherInterface $eventDispatcher,
@@ -72,8 +79,7 @@ final class NetworkingCommand extends AbstractCommand implements LazyEnvironment
 
     protected function doConfigure(): void
     {
-        $this
-            ->setName('networking')
+        $this->setName('networking')
             ->setDescription('Configure networking of Digital Ocean')
             ->addArgument('hostnames', InputArgument::REQUIRED, 'Comma-separated list of hostnames')
             ->addOption('ip',

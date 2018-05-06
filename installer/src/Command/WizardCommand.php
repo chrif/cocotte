@@ -37,6 +37,13 @@ final class WizardCommand extends AbstractCommand implements DocumentedCommand
      */
     private $operator;
 
+    /**
+     * @codeCoverageIgnore
+     * @param Style $style
+     * @param EventDispatcherInterface $eventDispatcher
+     * @param OptionProviderRegistry $optionProviderRegistry
+     * @param InteractionOperator $operator
+     */
     public function __construct(
         Style $style,
         EventDispatcherInterface $eventDispatcher,
@@ -64,12 +71,10 @@ final class WizardCommand extends AbstractCommand implements DocumentedCommand
     {
         $this
             ->setName('wizard')
-            ->setDescription(
-                $description = /** @lang text */
-                    "Interactively build a simple '<info>install</info>' command for <options=bold>Cocotte</>.")
+            ->setDescription($this->description())
             ->setHelp(
                 $this->formatHelp(
-                    $description,
+                    $this->description(),
                     'docker run -it --rm chrif/cocotte wizard'
                 )
             );
@@ -95,18 +100,60 @@ final class WizardCommand extends AbstractCommand implements DocumentedCommand
         $traefikUsername = $this->ask(TraefikUsername::OPTION_NAME);
         $traefikPassword = $this->ask(TraefikPassword::OPTION_NAME);
 
-        $this->style->complete([
+        $this->style->complete($this->completeMessage());
+        $this->style->pause();
+
+        $this->style->writeln(
+            $this->command($token, $traefikHostname, $traefikPassword, $traefikUsername)
+        );
+    }
+
+    private function ask(string $name): string
+    {
+        return $this->operator->ask($this->optionProviderRegistry->providerByOptionName($name));
+    }
+
+    /**
+     * @codeCoverageIgnore
+     * @return array
+     */
+    private function completeMessage(): array
+    {
+        return [
             "A command will be printed to the terminal.",
             "Run the command from a location on your computer where you usually put new project code.",
             "Afterwards, two directories will be created:\n- one named 'machine' that you must leave there ".
             "and never edit (it is used by Docker Machine to login to your cloud machine),\n- and one named 'traefik' ".
             "that you can edit all you want and which is ready for Git version control: this your new Traefik project.",
             "Thank you for trying Cocotte!",
-        ]);
-        $this->style->pause();
+        ];
+    }
 
-        $this->style->writeln(
-            <<<EOF
+    /**
+     * @codeCoverageIgnore
+     * @return string
+     */
+    private function description(): string
+    {
+        return $description = /** @lang text */
+            "Interactively build a simple '<info>install</info>' command for <options=bold>Cocotte</>.";
+    }
+
+    /**
+     * @codeCoverageIgnore
+     * @param $token
+     * @param $traefikHostname
+     * @param $traefikPassword
+     * @param $traefikUsername
+     * @return string
+     */
+    private function command(
+        string $token,
+        string $traefikHostname,
+        string $traefikPassword,
+        string $traefikUsername
+    ): string {
+        return <<<EOF
 <options=bold,underscore>Run this command:</>
 docker run -it --rm \
     -v "$(pwd)":/host \
@@ -117,12 +164,6 @@ docker run -it --rm \
     --traefik-ui-password="$traefikPassword" \
     --traefik-ui-username="$traefikUsername";
 
-EOF
-        );
-    }
-
-    private function ask(string $name): string
-    {
-        return $this->operator->ask($this->optionProviderRegistry->providerByOptionName($name));
+EOF;
     }
 }

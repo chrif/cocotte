@@ -87,6 +87,20 @@ final class StaticSiteCommand extends AbstractCommand implements
      */
     private $machineIp;
 
+    /**
+     * @codeCoverageIgnore
+     * @param StaticSiteCreator $staticSiteCreator
+     * @param NetworkingConfigurator $networkingConfigurator
+     * @param StaticSiteHostname $staticSiteHostname
+     * @param Style $style
+     * @param ProcessRunner $processRunner
+     * @param EventDispatcherInterface $eventDispatcher
+     * @param MachineState $machineState
+     * @param StaticSiteNamespace $staticSiteNamespace
+     * @param HostMount $hostMount
+     * @param StaticSiteDeploymentValidator $staticSiteDeploymentValidator
+     * @param MachineIp $machineIp
+     */
     public function __construct(
         StaticSiteCreator $staticSiteCreator,
         NetworkingConfigurator $networkingConfigurator,
@@ -114,6 +128,10 @@ final class StaticSiteCommand extends AbstractCommand implements
         $this->machineIp = $machineIp;
     }
 
+    /**
+     * @codeCoverageIgnore
+     * @return array
+     */
     public function lazyEnvironmentValues(): array
     {
         return [
@@ -125,6 +143,10 @@ final class StaticSiteCommand extends AbstractCommand implements
         ];
     }
 
+    /**
+     * @codeCoverageIgnore
+     * @return array
+     */
     public function optionProviders(): array
     {
         return [
@@ -160,13 +182,7 @@ final class StaticSiteCommand extends AbstractCommand implements
             ->setHelp(
                 $this->formatHelp(
                     $description,
-                    'docker run -it --rm \
-    -v "$(pwd)":/host \
-    -v /var/run/docker.sock:/var/run/docker.sock:ro \
-    chrif/cocotte static-site \
-    --digital-ocean-api-token="xxxx" \
-    --namespace="static-site" \
-    --hostname="static-site.mydomain.com";'
+                    $this->example()
                 )
             );
     }
@@ -229,6 +245,23 @@ final class StaticSiteCommand extends AbstractCommand implements
         )) {
             throw new \Exception('Cancelled');
         };
+    }
+
+    /**
+     * @codeCoverageIgnore
+     * @return string
+     */
+    private function example(): string
+    {
+        return <<<'TAG'
+docker run -it --rm \
+    -v "$(pwd)":/host \
+    -v /var/run/docker.sock:/var/run/docker.sock:ro \
+    chrif/cocotte static-site \
+    --digital-ocean-api-token="xxxx" \
+    --namespace="static-site" \
+    --hostname="static-site.mydomain.com";
+TAG;
     }
 
 }
