@@ -4,7 +4,7 @@
     "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
     "This file is @generated automatically"
   ],
-  "content-hash": "59bba7d27cc52d43ac8a9fc31f257302",
+    "content-hash": "4903ac2788c0e318f8bb3b95c2f8dbd6",
   "packages": [
     {
       "name": "beberlei/assert",
@@ -293,16 +293,16 @@
     },
     {
       "name": "io-developer/php-whois",
-      "version": "2.3.0",
+        "version": "dev-update-rocks-host",
       "source": {
         "type": "git",
-        "url": "https://github.com/io-developer/php-whois.git",
-        "reference": "b1a12ae9dff569feb43abbee1165337ff790c651"
+          "url": "https://github.com/chrif/php-whois.git",
+          "reference": "5caa5ff8bb67fe21cb3165f8b454b7452a4ccf92"
       },
       "dist": {
         "type": "zip",
-        "url": "https://api.github.com/repos/io-developer/php-whois/zipball/b1a12ae9dff569feb43abbee1165337ff790c651",
-        "reference": "b1a12ae9dff569feb43abbee1165337ff790c651",
+          "url": "https://api.github.com/repos/chrif/php-whois/zipball/5caa5ff8bb67fe21cb3165f8b454b7452a4ccf92",
+          "reference": "5caa5ff8bb67fe21cb3165f8b454b7452a4ccf92",
         "shasum": ""
       },
       "require": {
@@ -318,7 +318,18 @@
           "Iodev\\": "src/Iodev/"
         }
       },
-      "notification-url": "https://packagist.org/downloads/",
+        "autoload-dev": {
+            "psr-4": {
+                "": [
+                    "tests/"
+                ]
+            }
+        },
+        "scripts": {
+            "test": [
+                "phpunit --bootstrap vendor/autoload.php tests"
+            ]
+        },
       "license": [
         "MIT"
       ],
@@ -349,7 +360,10 @@
         "unicode",
         "whois"
       ],
-      "time": "2017-11-26T20:41:56+00:00"
+        "support": {
+            "source": "https://github.com/chrif/php-whois/tree/update-rocks-host"
+        },
+        "time": "2018-05-06T17:13:04+00:00"
     },
     {
       "name": "ocramius/package-versions",
@@ -2785,7 +2799,9 @@
   ],
   "aliases": [],
   "minimum-stability": "stable",
-  "stability-flags": [],
+    "stability-flags": {
+        "io-developer/php-whois": 20
+    },
   "prefer-stable": false,
   "prefer-lowest": false,
   "platform": [],
