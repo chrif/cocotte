@@ -172,14 +172,9 @@ final class InstallCommand extends AbstractCommand implements LazyEnvironment, H
                 null,
                 InputOption::VALUE_NONE,
                 'Validate all options but do not proceed with installation.')
-            ->setDescription(
-                $description = 'Create a <options=bold>Docker</> machine on <options=bold>Digital Ocean</> and '.
-                    'install the <options=bold>Traefik</> reverse proxy on it.')
+            ->setDescription($this->description())
             ->setHelp(
-                $this->formatHelp(
-                    $description,
-                    $this->example()
-                )
+                $this->formatHelp($this->description(), $this->example())
             );
     }
 
@@ -215,13 +210,15 @@ final class InstallCommand extends AbstractCommand implements LazyEnvironment, H
 
         $this->processRunner->mustRun(new Process('./bin/logs -t', $this->traefikCreator->hostAppPath()));
 
-        $this->style->complete([
-            "Installation successful.",
-            "You can now:\n".
-            "- visit your Traefik UI at <options=bold>https://{$this->traefikHostname->toString()}</>\n".
-            "- use docker-machine commands (e.g. <options=bold>docker-machine -s machine ssh {$this->machineName}</>)\n".
-            "- deploy a static website on your cloud machine with the <options=bold>static-site</> Cocotte command.",
-        ]);
+        $this->style->complete(
+            [
+                "Installation successful.",
+                "You can now:\n".
+                "- visit your Traefik UI at <options=bold>https://{$this->traefikHostname->toString()}</>\n".
+                "- use docker-machine commands (e.g. <options=bold>docker-machine -s machine ssh {$this->machineName}</>)\n".
+                "- deploy a static website on your cloud machine with the <options=bold>static-site</> Cocotte command.",
+            ]
+        );
     }
 
     private function confirm(): void
@@ -251,6 +248,16 @@ docker run -it --rm \
     --traefik-ui-password="password" \
     --traefik-ui-username="username";
 TAG;
+    }
+
+    /**
+     * @codeCoverageIgnore
+     * @return string
+     */
+    private function description(): string
+    {
+        return 'Create a <options=bold>Docker</> machine on <options=bold>Digital Ocean</> and '.
+            'install the <options=bold>Traefik</> reverse proxy on it.';
     }
 
 }

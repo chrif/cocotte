@@ -170,20 +170,15 @@ final class StaticSiteCommand extends AbstractCommand implements
                 'skip-networking',
                 null,
                 InputOption::VALUE_NONE,
-                'Do not configure networking. Cannot be true if skip-deploy is true.'
-            )
+                'Do not configure networking. Cannot be true if skip-deploy is true.')
             ->addOption(
                 'skip-deploy',
                 null,
                 InputOption::VALUE_NONE,
-                'Do not deploy to prod after creation.'
-            )
+                'Do not deploy to prod after creation.')
             ->setDescription($description = 'Create a static website and deploy it to your Docker Machine.')
             ->setHelp(
-                $this->formatHelp(
-                    $description,
-                    $this->example()
-                )
+                $this->formatHelp($description, $this->example())
             );
     }
 
@@ -221,10 +216,12 @@ final class StaticSiteCommand extends AbstractCommand implements
 
             $this->processRunner->mustRun(new Process('./bin/logs -t', $this->staticSiteCreator->hostAppPath()));
 
-            $this->style->complete([
-                "Static site successfully deployed at ".
-                "<options=bold>https://{$this->staticSiteHostname->toString()}</>",
-            ]);
+            $this->style->complete(
+                [
+                    "Static site successfully deployed at ".
+                    "<options=bold>https://{$this->staticSiteHostname->toString()}</>",
+                ]
+            );
         } else {
             $this->style->complete("Deployment has been skipped.");
         }
@@ -237,12 +234,7 @@ final class StaticSiteCommand extends AbstractCommand implements
 
     private function confirm(): void
     {
-        if (!$this->style->confirm(
-            "You are about to create a static website in ".
-            "'<options=bold>{$this->sitePath()}</>'\n".
-            " and deploy it to Digital Ocean at ".
-            "'<options=bold>{$this->staticSiteHostname->toString()}</>'."
-        )) {
+        if (!$this->style->confirm($this->confirmMessage())) {
             throw new \Exception('Cancelled');
         };
     }
@@ -262,6 +254,18 @@ docker run -it --rm \
     --namespace="static-site" \
     --hostname="static-site.mydomain.com";
 TAG;
+    }
+
+    /**
+     * @codeCoverageIgnore
+     * @return string
+     */
+    private function confirmMessage(): string
+    {
+        return "You are about to create a static website in ".
+            "'<options=bold>{$this->sitePath()}</>'\n".
+            " and deploy it to Digital Ocean at ".
+            "'<options=bold>{$this->staticSiteHostname->toString()}</>'.";
     }
 
 }

@@ -69,14 +69,10 @@ final class WizardCommand extends AbstractCommand implements DocumentedCommand
 
     protected function doConfigure(): void
     {
-        $this
-            ->setName('wizard')
+        $this->setName('wizard')
             ->setDescription($this->description())
             ->setHelp(
-                $this->formatHelp(
-                    $this->description(),
-                    'docker run -it --rm chrif/cocotte wizard'
-                )
+                $this->formatHelp($this->description(), $this->example())
             );
     }
 
@@ -165,5 +161,13 @@ docker run -it --rm \
     --traefik-ui-username="$traefikUsername";
 
 EOF;
+    }
+
+    /**
+     * @return string
+     */
+    private function example(): string
+    {
+        return 'docker run -it --rm chrif/cocotte wizard';
     }
 }

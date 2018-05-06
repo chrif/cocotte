@@ -53,6 +53,10 @@ final class NetworkingCommand extends AbstractCommand implements LazyEnvironment
         parent::__construct();
     }
 
+    /**
+     * @codeCoverageIgnore
+     * @return array
+     */
     public function lazyEnvironmentValues(): array
     {
         return [
@@ -60,6 +64,10 @@ final class NetworkingCommand extends AbstractCommand implements LazyEnvironment
         ];
     }
 
+    /**
+     * @codeCoverageIgnore
+     * @return array
+     */
     public function optionProviders(): array
     {
         return [

@@ -123,14 +123,10 @@ final class UninstallCommand extends AbstractCommand implements LazyEnvironment,
 
     protected function doConfigure(): void
     {
-        $this
-            ->setName('uninstall')
-            ->setDescription($description = 'Destroy the Docker machine on Digital Ocean and remove the Traefik subdomain.')
+        $this->setName('uninstall')
+            ->setDescription($this->description())
             ->setHelp(
-                $this->formatHelp(
-                    $description,
-                    $this->example()
-                )
+                $this->formatHelp($this->description(), $this->example())
             );
     }
 
@@ -174,5 +170,13 @@ docker run -it --rm \
     --digital-ocean-api-token="xxxx" \
     --traefik-ui-hostname="traefik.mydomain.com";
 TAG;
+    }
+
+    /**
+     * @return string
+     */
+    private function description(): string
+    {
+        return 'Destroy the Docker machine on Digital Ocean and remove the Traefik subdomain.';
     }
 }
