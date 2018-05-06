@@ -60,8 +60,8 @@ final class MachineCreator
             );
         }
 
-        $process = new Process(
         // @codeCoverageIgnoreStart
+        $process = new Process(
             'docker-machine create \
                 --driver digitalocean \
                 --digitalocean-access-token "${DIGITAL_OCEAN_API_TOKEN}" \
@@ -69,8 +69,8 @@ final class MachineCreator
                 --engine-opt log-opt="max-size=1m" \
                 --engine-opt log-opt="max-file=10" \
                 "${MACHINE_NAME}"'
-        // @codeCoverageIgnoreEnd
         );
+        // @codeCoverageIgnoreEnd
 
         $process->setTimeout(300);
 
