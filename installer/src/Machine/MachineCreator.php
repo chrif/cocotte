@@ -60,7 +60,6 @@ final class MachineCreator
             );
         }
 
-        // @codeCoverageIgnoreStart
         $process = new Process(
             'docker-machine create \
                 --driver digitalocean \
@@ -68,9 +67,8 @@ final class MachineCreator
                 --engine-opt log-driver="json-file" \
                 --engine-opt log-opt="max-size=1m" \
                 --engine-opt log-opt="max-file=10" \
-                "${MACHINE_NAME}"'
+                "${MACHINE_NAME}"' // @codeCoverageIgnore
         );
-        // @codeCoverageIgnoreEnd
 
         $process->setTimeout(300);
 
