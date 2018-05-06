@@ -67,7 +67,7 @@ final class MachineCreator
             );
         }
 
-        $process = $this->createCommand();
+        $process = $this->createProcess();
 
         $process->setTimeout(300);
 
@@ -79,7 +79,7 @@ final class MachineCreator
      *
      * @return Process
      */
-    private function createCommand(): Process
+    private function createProcess(): Process
     {
         return new Process(
             <<<'TAG'
