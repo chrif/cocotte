@@ -3,11 +3,12 @@
 namespace Cocotte\DigitalOcean;
 
 use Assert\Assertion;
+use Cocotte\Environment\FromEnvLazyFactory;
 use Cocotte\Environment\LazyEnvironmentValue;
 use Cocotte\Environment\LazyExportableOption;
 use Cocotte\Shell\Env;
 
-class ApiToken implements LazyExportableOption
+class ApiToken implements LazyExportableOption, FromEnvLazyFactory
 {
     const DIGITAL_OCEAN_API_TOKEN = 'DIGITAL_OCEAN_API_TOKEN';
     const OPTION_NAME = 'digital-ocean-api-token';
@@ -24,16 +25,17 @@ class ApiToken implements LazyExportableOption
     }
 
     /**
+     * @param Env $env
      * @return LazyEnvironmentValue|ApiToken
      */
-    public static function fromEnv(): LazyEnvironmentValue
+    public static function fromEnv(Env $env): LazyEnvironmentValue
     {
-        return new self(Env::get(self::DIGITAL_OCEAN_API_TOKEN, ""));
+        return new self($env->get(self::DIGITAL_OCEAN_API_TOKEN, ""));
     }
 
-    public static function toEnv(string $value): void
+    public static function toEnv(string $value, Env $env): void
     {
-        Env::put(self::DIGITAL_OCEAN_API_TOKEN, $value);
+        $env->put(self::DIGITAL_OCEAN_API_TOKEN, $value);
     }
 
     public static function optionName(): string

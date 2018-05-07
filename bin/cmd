@@ -2,18 +2,17 @@
 
 set -eu
 
-XDEBUG_INI=$PWD/installer/etc/xdebug.ini
-
 if [ "$1" = 'test' ]; then
     set -a
-    . ../.env
+    . .env
     set +a
     shift
-
-    XDEBUG_INI=$PWD/../installer/etc/xdebug.ini
 fi
 
-docker run --rm \
+XDEBUG_INI=$PWD/installer/etc/xdebug.ini
+cd host
+
+docker run -it --rm \
     -e ACME_ENABLED="${ACME_ENABLED:-true}" \
     -e DIGITAL_OCEAN_API_TOKEN="${DIGITAL_OCEAN_API_TOKEN}" \
     -e MACHINE_NAME="${MACHINE_NAME}" \
@@ -24,5 +23,6 @@ docker run --rm \
     -e TRAEFIK_UI_USERNAME="${TRAEFIK_UI_USERNAME}" \
     -v "$(pwd)":/host \
     -v ${XDEBUG_INI}:/etc/php7/conf.d/xdebug.ini:ro \
+    -v /var/run/docker.sock:/var/run/docker.sock:ro \
     chrif/cocotte \
     "$@"

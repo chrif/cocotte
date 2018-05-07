@@ -59,6 +59,17 @@ final class UninstallCommand extends AbstractCommand implements LazyEnvironment,
      */
     private $machineState;
 
+    /**
+     * @codeCoverageIgnore
+     *
+     * @param ProcessRunner $processRunner
+     * @param NetworkingConfigurator $networkingConfigurator
+     * @param TraefikHostname $traefikHostname
+     * @param Style $style
+     * @param MachineName $machineName
+     * @param EventDispatcherInterface $eventDispatcher
+     * @param MachineState $machineState
+     */
     public function __construct(
         ProcessRunner $processRunner,
         NetworkingConfigurator $networkingConfigurator,
@@ -78,6 +89,10 @@ final class UninstallCommand extends AbstractCommand implements LazyEnvironment,
         parent::__construct();
     }
 
+    /**
+     * @codeCoverageIgnore
+     * @return array
+     */
     public function lazyEnvironmentValues(): array
     {
         return [
@@ -88,6 +103,10 @@ final class UninstallCommand extends AbstractCommand implements LazyEnvironment,
         ];
     }
 
+    /**
+     * @codeCoverageIgnore
+     * @return array
+     */
     public function optionProviders(): array
     {
         return [
@@ -104,26 +123,19 @@ final class UninstallCommand extends AbstractCommand implements LazyEnvironment,
 
     protected function doConfigure(): void
     {
-        $this
-            ->setName('uninstall')
-            ->setDescription($description = 'Destroy the Docker machine on Digital Ocean and remove the Traefik subdomain.')
+        $this->setName('uninstall')
+            ->setDescription($this->description())
             ->setHelp(
-                $this->formatHelp(
-                    $description,
-                    'docker run -it --rm \
-    -v "$(pwd)":/host \
-    -v /var/run/docker.sock:/var/run/docker.sock:ro \
-    chrif/cocotte uninstall \
-    --digital-ocean-api-token="xxxx" \
-    --traefik-ui-hostname="traefik.mydomain.com";'
-                )
+                $this->formatHelp($this->description(), $this->example())
             );
     }
 
     protected function doExecute(InputInterface $input, OutputInterface $output)
     {
         $this->confirm();
-        $this->networkingConfigurator->configure($this->traefikHostname->toHostnameCollection(), true);
+        $this->networkingConfigurator->remove(
+            $this->traefikHostname->toHostnameCollection()
+        );
         if (!$this->machineState->exists()) {
             $this->style->verbose("Machine '{$this->machineName->toString()}' did not exist");
         } else {
@@ -141,5 +153,30 @@ final class UninstallCommand extends AbstractCommand implements LazyEnvironment,
         )) {
             throw new \Exception('Cancelled');
         };
+    }
+
+    /**
+     * @codeCoverageIgnore
+     *
+     * @return string
+     */
+    private function example(): string
+    {
+        return <<<'TAG'
+docker run -it --rm \
+    -v "$(pwd)":/host \
+    -v /var/run/docker.sock:/var/run/docker.sock:ro \
+    chrif/cocotte uninstall \
+    --digital-ocean-api-token="xxxx" \
+    --traefik-ui-hostname="traefik.mydomain.com";
+TAG;
+    }
+
+    /**
+     * @return string
+     */
+    private function description(): string
+    {
+        return 'Destroy the Docker machine on Digital Ocean and remove the Traefik subdomain.';
     }
 }

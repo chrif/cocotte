@@ -3,6 +3,8 @@ FROM chrif/cocotte-base
 # for detection to work in https://github.com/docker/machine/blob/3f20d202a2dad68f3c8d745f99f2439fb79454c9/commands/env.go#L223
 ENV SHELL /bin/sh
 
+RUN mkdir /host
+
 WORKDIR /installer
 COPY ./composer.json ./
 COPY ./composer.lock ./
@@ -10,6 +12,7 @@ COPY ./composer.lock ./
 RUN composer install --no-scripts --no-autoloader
 COPY ./bin ./bin
 COPY ./config ./config
+COPY ./doc ./doc
 COPY ./phpunit.xml.dist ./
 COPY ./src ./src
 COPY ./template ./template

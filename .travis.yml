@@ -23,37 +23,24 @@ before_install:
   - sudo mv docker-compose /usr/local/bin
 
 install:
-  - chmod +x bin/*
+  - chmod +x bin/* ./.travis/*
   - docker pull chrif/cocotte || true # reuse layers if possible
   - docker-compose build cocotte
   - docker images | grep chrif/cocotte
 
-before_script:
-  # install code climate https://github.com/codeclimate/test-reporter
-  - if [ "$TRAVIS_PULL_REQUEST" = false ]; then sudo ln -s $PWD/installer /installer && sudo chown travis:travis /installer; fi
-  - if [ "$TRAVIS_PULL_REQUEST" = false ]; then curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter; fi
-  - if [ "$TRAVIS_PULL_REQUEST" = false ]; then chmod +x ./cc-test-reporter; fi
-  - if [ "$TRAVIS_PULL_REQUEST" = false ]; then ./cc-test-reporter before-build; fi
-  - if [ "$TRAVIS_PULL_REQUEST" = false ]; then wget https://scrutinizer-ci.com/ocular.phar; fi
-
 script:
   # tests
-  - ./bin/cmd phpunit --coverage-clover /host/build/logs/clover.xml
-
-  # the install and apps commands
-  - ./bin/install -n -vvv
-  - ./bin/static-site -n -vvv
+  - ./bin/cmd phpunit --testsuite=unit --coverage-clover /host/coverage/unit.xml
+  - ./bin/cmd phpunit --testsuite=integration --coverage-clover /host/coverage/integration.xml
+  - ./bin/cmd phpunit --testsuite=system --coverage-clover /host/coverage/system.xml
 
   # test local deployment
   - ./.travis/deploy-dev
 
-  # cleanup
-  - if [ "${KEEP_MACHINE_AFTER:-false}" = false ]; then ./bin/cmd console networking -n -vvv --remove ${STATIC_SITE_HOSTNAME}; else true; fi
-  - if [ "${KEEP_MACHINE_AFTER:-false}" = false ]; then ./bin/uninstall -n -vvv; else echo "Machine not removed."; fi
-
 after_success:
-  - if [ "$TRAVIS_PULL_REQUEST" = false ]; then ./cc-test-reporter after-build --coverage-input-type=clover --exit-code=$TRAVIS_TEST_RESULT; fi
-  - if [ "$TRAVIS_PULL_REQUEST" = false ]; then php ocular.phar code-coverage:upload --format=php-clover build/logs/clover.xml; fi
+  - bash <(curl -s https://codecov.io/bash) -f host/coverage/unit.xml -F unit
+  - bash <(curl -s https://codecov.io/bash) -f host/coverage/integration.xml -F integration
+  - bash <(curl -s https://codecov.io/bash) -f host/coverage/system.xml -F system
 
 deploy:
   # push image to docker hub
@@ -83,10 +70,6 @@ deploy:
 
 env:
   global:
-    # code climate vars
-    # CC_TEST_REPORTER_ID (set in in repo settings)
-    - GIT_COMMITTED_AT=$(if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then git log -1 --pretty=format:%ct; else git log -1 --skip 1 --pretty=format:%ct; fi)
-
     # DIGITAL_OCEAN_API_TOKEN (set in in repo settings)
     - COCOTTE_VERSION=${TRAVIS_TAG}
     - GIT_COMMIT_ID=${TRAVIS_COMMIT}

@@ -3,7 +3,7 @@
 namespace Cocotte\DigitalOcean;
 
 use Cocotte\Console\Style;
-use Cocotte\Machine\MachineIp;
+use Darsyn\IP\IP;
 
 final class NetworkingConfigurator
 {
@@ -18,69 +18,71 @@ final class NetworkingConfigurator
     private $domain;
 
     /**
-     * @var MachineIp
-     */
-    private $machineIp;
-
-    /**
      * @var Style
      */
     private $style;
 
-    public function __construct(DomainRecord $domainRecord, Domain $domain, MachineIp $machineIp, Style $style)
+    public function __construct(DomainRecord $domainRecord, Domain $domain, Style $style)
     {
         $this->domainRecord = $domainRecord;
         $this->domain = $domain;
-        $this->machineIp = $machineIp;
         $this->style = $style;
     }
 
     /**
      * @param HostnameCollection|Hostname[] $hostnames
-     * @param bool $remove
+     * @param IP $ip
      */
-    public function configure(HostnameCollection $hostnames, $remove = false)
+    public function configure(HostnameCollection $hostnames, IP $ip)
     {
         $this->style->veryVerbose('Configuring networking for all the hostnames supplied: '.$hostnames->toString());
         foreach ($hostnames as $host) {
             $this->style->veryVerbose('Configuring '.$host);
-            if ($remove) {
-                $this->removeDomainRecord($host);
-            } else {
-                $this->configureDomain($host);
-            }
+            $this->configureDomain($host, $ip);
         }
     }
 
-    private function configureDomain(Hostname $hostname): void
+    /**
+     * @param HostnameCollection|Hostname[] $hostnames
+     */
+    public function remove(HostnameCollection $hostnames)
+    {
+        $this->style->veryVerbose('Removing networking for all the hostnames supplied: '.$hostnames->toString());
+        foreach ($hostnames as $host) {
+            $this->style->veryVerbose('Removing '.$host);
+            $this->removeDomainRecord($host);
+        }
+    }
+
+    private function configureDomain(Hostname $hostname, IP $ip): void
     {
         if (!$this->domain->exists($hostname)) {
             $this->style->verbose(
                 "Domain '{$hostname->toRoot()}' does not exist. Creating it and adding ".
-                "{$hostname->toRoot()} with ip ".$this->machineIp->toString()
+                "{$hostname->toRoot()} with ip {$ip->getShortAddress()}"
             );
-            $this->domain->create($hostname);
+            $this->domain->create($hostname, $ip);
         }
 
-        $this->configureDomainRecord($hostname);
+        $this->configureDomainRecord($hostname, $ip);
     }
 
-    private function configureDomainRecord(Hostname $hostname): void
+    private function configureDomainRecord(Hostname $hostname, IP $ip): void
     {
         if ($this->domainRecord->exists($hostname)) {
-            if (!$this->domainRecord->isUpToDate($hostname)) {
+            if (!$this->domainRecord->isUpToDate($hostname, $ip)) {
                 $this->style->verbose(
-                    "Domain record '{$hostname}' exists. Updating its ip to ".$this->machineIp->toString()
+                    "Domain record '{$hostname}' exists. Updating its ip to {$ip->getShortAddress()}"
                 );
-                $this->domainRecord->update($hostname);
+                $this->domainRecord->update($hostname, $ip);
             } else {
                 $this->style->verbose("Domain record '{$hostname}' exists and its ip is up-to-date.");
             }
         } else {
             $this->style->verbose(
-                "Domain record '{$hostname}' does not exist. Creating it with ip ".$this->machineIp->toString()
+                "Domain record '{$hostname}' does not exist. Creating it with ip {$ip->getShortAddress()}"
             );
-            $this->domainRecord->create($hostname);
+            $this->domainRecord->create($hostname, $ip);
         }
     }
 

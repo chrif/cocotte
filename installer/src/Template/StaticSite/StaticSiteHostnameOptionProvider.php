@@ -7,7 +7,7 @@ use Cocotte\Console\Style;
 use Cocotte\Console\StyledInputOption;
 use Cocotte\DigitalOcean\DnsValidator;
 use Cocotte\DigitalOcean\Hostname;
-use Cocotte\Shell\Env;
+use Cocotte\Environment\EnvironmentState;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Question\Question;
 
@@ -28,14 +28,14 @@ class StaticSiteHostnameOptionProvider implements OptionProvider
         $this->dnsValidator = $dnsValidator;
     }
 
-    public function option(): InputOption
+    public function option(EnvironmentState $environmentState): InputOption
     {
         return new StyledInputOption(
-            StaticSiteHostname::OPTION_NAME,
+            $this->optionName(),
             null,
             InputOption::VALUE_REQUIRED,
             $this->helpMessage(),
-            Env::get(StaticSiteHostname::STATIC_SITE_HOSTNAME)
+            $environmentState->defaultValue(StaticSiteHostname::STATIC_SITE_HOSTNAME)
         );
     }
 

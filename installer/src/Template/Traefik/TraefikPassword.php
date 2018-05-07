@@ -3,11 +3,12 @@
 namespace Cocotte\Template\Traefik;
 
 use Assert\Assertion;
+use Cocotte\Environment\FromEnvLazyFactory;
 use Cocotte\Environment\LazyEnvironmentValue;
 use Cocotte\Environment\LazyExportableOption;
 use Cocotte\Shell\Env;
 
-class TraefikPassword implements LazyExportableOption
+class TraefikPassword implements LazyExportableOption, FromEnvLazyFactory
 {
     const TRAEFIK_UI_PASSWORD = 'TRAEFIK_UI_PASSWORD';
     const OPTION_NAME = 'traefik-ui-password';
@@ -34,16 +35,17 @@ class TraefikPassword implements LazyExportableOption
     }
 
     /**
+     * @param Env $env
      * @return LazyEnvironmentValue|self
      */
-    public static function fromEnv(): LazyEnvironmentValue
+    public static function fromEnv(Env $env): LazyEnvironmentValue
     {
-        return new self(Env::get(self::TRAEFIK_UI_PASSWORD, ""));
+        return new self($env->get(self::TRAEFIK_UI_PASSWORD, ""));
     }
 
-    public static function toEnv(string $value): void
+    public static function toEnv(string $value, Env $env): void
     {
-        Env::put(self::TRAEFIK_UI_PASSWORD, $value);
+        $env->put(self::TRAEFIK_UI_PASSWORD, $value);
     }
 
     public static function optionName(): string

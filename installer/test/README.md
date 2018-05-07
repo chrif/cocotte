@@ -1,0 +1,1 @@
+All test classes are named exactly after the name of the class they test plus the _Test_ suffix of course. This allows quick navigation between source and test classes in PHPStorm.

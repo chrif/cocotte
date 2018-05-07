@@ -3,12 +3,14 @@
 namespace Cocotte\Template\Traefik;
 
 use Assert\Assertion;
+use Cocotte\Environment\FromEnvLazyFactory;
 use Cocotte\Environment\LazyEnvironmentValue;
 use Cocotte\Environment\LazyExportableOption;
 use Cocotte\Shell\Env;
 
-class TraefikUsername implements LazyExportableOption
+class TraefikUsername implements LazyExportableOption, FromEnvLazyFactory
 {
+    const SUGGESTED_VALUE = 'admin';
     const TRAEFIK_UI_USERNAME = 'TRAEFIK_UI_USERNAME';
     const OPTION_NAME = 'traefik-ui-username';
     const REGEX = '/^[a-zA-Z0-9]+$/';
@@ -34,16 +36,17 @@ class TraefikUsername implements LazyExportableOption
     }
 
     /**
+     * @param Env $env
      * @return LazyEnvironmentValue|self
      */
-    public static function fromEnv(): LazyEnvironmentValue
+    public static function fromEnv(Env $env): LazyEnvironmentValue
     {
-        return new self(Env::get(self::TRAEFIK_UI_USERNAME, ""));
+        return new self($env->get(self::TRAEFIK_UI_USERNAME, ""));
     }
 
-    public static function toEnv(string $value): void
+    public static function toEnv(string $value, Env $env): void
     {
-        Env::put(self::TRAEFIK_UI_USERNAME, $value);
+        $env->put(self::TRAEFIK_UI_USERNAME, $value);
     }
 
     public static function optionName(): string

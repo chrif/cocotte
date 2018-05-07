@@ -3,12 +3,14 @@
 namespace Cocotte\Machine;
 
 use Assert\Assertion;
+use Cocotte\Environment\FromEnvLazyFactory;
 use Cocotte\Environment\LazyEnvironmentValue;
 use Cocotte\Environment\LazyExportableOption;
 use Cocotte\Shell\Env;
 
-class MachineName implements LazyExportableOption
+class MachineName implements LazyExportableOption, FromEnvLazyFactory
 {
+    const DEFAULT_VALUE = 'cocotte';
     const MACHINE_NAME = 'MACHINE_NAME';
     const OPTION_NAME = 'machine-name';
     /**
@@ -34,16 +36,17 @@ class MachineName implements LazyExportableOption
     }
 
     /**
+     * @param Env $env
      * @return LazyEnvironmentValue|self
      */
-    public static function fromEnv(): LazyEnvironmentValue
+    public static function fromEnv(Env $env): LazyEnvironmentValue
     {
-        return new self(Env::get(self::MACHINE_NAME, ""));
+        return new self($env->get(self::MACHINE_NAME, ""));
     }
 
-    public static function toEnv(string $value): void
+    public static function toEnv(string $value, Env $env): void
     {
-        Env::put(self::MACHINE_NAME, $value);
+        $env->put(self::MACHINE_NAME, $value);
     }
 
     public static function optionName(): string

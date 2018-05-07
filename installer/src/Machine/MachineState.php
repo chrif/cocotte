@@ -16,14 +16,9 @@ final class MachineState
         $this->machineName = $machineName;
     }
 
-    public static function fromEnv()
-    {
-        return new self(MachineName::fromEnv());
-    }
-
     public function exists(): bool
     {
-        $process = new Process('docker-machine ls -q "${MACHINE_NAME}"');
+        $process = new Process('docker-machine ls -q --filter="name=${MACHINE_NAME}"');
         $process->run();
         if ($process->isSuccessful()) {
             return $this->machineName->toString() === trim($process->getOutput());
@@ -35,7 +30,7 @@ final class MachineState
     public function isRunning(): bool
     {
         $process = new Process(
-            'docker-machine ls -q --filter="state=running" "${MACHINE_NAME}"'
+            'docker-machine ls -q --filter="state=running" --filter="name=${MACHINE_NAME}"'
         );
         $process->run();
         if ($process->isSuccessful()) {

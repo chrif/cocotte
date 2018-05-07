@@ -35,6 +35,15 @@ final class MachineCreator
      */
     private $style;
 
+    /**
+     * @codeCoverageIgnore
+     *
+     * @param ProcessRunner $processRunner
+     * @param MachineState $machineState
+     * @param MachineName $machineName
+     * @param ApiToken $token
+     * @param Style $style
+     */
     public function __construct(
         ProcessRunner $processRunner,
         MachineState $machineState,
@@ -58,19 +67,31 @@ final class MachineCreator
             );
         }
 
-        $process = new Process(
-            'docker-machine create \
-                --driver digitalocean \
-                --digitalocean-access-token "${DIGITAL_OCEAN_API_TOKEN}" \
-                --engine-opt log-driver="json-file" \
-                --engine-opt log-opt="max-size=1m" \
-                --engine-opt log-opt="max-file=10" \
-                "${MACHINE_NAME}"'
-        );
+        $process = $this->createProcess();
 
         $process->setTimeout(300);
 
         $this->processRunner->mustRun($process, true);
+    }
+
+    /**
+     * @codeCoverageIgnore
+     *
+     * @return Process
+     */
+    private function createProcess(): Process
+    {
+        return new Process(
+            <<<'TAG'
+docker-machine create \
+    --driver digitalocean \
+    --digitalocean-access-token "${DIGITAL_OCEAN_API_TOKEN}" \
+    --engine-opt log-driver="json-file" \
+    --engine-opt log-opt="max-size=1m" \
+    --engine-opt log-opt="max-file=10" \
+    "${MACHINE_NAME}"
+TAG
+        );
     }
 
 }

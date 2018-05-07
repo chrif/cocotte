@@ -5,7 +5,7 @@ namespace Cocotte\DigitalOcean;
 use Cocotte\Console\OptionProvider;
 use Cocotte\Console\Style;
 use Cocotte\Console\StyledInputOption;
-use Cocotte\Shell\Env;
+use Cocotte\Environment\EnvironmentState;
 use DigitalOceanV2\Adapter\GuzzleHttpAdapter;
 use DigitalOceanV2\DigitalOceanV2;
 use Symfony\Component\Console\Input\InputOption;
@@ -23,14 +23,14 @@ class ApiTokenOptionProvider implements OptionProvider
         $this->style = $style;
     }
 
-    public function option(): InputOption
+    public function option(EnvironmentState $environmentState): InputOption
     {
         return new StyledInputOption(
-            ApiToken::OPTION_NAME,
+            $this->optionName(),
             null,
             InputOption::VALUE_REQUIRED,
             $this->helpMessage(),
-            Env::get(ApiToken::DIGITAL_OCEAN_API_TOKEN)
+            $environmentState->defaultValue(ApiToken::DIGITAL_OCEAN_API_TOKEN)
         );
     }
 

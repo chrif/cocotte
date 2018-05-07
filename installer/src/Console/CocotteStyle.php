@@ -25,7 +25,7 @@ final class CocotteStyle extends SymfonyStyle implements Style
 
     public function pause()
     {
-        $this->ask($this->quittableQuestion("Press <options=bold>ENTER</> to continue"));
+        return $this->ask($this->quittableQuestion("Press <options=bold>ENTER</> to continue"));
     }
 
     public function optionHelp(string $title, array $message): string

@@ -2,6 +2,10 @@
 
 set -euo pipefail
 
+BASE_PATH=$PWD;
+
+cd host
+
 set -a
 . traefik/.env-override
 set +a
@@ -23,7 +27,7 @@ sudo cat /etc/hosts
 (cd traefik; docker-compose logs -t traefik)
 (cd static-site; docker-compose logs -t nginx)
 
-./.travis/check-online ${TRAEFIK_LOCAL} 6
-./.travis/check-online ${STATIC_LOCAL} 6
+$BASE_PATH/.travis/check-online ${TRAEFIK_LOCAL} 6
+$BASE_PATH/.travis/check-online ${STATIC_LOCAL} 6
 
 curl http://${STATIC_LOCAL}

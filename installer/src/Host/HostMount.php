@@ -4,7 +4,6 @@ namespace Cocotte\Host;
 
 use Assert\Assertion;
 use Cocotte\Environment\LazyEnvironmentValue;
-use Cocotte\Filesystem\CocotteFilesystem;
 use Cocotte\Filesystem\Filesystem;
 
 class HostMount implements LazyEnvironmentValue
@@ -30,23 +29,6 @@ class HostMount implements LazyEnvironmentValue
 
         $this->value = $value;
         $this->filesystem = $filesystem;
-    }
-
-    /**
-     * @return LazyEnvironmentValue|self
-     * @throws \Assert\AssertionFailedException
-     * @throws HostException
-     */
-    public static function fromEnv(): LazyEnvironmentValue
-    {
-        foreach (Mounts::fromEnv()->toArray() as $mount) {
-            if ('bind' === $mount['Type'] && '/host' === $mount['Destination']) {
-                Assertion::true($mount['RW'], "Volume /host must be writable");
-
-                return new self($mount, CocotteFilesystem::create());
-            }
-        }
-        throw HostException::noHostMount();
     }
 
     /**

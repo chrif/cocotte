@@ -1,17 +1,21 @@
 # Development
 
 ## Setup
-Configure these dist files at the root
-* `.env.dist` 
-	* copy to `.env`
-	* some values need to be customized
-* `docker-compose.override.yml.dist`
-	* copy to `docker-compose.override.yml`
 
-## Build
-```
-docker-compose build --pull cocotte
-```
+1. Configure these dist files at the root
+	* `.env.dist` 
+		* copy to `.env`
+		* some values need to be customized
+	* `docker-compose.override.yml.dist`
+		* copy to `docker-compose.override.yml`
+1. Build
+	```
+	docker-compose build --pull cocotte
+	```
+1. Install dependencies locally
+	```
+	docker-compose run --rm cmd composer install
+	```
 
 ## Useful commands
 ### Install
@@ -21,7 +25,7 @@ docker-compose build --pull cocotte
 	```
 * test with `docker run` (no project mount, like prod)
 	```
-	(cd host; ../bin/install test)
+	./bin/install test
 	```
 ### Uninstall
 * with `docker-compose.override.yml` (with project mount)
@@ -30,7 +34,7 @@ docker-compose build --pull cocotte
 	```
 * test with `docker run` (no project mount, like prod)
 	```
-	(cd host; ../bin/uninstall test)
+	./bin/uninstall test
 	```
 ## Wizard
 * with `docker-compose.override.yml` (with project mount)
@@ -39,7 +43,7 @@ docker-compose build --pull cocotte
 	```
 * with `docker run` (no project mount, like prod)
 	```
-	(cd host; ../bin/wizard)
+	./bin/wizard
 	```
 ### Unit tests
 ```

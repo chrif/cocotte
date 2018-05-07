@@ -2,6 +2,7 @@
 
 namespace Cocotte\Console;
 
+use Cocotte\Environment\EnvironmentState;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 final class OptionProviderAutomation implements EventSubscriberInterface
@@ -15,11 +16,19 @@ final class OptionProviderAutomation implements EventSubscriberInterface
      * @var InteractionOperator
      */
     private $operator;
+    /**
+     * @var EnvironmentState
+     */
+    private $environmentState;
 
-    public function __construct(OptionProviderRegistry $registry, InteractionOperator $operator)
-    {
+    public function __construct(
+        OptionProviderRegistry $registry,
+        InteractionOperator $operator,
+        EnvironmentState $environmentState
+    ) {
         $this->registry = $registry;
         $this->operator = $operator;
+        $this->environmentState = $environmentState;
     }
 
     public static function getSubscribedEvents()
@@ -38,7 +47,7 @@ final class OptionProviderAutomation implements EventSubscriberInterface
         foreach ($command->optionProviders() as $className) {
             $optionProvider = $this->registry->providerByClassName($className);
 
-            $event->inputDefinition()->addOption($optionProvider->option());
+            $event->inputDefinition()->addOption($optionProvider->option($this->environmentState));
         }
     }
 
@@ -67,5 +76,4 @@ final class OptionProviderAutomation implements EventSubscriberInterface
             $this->operator->interact($event->input(), $optionProvider);
         }
     }
-
 }

@@ -1,7 +1,3 @@
-parameters:
-  api.adapter.class: DigitalOceanV2\Adapter\GuzzleHttpAdapter
-  console.output.verbosity: !php/const Symfony\Component\Console\Output\OutputInterface::VERBOSITY_NORMAL
-
 services:
   _defaults:
       autowire: true
@@ -15,8 +11,6 @@ services:
     class: Symfony\Component\Console\Input\ArgvInput
   Symfony\Component\Console\Output\OutputInterface:
     class: Symfony\Component\Console\Output\ConsoleOutput
-    arguments:
-      - '%console.output.verbosity%'
   Cocotte\Console\Style:
     class: Cocotte\Console\CocotteStyle
   Symfony\Component\Console\Application:
@@ -49,7 +43,7 @@ services:
   Cocotte\DigitalOcean\NetworkingConfigurator: ~
   DigitalOceanV2\Adapter\AdapterInterface:
     factory: 'Cocotte\DigitalOcean\DigitalOceanFactory:adapter'
-    arguments: ["%api.adapter.class%"]
+    arguments: ['DigitalOceanV2\Adapter\GuzzleHttpAdapter']
     lazy: true
   DigitalOceanV2\DigitalOceanV2: ~
   DigitalOceanV2\Api\Droplet: ~
@@ -63,6 +57,7 @@ services:
   # environment
   Cocotte\Environment\LazyEnvironmentLoader:
     tags: ['event.subscriber']
+  Cocotte\Environment\EnvironmentState: ~
 
   # event
   Symfony\Component\EventDispatcher\EventDispatcherInterface:
@@ -79,15 +74,21 @@ services:
   # host
   Cocotte\Host\HostMount:
     tags: ['lazy.environment']
+    factory: ['@Cocotte\Host\HostMountFactory', fromDocker]
   Cocotte\Host\Mounts:
     tags: ['lazy.environment']
+    factory: ['@Cocotte\Host\MountsFactory', fromDocker]
   Cocotte\Host\HostMountRequiredListener:
     tags: ['event.subscriber']
+  Cocotte\Host\HostMountFactory: ~
+  Cocotte\Host\MountsFactory: ~
 
   # machine
   Cocotte\Machine\MachineCreator: ~
   Cocotte\Machine\MachineIp:
     tags: ['lazy.environment']
+    factory: [ '@Cocotte\Machine\MachineIp', fromMachine ]
+    arguments: [ '@Cocotte\Shell\ProcessRunner' ]
   Cocotte\Machine\MachineName:
     tags: ['lazy.environment']
   Cocotte\Machine\MachineNameOptionProvider:
@@ -95,14 +96,17 @@ services:
   Cocotte\Machine\MachineState: ~
   Cocotte\Machine\MachineStoragePath:
     tags: ['lazy.environment']
+    factory: ['@Cocotte\Machine\MachineStoragePathFactory', fromEnv]
   Cocotte\Machine\MachineRequiredListener:
     tags: ['event.subscriber']
+  Cocotte\Machine\MachineStoragePathFactory: ~
 
   # shell
   Cocotte\Shell\ProcessRunner: ~
-  Cocotte\Shell\VariableReplacer: ~
   Cocotte\Shell\EnvironmentSubstitution\SubstitutionFactory: ~
   Cocotte\Shell\BasicAuth: ~
+  Cocotte\Shell\Env:
+    class: Cocotte\Shell\DefaultEnv
 
   # template
 

@@ -1,5 +1,4 @@
 <!-- https://phpunit.readthedocs.io/en/7.1/configuration.html#appendixes-configuration -->
-<!--suppress XmlUnboundNsPrefix -->
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          bootstrap="test/bootstrap.php"
          xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/7.0/phpunit.xsd"
@@ -11,12 +10,21 @@
     </filter>
 
     <testsuites>
+
         <testsuite name="unit">
             <directory>test/Unit</directory>
         </testsuite>
-        <testsuite name="functional">
-            <directory>test/Functional</directory>
+
+        <testsuite name="integration">
+            <directory>test/Integration</directory>
         </testsuite>
+
+        <testsuite name="system">
+            <directory>test/System/Install</directory>
+            <directory>test/System/Template</directory>
+            <directory>test/System/Uninstall</directory>
+        </testsuite>
+
     </testsuites>
 
 </phpunit>

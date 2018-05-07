@@ -21,3 +21,7 @@ We could host our own Docker Registry on the same VM as the only Docker Engine p
 There are third-parties offering free Docker Registry hosting, but their business model is most likely to have a free version just annoying enough so that people end-up paying.
 
 For all these reasons, the introduction of an image registry is left to a more advanced version of Cocotte.
+
+## Command fails with an error message beginning with `Failed to validate name servers`
+
+Cocotte uses a library to validate that the name servers of your domain are Digital Ocean's. If you are confident that your domain is valid but the library fails to validate your domain, you can disable DNS validation with this environment variable: `SKIP_DNS_VALIDATION=1`. Add it to the container when running Cocotte: `docker run -e SKIP_DNS_VALIDATION=1 ...`

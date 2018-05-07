@@ -1,4 +1,8 @@
-# Cocotte [![Build Status](https://travis-ci.org/chrif/cocotte.svg?branch=master)](https://travis-ci.org/chrif/cocotte)
+# Cocotte 
+
+[![Build Status](https://travis-ci.org/chrif/cocotte.svg?branch=master)](https://travis-ci.org/chrif/cocotte) 
+[![Code Coverage](https://codecov.io/gh/chrif/cocotte/branch/master/graph/badge.svg)](https://codecov.io/gh/chrif/cocotte)
+[![PayPal](paypal-badge.svg)](https://www.paypal.me/Fecteau)
 
 Cocotte aims at easing the learning curve for web developers starting with cloud hosting and application containerization. You get a basic and [affordable](#pricing) installation, allowing you to focus on your project(s) first, and learn about your infrastructure later:
 
@@ -84,7 +88,7 @@ $ docker run -it --rm chrif/cocotte
 
 ## Reference
 
-* [Console API Reference](console.md)
+* [Console API Reference](../installer/doc/console.md)
 * [Developing and deploying applications](templates.md)
 * [The `machine` directory](machine.md)
 

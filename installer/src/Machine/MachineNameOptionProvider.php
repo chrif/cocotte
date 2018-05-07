@@ -5,7 +5,7 @@ namespace Cocotte\Machine;
 use Cocotte\Console\OptionProvider;
 use Cocotte\Console\Style;
 use Cocotte\Console\StyledInputOption;
-use Cocotte\Shell\Env;
+use Cocotte\Environment\EnvironmentState;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Question\Question;
 
@@ -21,14 +21,14 @@ class MachineNameOptionProvider implements OptionProvider
         $this->style = $style;
     }
 
-    public function option(): InputOption
+    public function option(EnvironmentState $environmentState): InputOption
     {
         return new StyledInputOption(
-            MachineName::OPTION_NAME,
+            $this->optionName(),
             null,
             InputOption::VALUE_REQUIRED,
             $this->helpMessage(),
-            Env::get(MachineName::MACHINE_NAME)
+            $environmentState->defaultValue(MachineName::MACHINE_NAME, MachineName::DEFAULT_VALUE)
         );
     }
 
@@ -62,7 +62,7 @@ class MachineNameOptionProvider implements OptionProvider
     {
         return new Question(
             $this->style->quittableQuestion("Enter a <options=bold>Machine name</>"),
-            'cocotte'
+            MachineName::DEFAULT_VALUE
         );
     }
 

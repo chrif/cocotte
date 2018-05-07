@@ -3,19 +3,26 @@
 namespace Cocotte\DigitalOcean;
 
 use Assert\Assertion;
+use Cocotte\Shell\Env;
 use Iodev\Whois\DomainInfo;
 use Iodev\Whois\Whois;
 
-final class DnsValidator
+class DnsValidator
 {
+    const SKIP_DNS_VALIDATION = 'SKIP_DNS_VALIDATION';
     /**
      * @var Whois
      */
     private $whois;
+    /**
+     * @var Env
+     */
+    private $env;
 
-    public function __construct(Whois $whois)
+    public function __construct(Whois $whois, Env $env)
     {
         $this->whois = $whois;
+        $this->env = $env;
     }
 
     public function validateNameServers(Hostname $hostname)
@@ -47,6 +54,10 @@ final class DnsValidator
 
     public function validateHost(Hostname $hostname)
     {
+        if ($this->env->get(self::SKIP_DNS_VALIDATION)) {
+            return;
+        }
+
         try {
             $this->validateNameServers($hostname->toRoot());
         } catch (\Throwable $domainException) {

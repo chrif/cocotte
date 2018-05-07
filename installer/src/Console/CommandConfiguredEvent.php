@@ -2,7 +2,6 @@
 
 namespace Cocotte\Console;
 
-use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\EventDispatcher\Event;
 
 final class CommandConfiguredEvent extends Event
@@ -13,28 +12,14 @@ final class CommandConfiguredEvent extends Event
      */
     private $command;
 
-    /**
-     * @var InputDefinition
-     */
-    private $inputDefinition;
-
-    public function __construct(CommandInterface $command, InputDefinition $inputDefinition)
+    public function __construct(CommandInterface $command)
     {
         $this->command = $command;
-        $this->inputDefinition = $inputDefinition;
     }
 
     public function command(): CommandInterface
     {
         return $this->command;
-    }
-
-    /**
-     * @return InputDefinition
-     */
-    public function inputDefinition(): InputDefinition
-    {
-        return $this->inputDefinition;
     }
 
 }

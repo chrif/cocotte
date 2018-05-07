@@ -3,11 +3,12 @@
 namespace Cocotte\Template\StaticSite;
 
 use Assert\Assertion;
+use Cocotte\Environment\FromEnvLazyFactory;
 use Cocotte\Environment\LazyEnvironmentValue;
 use Cocotte\Environment\LazyExportableOption;
 use Cocotte\Shell\Env;
 
-class StaticSiteNamespace implements LazyExportableOption
+class StaticSiteNamespace implements LazyExportableOption, FromEnvLazyFactory
 {
     const STATIC_SITE_NAMESPACE = 'STATIC_SITE_NAMESPACE';
     const OPTION_NAME = 'namespace';
@@ -35,16 +36,17 @@ class StaticSiteNamespace implements LazyExportableOption
     }
 
     /**
+     * @param Env $env
      * @return LazyEnvironmentValue|self
      */
-    public static function fromEnv(): LazyEnvironmentValue
+    public static function fromEnv(Env $env): LazyEnvironmentValue
     {
-        return new self(Env::get(self::STATIC_SITE_NAMESPACE, ""));
+        return new self($env->get(self::STATIC_SITE_NAMESPACE, ""));
     }
 
-    public static function toEnv(string $value): void
+    public static function toEnv(string $value, Env $env): void
     {
-        Env::put(self::STATIC_SITE_NAMESPACE, $value);
+        $env->put(self::STATIC_SITE_NAMESPACE, $value);
     }
 
     public static function optionName(): string

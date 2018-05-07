@@ -4,11 +4,12 @@ namespace Cocotte\Template\Traefik;
 
 use Cocotte\DigitalOcean\Hostname;
 use Cocotte\DigitalOcean\HostnameCollection;
+use Cocotte\Environment\FromEnvLazyFactory;
 use Cocotte\Environment\LazyEnvironmentValue;
 use Cocotte\Environment\LazyExportableOption;
 use Cocotte\Shell\Env;
 
-class TraefikHostname implements LazyExportableOption
+class TraefikHostname implements LazyExportableOption, FromEnvLazyFactory
 {
     const TRAEFIK_UI_HOSTNAME = 'TRAEFIK_UI_HOSTNAME';
     const OPTION_NAME = 'traefik-ui-hostname';
@@ -25,17 +26,18 @@ class TraefikHostname implements LazyExportableOption
     }
 
     /**
+     * @param Env $env
      * @return LazyEnvironmentValue|self
      * @throws \Exception
      */
-    public static function fromEnv(): LazyEnvironmentValue
+    public static function fromEnv(Env $env): LazyEnvironmentValue
     {
-        return new self(Hostname::parse(Env::get(self::TRAEFIK_UI_HOSTNAME, "")));
+        return new self(Hostname::parse($env->get(self::TRAEFIK_UI_HOSTNAME, "")));
     }
 
-    public static function toEnv(string $value): void
+    public static function toEnv(string $value, Env $env): void
     {
-        Env::put(self::TRAEFIK_UI_HOSTNAME, $value);
+        $env->put(self::TRAEFIK_UI_HOSTNAME, $value);
     }
 
     public static function optionName(): string

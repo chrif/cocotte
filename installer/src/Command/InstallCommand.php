@@ -12,6 +12,7 @@ use Cocotte\Environment\LazyEnvironment;
 use Cocotte\Host\HostMount;
 use Cocotte\Host\HostMountRequired;
 use Cocotte\Machine\MachineCreator;
+use Cocotte\Machine\MachineIp;
 use Cocotte\Machine\MachineName;
 use Cocotte\Machine\MachineNameOptionProvider;
 use Cocotte\Machine\MachineStoragePath;
@@ -25,6 +26,7 @@ use Cocotte\Template\Traefik\TraefikPasswordOptionProvider;
 use Cocotte\Template\Traefik\TraefikUsername;
 use Cocotte\Template\Traefik\TraefikUsernameOptionProvider;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Process\Process;
@@ -80,7 +82,25 @@ final class InstallCommand extends AbstractCommand implements LazyEnvironment, H
      * @var TraefikDeploymentValidator
      */
     private $traefikDeploymentValidator;
+    /**
+     * @var MachineIp
+     */
+    private $machineIp;
 
+    /**
+     * @codeCoverageIgnore
+     * @param MachineCreator $machineCreator
+     * @param TraefikCreator $traefikCreator
+     * @param Style $style
+     * @param MachineName $machineName
+     * @param TraefikHostname $traefikHostname
+     * @param EventDispatcherInterface $eventDispatcher
+     * @param NetworkingConfigurator $networkingConfigurator
+     * @param ProcessRunner $processRunner
+     * @param HostMount $hostMount
+     * @param TraefikDeploymentValidator $traefikDeploymentValidator
+     * @param MachineIp $machineIp
+     */
     public function __construct(
         MachineCreator $machineCreator,
         TraefikCreator $traefikCreator,
@@ -91,7 +111,8 @@ final class InstallCommand extends AbstractCommand implements LazyEnvironment, H
         NetworkingConfigurator $networkingConfigurator,
         ProcessRunner $processRunner,
         HostMount $hostMount,
-        TraefikDeploymentValidator $traefikDeploymentValidator
+        TraefikDeploymentValidator $traefikDeploymentValidator,
+        MachineIp $machineIp
     ) {
         $this->machineCreator = $machineCreator;
         $this->traefikCreator = $traefikCreator;
@@ -104,8 +125,13 @@ final class InstallCommand extends AbstractCommand implements LazyEnvironment, H
         $this->hostMount = $hostMount;
         $this->traefikDeploymentValidator = $traefikDeploymentValidator;
         parent::__construct();
+        $this->machineIp = $machineIp;
     }
 
+    /**
+     * @codeCoverageIgnore
+     * @return array
+     */
     public function lazyEnvironmentValues(): array
     {
         return [
@@ -118,6 +144,10 @@ final class InstallCommand extends AbstractCommand implements LazyEnvironment, H
         ];
     }
 
+    /**
+     * @codeCoverageIgnore
+     * @return array
+     */
     public function optionProviders(): array
     {
         return [
@@ -136,28 +166,27 @@ final class InstallCommand extends AbstractCommand implements LazyEnvironment, H
 
     protected function doConfigure(): void
     {
-        $this
-            ->setName('install')
-            ->setDescription(
-                $description = 'Create a <options=bold>Docker</> machine on <options=bold>Digital Ocean</> and '.
-                    'install the <options=bold>Traefik</> reverse proxy on it.')
+        $this->setName('install')
+            ->addOption('dry-run',
+                null,
+                InputOption::VALUE_NONE,
+                'Validate all options but do not proceed with installation.')
+            ->setDescription($this->description())
             ->setHelp(
-                $this->formatHelp(
-                    $description,
-                    'docker run -it --rm \
-    -v "$(pwd)":/host \
-    -v /var/run/docker.sock:/var/run/docker.sock:ro \
-    chrif/cocotte install \
-    --digital-ocean-api-token="xxxx" \
-    --traefik-ui-hostname="traefik.mydomain.com" \
-    --traefik-ui-password="password" \
-    --traefik-ui-username="username";'
-                )
+                $this->formatHelp($this->description(), $this->example())
             );
     }
 
     protected function doExecute(InputInterface $input, OutputInterface $output)
     {
+        if ($input->getOption('dry-run')) {
+            $this->style->writeln(
+                "Would have created a Docker machine named '{$this->machineName}' on Digital Ocean."
+            );
+
+            return;
+        }
+
         $this->confirm();
         $this->style->writeln("Creating a Docker machine named '{$this->machineName}' on Digital Ocean.");
         $this->machineCreator->create();
@@ -166,7 +195,10 @@ final class InstallCommand extends AbstractCommand implements LazyEnvironment, H
         $this->traefikCreator->create();
 
         $this->style->writeln("Configuring networking for {$this->traefikHostname->toString()}");
-        $this->networkingConfigurator->configure($this->traefikHostname->toHostnameCollection());
+        $this->networkingConfigurator->configure(
+            $this->traefikHostname->toHostnameCollection(),
+            $this->machineIp->toIP()
+        );
 
         $this->style->writeln('Deploying Traefik to cloud machine');
 //        $this->processRunner->run(new Process('./bin/reset-prod 2>/dev/stdout', $this->traefikCreator->hostAppPath()));
@@ -177,13 +209,7 @@ final class InstallCommand extends AbstractCommand implements LazyEnvironment, H
 
         $this->processRunner->mustRun(new Process('./bin/logs -t', $this->traefikCreator->hostAppPath()));
 
-        $this->style->complete([
-            "Installation successful.",
-            "You can now:\n".
-            "- visit your Traefik UI at <options=bold>https://{$this->traefikHostname->toString()}</>\n".
-            "- use docker-machine commands (e.g. <options=bold>docker-machine -s machine ssh {$this->machineName}</>)\n".
-            "- deploy a static website on your cloud machine with the <options=bold>static-site</> Cocotte command.",
-        ]);
+        $this->style->complete($this->completeMessage());
     }
 
     private function confirm(): void
@@ -195,6 +221,49 @@ final class InstallCommand extends AbstractCommand implements LazyEnvironment, H
         )) {
             throw new \Exception('Cancelled');
         };
+    }
+
+    /**
+     * @codeCoverageIgnore
+     * @return string
+     */
+    private function example(): string
+    {
+        return <<<'TAG'
+docker run -it --rm \
+    -v "$(pwd)":/host \
+    -v /var/run/docker.sock:/var/run/docker.sock:ro \
+    chrif/cocotte install \
+    --digital-ocean-api-token="xxxx" \
+    --traefik-ui-hostname="traefik.mydomain.com" \
+    --traefik-ui-password="password" \
+    --traefik-ui-username="username";
+TAG;
+    }
+
+    /**
+     * @codeCoverageIgnore
+     * @return string
+     */
+    private function description(): string
+    {
+        return 'Create a <options=bold>Docker</> machine on <options=bold>Digital Ocean</> and '.
+            'install the <options=bold>Traefik</> reverse proxy on it.';
+    }
+
+    /**
+     * @codeCoverageIgnore
+     * @return array
+     */
+    private function completeMessage(): array
+    {
+        return [
+            "Installation successful.",
+            "You can now:\n".
+            "- visit your Traefik UI at <options=bold>https://{$this->traefikHostname->toString()}</>\n".
+            "- use docker-machine commands (e.g. <options=bold>docker-machine -s machine ssh {$this->machineName}</>)\n".
+            "- deploy a static website on your cloud machine with the <options=bold>static-site</> Cocotte command.",
+        ];
     }
 
 }

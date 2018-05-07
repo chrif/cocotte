@@ -2,7 +2,7 @@
 
 namespace Cocotte\DigitalOcean;
 
-use Cocotte\Machine\MachineIp;
+use Darsyn\IP\IP;
 use DigitalOceanV2\Api;
 use DigitalOceanV2\Entity;
 
@@ -22,40 +22,33 @@ final class DomainRecord
     private $domain;
 
     /**
-     * @var MachineIp
-     */
-    private $machineIp;
-
-    /**
      * @param Api\DomainRecord $domainRecordApi
      * @param Domain $domain
-     * @param MachineIp $machineIp
      */
-    public function __construct(Api\DomainRecord $domainRecordApi, Domain $domain, MachineIp $machineIp)
+    public function __construct(Api\DomainRecord $domainRecordApi, Domain $domain)
     {
         $this->domainRecordApi = $domainRecordApi;
         $this->domain = $domain;
-        $this->machineIp = $machineIp;
     }
 
-    public function update(Hostname $hostname): Entity\DomainRecord
+    public function update(Hostname $hostname, IP $ip): Entity\DomainRecord
     {
         $record = $this->get($hostname);
 
         return $this->domainRecordApi->updateData(
             $hostname->domainName(),
             $record->id,
-            $this->machineIp->toString()
+            $ip->getShortAddress()
         );
     }
 
-    public function create(Hostname $hostname): Entity\DomainRecord
+    public function create(Hostname $hostname, IP $ip): Entity\DomainRecord
     {
         return $this->domainRecordApi->create(
             $hostname->domainName(),
             self::A,
             $hostname->recordName(),
-            $this->machineIp->toString()
+            $ip->getShortAddress()
         );
     }
 
@@ -101,9 +94,9 @@ final class DomainRecord
         return false;
     }
 
-    public function isUpToDate(Hostname $hostname): bool
+    public function isUpToDate(Hostname $hostname, IP $ip): bool
     {
-        return $this->get($hostname)->data === $this->machineIp->toString();
+        return $this->get($hostname)->data === $ip->getShortAddress();
     }
 
     private function isTypeARecord($record): bool

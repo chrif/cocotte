@@ -11,6 +11,7 @@ use Cocotte\DigitalOcean\NetworkingConfigurator;
 use Cocotte\Environment\LazyEnvironment;
 use Cocotte\Host\HostMount;
 use Cocotte\Host\HostMountRequired;
+use Cocotte\Machine\MachineIp;
 use Cocotte\Machine\MachineName;
 use Cocotte\Machine\MachineNameOptionProvider;
 use Cocotte\Machine\MachineRequired;
@@ -81,7 +82,25 @@ final class StaticSiteCommand extends AbstractCommand implements
      * @var StaticSiteDeploymentValidator
      */
     private $staticSiteDeploymentValidator;
+    /**
+     * @var MachineIp
+     */
+    private $machineIp;
 
+    /**
+     * @codeCoverageIgnore
+     * @param StaticSiteCreator $staticSiteCreator
+     * @param NetworkingConfigurator $networkingConfigurator
+     * @param StaticSiteHostname $staticSiteHostname
+     * @param Style $style
+     * @param ProcessRunner $processRunner
+     * @param EventDispatcherInterface $eventDispatcher
+     * @param MachineState $machineState
+     * @param StaticSiteNamespace $staticSiteNamespace
+     * @param HostMount $hostMount
+     * @param StaticSiteDeploymentValidator $staticSiteDeploymentValidator
+     * @param MachineIp $machineIp
+     */
     public function __construct(
         StaticSiteCreator $staticSiteCreator,
         NetworkingConfigurator $networkingConfigurator,
@@ -92,7 +111,8 @@ final class StaticSiteCommand extends AbstractCommand implements
         MachineState $machineState,
         StaticSiteNamespace $staticSiteNamespace,
         HostMount $hostMount,
-        StaticSiteDeploymentValidator $staticSiteDeploymentValidator
+        StaticSiteDeploymentValidator $staticSiteDeploymentValidator,
+        MachineIp $machineIp
     ) {
         $this->staticSiteCreator = $staticSiteCreator;
         $this->networkingConfigurator = $networkingConfigurator;
@@ -105,8 +125,13 @@ final class StaticSiteCommand extends AbstractCommand implements
         $this->hostMount = $hostMount;
         $this->staticSiteDeploymentValidator = $staticSiteDeploymentValidator;
         parent::__construct();
+        $this->machineIp = $machineIp;
     }
 
+    /**
+     * @codeCoverageIgnore
+     * @return array
+     */
     public function lazyEnvironmentValues(): array
     {
         return [
@@ -118,6 +143,10 @@ final class StaticSiteCommand extends AbstractCommand implements
         ];
     }
 
+    /**
+     * @codeCoverageIgnore
+     * @return array
+     */
     public function optionProviders(): array
     {
         return [
@@ -135,44 +164,26 @@ final class StaticSiteCommand extends AbstractCommand implements
 
     protected function doConfigure(): void
     {
-        $this
-            ->setName('static-site')
+        $this->setName('static-site')
             ->addOption(
                 'skip-networking',
                 null,
                 InputOption::VALUE_NONE,
-                'Do not configure networking. Cannot be true if skip-deploy is true.'
-            )
+                'Do not configure networking. Cannot be true if skip-deploy is true.')
             ->addOption(
                 'skip-deploy',
                 null,
                 InputOption::VALUE_NONE,
-                'Do not deploy to prod after creation.'
-            )
+                'Do not deploy to prod after creation.')
             ->setDescription($description = 'Create a static website and deploy it to your Docker Machine.')
             ->setHelp(
-                $this->formatHelp(
-                    $description,
-                    'docker run -it --rm \
-    -v "$(pwd)":/host \
-    -v /var/run/docker.sock:/var/run/docker.sock:ro \
-    chrif/cocotte static-site \
-    --digital-ocean-api-token="xxxx" \
-    --namespace="static-site" \
-    --hostname="static-site.mydomain.com";'
-                )
+                $this->formatHelp($description, $this->example())
             );
     }
 
     protected function doExecute(InputInterface $input, OutputInterface $output)
     {
         $this->confirm();
-
-        if (!$this->machineState->exists()) {
-            $this->style->warning("Could not find a machine. ".
-                "Did you create a machine with the install command before ? ".
-                "Did you provide the correct machine name ?");
-        }
 
         $skipNetworking = $input->getOption('skip-networking');
         $skipDeploy = $input->getOption('skip-deploy');
@@ -188,7 +199,10 @@ final class StaticSiteCommand extends AbstractCommand implements
 
         if (!$skipNetworking) {
             $this->style->writeln("Configuring networking for {$this->staticSiteHostname}");
-            $this->networkingConfigurator->configure($this->staticSiteHostname->toHostnameCollection());
+            $this->networkingConfigurator->configure(
+                $this->staticSiteHostname->toHostnameCollection(),
+                $this->machineIp->toIP()
+            );
         }
 
         if (!$skipDeploy) {
@@ -201,10 +215,7 @@ final class StaticSiteCommand extends AbstractCommand implements
 
             $this->processRunner->mustRun(new Process('./bin/logs -t', $this->staticSiteCreator->hostAppPath()));
 
-            $this->style->complete([
-                "Static site successfully deployed at ".
-                "<options=bold>https://{$this->staticSiteHostname->toString()}</>",
-            ]);
+            $this->style->complete($this->completeMessage());
         } else {
             $this->style->complete("Deployment has been skipped.");
         }
@@ -217,14 +228,50 @@ final class StaticSiteCommand extends AbstractCommand implements
 
     private function confirm(): void
     {
-        if (!$this->style->confirm(
-            "You are about to create a static website in ".
-            "'<options=bold>{$this->sitePath()}</>'\n".
-            " and deploy it to Digital Ocean at ".
-            "'<options=bold>{$this->staticSiteHostname->toString()}</>'."
-        )) {
+        if (!$this->style->confirm($this->confirmMessage())) {
             throw new \Exception('Cancelled');
         };
+    }
+
+    /**
+     * @codeCoverageIgnore
+     * @return string
+     */
+    private function example(): string
+    {
+        return <<<'TAG'
+docker run -it --rm \
+    -v "$(pwd)":/host \
+    -v /var/run/docker.sock:/var/run/docker.sock:ro \
+    chrif/cocotte static-site \
+    --digital-ocean-api-token="xxxx" \
+    --namespace="static-site" \
+    --hostname="static-site.mydomain.com";
+TAG;
+    }
+
+    /**
+     * @codeCoverageIgnore
+     * @return string
+     */
+    private function confirmMessage(): string
+    {
+        return "You are about to create a static website in ".
+            "'<options=bold>{$this->sitePath()}</>'\n".
+            " and deploy it to Digital Ocean at ".
+            "'<options=bold>{$this->staticSiteHostname->toString()}</>'.";
+    }
+
+    /**
+     * @codeCoverageIgnore
+     * @return array
+     */
+    private function completeMessage(): array
+    {
+        return [
+            "Static site successfully deployed at ".
+            "<options=bold>https://{$this->staticSiteHostname->toString()}</>",
+        ];
     }
 
 }

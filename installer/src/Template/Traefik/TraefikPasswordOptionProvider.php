@@ -5,7 +5,7 @@ namespace Cocotte\Template\Traefik;
 use Cocotte\Console\OptionProvider;
 use Cocotte\Console\Style;
 use Cocotte\Console\StyledInputOption;
-use Cocotte\Shell\Env;
+use Cocotte\Environment\EnvironmentState;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Question\Question;
 
@@ -21,14 +21,14 @@ class TraefikPasswordOptionProvider implements OptionProvider
         $this->style = $style;
     }
 
-    public function option(): InputOption
+    public function option(EnvironmentState $environmentState): InputOption
     {
         return new StyledInputOption(
-            TraefikPassword::OPTION_NAME,
+            $this->optionName(),
             null,
             InputOption::VALUE_REQUIRED,
             $this->helpMessage(),
-            Env::get(TraefikPassword::TRAEFIK_UI_PASSWORD)
+            $environmentState->defaultValue(TraefikPassword::TRAEFIK_UI_PASSWORD)
         );
     }
 

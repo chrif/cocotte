@@ -4,22 +4,11 @@ namespace Cocotte\Test\Unit\DigitalOcean;
 
 use Assert\InvalidArgumentException;
 use Cocotte\DigitalOcean\ApiToken;
-use Cocotte\Shell\Env;
+use Cocotte\Test\Collaborator\Shell\FakeEnv;
 use PHPUnit\Framework\TestCase;
 
 class ApiTokenTest extends TestCase
 {
-    private $realToken;
-
-    public function setUp()
-    {
-        $this->realToken = Env::get(ApiToken::DIGITAL_OCEAN_API_TOKEN);
-    }
-
-    public function tearDown()
-    {
-        Env::put(ApiToken::DIGITAL_OCEAN_API_TOKEN, $this->realToken);
-    }
 
     public function testOptionName()
     {
@@ -28,8 +17,9 @@ class ApiTokenTest extends TestCase
 
     public function testFromEnv()
     {
-        Env::put('DIGITAL_OCEAN_API_TOKEN', 'foo');
-        $token = ApiToken::fromEnv();
+        $env = new FakeEnv();
+        $env->put('DIGITAL_OCEAN_API_TOKEN', 'foo');
+        $token = ApiToken::fromEnv($env);
         self::assertSame('foo', $token->toString());
     }
 
@@ -41,9 +31,9 @@ class ApiTokenTest extends TestCase
 
     public function testToEnv()
     {
-        self::assertNotSame('bar', getenv('DIGITAL_OCEAN_API_TOKEN'));
-        ApiToken::toEnv('bar');
-        self::assertSame('bar', getenv('DIGITAL_OCEAN_API_TOKEN'));
+        $env = new FakeEnv();
+        ApiToken::toEnv('bar', $env);
+        self::assertSame('bar', $env->get('DIGITAL_OCEAN_API_TOKEN'));
     }
 
     public function testNotEmpty()
