@@ -14,7 +14,9 @@
 * You can create as many of them as you want.
 * To develop locally, first make sure Traefik is [running locally](../installer/template/traefik/README.md#develop-locally), then hop to the [README](../installer/template/static/README.md).
 
-### Symfony (coming soon)
+### More templates coming soon
+
+The next templates to be added to Cocotte will feature popular web frameworks and serve as more advanced examples with databases.
 
 ## Useful commands
 

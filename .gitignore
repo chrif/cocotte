@@ -1,5 +1,4 @@
 .idea
 /.env
 /composer.phar
-/installer/bin/test
 /docker-compose.override.yml
