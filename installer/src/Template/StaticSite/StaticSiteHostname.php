@@ -65,4 +65,9 @@ class StaticSiteHostname implements LazyExportableOption, FromEnvLazyFactory
     {
         return HostnameCollection::fromArray([$this->hostname]);
     }
+
+    public function toHostname(): Hostname
+    {
+        return $this->hostname;
+    }
 }

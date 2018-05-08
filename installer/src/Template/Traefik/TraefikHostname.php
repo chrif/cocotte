@@ -71,4 +71,9 @@ class TraefikHostname implements LazyExportableOption, FromEnvLazyFactory
     {
         return $this->hostname->domainName();
     }
+
+    public function toHostname(): Hostname
+    {
+        return $this->hostname;
+    }
 }
