@@ -114,7 +114,7 @@ final class WizardCommand extends AbstractCommand implements DocumentedCommand
             "Run the command from a location on your computer where you usually put new project code.",
             "Afterwards, two directories will be created:\n- one named 'machine' that you must leave there ".
             "and never edit (it is used by Docker Machine to login to your cloud machine),\n- and one named 'traefik' ".
-            "that you can edit all you want and which is ready for Git version control: this your new Traefik project.",
+            "that you can edit all you want and which is ready for Git version control: this is your new Traefik project.",
             "Thank you for trying Cocotte!",
         ];
     }
