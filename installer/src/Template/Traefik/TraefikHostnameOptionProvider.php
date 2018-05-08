@@ -50,9 +50,9 @@ class TraefikHostnameOptionProvider implements OptionProvider
 
     public function validate(string $value)
     {
-        $hostname = Hostname::parse($value);
+        $traefikHostname = new TraefikHostname(Hostname::parse($value));
 
-        $this->dnsValidator->validateHost($hostname);
+        $this->dnsValidator->validateHost($traefikHostname->toHostname());
     }
 
     public function onCorrectAnswer(string $answer)

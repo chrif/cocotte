@@ -9,6 +9,8 @@ use Cocotte\DigitalOcean\ApiToken;
 use Cocotte\DigitalOcean\ApiTokenOptionProvider;
 use Cocotte\DigitalOcean\NetworkingConfigurator;
 use Cocotte\Environment\LazyEnvironment;
+use Cocotte\Help\DefaultExamples;
+use Cocotte\Help\FromEnvExamples;
 use Cocotte\Host\HostMount;
 use Cocotte\Host\HostMountRequired;
 use Cocotte\Machine\MachineCreator;
@@ -82,10 +84,15 @@ final class InstallCommand extends AbstractCommand implements LazyEnvironment, H
      * @var TraefikDeploymentValidator
      */
     private $traefikDeploymentValidator;
+
     /**
      * @var MachineIp
      */
     private $machineIp;
+    /**
+     * @var FromEnvExamples
+     */
+    private $fromEnvExamples;
 
     /**
      * @codeCoverageIgnore
@@ -100,6 +107,7 @@ final class InstallCommand extends AbstractCommand implements LazyEnvironment, H
      * @param HostMount $hostMount
      * @param TraefikDeploymentValidator $traefikDeploymentValidator
      * @param MachineIp $machineIp
+     * @param FromEnvExamples $fromEnvExamples
      */
     public function __construct(
         MachineCreator $machineCreator,
@@ -112,7 +120,8 @@ final class InstallCommand extends AbstractCommand implements LazyEnvironment, H
         ProcessRunner $processRunner,
         HostMount $hostMount,
         TraefikDeploymentValidator $traefikDeploymentValidator,
-        MachineIp $machineIp
+        MachineIp $machineIp,
+        FromEnvExamples $fromEnvExamples
     ) {
         $this->machineCreator = $machineCreator;
         $this->traefikCreator = $traefikCreator;
@@ -124,8 +133,9 @@ final class InstallCommand extends AbstractCommand implements LazyEnvironment, H
         $this->processRunner = $processRunner;
         $this->hostMount = $hostMount;
         $this->traefikDeploymentValidator = $traefikDeploymentValidator;
-        parent::__construct();
         $this->machineIp = $machineIp;
+        $this->fromEnvExamples = $fromEnvExamples;
+        parent::__construct();
     }
 
     /**
@@ -173,7 +183,7 @@ final class InstallCommand extends AbstractCommand implements LazyEnvironment, H
                 'Validate all options but do not proceed with installation.')
             ->setDescription($this->description())
             ->setHelp(
-                $this->formatHelp($this->description(), $this->example())
+                $this->formatHelp($this->description(), (new DefaultExamples())->install())
             );
     }
 
@@ -210,6 +220,8 @@ final class InstallCommand extends AbstractCommand implements LazyEnvironment, H
         $this->processRunner->mustRun(new Process('./bin/logs -t', $this->traefikCreator->hostAppPath()));
 
         $this->style->complete($this->completeMessage());
+
+        $this->style->writeln($this->command());
     }
 
     private function confirm(): void
@@ -221,24 +233,6 @@ final class InstallCommand extends AbstractCommand implements LazyEnvironment, H
         )) {
             throw new \Exception('Cancelled');
         };
-    }
-
-    /**
-     * @codeCoverageIgnore
-     * @return string
-     */
-    private function example(): string
-    {
-        return <<<'TAG'
-docker run -it --rm \
-    -v "$(pwd)":/host \
-    -v /var/run/docker.sock:/var/run/docker.sock:ro \
-    chrif/cocotte install \
-    --digital-ocean-api-token="xxxx" \
-    --traefik-ui-hostname="traefik.mydomain.com" \
-    --traefik-ui-password="password" \
-    --traefik-ui-username="username";
-TAG;
     }
 
     /**
@@ -260,10 +254,27 @@ TAG;
         return [
             "Installation successful.",
             "You can now:\n".
-            "- visit your Traefik UI at <options=bold>https://{$this->traefikHostname->toString()}</>\n".
-            "- use docker-machine commands (e.g. <options=bold>docker-machine -s machine ssh {$this->machineName}</>)\n".
-            "- deploy a static website on your cloud machine with the <options=bold>static-site</> Cocotte command.",
+            "- Visit your Traefik UI at <options=bold>https://{$this->traefikHostname->toString()}</>\n".
+            "- Use docker-machine commands (e.g. <options=bold>docker-machine -s machine ssh {$this->machineName}</>)\n".
+            "- Deploy a static website to your cloud machine with the command below.",
         ];
     }
 
+    /**
+     * @return string
+     */
+    private function command(): string
+    {
+        $command = $this->fromEnvExamples->staticSite(
+            null,
+            'site-1',
+            'site1.'.$this->traefikHostname->domainName()
+        );
+
+        return <<<EOF
+<options=bold,underscore>Run this command to create a static site:</>
+{$command}
+
+EOF;
+    }
 }

@@ -9,6 +9,7 @@ use Cocotte\DigitalOcean\ApiToken;
 use Cocotte\DigitalOcean\ApiTokenOptionProvider;
 use Cocotte\DigitalOcean\NetworkingConfigurator;
 use Cocotte\Environment\LazyEnvironment;
+use Cocotte\Help\DefaultExamples;
 use Cocotte\Host\HostMount;
 use Cocotte\Host\HostMountRequired;
 use Cocotte\Machine\MachineIp;
@@ -177,7 +178,7 @@ final class StaticSiteCommand extends AbstractCommand implements
                 'Do not deploy to prod after creation.')
             ->setDescription($description = 'Create a static website and deploy it to your Docker Machine.')
             ->setHelp(
-                $this->formatHelp($description, $this->example())
+                $this->formatHelp($description, (new DefaultExamples())->staticSite())
             );
     }
 
@@ -231,23 +232,6 @@ final class StaticSiteCommand extends AbstractCommand implements
         if (!$this->style->confirm($this->confirmMessage())) {
             throw new \Exception('Cancelled');
         };
-    }
-
-    /**
-     * @codeCoverageIgnore
-     * @return string
-     */
-    private function example(): string
-    {
-        return <<<'TAG'
-docker run -it --rm \
-    -v "$(pwd)":/host \
-    -v /var/run/docker.sock:/var/run/docker.sock:ro \
-    chrif/cocotte static-site \
-    --digital-ocean-api-token="xxxx" \
-    --namespace="static-site" \
-    --hostname="static-site.mydomain.com";
-TAG;
     }
 
     /**
