@@ -2,6 +2,7 @@
 
 namespace Cocotte\Template\StaticSite;
 
+use Assert\Assertion;
 use Cocotte\DigitalOcean\Hostname;
 use Cocotte\DigitalOcean\HostnameCollection;
 use Cocotte\Environment\FromEnvLazyFactory;
@@ -21,6 +22,7 @@ class StaticSiteHostname implements LazyExportableOption, FromEnvLazyFactory
 
     public function __construct(Hostname $hostname)
     {
+        Assertion::false($hostname->isRoot(), "$hostname does not have a subdomain.");
         $this->hostname = $hostname;
     }
 

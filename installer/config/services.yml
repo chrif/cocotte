@@ -71,6 +71,9 @@ services:
   Cocotte\Finder\Finder:
     class: Cocotte\Finder\CocotteFinder
 
+  # help
+  Cocotte\Help\FromEnvExamples: ~
+
   # host
   Cocotte\Host\HostMount:
     tags: ['lazy.environment']

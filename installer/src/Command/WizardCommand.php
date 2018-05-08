@@ -8,6 +8,7 @@ use Cocotte\Console\InteractionOperator;
 use Cocotte\Console\OptionProviderRegistry;
 use Cocotte\Console\Style;
 use Cocotte\DigitalOcean\ApiToken;
+use Cocotte\Help\DefaultExamples;
 use Cocotte\Template\Traefik\TraefikHostname;
 use Cocotte\Template\Traefik\TraefikPassword;
 use Cocotte\Template\Traefik\TraefikUsername;
@@ -142,16 +143,16 @@ final class WizardCommand extends AbstractCommand implements DocumentedCommand
         string $traefikPassword,
         string $traefikUsername
     ): string {
+        $command = (new DefaultExamples())->install(
+            $token,
+            $traefikHostname,
+            $traefikPassword,
+            $traefikUsername
+        );
+
         return <<<EOF
 <options=bold,underscore>Run this command:</>
-docker run -it --rm \
-    -v "$(pwd)":/host \
-    -v /var/run/docker.sock:/var/run/docker.sock:ro \
-    chrif/cocotte install \
-    --digital-ocean-api-token="$token" \
-    --traefik-ui-hostname="$traefikHostname" \
-    --traefik-ui-password="$traefikPassword" \
-    --traefik-ui-username="$traefikUsername";
+{$command}
 
 EOF;
     }

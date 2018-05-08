@@ -9,6 +9,7 @@ use Cocotte\DigitalOcean\ApiToken;
 use Cocotte\DigitalOcean\ApiTokenOptionProvider;
 use Cocotte\DigitalOcean\NetworkingConfigurator;
 use Cocotte\Environment\LazyEnvironment;
+use Cocotte\Help\DefaultExamples;
 use Cocotte\Host\HostMountRequired;
 use Cocotte\Machine\MachineName;
 use Cocotte\Machine\MachineNameOptionProvider;
@@ -126,7 +127,7 @@ final class UninstallCommand extends AbstractCommand implements LazyEnvironment,
         $this->setName('uninstall')
             ->setDescription($this->description())
             ->setHelp(
-                $this->formatHelp($this->description(), $this->example())
+                $this->formatHelp($this->description(), (new DefaultExamples())->uninstall())
             );
     }
 
@@ -153,23 +154,6 @@ final class UninstallCommand extends AbstractCommand implements LazyEnvironment,
         )) {
             throw new \Exception('Cancelled');
         };
-    }
-
-    /**
-     * @codeCoverageIgnore
-     *
-     * @return string
-     */
-    private function example(): string
-    {
-        return <<<'TAG'
-docker run -it --rm \
-    -v "$(pwd)":/host \
-    -v /var/run/docker.sock:/var/run/docker.sock:ro \
-    chrif/cocotte uninstall \
-    --digital-ocean-api-token="xxxx" \
-    --traefik-ui-hostname="traefik.mydomain.com";
-TAG;
     }
 
     /**
