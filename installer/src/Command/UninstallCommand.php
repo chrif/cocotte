@@ -127,7 +127,7 @@ final class UninstallCommand extends AbstractCommand implements LazyEnvironment,
         $this->setName('uninstall')
             ->setDescription($this->description())
             ->setHelp(
-                $this->formatHelp($this->description(), (new DefaultExamples())->uninstall())
+                $this->formatHelp($this->description(), (new DefaultExamples)->uninstall())
             );
     }
 

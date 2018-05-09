@@ -183,7 +183,7 @@ final class InstallCommand extends AbstractCommand implements LazyEnvironment, H
                 'Validate all options but do not proceed with installation.')
             ->setDescription($this->description())
             ->setHelp(
-                $this->formatHelp($this->description(), (new DefaultExamples())->install())
+                $this->formatHelp($this->description(), (new DefaultExamples)->install())
             );
     }
 

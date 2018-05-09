@@ -143,7 +143,7 @@ final class WizardCommand extends AbstractCommand implements DocumentedCommand
         string $traefikPassword,
         string $traefikUsername
     ): string {
-        $command = (new DefaultExamples())->install(
+        $command = (new DefaultExamples)->install(
             $token,
             $traefikHostname,
             $traefikPassword,

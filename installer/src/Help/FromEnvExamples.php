@@ -60,7 +60,7 @@ final class FromEnvExamples implements CommandExamples
 
     public function install(): string
     {
-        return (new DefaultExamples())->install(
+        return (new DefaultExamples)->install(
             $this->apiToken->toString(),
             $this->traefikHostname->toString(),
             $this->traefikPassword->toString(),
@@ -73,7 +73,7 @@ final class FromEnvExamples implements CommandExamples
         string $namespace = null,
         string $hostname = null
     ): string {
-        return (new DefaultExamples())->staticSite(
+        return (new DefaultExamples)->staticSite(
             $token ?? $this->apiToken->toString(),
             $namespace ?? $this->staticSiteNamespace->toString(),
             $hostname ?? $this->staticSiteHostname->toString()
@@ -82,7 +82,7 @@ final class FromEnvExamples implements CommandExamples
 
     public function uninstall(): string
     {
-        return (new DefaultExamples())->uninstall(
+        return (new DefaultExamples)->uninstall(
             $this->apiToken->toString(),
             $this->traefikHostname->toString()
         );
