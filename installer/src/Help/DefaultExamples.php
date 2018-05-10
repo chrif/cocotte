@@ -5,7 +5,6 @@ namespace Cocotte\Help;
 final class DefaultExamples implements CommandExamples
 {
     /**
-     * @codeCoverageIgnore
      * @param $token
      * @param $traefikHostname
      * @param $traefikPassword
@@ -31,7 +30,6 @@ EOF;
     }
 
     /**
-     * @codeCoverageIgnore
      * @param $token
      * @param $namespace
      * @param $hostname
@@ -55,8 +53,6 @@ EOF;
     }
 
     /**
-     * @codeCoverageIgnore
-     *
      * @param string $token
      * @param string $traefikHostname
      * @return string
