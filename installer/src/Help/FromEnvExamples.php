@@ -44,12 +44,6 @@ final class FromEnvExamples implements CommandExamples
 
     /**
      * @codeCoverageIgnore
-     * @param ApiToken $apiToken
-     * @param TraefikHostname $traefikHostname
-     * @param TraefikUsername $traefikUsername
-     * @param TraefikPassword $traefikPassword
-     * @param StaticSiteHostname $staticSiteHostname
-     * @param StaticSiteNamespace $staticSiteNamespace
      */
     public function __construct(
         ApiToken $apiToken,

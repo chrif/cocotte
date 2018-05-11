@@ -37,12 +37,6 @@ final class MachineCreator
 
     /**
      * @codeCoverageIgnore
-     *
-     * @param ProcessRunner $processRunner
-     * @param MachineState $machineState
-     * @param MachineName $machineName
-     * @param ApiToken $token
-     * @param Style $style
      */
     public function __construct(
         ProcessRunner $processRunner,
@@ -76,8 +70,6 @@ final class MachineCreator
 
     /**
      * @codeCoverageIgnore
-     *
-     * @return Process
      */
     private function createProcess(): Process
     {

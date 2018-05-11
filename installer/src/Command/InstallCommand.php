@@ -96,18 +96,6 @@ final class InstallCommand extends AbstractCommand implements LazyEnvironment, H
 
     /**
      * @codeCoverageIgnore
-     * @param MachineCreator $machineCreator
-     * @param TraefikCreator $traefikCreator
-     * @param Style $style
-     * @param MachineName $machineName
-     * @param TraefikHostname $traefikHostname
-     * @param EventDispatcherInterface $eventDispatcher
-     * @param NetworkingConfigurator $networkingConfigurator
-     * @param ProcessRunner $processRunner
-     * @param HostMount $hostMount
-     * @param TraefikDeploymentValidator $traefikDeploymentValidator
-     * @param MachineIp $machineIp
-     * @param FromEnvExamples $fromEnvExamples
      */
     public function __construct(
         MachineCreator $machineCreator,
@@ -140,7 +128,6 @@ final class InstallCommand extends AbstractCommand implements LazyEnvironment, H
 
     /**
      * @codeCoverageIgnore
-     * @return array
      */
     public function lazyEnvironmentValues(): array
     {
@@ -156,7 +143,6 @@ final class InstallCommand extends AbstractCommand implements LazyEnvironment, H
 
     /**
      * @codeCoverageIgnore
-     * @return array
      */
     public function optionProviders(): array
     {
@@ -237,7 +223,6 @@ final class InstallCommand extends AbstractCommand implements LazyEnvironment, H
 
     /**
      * @codeCoverageIgnore
-     * @return string
      */
     private function description(): string
     {
@@ -247,7 +232,6 @@ final class InstallCommand extends AbstractCommand implements LazyEnvironment, H
 
     /**
      * @codeCoverageIgnore
-     * @return array
      */
     private function completeMessage(): array
     {
@@ -260,9 +244,6 @@ final class InstallCommand extends AbstractCommand implements LazyEnvironment, H
         ];
     }
 
-    /**
-     * @return string
-     */
     private function command(): string
     {
         $command = $this->fromEnvExamples->staticSite(

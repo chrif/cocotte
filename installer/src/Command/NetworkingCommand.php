@@ -36,10 +36,6 @@ final class NetworkingCommand extends AbstractCommand implements LazyEnvironment
 
     /**
      * @codeCoverageIgnore
-     * @param NetworkingConfigurator $networkingConfigurator
-     * @param EventDispatcherInterface $eventDispatcher
-     * @param Style $style
-     * @param MachineIp $machineIp
      */
     public function __construct(
         NetworkingConfigurator $networkingConfigurator,
@@ -55,7 +51,6 @@ final class NetworkingCommand extends AbstractCommand implements LazyEnvironment
 
     /**
      * @codeCoverageIgnore
-     * @return array
      */
     public function lazyEnvironmentValues(): array
     {
@@ -66,7 +61,6 @@ final class NetworkingCommand extends AbstractCommand implements LazyEnvironment
 
     /**
      * @codeCoverageIgnore
-     * @return array
      */
     public function optionProviders(): array
     {

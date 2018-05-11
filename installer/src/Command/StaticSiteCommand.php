@@ -90,17 +90,6 @@ final class StaticSiteCommand extends AbstractCommand implements
 
     /**
      * @codeCoverageIgnore
-     * @param StaticSiteCreator $staticSiteCreator
-     * @param NetworkingConfigurator $networkingConfigurator
-     * @param StaticSiteHostname $staticSiteHostname
-     * @param Style $style
-     * @param ProcessRunner $processRunner
-     * @param EventDispatcherInterface $eventDispatcher
-     * @param MachineState $machineState
-     * @param StaticSiteNamespace $staticSiteNamespace
-     * @param HostMount $hostMount
-     * @param StaticSiteDeploymentValidator $staticSiteDeploymentValidator
-     * @param MachineIp $machineIp
      */
     public function __construct(
         StaticSiteCreator $staticSiteCreator,
@@ -131,7 +120,6 @@ final class StaticSiteCommand extends AbstractCommand implements
 
     /**
      * @codeCoverageIgnore
-     * @return array
      */
     public function lazyEnvironmentValues(): array
     {
@@ -146,7 +134,6 @@ final class StaticSiteCommand extends AbstractCommand implements
 
     /**
      * @codeCoverageIgnore
-     * @return array
      */
     public function optionProviders(): array
     {
@@ -236,7 +223,6 @@ final class StaticSiteCommand extends AbstractCommand implements
 
     /**
      * @codeCoverageIgnore
-     * @return string
      */
     private function confirmMessage(): string
     {
@@ -248,7 +234,6 @@ final class StaticSiteCommand extends AbstractCommand implements
 
     /**
      * @codeCoverageIgnore
-     * @return array
      */
     private function completeMessage(): array
     {

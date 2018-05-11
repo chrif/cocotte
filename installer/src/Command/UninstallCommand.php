@@ -62,14 +62,6 @@ final class UninstallCommand extends AbstractCommand implements LazyEnvironment,
 
     /**
      * @codeCoverageIgnore
-     *
-     * @param ProcessRunner $processRunner
-     * @param NetworkingConfigurator $networkingConfigurator
-     * @param TraefikHostname $traefikHostname
-     * @param Style $style
-     * @param MachineName $machineName
-     * @param EventDispatcherInterface $eventDispatcher
-     * @param MachineState $machineState
      */
     public function __construct(
         ProcessRunner $processRunner,
@@ -92,7 +84,6 @@ final class UninstallCommand extends AbstractCommand implements LazyEnvironment,
 
     /**
      * @codeCoverageIgnore
-     * @return array
      */
     public function lazyEnvironmentValues(): array
     {
@@ -106,7 +97,6 @@ final class UninstallCommand extends AbstractCommand implements LazyEnvironment,
 
     /**
      * @codeCoverageIgnore
-     * @return array
      */
     public function optionProviders(): array
     {

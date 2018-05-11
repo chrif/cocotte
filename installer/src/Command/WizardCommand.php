@@ -40,10 +40,6 @@ final class WizardCommand extends AbstractCommand implements DocumentedCommand
 
     /**
      * @codeCoverageIgnore
-     * @param Style $style
-     * @param EventDispatcherInterface $eventDispatcher
-     * @param OptionProviderRegistry $optionProviderRegistry
-     * @param InteractionOperator $operator
      */
     public function __construct(
         Style $style,
@@ -105,7 +101,6 @@ final class WizardCommand extends AbstractCommand implements DocumentedCommand
 
     /**
      * @codeCoverageIgnore
-     * @return array
      */
     private function completeMessage(): array
     {
@@ -121,7 +116,6 @@ final class WizardCommand extends AbstractCommand implements DocumentedCommand
 
     /**
      * @codeCoverageIgnore
-     * @return string
      */
     private function description(): string
     {
@@ -129,13 +123,6 @@ final class WizardCommand extends AbstractCommand implements DocumentedCommand
             "Interactively build a simple '<info>install</info>' command for <options=bold>Cocotte</>.";
     }
 
-    /**
-     * @param $token
-     * @param $traefikHostname
-     * @param $traefikPassword
-     * @param $traefikUsername
-     * @return string
-     */
     private function command(
         string $token,
         string $traefikHostname,
@@ -168,7 +155,6 @@ EOF;
 
     /**
      * @codeCoverageIgnore
-     * @return array
      */
     private function optionHelpMessage(): array
     {
