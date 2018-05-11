@@ -42,6 +42,15 @@ final class FromEnvExamples implements CommandExamples
      */
     private $staticSiteNamespace;
 
+    /**
+     * @codeCoverageIgnore
+     * @param ApiToken $apiToken
+     * @param TraefikHostname $traefikHostname
+     * @param TraefikUsername $traefikUsername
+     * @param TraefikPassword $traefikPassword
+     * @param StaticSiteHostname $staticSiteHostname
+     * @param StaticSiteNamespace $staticSiteNamespace
+     */
     public function __construct(
         ApiToken $apiToken,
         TraefikHostname $traefikHostname,
@@ -68,11 +77,8 @@ final class FromEnvExamples implements CommandExamples
         );
     }
 
-    public function staticSite(
-        string $token = null,
-        string $namespace = null,
-        string $hostname = null
-    ): string {
+    public function staticSite(string $token = null, string $namespace = null, string $hostname = null): string
+    {
         return (new DefaultExamples)->staticSite(
             $token ?? $this->apiToken->toString(),
             $namespace ?? $this->staticSiteNamespace->toString(),
