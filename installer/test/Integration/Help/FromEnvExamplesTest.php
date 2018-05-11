@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Cocotte\Tests\Integration\Help;
+namespace Cocotte\Test\Integration\Help;
 
 use Cocotte\DigitalOcean\ApiToken;
 use Cocotte\Environment\LazyEnvironment;
