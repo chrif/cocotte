@@ -130,7 +130,6 @@ final class WizardCommand extends AbstractCommand implements DocumentedCommand
     }
 
     /**
-     * @codeCoverageIgnore
      * @param $token
      * @param $traefikHostname
      * @param $traefikPassword
@@ -150,11 +149,13 @@ final class WizardCommand extends AbstractCommand implements DocumentedCommand
             $traefikUsername
         );
 
+        // @codeCoverageIgnoreStart
         return <<<EOF
 <options=bold,underscore>Run this command:</>
 {$command}
 
 EOF;
+        // @codeCoverageIgnoreEnd
     }
 
     /**
