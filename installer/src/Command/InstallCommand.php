@@ -271,10 +271,12 @@ final class InstallCommand extends AbstractCommand implements LazyEnvironment, H
             'site1.'.$this->traefikHostname->domainName()
         );
 
+        // @codeCoverageIgnoreStart
         return <<<EOF
 <options=bold,underscore>Run this command to create a static site:</>
 {$command}
 
 EOF;
+        // @codeCoverageIgnoreEnd
     }
 }
