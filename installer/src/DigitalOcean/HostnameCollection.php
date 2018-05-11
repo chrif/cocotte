@@ -2,23 +2,24 @@
 
 namespace Cocotte\DigitalOcean;
 
+use ArrayIterator;
 use Assert\Assertion;
-use Cocotte\Collection\GenericCollection;
+use IteratorAggregate;
 
-final class HostnameCollection extends GenericCollection
+final class HostnameCollection implements IteratorAggregate, \Countable
 {
-    protected $values;
+    private $hostnames;
 
     public function __construct(Hostname ...$hostnames)
     {
         Assertion::greaterThan($hostnames, 0, "There is no hostname");
-        $this->values = $hostnames;
+        $this->hostnames = $hostnames;
     }
 
     public static function fromScalarArray(array $value): self
     {
-        return self::fromArray(
-            array_map(
+        return new self(
+            ...array_map(
                 function (string $host) {
                     return Hostname::parse($host);
                 },
@@ -34,7 +35,7 @@ final class HostnameCollection extends GenericCollection
 
     public function toString(): string
     {
-        return implode(',', $this->values);
+        return implode(',', $this->hostnames);
     }
 
     public function __toString()
@@ -45,10 +46,21 @@ final class HostnameCollection extends GenericCollection
     public function toLocal(): HostnameCollection
     {
         $localHosts = [];
-        foreach ($this->values as $value) {
+        foreach ($this->hostnames as $value) {
             $localHosts[] = $value->toLocal();
         }
 
-        return self::fromArray($localHosts);
+        return new self(...$localHosts);
     }
+
+    public function getIterator()
+    {
+        return new ArrayIterator($this->hostnames);
+    }
+
+    public function count()
+    {
+        return count($this->hostnames);
+    }
+
 }
