@@ -23,9 +23,10 @@
     }
   ],
   "require-dev": {
-    "phpunit/phpunit": "^7.0"
+    "phpunit/phpunit": "^7.1"
   },
   "require": {
+    "php": "7.1.16",
     "toin0u/digitalocean-v2": "^2.2",
     "symfony/console": "^4.0",
     "symfony/config": "^4.0",

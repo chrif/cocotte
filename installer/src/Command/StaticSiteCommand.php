@@ -9,6 +9,7 @@ use Cocotte\DigitalOcean\ApiToken;
 use Cocotte\DigitalOcean\ApiTokenOptionProvider;
 use Cocotte\DigitalOcean\NetworkingConfigurator;
 use Cocotte\Environment\LazyEnvironment;
+use Cocotte\Help\DefaultExamples;
 use Cocotte\Host\HostMount;
 use Cocotte\Host\HostMountRequired;
 use Cocotte\Machine\MachineIp;
@@ -89,17 +90,6 @@ final class StaticSiteCommand extends AbstractCommand implements
 
     /**
      * @codeCoverageIgnore
-     * @param StaticSiteCreator $staticSiteCreator
-     * @param NetworkingConfigurator $networkingConfigurator
-     * @param StaticSiteHostname $staticSiteHostname
-     * @param Style $style
-     * @param ProcessRunner $processRunner
-     * @param EventDispatcherInterface $eventDispatcher
-     * @param MachineState $machineState
-     * @param StaticSiteNamespace $staticSiteNamespace
-     * @param HostMount $hostMount
-     * @param StaticSiteDeploymentValidator $staticSiteDeploymentValidator
-     * @param MachineIp $machineIp
      */
     public function __construct(
         StaticSiteCreator $staticSiteCreator,
@@ -130,7 +120,6 @@ final class StaticSiteCommand extends AbstractCommand implements
 
     /**
      * @codeCoverageIgnore
-     * @return array
      */
     public function lazyEnvironmentValues(): array
     {
@@ -145,7 +134,6 @@ final class StaticSiteCommand extends AbstractCommand implements
 
     /**
      * @codeCoverageIgnore
-     * @return array
      */
     public function optionProviders(): array
     {
@@ -177,7 +165,7 @@ final class StaticSiteCommand extends AbstractCommand implements
                 'Do not deploy to prod after creation.')
             ->setDescription($description = 'Create a static website and deploy it to your Docker Machine.')
             ->setHelp(
-                $this->formatHelp($description, $this->example())
+                $this->formatHelp($description, (new DefaultExamples)->staticSite())
             );
     }
 
@@ -235,24 +223,6 @@ final class StaticSiteCommand extends AbstractCommand implements
 
     /**
      * @codeCoverageIgnore
-     * @return string
-     */
-    private function example(): string
-    {
-        return <<<'TAG'
-docker run -it --rm \
-    -v "$(pwd)":/host \
-    -v /var/run/docker.sock:/var/run/docker.sock:ro \
-    chrif/cocotte static-site \
-    --digital-ocean-api-token="xxxx" \
-    --namespace="static-site" \
-    --hostname="static-site.mydomain.com";
-TAG;
-    }
-
-    /**
-     * @codeCoverageIgnore
-     * @return string
      */
     private function confirmMessage(): string
     {
@@ -264,7 +234,6 @@ TAG;
 
     /**
      * @codeCoverageIgnore
-     * @return array
      */
     private function completeMessage(): array
     {

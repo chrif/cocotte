@@ -4,7 +4,7 @@ namespace Cocotte\Machine;
 
 use Symfony\Component\Process\Process;
 
-final class MachineState
+class MachineState
 {
     /**
      * @var MachineName

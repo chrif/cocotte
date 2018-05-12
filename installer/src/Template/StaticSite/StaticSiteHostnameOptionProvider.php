@@ -41,9 +41,9 @@ class StaticSiteHostnameOptionProvider implements OptionProvider
 
     public function validate(string $value)
     {
-        $hostname = Hostname::parse($value);
+        $staticSiteHostname = new StaticSiteHostname(Hostname::parse($value));
 
-        $this->dnsValidator->validateHost($hostname);
+        $this->dnsValidator->validateHost($staticSiteHostname->toHostname());
     }
 
     public function helpMessage(): string

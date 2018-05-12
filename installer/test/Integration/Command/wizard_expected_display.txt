@@ -60,7 +60,7 @@
             Afterwards, two directories will be created:                                                                
             - one named 'machine' that you must leave there and never edit (it is used by Docker Machine to login to    
             your cloud machine),                                                                                        
-            - and one named 'traefik' that you can edit all you want and which is ready for Git version control: this   
+            - and one named 'traefik' that you can edit all you want and which is ready for Git version control: this is
             your new Traefik project.                                                                                   
                                                                                                                         
             Thank you for trying Cocotte!                                                                               

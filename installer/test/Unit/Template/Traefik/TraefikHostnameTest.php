@@ -11,6 +11,6 @@ class TraefikHostnameTest extends TestCase
 
     public function test_to_string()
     {
-        self::assertSame('foo.bar', (string)(new TraefikHostname(Hostname::parse('foo.bar'))));
+        self::assertSame('foo.bar.baz', (string)(new TraefikHostname(Hostname::parse('foo.bar.baz'))));
     }
 }

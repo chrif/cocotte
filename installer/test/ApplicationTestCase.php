@@ -13,6 +13,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Tester\CommandTester;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\Process\Process;
 
 /**
  * This is the base class for all system tests.
@@ -23,6 +24,14 @@ class ApplicationTestCase extends TestCase
      * @var Application
      */
     private $application;
+
+    public static function assertEnvInString($expected, $actual)
+    {
+        $process = new Process('envsubst');
+        $process->setInput($expected);
+        $process->mustRun();
+        self::assertSame($process->getOutput(), $actual);
+    }
 
     protected function assertCommandExecutes(Command $command, array $options = []): CommandTester
     {

@@ -8,6 +8,7 @@ use Cocotte\Console\InteractionOperator;
 use Cocotte\Console\OptionProviderRegistry;
 use Cocotte\Console\Style;
 use Cocotte\DigitalOcean\ApiToken;
+use Cocotte\Help\DefaultExamples;
 use Cocotte\Template\Traefik\TraefikHostname;
 use Cocotte\Template\Traefik\TraefikPassword;
 use Cocotte\Template\Traefik\TraefikUsername;
@@ -39,10 +40,6 @@ final class WizardCommand extends AbstractCommand implements DocumentedCommand
 
     /**
      * @codeCoverageIgnore
-     * @param Style $style
-     * @param EventDispatcherInterface $eventDispatcher
-     * @param OptionProviderRegistry $optionProviderRegistry
-     * @param InteractionOperator $operator
      */
     public function __construct(
         Style $style,
@@ -104,7 +101,6 @@ final class WizardCommand extends AbstractCommand implements DocumentedCommand
 
     /**
      * @codeCoverageIgnore
-     * @return array
      */
     private function completeMessage(): array
     {
@@ -113,14 +109,13 @@ final class WizardCommand extends AbstractCommand implements DocumentedCommand
             "Run the command from a location on your computer where you usually put new project code.",
             "Afterwards, two directories will be created:\n- one named 'machine' that you must leave there ".
             "and never edit (it is used by Docker Machine to login to your cloud machine),\n- and one named 'traefik' ".
-            "that you can edit all you want and which is ready for Git version control: this your new Traefik project.",
+            "that you can edit all you want and which is ready for Git version control: this is your new Traefik project.",
             "Thank you for trying Cocotte!",
         ];
     }
 
     /**
      * @codeCoverageIgnore
-     * @return string
      */
     private function description(): string
     {
@@ -128,32 +123,26 @@ final class WizardCommand extends AbstractCommand implements DocumentedCommand
             "Interactively build a simple '<info>install</info>' command for <options=bold>Cocotte</>.";
     }
 
-    /**
-     * @codeCoverageIgnore
-     * @param $token
-     * @param $traefikHostname
-     * @param $traefikPassword
-     * @param $traefikUsername
-     * @return string
-     */
     private function command(
         string $token,
         string $traefikHostname,
         string $traefikPassword,
         string $traefikUsername
     ): string {
+        $command = (new DefaultExamples)->install(
+            $token,
+            $traefikHostname,
+            $traefikPassword,
+            $traefikUsername
+        );
+
+        // @codeCoverageIgnoreStart
         return <<<EOF
 <options=bold,underscore>Run this command:</>
-docker run -it --rm \
-    -v "$(pwd)":/host \
-    -v /var/run/docker.sock:/var/run/docker.sock:ro \
-    chrif/cocotte install \
-    --digital-ocean-api-token="$token" \
-    --traefik-ui-hostname="$traefikHostname" \
-    --traefik-ui-password="$traefikPassword" \
-    --traefik-ui-username="$traefikUsername";
+{$command}
 
 EOF;
+        // @codeCoverageIgnoreEnd
     }
 
     /**
@@ -166,7 +155,6 @@ EOF;
 
     /**
      * @codeCoverageIgnore
-     * @return array
      */
     private function optionHelpMessage(): array
     {

@@ -37,12 +37,6 @@ final class MachineCreator
 
     /**
      * @codeCoverageIgnore
-     *
-     * @param ProcessRunner $processRunner
-     * @param MachineState $machineState
-     * @param MachineName $machineName
-     * @param ApiToken $token
-     * @param Style $style
      */
     public function __construct(
         ProcessRunner $processRunner,
@@ -69,15 +63,13 @@ final class MachineCreator
 
         $process = $this->createProcess();
 
-        $process->setTimeout(300);
+        $process->setTimeout(600);
 
         $this->processRunner->mustRun($process, true);
     }
 
     /**
      * @codeCoverageIgnore
-     *
-     * @return Process
      */
     private function createProcess(): Process
     {

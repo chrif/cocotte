@@ -46,7 +46,7 @@ class NetworkingConfiguratorTest extends ApplicationTestCase implements LazyEnvi
     {
         $this->loadEnvironment();
         $this->hostname = Hostname::parse(sprintf('app.%s.test', uniqid('cocotte-')));
-        $this->hostnameCollection = HostnameCollection::fromArray([$this->hostname]);
+        $this->hostnameCollection = new HostnameCollection($this->hostname);
         $this->configurator = new NetworkingConfigurator(
             $this->domainRecordApi = DomainRecordActual::get($this->container())->service(),
             $this->domainApi = DomainActual::get($this->container())->service(),

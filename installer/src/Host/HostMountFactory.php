@@ -33,8 +33,12 @@ final class HostMountFactory
         foreach ($this->mountsFactory->fromDocker()->toArray() as $mount) {
             if ('bind' === $mount['Type'] && '/host' === $mount['Destination']) {
                 Assertion::true($mount['RW'], "Volume /host must be writable");
+                Assertion::true(
+                    $this->filesystem->isAbsolutePath($mount['Source']),
+                    "Host mount source '{$mount['Source']}' is not an absolute path"
+                );
 
-                return new HostMount($mount, $this->filesystem);
+                return new HostMount($mount);
             }
         }
         throw HostException::noHostMount();

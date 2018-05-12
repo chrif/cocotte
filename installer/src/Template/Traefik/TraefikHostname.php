@@ -2,6 +2,7 @@
 
 namespace Cocotte\Template\Traefik;
 
+use Assert\Assertion;
 use Cocotte\DigitalOcean\Hostname;
 use Cocotte\DigitalOcean\HostnameCollection;
 use Cocotte\Environment\FromEnvLazyFactory;
@@ -22,6 +23,7 @@ class TraefikHostname implements LazyExportableOption, FromEnvLazyFactory
 
     public function __construct(Hostname $hostname)
     {
+        Assertion::false($hostname->isRoot(), "$hostname does not have a subdomain.");
         $this->hostname = $hostname;
     }
 
@@ -57,11 +59,21 @@ class TraefikHostname implements LazyExportableOption, FromEnvLazyFactory
 
     public function toHostnameCollection(): HostnameCollection
     {
-        return HostnameCollection::fromArray([$this->hostname]);
+        return new HostnameCollection($this->hostname);
     }
 
     public function toLocal(): Hostname
     {
         return $this->hostname->toLocal();
+    }
+
+    public function domainName()
+    {
+        return $this->hostname->domainName();
+    }
+
+    public function toHostname(): Hostname
+    {
+        return $this->hostname;
     }
 }
