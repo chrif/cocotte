@@ -248,7 +248,7 @@ final class InstallCommand extends AbstractCommand implements LazyEnvironment, H
     {
         $command = $this->fromEnvExamples->staticSite(
             null,
-            'site-1',
+            'site1',
             'site1.'.$this->traefikHostname->domainName()
         );
 
