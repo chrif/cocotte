@@ -90,6 +90,7 @@ $ docker run -it --rm chrif/cocotte
 * [Console API Reference](installer/doc/console.md)
 * [Developing and deploying applications](doc/templates.md)
 * [The `machine` directory](doc/machine.md)
+* [Frequently asked questions](doc/faq.md)
 
 ## Contributing
 
