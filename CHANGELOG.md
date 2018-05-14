@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [0.2.0] - 2018-05-13
 ### Added
 - Suggest a static site command to run with valid values on install command complete.
 
@@ -13,4 +15,5 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Initial release.
 - Command line interface for installing, adding a static site, and uninstalling.
 
-[Unreleased]: https://github.com/chrif/cocotte/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/chrif/cocotte/compare/0.2.0...HEAD
+[0.2.0]: https://github.com/chrif/cocotte/compare/v0.1.0...0.2.0
