@@ -64,7 +64,5 @@ docker-compose run --rm cmd ash
 ## Create a release
 
 ```
-git checkout master
-git pull
-git tag -a <version> -m <message> && git push origin <version>
+./bin/release <version>
 ```

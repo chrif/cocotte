@@ -65,6 +65,7 @@ deploy:
     skip_cleanup: true
     file: "chrif-cocotte-${TRAVIS_TAG}.tar.gz"
     api_key: $GITHUB_TOKEN
+    body: "[CHANGELOG](https://github.com/chrif/cocotte/blob/master/CHANGELOG.md)"
     on:
       tags: true
 

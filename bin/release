@@ -1,0 +1,10 @@
+#!/bin/sh
+
+set -euo pipefail
+
+readonly VERSION={$1}
+
+git checkout master
+git pull
+git tag ${VERSION}
+git push origin ${VERSION}
