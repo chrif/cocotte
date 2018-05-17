@@ -64,6 +64,7 @@ docker-compose run --rm cmd ash
 ## Create a release
 
 ```
+git fetch -p -P
 git checkout master
 git pull
 ./bin/release <version>
