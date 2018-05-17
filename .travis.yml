@@ -53,15 +53,6 @@ deploy:
     on:
       tags: true
 
-  # push dev image to docker hub
-  - provider: script
-    skip_cleanup: true
-    script: "echo $DOCKER_PASSWORD | docker login -u chrif --password-stdin && \
-            docker tag chrif/cocotte:latest chrif/cocotte:dev-master && \
-            docker push chrif/cocotte:dev-master"
-    on:
-      branch: master
-
   # prepare artifacts for github release
   - provider: script
     skip_cleanup: true
@@ -77,6 +68,15 @@ deploy:
     body: "[CHANGELOG](https://github.com/chrif/cocotte/blob/master/CHANGELOG.md)"
     on:
       tags: true
+
+  # push dev image to docker hub
+  - provider: script
+    skip_cleanup: true
+    script: "echo $DOCKER_PASSWORD | docker login -u chrif --password-stdin && \
+            docker tag chrif/cocotte:latest chrif/cocotte:dev-master && \
+            docker push chrif/cocotte:dev-master"
+    on:
+      branch: master
 
 env:
   global:
