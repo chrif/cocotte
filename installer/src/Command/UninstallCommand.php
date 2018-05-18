@@ -60,9 +60,6 @@ final class UninstallCommand extends AbstractCommand implements LazyEnvironment,
      */
     private $machineState;
 
-    /**
-     * @codeCoverageIgnore
-     */
     public function __construct(
         ProcessRunner $processRunner,
         NetworkingConfigurator $networkingConfigurator,
@@ -82,9 +79,6 @@ final class UninstallCommand extends AbstractCommand implements LazyEnvironment,
         parent::__construct();
     }
 
-    /**
-     * @codeCoverageIgnore
-     */
     public function lazyEnvironmentValues(): array
     {
         return [
@@ -95,9 +89,6 @@ final class UninstallCommand extends AbstractCommand implements LazyEnvironment,
         ];
     }
 
-    /**
-     * @codeCoverageIgnore
-     */
     public function optionProviders(): array
     {
         return [

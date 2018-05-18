@@ -88,9 +88,6 @@ final class StaticSiteCommand extends AbstractCommand implements
      */
     private $machineIp;
 
-    /**
-     * @codeCoverageIgnore
-     */
     public function __construct(
         StaticSiteCreator $staticSiteCreator,
         NetworkingConfigurator $networkingConfigurator,
@@ -118,9 +115,6 @@ final class StaticSiteCommand extends AbstractCommand implements
         $this->machineIp = $machineIp;
     }
 
-    /**
-     * @codeCoverageIgnore
-     */
     public function lazyEnvironmentValues(): array
     {
         return [
@@ -132,9 +126,6 @@ final class StaticSiteCommand extends AbstractCommand implements
         ];
     }
 
-    /**
-     * @codeCoverageIgnore
-     */
     public function optionProviders(): array
     {
         return [
@@ -221,9 +212,6 @@ final class StaticSiteCommand extends AbstractCommand implements
         };
     }
 
-    /**
-     * @codeCoverageIgnore
-     */
     private function confirmMessage(): string
     {
         return "You are about to create a static website in ".
@@ -232,9 +220,6 @@ final class StaticSiteCommand extends AbstractCommand implements
             "'<options=bold>{$this->staticSiteHostname->toString()}</>'.";
     }
 
-    /**
-     * @codeCoverageIgnore
-     */
     private function completeMessage(): array
     {
         return [

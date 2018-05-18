@@ -94,9 +94,6 @@ final class InstallCommand extends AbstractCommand implements LazyEnvironment, H
      */
     private $fromEnvExamples;
 
-    /**
-     * @codeCoverageIgnore
-     */
     public function __construct(
         MachineCreator $machineCreator,
         TraefikCreator $traefikCreator,
@@ -126,9 +123,6 @@ final class InstallCommand extends AbstractCommand implements LazyEnvironment, H
         parent::__construct();
     }
 
-    /**
-     * @codeCoverageIgnore
-     */
     public function lazyEnvironmentValues(): array
     {
         return [
@@ -141,9 +135,6 @@ final class InstallCommand extends AbstractCommand implements LazyEnvironment, H
         ];
     }
 
-    /**
-     * @codeCoverageIgnore
-     */
     public function optionProviders(): array
     {
         return [
@@ -221,18 +212,12 @@ final class InstallCommand extends AbstractCommand implements LazyEnvironment, H
         };
     }
 
-    /**
-     * @codeCoverageIgnore
-     */
     private function description(): string
     {
         return 'Create a <options=bold>Docker</> machine on <options=bold>Digital Ocean</> and '.
             'install the <options=bold>Traefik</> reverse proxy on it.';
     }
 
-    /**
-     * @codeCoverageIgnore
-     */
     private function completeMessage(): array
     {
         return [
@@ -252,12 +237,10 @@ final class InstallCommand extends AbstractCommand implements LazyEnvironment, H
             'site1.'.$this->traefikHostname->domainName()
         );
 
-        // @codeCoverageIgnoreStart
         return <<<EOF
 <options=bold,underscore>Run this command to create a static site:</>
 {$command}
 
 EOF;
-        // @codeCoverageIgnoreEnd
     }
 }
