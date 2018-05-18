@@ -76,6 +76,7 @@ deploy:
 
 env:
   global:
+    # SYSTEM_TEST_VERBOSITY (set in repo settings)
     # DIGITAL_OCEAN_API_TOKEN (set in in repo settings)
     - COCOTTE_VERSION=${TRAVIS_TAG}
     - GIT_COMMIT_ID=${TRAVIS_COMMIT}

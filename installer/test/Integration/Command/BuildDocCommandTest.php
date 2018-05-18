@@ -19,7 +19,7 @@ class BuildDocCommandTest extends ApplicationTestCase
         $buildDocCommand = BuildDocCommandActual::get($this->container())->service();
         $buildDocCommand->setApplication($this->application()->console());
 
-        $tester = $this->assertCommandExecutes($buildDocCommand);
+        $tester = $this->assertCommandExecutes($buildDocCommand, [], false);
         $display = $tester->getDisplay();
         self::assertSame(file_get_contents(__DIR__."/../../../doc/console.md"), $display);
     }
