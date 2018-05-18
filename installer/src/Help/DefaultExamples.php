@@ -2,9 +2,6 @@
 
 namespace Cocotte\Help;
 
-/**
- * @codeCoverageIgnore
- */
 final class DefaultExamples implements CommandExamples
 {
     public function install(

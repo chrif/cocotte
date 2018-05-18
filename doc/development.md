@@ -18,7 +18,7 @@
 	```
 
 ## Useful commands
-### Install
+__Install__
 * with `docker-compose.override.yml` (with project mount)
 	```
 	docker-compose run --rm install
@@ -27,7 +27,7 @@
 	```
 	./bin/install test
 	```
-### Uninstall
+__Uninstall__
 * with `docker-compose.override.yml` (with project mount)
 	```
 	docker-compose run --rm uninstall
@@ -36,7 +36,7 @@
 	```
 	./bin/uninstall test
 	```
-## Wizard
+__Wizard__
 * with `docker-compose.override.yml` (with project mount)
 	```
 	docker-compose run --rm wizard
@@ -45,26 +45,30 @@
 	```
 	./bin/wizard
 	```
-### Unit tests
+__Unit tests__
 ```
 docker-compose run --rm cmd phpunit --testsuite=unit 
 ```
-### Symfony console
+__Symfony console__
 ```
 docker-compose run --rm cmd console
 ```
-### Shell session
+__Shell session__
 ```
 docker-compose run --rm cmd ash
 ```
+__Prune tags__
+```
+git fetch -p -P
+```
+
 ## Building the documentation
 ```
 ./bin/build-doc
 ```
 ## Create a release
-
 ```
 git checkout master
 git pull
-git tag -a <version> -m <message> && git push origin <version>
+./bin/release <version>
 ```

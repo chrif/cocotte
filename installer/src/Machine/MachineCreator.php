@@ -35,9 +35,6 @@ final class MachineCreator
      */
     private $style;
 
-    /**
-     * @codeCoverageIgnore
-     */
     public function __construct(
         ProcessRunner $processRunner,
         MachineState $machineState,
@@ -68,9 +65,6 @@ final class MachineCreator
         $this->processRunner->mustRun($process, true);
     }
 
-    /**
-     * @codeCoverageIgnore
-     */
     private function createProcess(): Process
     {
         return new Process(

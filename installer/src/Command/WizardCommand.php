@@ -38,9 +38,6 @@ final class WizardCommand extends AbstractCommand implements DocumentedCommand
      */
     private $operator;
 
-    /**
-     * @codeCoverageIgnore
-     */
     public function __construct(
         Style $style,
         EventDispatcherInterface $eventDispatcher,
@@ -99,9 +96,6 @@ final class WizardCommand extends AbstractCommand implements DocumentedCommand
         return $this->operator->ask($this->optionProviderRegistry->providerByOptionName($name));
     }
 
-    /**
-     * @codeCoverageIgnore
-     */
     private function completeMessage(): array
     {
         return [
@@ -114,9 +108,6 @@ final class WizardCommand extends AbstractCommand implements DocumentedCommand
         ];
     }
 
-    /**
-     * @codeCoverageIgnore
-     */
     private function description(): string
     {
         return $description = /** @lang text */
@@ -136,13 +127,11 @@ final class WizardCommand extends AbstractCommand implements DocumentedCommand
             $traefikUsername
         );
 
-        // @codeCoverageIgnoreStart
         return <<<EOF
 <options=bold,underscore>Run this command:</>
 {$command}
 
 EOF;
-        // @codeCoverageIgnoreEnd
     }
 
     /**
@@ -153,9 +142,6 @@ EOF;
         return 'docker run -it --rm chrif/cocotte wizard';
     }
 
-    /**
-     * @codeCoverageIgnore
-     */
     private function optionHelpMessage(): array
     {
         return [

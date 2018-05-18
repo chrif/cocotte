@@ -42,9 +42,6 @@ final class FromEnvExamples implements CommandExamples
      */
     private $staticSiteNamespace;
 
-    /**
-     * @codeCoverageIgnore
-     */
     public function __construct(
         ApiToken $apiToken,
         TraefikHostname $traefikHostname,

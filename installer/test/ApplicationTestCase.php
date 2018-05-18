@@ -33,24 +33,42 @@ class ApplicationTestCase extends TestCase
         self::assertSame($process->getOutput(), $actual);
     }
 
-    protected function assertCommandExecutes(Command $command, array $options = []): CommandTester
-    {
+    protected function assertCommandExecutes(
+        Command $command,
+        array $options = [],
+        $guardDisplay = true
+    ): CommandTester {
         $input = InputActual::get($this->container())->service();
         $output = OutputActual::get($this->container())->service();
+        $verbosity = (int)(getenv('SYSTEM_TEST_VERBOSITY') ?: OutputInterface::VERBOSITY_DEBUG);
+        self::assertContains($verbosity,
+            [
+                OutputInterface::VERBOSITY_QUIET,
+                OutputInterface::VERBOSITY_DEBUG,
+            ],
+            "The verbosity modes suited for system tests are quiet or debug. $verbosity was used.");
 
         $input->setInteractive(false);
-        $output->setVerbosity(OutputInterface::VERBOSITY_DEBUG);
+        $output->setVerbosity($verbosity);
 
         $tester = new CommandTester($command);
         $tester->execute(
             $options,
             [
                 'interactive' => false,
-                'verbosity' => OutputInterface::VERBOSITY_DEBUG,
             ]
         );
 
         self::assertSame(0, $tester->getStatusCode());
+        if ($guardDisplay && trim($tester->getDisplay())) {
+            self::fail(
+                "The memory output has been used during tests. It means some code did not use the output ".
+                "service to write to console, but rather the output parameter directly. Make sure it is ".
+                "a desired behavior. In production, the output service and the output instance passed ".
+                "as parameter to a command are the same instance, but injecting the output service is".
+                " the preferred way of accessing it for testing purposes."
+            );
+        }
 
         return $tester;
     }

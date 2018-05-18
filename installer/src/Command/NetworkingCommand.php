@@ -34,9 +34,6 @@ final class NetworkingCommand extends AbstractCommand implements LazyEnvironment
      */
     private $style;
 
-    /**
-     * @codeCoverageIgnore
-     */
     public function __construct(
         NetworkingConfigurator $networkingConfigurator,
         EventDispatcherInterface $eventDispatcher,
@@ -49,9 +46,6 @@ final class NetworkingCommand extends AbstractCommand implements LazyEnvironment
         parent::__construct();
     }
 
-    /**
-     * @codeCoverageIgnore
-     */
     public function lazyEnvironmentValues(): array
     {
         return [
@@ -59,9 +53,6 @@ final class NetworkingCommand extends AbstractCommand implements LazyEnvironment
         ];
     }
 
-    /**
-     * @codeCoverageIgnore
-     */
     public function optionProviders(): array
     {
         return [
