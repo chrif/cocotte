@@ -85,4 +85,19 @@ final class FromEnvExamples implements CommandExamples
         );
     }
 
+    public function installInteractive(): string
+    {
+        return (new DefaultExamples)->installInteractive();
+    }
+
+    public function uninstallInteractive(): string
+    {
+        return (new DefaultExamples)->uninstallInteractive();
+    }
+
+    public function staticSiteInteractive(): string
+    {
+        return (new DefaultExamples)->staticSiteInteractive();
+    }
+
 }

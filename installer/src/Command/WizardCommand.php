@@ -65,16 +65,14 @@ final class WizardCommand extends AbstractCommand implements DocumentedCommand
     {
         $this->setName('wizard')
             ->setDescription($this->description())
-            ->setHelp(
-                $this->formatHelp($this->description(), $this->example())
-            );
+            ->setHelp($this->description());
     }
 
     protected function doExecute(InputInterface $input, OutputInterface $output)
     {
         $input->setInteractive(true);
         $this->style->help(
-            $this->style->optionHelp("Cocotte Wizard", $this->optionHelpMessage())
+            $this->style->optionHelp("Cocotte Wizard", $this->welcomeMessage())
         );
         $this->style->pause();
 
@@ -134,15 +132,7 @@ final class WizardCommand extends AbstractCommand implements DocumentedCommand
 EOF;
     }
 
-    /**
-     * @return string
-     */
-    private function example(): string
-    {
-        return 'docker run -it --rm chrif/cocotte wizard';
-    }
-
-    private function optionHelpMessage(): array
+    private function welcomeMessage(): array
     {
         return [
             "This wizard helps you build a simple '<info>install</info>' command for Cocotte.",

@@ -156,7 +156,10 @@ final class StaticSiteCommand extends AbstractCommand implements
                 'Do not deploy to prod after creation.')
             ->setDescription($description = 'Create a static website and deploy it to your Docker Machine.')
             ->setHelp(
-                $this->formatHelp($description, (new DefaultExamples)->staticSite())
+                $this->formatHelp($description,
+                    (new DefaultExamples)->staticSite(),
+                    (new DefaultExamples)->staticSiteInteractive()
+                )
             );
     }
 
