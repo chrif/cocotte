@@ -52,4 +52,35 @@ docker run -it --rm \
     --traefik-ui-hostname="{$traefikHostname}";
 EOF;
     }
+
+    public function installInteractive(): string
+    {
+        return <<<EOF
+docker run -it --rm \
+    -v "$(pwd)":/host \
+    -v /var/run/docker.sock:/var/run/docker.sock:ro \
+    chrif/cocotte install;
+EOF;
+    }
+
+    public function uninstallInteractive(): string
+    {
+        return <<<EOF
+docker run -it --rm \
+    -v "$(pwd)":/host \
+    -v /var/run/docker.sock:/var/run/docker.sock:ro \
+    chrif/cocotte uninstall;
+EOF;
+    }
+
+    public function staticSiteInteractive(): string
+    {
+        return <<<EOF
+docker run -it --rm \
+    -v "$(pwd)":/host \
+    -v /var/run/docker.sock:/var/run/docker.sock:ro \
+    chrif/cocotte static-site;
+EOF;
+    }
+
 }

@@ -4,6 +4,7 @@ namespace Cocotte\Test\Integration\Help;
 
 use Cocotte\DigitalOcean\ApiToken;
 use Cocotte\Environment\LazyEnvironment;
+use Cocotte\Help\DefaultExamples;
 use Cocotte\Template\StaticSite\StaticSiteHostname;
 use Cocotte\Template\StaticSite\StaticSiteNamespace;
 use Cocotte\Template\Traefik\TraefikHostname;
@@ -63,6 +64,15 @@ EOF;
             StaticSiteHostname::class,
             StaticSiteNamespace::class,
         ];
+    }
+
+    public function test_interactive_examples_just_return_default_value()
+    {
+        $fromEnvExamples = FromEnvExamplesActual::get($this->container())->service();
+        $defaultExamples = new DefaultExamples();
+        self::assertSame($defaultExamples->installInteractive(), $fromEnvExamples->installInteractive());
+        self::assertSame($defaultExamples->staticSiteInteractive(), $fromEnvExamples->staticSiteInteractive());
+        self::assertSame($defaultExamples->uninstallInteractive(), $fromEnvExamples->uninstallInteractive());
     }
 
 }
