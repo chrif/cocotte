@@ -53,17 +53,12 @@ class ApiTokenOptionProvider implements OptionProvider
         $adapter = new GuzzleHttpAdapter($token->toString());
         $digitalOceanV2 = new DigitalOceanV2($adapter);
         try {
-            $account = $digitalOceanV2->account()->getUserInformation();
+            $digitalOceanV2->domain()->create('cocotte-validate.token', '127.0.0.1');
+            $digitalOceanV2->domain()->delete('cocotte-validate.token');
         } catch (\Throwable $e) {
             throw new \Exception(
-                "Failed to validate the Digital Ocean token with message:\n".
+                "Failed to validate that the Digital Ocean token has 'write' permissions. Error message was:\n".
                 $e->getMessage()
-            );
-        }
-        if ($account->status !== 'active') {
-            throw new \Exception(
-                "Failed to validate the Digital Ocean token with message:\n".
-                "The Digital Ocean token is associated to an account with status '{$account->status}'."
             );
         }
     }
