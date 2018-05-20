@@ -67,8 +67,10 @@ git fetch -p -P
 ./bin/build-doc
 ```
 ## Create a release
-```
-git checkout master
-git pull
-./bin/release <version>
-```
+1. Unset `ACME_ENABLED=false` on Travis repo settings.
+2. Tag release
+	```
+	git checkout master
+	git pull
+	./bin/release <version>
+	```

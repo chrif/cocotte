@@ -28,13 +28,13 @@ install:
 
 script:
   # tests
-  - ./bin/cmd phpunit --coverage-clover /host/coverage/coverage.xml
+  - ./bin/cmd phpunit --coverage-clover /host/coverage/clover.xml
 
   # test local deployment
   - ./.travis/deploy-dev
 
 after_success:
-  - bash <(curl -s https://codecov.io/bash) -f host/coverage/coverage.xml
+  - bash <(curl -s https://codecov.io/bash) -f host/coverage/clover.xml
 
 deploy:
   # push image to docker hub
