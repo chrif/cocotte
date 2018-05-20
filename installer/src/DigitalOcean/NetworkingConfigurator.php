@@ -71,7 +71,7 @@ final class NetworkingConfigurator
     {
         if ($this->domainRecord->exists($hostname)) {
             if (!$this->domainRecord->isUpToDate($hostname, $ip)) {
-                $this->style->verbose(
+                $this->style->note(
                     "Domain record '{$hostname}' exists. Updating its ip to {$ip->getShortAddress()}"
                 );
                 $this->domainRecord->update($hostname, $ip);

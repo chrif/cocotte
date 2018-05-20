@@ -21,7 +21,7 @@ install
 
 Create a Docker machine on Digital Ocean and install the Traefik reverse proxy on it.
 
-Example:
+Example with required options:
 ```
 $ docker run -it --rm \
     -v "$(pwd)":/host \
@@ -31,6 +31,13 @@ $ docker run -it --rm \
     --traefik-ui-hostname="traefik.mydomain.com" \
     --traefik-ui-password="password" \
     --traefik-ui-username="username";
+```
+Or run interactively:
+```
+$ docker run -it --rm \
+    -v "$(pwd)":/host \
+    -v /var/run/docker.sock:/var/run/docker.sock:ro \
+    chrif/cocotte install;
 ```
 This command requires 2 volumes:
   * "$(pwd)":/host
@@ -125,7 +132,7 @@ static-site
 
 Create a static website and deploy it to your Docker Machine.
 
-Example:
+Example with required options:
 ```
 $ docker run -it --rm \
     -v "$(pwd)":/host \
@@ -134,6 +141,13 @@ $ docker run -it --rm \
     --digital-ocean-api-token="xxxx" \
     --namespace="static-site" \
     --hostname="static-site.mydomain.com";
+```
+Or run interactively:
+```
+$ docker run -it --rm \
+    -v "$(pwd)":/host \
+    -v /var/run/docker.sock:/var/run/docker.sock:ro \
+    chrif/cocotte static-site;
 ```
 This command requires 2 volumes:
   * "$(pwd)":/host
@@ -228,7 +242,7 @@ uninstall
 
 Destroy the Docker machine on Digital Ocean and remove the Traefik subdomain.
 
-Example:
+Example with required options:
 ```
 $ docker run -it --rm \
     -v "$(pwd)":/host \
@@ -236,6 +250,13 @@ $ docker run -it --rm \
     chrif/cocotte uninstall \
     --digital-ocean-api-token="xxxx" \
     --traefik-ui-hostname="traefik.mydomain.com";
+```
+Or run interactively:
+```
+$ docker run -it --rm \
+    -v "$(pwd)":/host \
+    -v /var/run/docker.sock:/var/run/docker.sock:ro \
+    chrif/cocotte uninstall;
 ```
 This command requires 2 volumes:
   * "$(pwd)":/host
@@ -298,9 +319,4 @@ wizard
 * `docker run -it --rm chrif/cocotte wizard`
 
 Interactively build a simple 'install' command for Cocotte.
-
-Example:
-```
-$ docker run -it --rm chrif/cocotte wizard
-```
 
