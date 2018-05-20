@@ -55,13 +55,16 @@
  > 
  [COMPLETE] A command will be printed to the terminal.                                                                  
                                                                                                                         
-            Run the command from a location on your computer where you usually put new project code.                    
-                                                                                                                        
-            Afterwards, two directories will be created:                                                                
-            - one named 'machine' that you must leave there and never edit (it is used by Docker Machine to login to    
-            your cloud machine),                                                                                        
-            - and one named 'traefik' that you can edit all you want and which is ready for Git version control: this is
-            your new Traefik project.                                                                                   
+            Run the command from a location on your computer where you usually put
+            new project code.
+
+            Afterwards, two directories will be created:
+
+            1. A 'machine' directory that you must leave there and never edit. It is
+               used by Docker Machine to login to your cloud machine.
+
+            2. A 'traefik' directory that you can edit all you want and which is
+               ready for version control. This is your new Traefik project.
                                                                                                                         
             Thank you for trying Cocotte!                                                                               
 
