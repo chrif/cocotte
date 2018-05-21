@@ -50,6 +50,10 @@ abstract class AbstractCommand extends Command implements CommandInterface
     final protected function initialize(InputInterface $input, OutputInterface $output)
     {
         $this->eventDispatcher()->dispatch(
+            CommandEventStore::COMMAND_BEFORE_INITIALIZE,
+            new CommandBeforeInitializeEvent($this, $input)
+        );
+        $this->eventDispatcher()->dispatch(
             CommandEventStore::COMMAND_INITIALIZE,
             new CommandInitializeEvent($this, $input)
         );
@@ -61,12 +65,6 @@ abstract class AbstractCommand extends Command implements CommandInterface
             CommandEventStore::COMMAND_INTERACT,
             new CommandInteractEvent($this, $input)
         );
-        $this->doInteract($input, $output);
-    }
-
-    protected function doInteract(InputInterface $input, OutputInterface $output): void
-    {
-
     }
 
     final protected function execute(InputInterface $input, OutputInterface $output)

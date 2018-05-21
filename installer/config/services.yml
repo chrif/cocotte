@@ -41,6 +41,8 @@ services:
   Cocotte\DigitalOcean\Domain: ~
   Cocotte\DigitalOcean\DomainRecord: ~
   Cocotte\DigitalOcean\NetworkingConfigurator: ~
+  Cocotte\DigitalOcean\SkipDnsValidation:
+    tags: ['event.subscriber']
   DigitalOceanV2\Adapter\AdapterInterface:
     factory: 'Cocotte\DigitalOcean\DigitalOceanFactory:adapter'
     arguments: ['DigitalOceanV2\Adapter\GuzzleHttpAdapter']

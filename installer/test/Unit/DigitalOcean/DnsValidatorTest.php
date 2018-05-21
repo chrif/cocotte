@@ -2,8 +2,8 @@
 
 namespace Cocotte\Test\Unit\DigitalOcean;
 
-use Cocotte\DigitalOcean\DnsValidator;
 use Cocotte\DigitalOcean\Hostname;
+use Cocotte\DigitalOcean\SkipDnsValidation;
 use Cocotte\Test\Collaborator\DigitalOcean\DnsValidatorDouble;
 use PHPUnit\Framework\MockObject\MockBuilder;
 use PHPUnit\Framework\TestCase;
@@ -17,7 +17,7 @@ final class DnsValidatorTest extends TestCase
         $env = $builder->env();
         $validator = $double->buildMock(function (MockBuilder $mockBuilder) use ($builder) {
             $mockBuilder
-                ->setMethodsExcept(['validateHost'])
+                ->setMethods(['validateNameServers'])
                 ->setConstructorArgs($builder->args());
         });
 
@@ -25,7 +25,7 @@ final class DnsValidatorTest extends TestCase
             ->method('validateNameServers')
             ->willThrowException(new \Exception('not skipped'));
 
-        self::assertFalse((bool)$env->get(DnsValidator::SKIP_DNS_VALIDATION));
+        self::assertFalse((bool)$env->get(SkipDnsValidation::SKIP_DNS_VALIDATION));
 
         $this->expectExceptionMessage('not skipped');
 
@@ -39,15 +39,15 @@ final class DnsValidatorTest extends TestCase
         $env = $builder->env();
         $validator = $double->buildMock(function (MockBuilder $mockBuilder) use ($builder) {
             $mockBuilder
-                ->setMethodsExcept(['validateHost'])
+                ->setMethods(['validateNameServers'])
                 ->setConstructorArgs($builder->args());
         });
 
         $validator->expects(self::never())
             ->method('validateNameServers');
 
-        $env->put(DnsValidator::SKIP_DNS_VALIDATION, 'true');
-        self::assertTrue((bool)$env->get(DnsValidator::SKIP_DNS_VALIDATION));
+        $env->put(SkipDnsValidation::SKIP_DNS_VALIDATION, 'true');
+        self::assertTrue((bool)$env->get(SkipDnsValidation::SKIP_DNS_VALIDATION));
 
         $validator->validateHost(Hostname::parse('example.com'));
     }
