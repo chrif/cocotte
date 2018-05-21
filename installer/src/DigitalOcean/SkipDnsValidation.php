@@ -66,7 +66,7 @@ final class SkipDnsValidation implements EventSubscriberInterface
         $input = $event->input();
         $name = self::OPTION_NAME;
 
-        if ($input->hasOption($name)) {
+        if ($input->hasOption($name) && $input->getOption($name)) {
             $this->env->put(self::SKIP_DNS_VALIDATION, '1');
         }
     }

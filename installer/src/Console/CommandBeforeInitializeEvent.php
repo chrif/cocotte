@@ -9,18 +9,12 @@ final class CommandBeforeInitializeEvent extends Event
 {
 
     /**
-     * @var CommandInterface
-     */
-    private $command;
-
-    /**
      * @var InputInterface
      */
     private $input;
 
-    public function __construct(CommandInterface $command, InputInterface $input)
+    public function __construct(InputInterface $input)
     {
-        $this->command = $command;
         $this->input = $input;
     }
 
