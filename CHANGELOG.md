@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [Unreleased]
 ### Added
 - Examples to run commands interactively.
+- `--skip-dns-validation` option.
 ### Changed
 - Better and nicer complete message for wizard command.
 - Validate write permissions for Digital Ocean token.

@@ -5,13 +5,14 @@ namespace Cocotte\Template\Traefik;
 use Cocotte\Console\OptionProvider;
 use Cocotte\Console\Style;
 use Cocotte\Console\StyledInputOption;
+use Cocotte\DigitalOcean\DnsValidated;
 use Cocotte\DigitalOcean\DnsValidator;
 use Cocotte\DigitalOcean\Hostname;
 use Cocotte\Environment\EnvironmentState;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Question\Question;
 
-class TraefikHostnameOptionProvider implements OptionProvider
+class TraefikHostnameOptionProvider implements OptionProvider, DnsValidated
 {
     /**
      * @var Style

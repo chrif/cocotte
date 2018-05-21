@@ -11,7 +11,7 @@ use Cocotte\Template\Traefik\TraefikHostname;
 use Cocotte\Template\Traefik\TraefikPassword;
 use Cocotte\Template\Traefik\TraefikUsername;
 
-final class EnvironmentState
+class EnvironmentState
 {
     /**
      * @var Env

@@ -24,4 +24,4 @@ For all these reasons, the introduction of an image registry is left to a more a
 
 ## Command fails with an error message beginning with `Failed to validate name servers`
 
-Cocotte uses a library to validate that the name servers of your domain are Digital Ocean's. If you are confident that your domain is valid but the library fails to validate your domain, you can disable DNS validation with this environment variable: `SKIP_DNS_VALIDATION=1`. Add it to the container when running Cocotte: `docker run -e SKIP_DNS_VALIDATION=1 ...`
+Cocotte uses a third-party library to validate that the name servers of your domain are Digital Ocean's. If you are confident that your domain is valid but the library fails to validate your domain, you can disable DNS validation with the `--skip-dns-validation` option.

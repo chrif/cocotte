@@ -112,6 +112,17 @@ Alphanumeric and some special characters. Must match /^[a-zA-Z0-9_@#%?&*+=!-]+$/
 * Is multiple: no
 * Default: `NULL`
 
+#### `--skip-dns-validation`
+
+Cocotte uses a third-party library to validate that the name servers of your
+domain point to Digital Ocean. If you are confident that your name servers
+are correct, you can skip DNS validation.
+
+* Accept value: no
+* Is value required: no
+* Is multiple: no
+* Default: `false`
+
 #### `--dry-run`
 
 Validate all options but do not proceed with installation.
@@ -213,6 +224,17 @@ for the droplet name. Must match /^[a-zA-Z0-9][a-zA-Z0-9\-\.]*$/
 * Is multiple: no
 * Default: `'cocotte'`
 
+#### `--skip-dns-validation`
+
+Cocotte uses a third-party library to validate that the name servers of your
+domain point to Digital Ocean. If you are confident that your name servers
+are correct, you can skip DNS validation.
+
+* Accept value: no
+* Is value required: no
+* Is multiple: no
+* Default: `false`
+
 #### `--skip-networking`
 
 Do not configure networking. Cannot be true if skip-deploy is true.
@@ -308,6 +330,17 @@ changed, you can expect a propagation time up to 24 hours.
 * Is value required: yes
 * Is multiple: no
 * Default: `NULL`
+
+#### `--skip-dns-validation`
+
+Cocotte uses a third-party library to validate that the name servers of your
+domain point to Digital Ocean. If you are confident that your name servers
+are correct, you can skip DNS validation.
+
+* Accept value: no
+* Is value required: no
+* Is multiple: no
+* Default: `false`
 
 ---
 

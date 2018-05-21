@@ -47,8 +47,8 @@ final class CocotteStyle extends SymfonyStyle implements Style
     {
         return [
             "This the fully qualified domain name for your $name.",
-            "It has to be with a subdomain like in '<info>$subdomain.mydomain.com</info>', in which case \n".
-            "'<info>mydomain.com</info>' must point to the name servers of Digital Ocean, and Cocotte \n".
+            "It has to be with a subdomain like in '<info>$subdomain.mydomain.com</info>', in which case\n".
+            "'<info>mydomain.com</info>' must point to the name servers of Digital Ocean, and Cocotte\n".
             "will create and configure the '<info>$subdomain</info>' subdomain for you.",
             "Cocotte validates that the name servers of the domain you enter are Digital \nOcean's. ".
             "How to point to Digital Ocean name servers: ".$this->link('https://goo.gl/SJnw2c')."\n".

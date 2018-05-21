@@ -9,7 +9,6 @@ use Iodev\Whois\Whois;
 
 class DnsValidator
 {
-    const SKIP_DNS_VALIDATION = 'SKIP_DNS_VALIDATION';
     /**
      * @var Whois
      */
@@ -25,7 +24,22 @@ class DnsValidator
         $this->env = $env;
     }
 
-    public function validateNameServers(Hostname $hostname)
+    public function validateHost(Hostname $hostname)
+    {
+        if ($this->env->get(SkipDnsValidation::SKIP_DNS_VALIDATION)) {
+            return;
+        }
+
+        try {
+            $this->validateNameServers($hostname->toRoot());
+        } catch (\Throwable $domainException) {
+            $message[] = "Failed to validate name servers for '$hostname':";
+            $message[] = $domainException->getMessage();
+            throw new \Exception(implode("\n", $message));
+        }
+    }
+
+    protected function validateNameServers(Hostname $hostname)
     {
         $info = $this->whois->loadDomainInfo($hostname->domainName());
         if (!$info instanceof DomainInfo) {
@@ -49,21 +63,6 @@ class DnsValidator
                 "'{$nameServer->toString()}' is not a Digital Ocean's name server in the ".
                 "form of ns[0-9].digitalocean.com"
             );
-        }
-    }
-
-    public function validateHost(Hostname $hostname)
-    {
-        if ($this->env->get(self::SKIP_DNS_VALIDATION)) {
-            return;
-        }
-
-        try {
-            $this->validateNameServers($hostname->toRoot());
-        } catch (\Throwable $domainException) {
-            $message[] = "Failed to validate name servers for '$hostname':";
-            $message[] = $domainException->getMessage();
-            throw new \Exception(implode("\n", $message));
         }
     }
 }
