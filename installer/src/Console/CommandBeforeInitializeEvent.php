@@ -24,11 +24,6 @@ final class CommandBeforeInitializeEvent extends Event
         $this->input = $input;
     }
 
-    public function command(): CommandInterface
-    {
-        return $this->command;
-    }
-
     public function input(): InputInterface
     {
         return $this->input;

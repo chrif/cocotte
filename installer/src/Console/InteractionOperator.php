@@ -4,7 +4,7 @@ namespace Cocotte\Console;
 
 use Symfony\Component\Console\Input\InputInterface;
 
-final class InteractionOperator
+class InteractionOperator
 {
     /**
      * @var Style
