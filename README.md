@@ -2,6 +2,8 @@
 
 [![Build Status](https://travis-ci.org/chrif/cocotte.svg?branch=master)](https://travis-ci.org/chrif/cocotte) 
 [![Code Coverage](https://codecov.io/gh/chrif/cocotte/branch/master/graph/badge.svg)](https://codecov.io/gh/chrif/cocotte)
+[![Maintainability](https://api.codeclimate.com/v1/badges/4a2efdec6fce9e6cb1eb/maintainability)](https://codeclimate.com/github/chrif/cocotte/maintainability)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/chrif/cocotte/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/chrif/cocotte/?branch=master)
 [![PayPal](doc/paypal-badge.svg)](https://www.paypal.me/Fecteau)
 
 Cocotte aims at easing the learning curve for web developers starting with cloud hosting and application containerization. You get a basic and [affordable](#pricing) installation, allowing you to focus on your project(s) first, and learn about your infrastructure later:
