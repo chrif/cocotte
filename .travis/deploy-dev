@@ -27,7 +27,7 @@ sudo cat /etc/hosts
 (cd traefik; docker-compose logs -t traefik)
 (cd static-site; docker-compose logs -t nginx)
 
-$BASE_PATH/.travis/check-online ${TRAEFIK_LOCAL} 6
-$BASE_PATH/.travis/check-online ${STATIC_LOCAL} 6
+${BASE_PATH}/.travis/check-online ${TRAEFIK_LOCAL} 6
+${BASE_PATH}/.travis/check-online ${STATIC_LOCAL} 6
 
 curl http://${STATIC_LOCAL}

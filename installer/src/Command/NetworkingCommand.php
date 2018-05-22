@@ -9,7 +9,6 @@ use Cocotte\DigitalOcean\ApiTokenOptionProvider;
 use Cocotte\DigitalOcean\HostnameCollection;
 use Cocotte\DigitalOcean\NetworkingConfigurator;
 use Cocotte\Environment\LazyEnvironment;
-use Cocotte\Machine\MachineIp;
 use Darsyn\IP\IP;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -37,8 +36,7 @@ final class NetworkingCommand extends AbstractCommand implements LazyEnvironment
     public function __construct(
         NetworkingConfigurator $networkingConfigurator,
         EventDispatcherInterface $eventDispatcher,
-        Style $style,
-        MachineIp $machineIp
+        Style $style
     ) {
         $this->networkingConfigurator = $networkingConfigurator;
         $this->eventDispatcher = $eventDispatcher;

@@ -107,7 +107,7 @@ class MarkdownDescriptor implements DescriptorInterface
             $this->write('### Arguments');
             foreach ($definition->getArguments() as $argument) {
                 $this->write("\n\n");
-                $this->write($this->describeInputArgument($argument));
+                $this->describeInputArgument($argument);
             }
         }
 
@@ -120,7 +120,7 @@ class MarkdownDescriptor implements DescriptorInterface
             $this->write('### Options');
             foreach ($inputOptions as $option) {
                 $this->write("\n\n");
-                $this->write($this->describeInputOption($option));
+                $this->describeInputOption($option);
             }
         }
     }
@@ -167,7 +167,7 @@ class MarkdownDescriptor implements DescriptorInterface
         $this->write("\n\n");
         $this->write(implode("\n",
                 array_map(
-                    function (Command $command) use ($description) {
+                    function (Command $command) {
                         return sprintf(
                             "* [`%s`](#%s)\n  > %s",
                             $command->getName(),
@@ -182,7 +182,7 @@ class MarkdownDescriptor implements DescriptorInterface
 
         foreach ($commands as $command) {
             $this->write("\n\n---\n\n");
-            $this->write($this->describeCommand($command));
+            $this->describeCommand($command);
         }
     }
 

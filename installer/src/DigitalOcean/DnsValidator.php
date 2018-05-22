@@ -33,6 +33,7 @@ class DnsValidator
         try {
             $this->validateNameServers($hostname->toRoot());
         } catch (\Throwable $domainException) {
+            $message = [];
             $message[] = "Failed to validate name servers for '$hostname':";
             $message[] = $domainException->getMessage();
             throw new \Exception(implode("\n", $message));

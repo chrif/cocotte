@@ -1,7 +1,10 @@
 <?php declare(strict_types=1);
 
-namespace Cocotte\DependencyInjection;
+namespace Cocotte;
 
+use Cocotte\DependencyInjection\ConsoleCommandPass;
+use Cocotte\DependencyInjection\LazyEnvironmentPass;
+use Cocotte\DependencyInjection\OptionProviderPass;
 use Symfony\Bridge\ProxyManager\LazyProxy\Instantiator\RuntimeInstantiator;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Console\Application as Console;
