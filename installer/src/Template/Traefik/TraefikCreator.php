@@ -14,11 +14,6 @@ final class TraefikCreator
 {
 
     /**
-     * @var string
-     */
-    private static $tmpTemplatePath;
-
-    /**
      * @var Style
      */
     private $style;
@@ -58,6 +53,11 @@ final class TraefikCreator
      */
     private $basicAuth;
 
+    /**
+     * @var string
+     */
+    private $tmpTemplatePath;
+
     public function __construct(
         Style $style,
         ProcessRunner $processRunner,
@@ -76,6 +76,7 @@ final class TraefikCreator
         $this->traefikPassword = $traefikPassword;
         $this->traefikUsername = $traefikUsername;
         $this->basicAuth = $basicAuth;
+        $this->tmpTemplatePath = "/tmp/".uniqid('traefik-');
     }
 
     public function create()
@@ -234,11 +235,7 @@ final class TraefikCreator
 
     private function tmpTemplatePath(): string
     {
-        if (null === self::$tmpTemplatePath) {
-            self::$tmpTemplatePath = "/tmp/".uniqid('traefik-');
-        }
-
-        return self::$tmpTemplatePath;
+        return $this->tmpTemplatePath;
     }
 
     private function installerTemplatePath(): string

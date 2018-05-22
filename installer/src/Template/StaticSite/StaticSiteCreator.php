@@ -14,11 +14,6 @@ final class StaticSiteCreator
 {
 
     /**
-     * @var string
-     */
-    private static $tmpTemplatePath;
-
-    /**
      * @var Style
      */
     private $style;
@@ -53,6 +48,11 @@ final class StaticSiteCreator
      */
     private $staticSiteHostname;
 
+    /**
+     * @var string
+     */
+    private $tmpTemplatePath;
+
     public function __construct(
         Style $style,
         ProcessRunner $processRunner,
@@ -69,6 +69,7 @@ final class StaticSiteCreator
         $this->substitutionFactory = $substitutionFactory;
         $this->staticSiteNamespace = $staticSiteName;
         $this->staticSiteHostname = $staticSiteHostname;
+        $this->tmpTemplatePath = "/tmp/".uniqid('static-');
     }
 
     public function create()
@@ -243,11 +244,7 @@ final class StaticSiteCreator
 
     private function tmpTemplatePath(): string
     {
-        if (null === self::$tmpTemplatePath) {
-            self::$tmpTemplatePath = "/tmp/".uniqid('static-');
-        }
-
-        return self::$tmpTemplatePath;
+        return $this->tmpTemplatePath;
     }
 
     private function installerTemplatePath(): string

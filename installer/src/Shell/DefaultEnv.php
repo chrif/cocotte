@@ -13,7 +13,7 @@ final class DefaultEnv implements Env
         Assertion::true(putenv($name.'='.$value), "Could not put env with name '$name' and value '$value'.");
         Assertion::same(
             $value,
-            $retrieved = self::get($name),
+            $retrieved = $this->get($name),
             "Failed asserting that value '$value' for env with name '$name' has been preserved when putting it. ".
             "Retrieved value was '$retrieved'."
         );
@@ -39,7 +39,7 @@ final class DefaultEnv implements Env
         Assertion::true(putenv($name), "Could not unset env with name '$name'.");
         Assertion::same(
             null,
-            $retrieved = self::get($name),
+            $retrieved = $this->get($name),
             "Failed asserting that env with name '$name' has been unset. ".
             "Retrieved value was '$retrieved'."
         );
