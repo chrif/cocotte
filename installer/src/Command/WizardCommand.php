@@ -8,6 +8,7 @@ use Cocotte\Console\InteractionOperator;
 use Cocotte\Console\OptionProviderRegistry;
 use Cocotte\Console\Style;
 use Cocotte\DigitalOcean\ApiToken;
+use Cocotte\DigitalOcean\DnsValidated;
 use Cocotte\Help\DefaultExamples;
 use Cocotte\Template\Traefik\TraefikHostname;
 use Cocotte\Template\Traefik\TraefikPassword;
@@ -16,7 +17,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
-final class WizardCommand extends AbstractCommand implements DocumentedCommand
+final class WizardCommand extends AbstractCommand implements DocumentedCommand, DnsValidated
 {
     /**
      * @var Style

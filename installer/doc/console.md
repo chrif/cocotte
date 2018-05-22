@@ -349,7 +349,19 @@ wizard
 
 ### Usage
 
-* `docker run -it --rm chrif/cocotte wizard`
+* `docker run -it --rm chrif/cocotte wizard [options]`
 
 Interactively build a simple 'install' command for Cocotte.
 
+### Options
+
+#### `--skip-dns-validation`
+
+Cocotte uses a third-party library to validate that the name servers of your
+domain point to Digital Ocean. If you are confident that your name servers
+are correct, you can skip DNS validation.
+
+* Accept value: no
+* Is value required: no
+* Is multiple: no
+* Default: `false`

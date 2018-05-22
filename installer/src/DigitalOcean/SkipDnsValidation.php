@@ -42,21 +42,16 @@ final class SkipDnsValidation implements EventSubscriberInterface
     {
         $command = $event->command();
 
-        foreach ($command->optionProviders() as $className) {
-            $optionProvider = $this->registry->providerByClassName($className);
+        if ($command instanceof DnsValidated) {
+            $event->inputDefinition()->addOption($this->option());
+        } else {
+            foreach ($command->optionProviders() as $className) {
+                $optionProvider = $this->registry->providerByClassName($className);
 
-            if ($optionProvider instanceof DnsValidated) {
-                $event->inputDefinition()->addOption(
-                    new InputOption(
-                        self::OPTION_NAME,
-                        null,
-                        InputOption::VALUE_NONE,
-                        "Cocotte uses a third-party library to validate that the name servers of your\n".
-                        "domain point to Digital Ocean. If you are confident that your name servers\n".
-                        "are correct, you can skip DNS validation."
-                    )
-                );
-                break;
+                if ($optionProvider instanceof DnsValidated) {
+                    $event->inputDefinition()->addOption($this->option());
+                    break;
+                }
             }
         }
     }
@@ -69,6 +64,18 @@ final class SkipDnsValidation implements EventSubscriberInterface
         if ($input->hasOption($name) && $input->getOption($name)) {
             $this->env->put(self::SKIP_DNS_VALIDATION, '1');
         }
+    }
+
+    private function option(): InputOption
+    {
+        return new InputOption(
+            self::OPTION_NAME,
+            null,
+            InputOption::VALUE_NONE,
+            "Cocotte uses a third-party library to validate that the name servers of your\n".
+            "domain point to Digital Ocean. If you are confident that your name servers\n".
+            "are correct, you can skip DNS validation."
+        );
     }
 
 }
