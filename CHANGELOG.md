@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [0.3.1] - 2018-05-21
+### Fixed
+- Add --skip-dns-validation option to wizard command.
+
 ## [0.3.0] - 2018-05-21
 ### Added
 - Examples to run commands interactively.
@@ -23,6 +27,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Initial release.
 - Command line interface for installing, adding a static site, and uninstalling.
 
-[Unreleased]: https://github.com/chrif/cocotte/compare/0.3.0...HEAD
+[Unreleased]: https://github.com/chrif/cocotte/compare/0.3.1...HEAD
+[0.3.1]: https://github.com/chrif/cocotte/compare/0.3.0...0.3.1
 [0.3.0]: https://github.com/chrif/cocotte/compare/0.2.0...0.3.0
 [0.2.0]: https://github.com/chrif/cocotte/compare/v0.1.0...0.2.0
