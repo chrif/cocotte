@@ -2,10 +2,8 @@
 
 namespace Cocotte\Console;
 
-use InvalidArgumentException;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Descriptor\DescriptorInterface;
 use Symfony\Component\Console\Formatter\OutputFormatter;
 use Symfony\Component\Console\Helper\Helper;
 use Symfony\Component\Console\Input\InputArgument;
@@ -13,7 +11,7 @@ use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class MarkdownDescriptor implements DescriptorInterface
+class MarkdownDescriptor
 {
 
     /**
@@ -21,35 +19,14 @@ class MarkdownDescriptor implements DescriptorInterface
      */
     private $output;
 
-    public function describe(OutputInterface $output, $object, array $options = array())
+    public function describe(OutputInterface $output, Application $object)
     {
         $decorated = $output->isDecorated();
         $output->setDecorated(false);
 
         $this->output = $output;
 
-        switch (true) {
-            case $object instanceof InputArgument:
-                $this->describeInputArgument($object);
-                break;
-            case $object instanceof InputOption:
-                $this->describeInputOption($object);
-                break;
-            case $object instanceof InputDefinition:
-                $this->describeInputDefinition($object);
-                break;
-            case $object instanceof Command:
-                if ($object instanceof DocumentedCommand) {
-                    $this->describeCommand($object);
-                }
-                break;
-            case $object instanceof Application:
-                $this->describeApplication($object);
-                break;
-            default:
-                throw new InvalidArgumentException(sprintf('Object of type "%s" is not describable.',
-                    get_class($object)));
-        }
+        $this->describeApplication($object);
 
         $output->setDecorated($decorated);
     }
@@ -60,14 +37,14 @@ class MarkdownDescriptor implements DescriptorInterface
      * @param string $content
      * @param bool $decorated
      */
-    protected function write($content, $decorated = false)
+    private function write($content, $decorated = false)
     {
         $this->output->write($content,
             false,
             $decorated ? OutputInterface::OUTPUT_NORMAL : OutputInterface::OUTPUT_RAW);
     }
 
-    protected function describeInputArgument(InputArgument $argument)
+    private function describeInputArgument(InputArgument $argument)
     {
         $description = $this->removeDecoration($argument->getDescription());
         $this->write(
@@ -81,7 +58,7 @@ class MarkdownDescriptor implements DescriptorInterface
         );
     }
 
-    protected function describeInputOption(InputOption $option)
+    private function describeInputOption(InputOption $option)
     {
         $name = '--'.$option->getName();
         if ($option->getShortcut()) {
@@ -101,7 +78,7 @@ class MarkdownDescriptor implements DescriptorInterface
         );
     }
 
-    protected function describeInputDefinition(InputDefinition $definition)
+    private function describeInputDefinition(InputDefinition $definition)
     {
         if ($showArguments = count($definition->getArguments()) > 0) {
             $this->write('### Arguments');
@@ -125,7 +102,7 @@ class MarkdownDescriptor implements DescriptorInterface
         }
     }
 
-    protected function describeCommand(Command $command)
+    private function describeCommand(Command $command)
     {
         $synopsis = $command->getSynopsis(true);
 
@@ -152,7 +129,7 @@ class MarkdownDescriptor implements DescriptorInterface
         }
     }
 
-    protected function describeApplication(Application $application)
+    private function describeApplication(Application $application)
     {
         $description = new \Symfony\Component\Console\Descriptor\ApplicationDescription($application);
         $title = "Console API Reference";
