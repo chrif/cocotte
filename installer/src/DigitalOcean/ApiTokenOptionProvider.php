@@ -53,8 +53,9 @@ class ApiTokenOptionProvider implements OptionProvider
         $adapter = new GuzzleHttpAdapter($token->toString());
         $digitalOceanV2 = new DigitalOceanV2($adapter);
         try {
-            $digitalOceanV2->domain()->create('cocotte-validate.token', '127.0.0.1');
-            $digitalOceanV2->domain()->delete('cocotte-validate.token');
+            $domain = sprintf('cocotte-validate-%s.token', uniqid());
+            $digitalOceanV2->domain()->create($domain, '127.0.0.1');
+            $digitalOceanV2->domain()->delete($domain);
         } catch (\Throwable $e) {
             throw new \Exception(
                 "Failed to validate that the Digital Ocean token has 'write' permissions. Error message was:\n".
