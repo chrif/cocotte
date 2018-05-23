@@ -2,7 +2,7 @@
 
 namespace Cocotte\Test;
 
-use Cocotte\DependencyInjection\Application;
+use Cocotte\Application;
 use Cocotte\Environment\LazyEnvironment;
 use Cocotte\Environment\LazyEnvironmentLoader;
 use Cocotte\Test\Collaborator\Console\HasAllOptionsWithNullValuesInputStub;

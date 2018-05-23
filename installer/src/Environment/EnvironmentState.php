@@ -30,22 +30,27 @@ class EnvironmentState
 
     public function isBare(): bool
     {
-        //@formatter:off
-        return
-            $this->hasBareValue(ApiToken::DIGITAL_OCEAN_API_TOKEN) &&
-            $this->hasBareValue(MachineName::MACHINE_NAME, MachineName::DEFAULT_VALUE) &&
-            $this->hasBareValue(StaticSiteHostname::STATIC_SITE_HOSTNAME) &&
-            $this->hasBareValue(StaticSiteNamespace::STATIC_SITE_NAMESPACE) &&
-            $this->hasBareValue(TraefikHostname::TRAEFIK_UI_HOSTNAME) &&
-            $this->hasBareValue(TraefikPassword::TRAEFIK_UI_PASSWORD) &&
-            $this->hasBareValue(TraefikUsername::TRAEFIK_UI_USERNAME);
-        //@formatter:on
+        try {
+            $this->assertBare(ApiToken::DIGITAL_OCEAN_API_TOKEN);
+            $this->assertBare(MachineName::MACHINE_NAME, MachineName::DEFAULT_VALUE);
+            $this->assertBare(StaticSiteHostname::STATIC_SITE_HOSTNAME);
+            $this->assertBare(StaticSiteNamespace::STATIC_SITE_NAMESPACE);
+            $this->assertBare(TraefikHostname::TRAEFIK_UI_HOSTNAME);
+            $this->assertBare(TraefikPassword::TRAEFIK_UI_PASSWORD);
+            $this->assertBare(TraefikUsername::TRAEFIK_UI_USERNAME);
+        } catch (NotBareException $e) {
+            return false;
+        }
+
+        return true;
     }
 
-    private function hasBareValue(string $name, $default = null): bool
+    private function assertBare(string $name, $default = null)
     {
         $value = $this->defaultValue($name, $default);
 
-        return $value === $default;
+        if ($value !== $default) {
+            throw new NotBareException();
+        }
     }
 }

@@ -14,11 +14,6 @@ final class TraefikCreator
 {
 
     /**
-     * @var string
-     */
-    private static $tmpTemplatePath;
-
-    /**
      * @var Style
      */
     private $style;
@@ -58,6 +53,11 @@ final class TraefikCreator
      */
     private $basicAuth;
 
+    /**
+     * @var string
+     */
+    private $tmpTemplatePath;
+
     public function __construct(
         Style $style,
         ProcessRunner $processRunner,
@@ -76,6 +76,7 @@ final class TraefikCreator
         $this->traefikPassword = $traefikPassword;
         $this->traefikUsername = $traefikUsername;
         $this->basicAuth = $basicAuth;
+        $this->tmpTemplatePath = "/tmp/".uniqid('traefik-');
     }
 
     public function create()
@@ -157,49 +158,8 @@ final class TraefikCreator
     {
         $this->style->verbose("Create '.env' and '.env-override' from command options + env");
 
-        $basicAuth = $this->basicAuth->generate(
-            $this->traefikUsername->toString(),
-            $this->traefikPassword->toString()
-        );
-
-        EnvironmentSubstitution::withDefaults()
-            ->restrict(
-                [
-                    'TRAEFIK_UI_HOSTNAME',
-                    'TRAEFIK_ACME_EMAIL',
-                    'MACHINE_NAME',
-                    'MACHINE_STORAGE_PATH',
-                ]
-            )
-            ->substitute(
-                $this->substitutionFactory->dumpFile(
-                    $this->tmpAppPath().'/.env',
-                    EnvironmentSubstitution::formatEnvFile(
-                        [
-                            'APP_HOSTS="${TRAEFIK_UI_HOSTNAME}"',
-                            "APP_AUTH_BASIC='{$basicAuth}'",
-                            'ACME_EMAIL="${TRAEFIK_ACME_EMAIL}"',
-                            'MACHINE_NAME="${MACHINE_NAME}"',
-                            'MACHINE_STORAGE_PATH="${MACHINE_STORAGE_PATH}"',
-                        ]
-                    )
-                )
-            );
-        EnvironmentSubstitution::withDefaults()
-            ->export(
-                [
-                    'APP_HOSTS' => $this->traefikHostname->toLocal()->toString(),
-                ]
-            )->substitute(
-                $this->substitutionFactory->dumpFile(
-                    $this->tmpAppPath().'/.env-override',
-                    EnvironmentSubstitution::formatEnvFile(
-                        [
-                            'APP_HOSTS="${APP_HOSTS}"',
-                        ]
-                    )
-                )
-            );
+        $this->createDotEnvProd();
+        $this->createDotEnvDev();
     }
 
     private function copyTmpToHost(): void
@@ -234,15 +194,70 @@ final class TraefikCreator
 
     private function tmpTemplatePath(): string
     {
-        if (null === self::$tmpTemplatePath) {
-            self::$tmpTemplatePath = "/tmp/".uniqid('traefik-');
-        }
-
-        return self::$tmpTemplatePath;
+        return $this->tmpTemplatePath;
     }
 
     private function installerTemplatePath(): string
     {
         return "/installer/template/traefik";
+    }
+
+    private function createDotEnvProd(): void
+    {
+        EnvironmentSubstitution::withDefaults()
+            ->restrict(
+                [
+                    'TRAEFIK_UI_HOSTNAME',
+                    'TRAEFIK_ACME_EMAIL',
+                    'MACHINE_NAME',
+                    'MACHINE_STORAGE_PATH',
+                ]
+            )
+            ->substitute($this->dotEnvProdSubstitution());
+    }
+
+    private function createDotEnvDev(): void
+    {
+        EnvironmentSubstitution::withDefaults()
+            ->export(
+                [
+                    'APP_HOSTS' => $this->traefikHostname->toLocal()->toString(),
+                ]
+            )->substitute(
+                $this->substitutionFactory->dumpFile(
+                    $this->tmpAppPath().'/.env-override',
+                    EnvironmentSubstitution::formatEnvFile(
+                        [
+                            'APP_HOSTS="${APP_HOSTS}"',
+                        ]
+                    )
+                )
+            );
+    }
+
+    /**
+     * @return \Cocotte\Shell\EnvironmentSubstitution\DumpFileSubstitution
+     */
+    private function dotEnvProdSubstitution(): \Cocotte\Shell\EnvironmentSubstitution\DumpFileSubstitution
+    {
+        $basicAuth = $this->basicAuth->generate(
+            $this->traefikUsername->toString(),
+            $this->traefikPassword->toString()
+        );
+
+        $substitutionStrategy = $this->substitutionFactory->dumpFile(
+            $this->tmpAppPath().'/.env',
+            EnvironmentSubstitution::formatEnvFile(
+                [
+                    'APP_HOSTS="${TRAEFIK_UI_HOSTNAME}"',
+                    "APP_AUTH_BASIC='{$basicAuth}'",
+                    'ACME_EMAIL="${TRAEFIK_ACME_EMAIL}"',
+                    'MACHINE_NAME="${MACHINE_NAME}"',
+                    'MACHINE_STORAGE_PATH="${MACHINE_STORAGE_PATH}"',
+                ]
+            )
+        );
+
+        return $substitutionStrategy;
     }
 }

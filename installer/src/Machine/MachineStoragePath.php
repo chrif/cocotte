@@ -67,31 +67,51 @@ class MachineStoragePath implements LazyEnvironmentValue, LazyLoadAware
      */
     private function symLink()
     {
-        $pathOnHostFilesystem = $this->toString();
-        $pathOnInstaller = "/host/machine";
+        // Unlikely but if Cocotte is run from a root /host directory, the we don't need a sym link.
+        if ($this->pathOnInstaller() === $this->pathOnHostFileSystem()) {
+            return;
+        }
 
-        if ($pathOnInstaller !== $pathOnHostFilesystem) {
+        if (!$this->filesystem->exists($this->pathOnHostFileSystem())) {
+            $this->createSymLink();
+        } else {
+            $this->guardSymLinkIsNotAUnixStandardPath();
+        }
+    }
 
-            if (!$this->filesystem->exists($pathOnHostFilesystem)) {
+    private function pathOnHostFileSystem(): string
+    {
+        return $this->toString();
+    }
 
-                if (is_dir($pathOnInstaller) && !is_dir("$pathOnInstaller/certs")) {
-                    throw new \Exception(
-                        "Error: Tried to create a directory named 'machine' in the directory from where you ".
-                        "executed Cocotte but it already exists and it is not a valid docker machine storage path."
-                    );
-                }
-                $this->filesystem->mkdir("$pathOnInstaller/certs");
-                $this->filesystem->symlink($pathOnInstaller, $pathOnHostFilesystem);
-            } elseif (
-                !is_link($pathOnHostFilesystem) ||
-                $this->filesystem->readlink($pathOnHostFilesystem) !== $pathOnInstaller
-            ) {
-                throw new \Exception(
-                    "Error: cannot symlink '$pathOnInstaller' to '$pathOnHostFilesystem' because it is a real ".
-                    "path on Cocotte filesystem. Start Cocotte from a different directory on your computer. One ".
-                    "that does not exist in the Filesystem Hierarchy Standard of a UNIX-like operating system\n"
-                );
-            }
+    private function pathOnInstaller(): string
+    {
+        return "/host/machine";
+    }
+
+    private function createSymLink(): void
+    {
+        if (is_dir($this->pathOnInstaller()) && !is_dir("{$this->pathOnInstaller()}/certs")) {
+            throw new \Exception(
+                "Error: Tried to create a directory named 'machine' in the directory from where you ".
+                "executed Cocotte but it already exists and it is not a valid docker machine storage path."
+            );
+        }
+        $this->filesystem->mkdir("{$this->pathOnInstaller()}/certs");
+        $this->filesystem->symlink($this->pathOnInstaller(), $this->pathOnHostFileSystem());
+    }
+
+    private function guardSymLinkIsNotAUnixStandardPath(): void
+    {
+        if (
+            !is_link($this->pathOnHostFileSystem()) ||
+            $this->filesystem->readlink($this->pathOnHostFileSystem()) !== $this->pathOnInstaller()
+        ) {
+            throw new \Exception(
+                "Error: cannot symlink '{$this->pathOnInstaller()}' to '{$this->pathOnHostFileSystem()}' because it is a real ".
+                "path on Cocotte filesystem. Start Cocotte from a different directory on your computer. One ".
+                "that does not exist in the Filesystem Hierarchy Standard of a UNIX-like operating system\n"
+            );
         }
     }
 }

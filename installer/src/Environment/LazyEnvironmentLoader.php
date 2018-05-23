@@ -7,7 +7,7 @@ use Cocotte\Console\CommandEventStore;
 use Cocotte\Console\CommandExecuteEvent;
 use Cocotte\Console\Style;
 use Cocotte\Shell\Env;
-use ProxyManager\Proxy\LazyLoadingInterface;
+use ProxyManager\Proxy\VirtualProxyInterface;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -15,7 +15,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 final class LazyEnvironmentLoader implements EventSubscriberInterface
 {
     /**
-     * @var LazyEnvironmentValue|LazyLoadingInterface[]
+     * @var LazyEnvironmentValue|VirtualProxyInterface[]
      */
     private $values = [];
     /**
@@ -74,7 +74,7 @@ final class LazyEnvironmentLoader implements EventSubscriberInterface
         $this->style->debug("Lazy loaded env:\n".print_r(getenv(), true));
     }
 
-    private function getLazyValue(string $className): LazyLoadingInterface
+    private function getLazyValue(string $className): VirtualProxyInterface
     {
         foreach ($this->values as $value) {
             if ($value instanceof $className) {
@@ -84,14 +84,14 @@ final class LazyEnvironmentLoader implements EventSubscriberInterface
         throw new \Exception("Could not find '$className'");
     }
 
-    private function initializeProxy(LazyLoadingInterface $lazyValue)
+    private function initializeProxy(VirtualProxyInterface $lazyValue)
     {
         if ($lazyValue->isProxyInitialized()) {
             throw new \Exception(
                 sprintf(
                     "Managing a lazy environment value ".
                     "'%s' which is already initialized.",
-                    $lazyValue
+                    get_class($lazyValue->getWrappedValueHolderValue())
                 )
             );
         }

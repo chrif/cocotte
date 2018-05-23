@@ -114,7 +114,7 @@ final class WizardCommand extends AbstractCommand implements DocumentedCommand, 
 
     private function description(): string
     {
-        return $description = /** @lang text */
+        return /** @lang text */
             "Interactively build a simple '<info>install</info>' command for <options=bold>Cocotte</>.";
     }
 

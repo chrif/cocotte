@@ -4,7 +4,7 @@ namespace Cocotte\DigitalOcean;
 
 use Assert\Assertion;
 use Cocotte\Shell\Env;
-use Iodev\Whois\DomainInfo;
+use Iodev\Whois\Modules\Tld\DomainInfo;
 use Iodev\Whois\Whois;
 
 class DnsValidator
@@ -33,6 +33,7 @@ class DnsValidator
         try {
             $this->validateNameServers($hostname->toRoot());
         } catch (\Throwable $domainException) {
+            $message = [];
             $message[] = "Failed to validate name servers for '$hostname':";
             $message[] = $domainException->getMessage();
             throw new \Exception(implode("\n", $message));

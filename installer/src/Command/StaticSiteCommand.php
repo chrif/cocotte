@@ -166,41 +166,10 @@ final class StaticSiteCommand extends AbstractCommand implements
     protected function doExecute(InputInterface $input, OutputInterface $output)
     {
         $this->confirm();
-
-        $skipNetworking = $input->getOption('skip-networking');
-        $skipDeploy = $input->getOption('skip-deploy');
-
-        if ($skipNetworking && !$skipDeploy) {
-            throw new \Exception("Cannot skip networking when deploying");
-        }
-
-        $this->style->writeln(
-            "Creating a new static site in {$this->sitePath()}"
-        );
-        $this->staticSiteCreator->create();
-
-        if (!$skipNetworking) {
-            $this->style->writeln("Configuring networking for {$this->staticSiteHostname}");
-            $this->networkingConfigurator->configure(
-                $this->staticSiteHostname->toHostnameCollection(),
-                $this->machineIp->toIP()
-            );
-        }
-
-        if (!$skipDeploy) {
-            $this->style->writeln('Deploying created site to cloud machine');
-            $this->processRunner->mustRun(new Process('./bin/prod 2>/dev/stdout',
-                $this->staticSiteCreator->hostAppPath()));
-
-            $this->style->writeln('Waiting for site to respond');
-            $this->staticSiteDeploymentValidator->validate();
-
-            $this->processRunner->mustRun(new Process('./bin/logs -t', $this->staticSiteCreator->hostAppPath()));
-
-            $this->style->complete($this->completeMessage());
-        } else {
-            $this->style->complete("Deployment has been skipped.");
-        }
+        $this->assertValidOptions($input);
+        $this->createSite();
+        $this->configureNetworking($input);
+        $this->deploy($input);
     }
 
     private function sitePath(): string
@@ -229,6 +198,52 @@ final class StaticSiteCommand extends AbstractCommand implements
             "Static site successfully deployed at ".
             "<options=bold>https://{$this->staticSiteHostname->toString()}</>",
         ];
+    }
+
+    private function assertValidOptions(InputInterface $input): void
+    {
+        if ($input->getOption('skip-networking') && !$input->getOption('skip-deploy')) {
+            throw new \Exception("Cannot skip networking when deploying");
+        }
+    }
+
+    private function createSite(): void
+    {
+        $this->style->writeln("Creating a new static site in {$this->sitePath()}");
+        $this->staticSiteCreator->create();
+    }
+
+    private function configureNetworking(InputInterface $input): void
+    {
+        if (!($input->getOption('skip-networking'))) {
+            $this->style->writeln("Configuring networking for {$this->staticSiteHostname}");
+            $this->networkingConfigurator->configure(
+                $this->staticSiteHostname->toHostnameCollection(),
+                $this->machineIp->toIP()
+            );
+        }
+    }
+
+    private function deploy(InputInterface $input): void
+    {
+        if (!($input->getOption('skip-deploy'))) {
+            $this->style->writeln('Deploying created site to cloud machine');
+
+            $this->processRunner->mustRun(
+                new Process('./bin/prod 2>/dev/stdout',
+                    $this->staticSiteCreator->hostAppPath())
+            );
+
+            $this->style->writeln('Waiting for site to respond');
+
+            $this->staticSiteDeploymentValidator->validate();
+
+            $this->processRunner->mustRun(new Process('./bin/logs -t', $this->staticSiteCreator->hostAppPath()));
+
+            $this->style->complete($this->completeMessage());
+        } else {
+            $this->style->complete("Deployment has been skipped.");
+        }
     }
 
 }
