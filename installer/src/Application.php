@@ -35,18 +35,7 @@ final class Application
         $loader = new YamlFileLoader($container, new FileLocator());
         $loader->load($serviceResource);
 
-        $container->addCompilerPass(new LazyEnvironmentPass());
-        $container->addCompilerPass(new ConsoleCommandPass());
-        $container->addCompilerPass(new OptionProviderPass());
-        $container->addCompilerPass(new RegisterListenersPass(
-            EventDispatcherInterface::class,
-            'event.listener',
-            'event.subscriber'
-        ));
-
-        foreach ($extraPasses as $pass) {
-            $container->addCompilerPass($pass);
-        }
+        $this->addCompilerPasses($extraPasses, $container);
 
         $container->compile(true);
 
@@ -61,5 +50,21 @@ final class Application
     public function console(): Console
     {
         return $this->container->get(Console::class);
+    }
+
+    private function addCompilerPasses(array $extraPasses, ContainerBuilder $container): void
+    {
+        $container->addCompilerPass(new LazyEnvironmentPass());
+        $container->addCompilerPass(new ConsoleCommandPass());
+        $container->addCompilerPass(new OptionProviderPass());
+        $container->addCompilerPass(new RegisterListenersPass(
+            EventDispatcherInterface::class,
+            'event.listener',
+            'event.subscriber'
+        ));
+
+        foreach ($extraPasses as $pass) {
+            $container->addCompilerPass($pass);
+        }
     }
 }
