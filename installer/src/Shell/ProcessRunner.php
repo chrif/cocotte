@@ -4,6 +4,7 @@ namespace Cocotte\Shell;
 
 use Cocotte\Console\Style;
 use Symfony\Component\Console\Helper\ProcessHelper;
+use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Process\Process;
@@ -49,14 +50,7 @@ class ProcessRunner
             $this->style,
             $process,
             null,
-            function ($type, $buffer) use ($useProgress, $displayProgressText, $progressBar) {
-                if ($useProgress) {
-                    if ($displayProgressText && Process::OUT === $type) {
-                        $progressBar->setMessage(substr(preg_replace('#\s+#', ' ', $buffer), 0, 100));
-                    }
-                    $progressBar->advance();
-                }
-            },
+            $this->callback($displayProgressText, $useProgress, $progressBar),
             OutputInterface::VERBOSITY_VERBOSE
         );
 
@@ -64,5 +58,17 @@ class ProcessRunner
             $progressBar->finish();
             $progressBar->clear();
         }
+    }
+
+    private function callback(bool $displayProgressText, bool $useProgress, ProgressBar $progressBar): \Closure
+    {
+        return function ($type, $buffer) use ($useProgress, $displayProgressText, $progressBar) {
+            if ($useProgress) {
+                if ($displayProgressText && Process::OUT === $type) {
+                    $progressBar->setMessage(substr(preg_replace('#\s+#', ' ', $buffer), 0, 100));
+                }
+                $progressBar->advance();
+            }
+        };
     }
 }
