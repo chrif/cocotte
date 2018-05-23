@@ -3,20 +3,6 @@ build:
         php:
             version: 7.1
     root_path: './installer/'
-    nodes:
-        analysis:
-            project_setup:
-                override:
-                    - 'true'
-            tests:
-                override:
-                    - php-scrutinizer-run
-                    -
-                        command: phpcs-run
-                        use_website_config: true
 filter:
     excluded_paths:
-        - 'bin/*'
         - 'installer/test/*'
-checks:
-    php: true
