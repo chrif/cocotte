@@ -204,11 +204,6 @@ final class TraefikCreator
 
     private function createDotEnvProd(): void
     {
-        $basicAuth = $this->basicAuth->generate(
-            $this->traefikUsername->toString(),
-            $this->traefikPassword->toString()
-        );
-
         EnvironmentSubstitution::withDefaults()
             ->restrict(
                 [
@@ -218,20 +213,7 @@ final class TraefikCreator
                     'MACHINE_STORAGE_PATH',
                 ]
             )
-            ->substitute(
-                $this->substitutionFactory->dumpFile(
-                    $this->tmpAppPath().'/.env',
-                    EnvironmentSubstitution::formatEnvFile(
-                        [
-                            'APP_HOSTS="${TRAEFIK_UI_HOSTNAME}"',
-                            "APP_AUTH_BASIC='{$basicAuth}'",
-                            'ACME_EMAIL="${TRAEFIK_ACME_EMAIL}"',
-                            'MACHINE_NAME="${MACHINE_NAME}"',
-                            'MACHINE_STORAGE_PATH="${MACHINE_STORAGE_PATH}"',
-                        ]
-                    )
-                )
-            );
+            ->substitute($this->dotEnvProdSubstitution());
     }
 
     private function createDotEnvDev(): void
@@ -251,5 +233,31 @@ final class TraefikCreator
                     )
                 )
             );
+    }
+
+    /**
+     * @return \Cocotte\Shell\EnvironmentSubstitution\DumpFileSubstitution
+     */
+    private function dotEnvProdSubstitution(): \Cocotte\Shell\EnvironmentSubstitution\DumpFileSubstitution
+    {
+        $basicAuth = $this->basicAuth->generate(
+            $this->traefikUsername->toString(),
+            $this->traefikPassword->toString()
+        );
+
+        $substitutionStrategy = $this->substitutionFactory->dumpFile(
+            $this->tmpAppPath().'/.env',
+            EnvironmentSubstitution::formatEnvFile(
+                [
+                    'APP_HOSTS="${TRAEFIK_UI_HOSTNAME}"',
+                    "APP_AUTH_BASIC='{$basicAuth}'",
+                    'ACME_EMAIL="${TRAEFIK_ACME_EMAIL}"',
+                    'MACHINE_NAME="${MACHINE_NAME}"',
+                    'MACHINE_STORAGE_PATH="${MACHINE_STORAGE_PATH}"',
+                ]
+            )
+        );
+
+        return $substitutionStrategy;
     }
 }
