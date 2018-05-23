@@ -152,40 +152,8 @@ final class StaticSiteCreator
     private function createDotEnv(): void
     {
         $this->style->verbose("Create '.env' and '.env-override' from command options + env");
-        EnvironmentSubstitution::withDefaults()
-            ->export(
-                [
-                    'APP_NAME' => $this->staticSiteNamespace->toString(),
-                    'APP_HOSTS' => $this->staticSiteHostname->toString(),
-                ]
-            )->substitute(
-                $this->substitutionFactory->dumpFile(
-                    $this->tmpAppPath().'/.env',
-                    EnvironmentSubstitution::formatEnvFile(
-                        [
-                            'APP_NAME="${APP_NAME}"',
-                            'APP_HOSTS="${APP_HOSTS}"',
-                            'MACHINE_NAME="${MACHINE_NAME}"',
-                            'MACHINE_STORAGE_PATH="${MACHINE_STORAGE_PATH}"',
-                        ]
-                    )
-                )
-            );
-        EnvironmentSubstitution::withDefaults()
-            ->export(
-                [
-                    'APP_HOSTS' => $this->staticSiteHostname->toLocal()->toString(),
-                ]
-            )->substitute(
-                $this->substitutionFactory->dumpFile(
-                    $this->tmpAppPath().'/.env-override',
-                    EnvironmentSubstitution::formatEnvFile(
-                        [
-                            'APP_HOSTS="${APP_HOSTS}"',
-                        ]
-                    )
-                )
-            );
+        $this->createDotEnvProd();
+        $this->createDotEnvDev();
     }
 
     private function substituteEnvInIndexHtml(): void
@@ -250,5 +218,47 @@ final class StaticSiteCreator
     private function installerTemplatePath(): string
     {
         return "/installer/template/static";
+    }
+
+    private function createDotEnvProd(): void
+    {
+        EnvironmentSubstitution::withDefaults()
+            ->export(
+                [
+                    'APP_NAME' => $this->staticSiteNamespace->toString(),
+                    'APP_HOSTS' => $this->staticSiteHostname->toString(),
+                ]
+            )->substitute(
+                $this->substitutionFactory->dumpFile(
+                    $this->tmpAppPath().'/.env',
+                    EnvironmentSubstitution::formatEnvFile(
+                        [
+                            'APP_NAME="${APP_NAME}"',
+                            'APP_HOSTS="${APP_HOSTS}"',
+                            'MACHINE_NAME="${MACHINE_NAME}"',
+                            'MACHINE_STORAGE_PATH="${MACHINE_STORAGE_PATH}"',
+                        ]
+                    )
+                )
+            );
+    }
+
+    private function createDotEnvDev(): void
+    {
+        EnvironmentSubstitution::withDefaults()
+            ->export(
+                [
+                    'APP_HOSTS' => $this->staticSiteHostname->toLocal()->toString(),
+                ]
+            )->substitute(
+                $this->substitutionFactory->dumpFile(
+                    $this->tmpAppPath().'/.env-override',
+                    EnvironmentSubstitution::formatEnvFile(
+                        [
+                            'APP_HOSTS="${APP_HOSTS}"',
+                        ]
+                    )
+                )
+            );
     }
 }
