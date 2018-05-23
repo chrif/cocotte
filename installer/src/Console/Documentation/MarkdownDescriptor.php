@@ -1,12 +1,12 @@
 <?php declare(strict_types=1);
 
-namespace Cocotte\Console;
+namespace Cocotte\Console\Documentation;
 
+use Cocotte\Console\DocumentedCommand;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Formatter\OutputFormatter;
 use Symfony\Component\Console\Helper\Helper;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -19,16 +19,31 @@ class MarkdownDescriptor
      */
     private $output;
 
-    public function describe(OutputInterface $output, Application $object)
-    {
-        $decorated = $output->isDecorated();
-        $output->setDecorated(false);
+    /**
+     * @var OptionDescriber
+     */
+    private $optionDescriber;
 
+    /**
+     * @var ArgumentDescriber
+     */
+    private $argumentDescriber;
+
+    public function __construct(OutputInterface $output)
+    {
         $this->output = $output;
+        $this->optionDescriber = new OptionDescriber($output);
+        $this->argumentDescriber = new ArgumentDescriber($output);
+    }
+
+    public function describe(Application $object)
+    {
+        $decorated = $this->output->isDecorated();
+        $this->output->setDecorated(false);
 
         $this->describeApplication($object);
 
-        $output->setDecorated($decorated);
+        $this->output->setDecorated($decorated);
     }
 
     /**
@@ -42,38 +57,6 @@ class MarkdownDescriptor
         $this->output->write($content,
             false,
             $decorated ? OutputInterface::OUTPUT_NORMAL : OutputInterface::OUTPUT_RAW);
-    }
-
-    private function describeInputArgument(InputArgument $argument)
-    {
-        $description = $this->removeDecoration($argument->getDescription());
-        $this->write(
-            '#### `'.$this->argumentName($argument)."`\n\n"
-            .$this->formatArgumentDescription($description)
-            .'* Is required: '.$this->argumentIsRequired($argument)."\n"
-            .'* Is array: '.$this->argumentIsArray($argument)."\n"
-            .'* Default: `'.str_replace("\n", '', var_export($argument->getDefault(), true)).'`'
-        );
-    }
-
-    private function describeInputOption(InputOption $option)
-    {
-        $name = '--'.$option->getName();
-        if ($option->getShortcut()) {
-            $name .= '|-'.implode('|-', explode('|', $option->getShortcut())).'';
-        }
-
-        $emphasis = $this->optionEmphasis($option);
-
-        $description = $this->removeDecoration($option->getDescription());
-        $this->write(
-            '#### `'.$name.'`'."\n\n"
-            .$this->formatOptionDescription($description, $emphasis)
-            .'* Accept value: '.$this->optionValue($option)."\n"
-            .'* Is value required: '.$this->optionValueRequired($option)."\n"
-            .'* Is multiple: '.$this->optionIsMultiple($option)."\n"
-            .'* Default: `'.str_replace("\n", '', var_export($option->getDefault(), true)).'`'
-        );
     }
 
     private function describeInputDefinition(InputDefinition $definition)
@@ -141,90 +124,6 @@ class MarkdownDescriptor
     }
 
     /**
-     * @param $description
-     * @param $emphasis
-     * @return string
-     */
-    private function formatOptionDescription($description, $emphasis): string
-    {
-        return ($description ? $emphasis.preg_replace('/\s*[\r\n]\s*/', "\n", $description)."\n\n" : '');
-    }
-
-    /**
-     * @param InputOption $option
-     * @return string
-     */
-    private function optionValue(InputOption $option): string
-    {
-        return ($option->acceptValue() ? 'yes' : 'no');
-    }
-
-    /**
-     * @param InputOption $option
-     * @return string
-     */
-    private function optionValueRequired(InputOption $option): string
-    {
-        return ($option->isValueRequired() ? 'yes' : 'no');
-    }
-
-    /**
-     * @param InputOption $option
-     * @return string
-     */
-    private function optionIsMultiple(InputOption $option): string
-    {
-        return ($option->isArray() ? 'yes' : 'no');
-    }
-
-    /**
-     * @param InputOption $option
-     * @return string
-     */
-    private function optionEmphasis(InputOption $option): string
-    {
-        return $option instanceof StyledInputOption ? '##### ' : '';
-    }
-
-    /**
-     * @param InputArgument $argument
-     * @return string
-     */
-    private function argumentIsRequired(InputArgument $argument): string
-    {
-        return ($argument->isRequired() ? 'yes' : 'no');
-    }
-
-    /**
-     * @param InputArgument $argument
-     * @return string
-     */
-    private function argumentIsArray(InputArgument $argument): string
-    {
-        return ($argument->isArray() ? 'yes' : 'no');
-    }
-
-    /**
-     * @param InputArgument $argument
-     * @return string
-     */
-    private function argumentName(InputArgument $argument): string
-    {
-        return ($argument->getName() ?: '<none>');
-    }
-
-    /**
-     * @param $description
-     * @return string
-     */
-    private function formatArgumentDescription($description): string
-    {
-        return ($description ? preg_replace('/\s*[\r\n]\s*/',
-                "\n",
-                $description)."\n\n" : '');
-    }
-
-    /**
      * @param InputDefinition $definition
      * @return bool
      */
@@ -234,7 +133,7 @@ class MarkdownDescriptor
             $this->write('### Arguments');
             foreach ($definition->getArguments() as $argument) {
                 $this->write("\n\n");
-                $this->describeInputArgument($argument);
+                $this->argumentDescriber->describe($argument);
             }
         }
 
@@ -256,7 +155,7 @@ class MarkdownDescriptor
             $this->write('### Options');
             foreach ($inputOptions as $option) {
                 $this->write("\n\n");
-                $this->describeInputOption($option);
+                $this->optionDescriber->describe($option);
             }
         }
     }
