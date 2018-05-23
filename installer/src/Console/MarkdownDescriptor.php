@@ -140,16 +140,7 @@ class MarkdownDescriptor
     {
         $options = $definition->getOptions();
         $options = $this->filterOptions($options);
-        usort($options,
-            function (InputOption $a, InputOption $b) {
-                $aRequired = $a->isValueRequired() ? 1 : 0;
-                $bRequired = $b->isValueRequired() ? 1 : 0;
-                if ($aRequired == $bRequired) {
-                    return 0;
-                }
-
-                return ($aRequired > $bRequired) ? -1 : 1;
-            });
+        usort($options, $this->sortOptions());
 
         return $options;
     }
@@ -322,5 +313,21 @@ class MarkdownDescriptor
                     ['help', 'quiet', 'verbose', 'version', 'ansi', 'no-ansi', 'no-interaction']
                 );
             });
+    }
+
+    /**
+     * @return \Closure
+     */
+    private function sortOptions(): \Closure
+    {
+        return function (InputOption $a, InputOption $b) {
+            $aRequired = $a->isValueRequired() ? 1 : 0;
+            $bRequired = $b->isValueRequired() ? 1 : 0;
+            if ($aRequired == $bRequired) {
+                return 0;
+            }
+
+            return ($aRequired > $bRequired) ? -1 : 1;
+        };
     }
 }
