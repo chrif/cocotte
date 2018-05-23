@@ -91,12 +91,7 @@ class MarkdownDescriptor
             $command->getName()."\n"
             .str_repeat('-', Helper::strlen($command->getName()) + 2)."\n\n"
             .'### Usage'."\n\n"
-            .array_reduce(array_merge(array($synopsis),
-                $command->getAliases(),
-                $command->getUsages()),
-                function ($carry, $usage) {
-                    return $carry.'* `'.$usage.'`'."\n";
-                })
+            .$this->commandUsage($command, $synopsis)
         );
 
         if ($help = $command->getProcessedHelp()) {
@@ -329,5 +324,20 @@ class MarkdownDescriptor
 
             return ($aRequired > $bRequired) ? -1 : 1;
         };
+    }
+
+    /**
+     * @param Command $command
+     * @param $synopsis
+     * @return string
+     */
+    private function commandUsage(Command $command, $synopsis): string
+    {
+        return array_reduce(array_merge(array($synopsis),
+            $command->getAliases(),
+            $command->getUsages()),
+            function ($carry, $usage) {
+                return $carry.'* `'.$usage.'`'."\n";
+            });
     }
 }
