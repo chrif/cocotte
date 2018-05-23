@@ -4,7 +4,7 @@
     "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
     "This file is @generated automatically"
   ],
-  "content-hash": "de5c8df72f56a87cc709c4a04fa3b702",
+  "content-hash": "39a2f4fa43192bffbe9d10cc177cab46",
   "packages": [
     {
       "name": "beberlei/assert",
@@ -293,20 +293,21 @@
     },
     {
       "name": "io-developer/php-whois",
-      "version": "dev-update-rocks-host",
+      "version": "3.0.0",
       "source": {
         "type": "git",
-        "url": "https://github.com/chrif/php-whois.git",
-        "reference": "5caa5ff8bb67fe21cb3165f8b454b7452a4ccf92"
+        "url": "https://github.com/io-developer/php-whois.git",
+        "reference": "7d8c473c69962eacaaa91715ad55ebe5fe8a3590"
       },
       "dist": {
         "type": "zip",
-        "url": "https://api.github.com/repos/chrif/php-whois/zipball/5caa5ff8bb67fe21cb3165f8b454b7452a4ccf92",
-        "reference": "5caa5ff8bb67fe21cb3165f8b454b7452a4ccf92",
+        "url": "https://api.github.com/repos/io-developer/php-whois/zipball/7d8c473c69962eacaaa91715ad55ebe5fe8a3590",
+        "reference": "7d8c473c69962eacaaa91715ad55ebe5fe8a3590",
         "shasum": ""
       },
       "require": {
         "ext-intl": "*",
+        "ext-mbstring": "*",
         "php": ">=5.4"
       },
       "require-dev": {
@@ -318,18 +319,7 @@
           "Iodev\\": "src/Iodev/"
         }
       },
-      "autoload-dev": {
-        "psr-4": {
-          "": [
-            "tests/"
-          ]
-        }
-      },
-      "scripts": {
-        "test": [
-          "phpunit --bootstrap vendor/autoload.php tests"
-        ]
-      },
+      "notification-url": "https://packagist.org/downloads/",
       "license": [
         "MIT"
       ],
@@ -340,30 +330,22 @@
           "homepage": "https://github.com/io-developer"
         }
       ],
-      "description": "PHP WHOIS client implementation. Provides raw-text and parsed answers. Allows easy check domain availability or expiration date. Sends WHOIS queries to real service via port 43",
+      "description": "PHP WHOIS provides parsed and raw whois lookup of domains and ASN routes. PHP 5.4+ and 7+ compatible ",
       "homepage": "https://github.com/io-developer/php-whois",
       "keywords": [
-        "availability",
-        "client",
+        "asn",
         "domain",
-        "expiration",
-        "expiry",
-        "idna",
-        "information",
+        "info",
         "lookup",
         "parser",
         "php",
-        "punnycode",
-        "pure",
-        "registrant",
-        "registrar",
-        "unicode",
-        "whois"
+        "query",
+        "routes",
+        "tld",
+        "whois",
+        "црщшы"
       ],
-      "support": {
-        "source": "https://github.com/chrif/php-whois/tree/update-rocks-host"
-      },
-      "time": "2018-05-06T17:13:04+00:00"
+      "time": "2018-05-19T19:31:11+00:00"
     },
     {
       "name": "ocramius/package-versions",
@@ -2857,9 +2839,7 @@
   ],
   "aliases": [],
   "minimum-stability": "stable",
-    "stability-flags": {
-        "io-developer/php-whois": 20
-    },
+  "stability-flags": [],
   "prefer-stable": false,
   "prefer-lowest": false,
   "platform": {

@@ -4,7 +4,7 @@ namespace Cocotte\DigitalOcean;
 
 use Assert\Assertion;
 use Cocotte\Shell\Env;
-use Iodev\Whois\DomainInfo;
+use Iodev\Whois\Modules\Tld\DomainInfo;
 use Iodev\Whois\Whois;
 
 class DnsValidator
