@@ -316,13 +316,14 @@ class MarkdownDescriptor
     private function sortOptions(): \Closure
     {
         return function (InputOption $a, InputOption $b) {
-            $aRequired = $a->isValueRequired() ? 1 : 0;
-            $bRequired = $b->isValueRequired() ? 1 : 0;
-            if ($aRequired == $bRequired) {
+            if ($a->isValueRequired() == $b->isValueRequired()) {
                 return 0;
             }
+            if ($a->isValueRequired()) {
+                return -1;
+            }
 
-            return ($aRequired > $bRequired) ? -1 : 1;
+            return 1;
         };
     }
 
