@@ -178,29 +178,15 @@ final class InstallCommand extends AbstractCommand implements LazyEnvironment, H
         }
 
         $this->confirm();
-        $this->style->writeln("Creating a Docker machine named '{$this->machineName}' on Digital Ocean.");
-        $this->machineCreator->create();
-
-        $this->style->writeln("Creating Traefik template in {$this->hostMount->sourcePath()}/traefik");
-        $this->traefikCreator->create();
-
-        $this->style->writeln("Configuring networking for {$this->traefikHostname->toString()}");
-        $this->networkingConfigurator->configure(
-            $this->traefikHostname->toHostnameCollection(),
-            $this->machineIp->toIP()
-        );
-
-        $this->style->writeln('Deploying Traefik to cloud machine');
-//        $this->processRunner->run(new Process('./bin/reset-prod 2>/dev/stdout', $this->traefikCreator->hostAppPath()));
-        $this->processRunner->mustRun(new Process('./bin/prod 2>/dev/stdout', $this->traefikCreator->hostAppPath()));
-
-        $this->style->writeln('Waiting for Traefik to start');
-        $this->traefikDeploymentValidator->validate();
+        $this->createMachine();
+        $this->createTraefikTemplate();
+        $this->configureNetworking();
+        $this->deployTraefik();
+        $this->waitForTraefikReady();
 
         $this->processRunner->mustRun(new Process('./bin/logs -t', $this->traefikCreator->hostAppPath()));
 
         $this->style->complete($this->completeMessage());
-
         $this->style->writeln($this->command());
     }
 
@@ -245,5 +231,39 @@ final class InstallCommand extends AbstractCommand implements LazyEnvironment, H
 {$command}
 
 EOF;
+    }
+
+    private function createMachine(): void
+    {
+        $this->style->writeln("Creating a Docker machine named '{$this->machineName}' on Digital Ocean.");
+        $this->machineCreator->create();
+    }
+
+    private function createTraefikTemplate(): void
+    {
+        $this->style->writeln("Creating Traefik template in {$this->hostMount->sourcePath()}/traefik");
+        $this->traefikCreator->create();
+    }
+
+    private function configureNetworking(): void
+    {
+        $this->style->writeln("Configuring networking for {$this->traefikHostname->toString()}");
+        $this->networkingConfigurator->configure(
+            $this->traefikHostname->toHostnameCollection(),
+            $this->machineIp->toIP()
+        );
+    }
+
+    private function deployTraefik(): void
+    {
+        $this->style->writeln('Deploying Traefik to cloud machine');
+//        $this->processRunner->run(new Process('./bin/reset-prod 2>/dev/stdout', $this->traefikCreator->hostAppPath()));
+        $this->processRunner->mustRun(new Process('./bin/prod 2>/dev/stdout', $this->traefikCreator->hostAppPath()));
+    }
+
+    private function waitForTraefikReady(): void
+    {
+        $this->style->writeln('Waiting for Traefik to start');
+        $this->traefikDeploymentValidator->validate();
     }
 }

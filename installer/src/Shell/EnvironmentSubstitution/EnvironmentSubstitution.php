@@ -54,7 +54,7 @@ final class EnvironmentSubstitution
     public function substitute(SubstitutionStrategy $substitutionStrategy)
     {
         $command = ['envsubst'];
-        if ($this->restrictions) {
+        if (!empty($this->restrictions)) {
             $command[] = implode(',', $this->shellFormat($this->restrictions));
         }
         $substitutionStrategy->substitute(new Process($command, null, $this->exports));

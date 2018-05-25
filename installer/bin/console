@@ -2,7 +2,7 @@
 <?php
 require __DIR__.'/../vendor/autoload.php';
 
-use Cocotte\DependencyInjection\Application;
+use Cocotte\Application;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
