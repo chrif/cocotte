@@ -5,6 +5,7 @@ namespace Cocotte\Test\Collaborator\Console;
 use Cocotte\Console\CommandInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Console\Input\InputArgument;
 
 final class CommandInterfaceDouble
 {
@@ -47,4 +48,8 @@ final class CommandInterfaceDouble
             ->getMock();
     }
 
+    public function singleArgumentCommandStub(InputArgument $inputArgument): SingleArgumentCommandStub
+    {
+        return new SingleArgumentCommandStub($inputArgument);
+    }
 }

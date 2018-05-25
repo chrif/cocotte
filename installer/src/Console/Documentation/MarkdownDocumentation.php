@@ -11,7 +11,7 @@ use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class MarkdownDescriptor
+class MarkdownDocumentation
 {
 
     /**
@@ -36,7 +36,7 @@ class MarkdownDescriptor
         $this->argumentDescriber = new ArgumentDescriber($output);
     }
 
-    public function describe(Application $object)
+    public function document(Application $object)
     {
         $decorated = $this->output->isDecorated();
         $this->output->setDecorated(false);

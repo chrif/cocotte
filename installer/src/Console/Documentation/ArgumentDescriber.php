@@ -22,12 +22,14 @@ final class ArgumentDescriber
     public function describe(InputArgument $argument)
     {
         $description = $this->removeDecoration($argument->getDescription());
+        $default = $this->formatDefaultValue($argument);
+
         $this->write(
             '#### `'.$this->argumentName($argument)."`\n\n"
             .$this->formatArgumentDescription($description)
             .'* Is required: '.$this->argumentIsRequired($argument)."\n"
             .'* Is array: '.$this->argumentIsArray($argument)."\n"
-            .'* Default: `'.str_replace("\n", '', var_export($argument->getDefault(), true)).'`'
+            .'* Default: `'.str_replace("\n", '', var_export($default, true)).'`'
         );
     }
 
@@ -87,5 +89,19 @@ final class ArgumentDescriber
     private function argumentIsArray(InputArgument $argument): string
     {
         return ($argument->isArray() ? 'yes' : 'no');
+    }
+
+    /**
+     * @param InputArgument $argument
+     * @return mixed|string
+     */
+    private function formatDefaultValue(InputArgument $argument)
+    {
+        $default = $argument->getDefault();
+        if (is_string($default)) {
+            $default = $this->removeDecoration($argument->getDefault());
+        }
+
+        return $default;
     }
 }

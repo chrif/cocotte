@@ -2,7 +2,7 @@
 
 namespace Cocotte\Command;
 
-use Cocotte\Console\Documentation\MarkdownDescriptor;
+use Cocotte\Console\Documentation\MarkdownDocumentation;
 use Cocotte\Environment\EnvironmentState;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -37,8 +37,8 @@ final class BuildDocCommand extends Command
             throw new \Exception("Environment is populated. This command needs to run on a bare environment.");
         }
 
-        $descriptor = new MarkdownDescriptor($output);
-        $descriptor->describe($this->getApplication());
+        $descriptor = new MarkdownDocumentation($output);
+        $descriptor->document($this->getApplication());
     }
 
 }
