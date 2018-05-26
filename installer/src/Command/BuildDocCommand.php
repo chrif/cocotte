@@ -37,8 +37,8 @@ final class BuildDocCommand extends Command
             throw new \Exception("Environment is populated. This command needs to run on a bare environment.");
         }
 
-        $descriptor = new MarkdownDocumentation($output);
-        $descriptor->document($this->getApplication());
+        $markdownDocumentation = new MarkdownDocumentation($output);
+        $markdownDocumentation->document($this->getApplication());
     }
 
 }
