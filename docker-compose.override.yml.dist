@@ -75,7 +75,7 @@ services:
   bare:
     image: chrif/cocotte
     volumes:
-      - ./doc:/doc
+      - ./docs:/docs
       - ./installer:/installer
       - ./installer/etc/xdebug.ini:/etc/php7/conf.d/xdebug.ini:ro
       - ./installer/etc/php.ini:/etc/php7/conf.d/zzz-php.ini:ro
@@ -89,3 +89,8 @@ services:
       - .:/opt/project
     environment:
       TRAVIS_TOKEN: ${TRAVIS_TOKEN}
+
+  doctoc:
+    build: docker/doctoc
+    volumes:
+      - .:/usr/src

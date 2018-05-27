@@ -10,6 +10,21 @@ Cocotte aims at easing the learning curve for web developers starting with cloud
 * [Digital Ocean](https://www.digitalocean.com/) as the cloud provider.
 * [Traefik](https://traefik.io/) as the reverse proxy for hostname routing and SSL certificates automation.
 
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+## Table of Contents
+
+- [In pseudo-code](#in-pseudo-code)
+- [In details](#in-details)
+- [Pricing](#pricing)
+- [Requirements](#requirements)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Reference](#reference)
+- [Contributing](#contributing)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 ## In pseudo-code
 
 ```
