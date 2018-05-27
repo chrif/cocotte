@@ -24,6 +24,7 @@ Cocotte aims at easing the learning curve for web developers starting with cloud
 - [Usage](#usage)
 - [Reference](#reference)
 - [Contributing](#contributing)
+- [Support](#support)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
