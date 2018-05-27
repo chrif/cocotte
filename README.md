@@ -90,7 +90,7 @@ If you already have a Digital Ocean account, then you probably know about cloud 
 
 * Install [Docker Community Edition](https://www.docker.com/community-edition) (including Docker Compose and Docker Machine).
 * If you don't have a Digital Ocean account, create one with [this link](https://m.do.co/c/c25ed78e51c5) and you will get a 10$ credit, allowing you to try Cocotte for free.
-* Generate a [Digital Ocean API token](https://cloud.digitalocean.com/settings/api/tokens).
+* Generate a [Digital Ocean API token](https://cloud.digitalocean.com/settings/api/tokens) with write permissions.
 * Make sur you have a domain whose name servers are set to:
 	 * ns1.digitalocean.com
 	 * ns2.digitalocean.com

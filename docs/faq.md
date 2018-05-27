@@ -32,4 +32,4 @@ For all these reasons, the introduction of an image registry is left to a more a
 
 ## Command fails with an error message beginning with `Failed to validate name servers`
 
-Cocotte uses a third-party library to validate that the name servers of your domain are Digital Ocean's. If you are confident that your domain is valid but the library fails to validate your domain, you can disable DNS validation with the `--skip-dns-validation` option.
+Cocotte uses a third-party library to validate that the name servers of your domain point to Digital Ocean. If you are confident that your name servers are correct but the library fails to validate your domain, you can disable DNS validation with the `--skip-dns-validation` option.
