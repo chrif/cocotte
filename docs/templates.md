@@ -1,5 +1,19 @@
 # Developing and deploying applications
 
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+## Table of Contents
+
+- [Traefik](#traefik)
+- [Application templates](#application-templates)
+  - [Static site](#static-site)
+  - [More templates coming soon](#more-templates-coming-soon)
+- [Useful commands](#useful-commands)
+- [Reference manuals](#reference-manuals)
+- [What should I learn first?](#what-should-i-learn-first)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 ## Traefik
 * When running the [`install`](../installer/docs/console.md#install) command, Cocotte creates a directory named `traefik`. You can commit it to version control. This is yours to modify if and when necessary.
 * Cocotte expects exactly one Traefik container running in your Docker Engine as this is required to route the requests of all your other applications.

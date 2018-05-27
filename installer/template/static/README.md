@@ -2,6 +2,24 @@
 
 The examples assume a static site created with namespace `mysite` and hostname `mysite.mydomain.com`. It is also assumed that Traefik is running locally.
 
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+## Table of Contents
+
+- [Develop locally](#develop-locally)
+- [Deploy to production](#deploy-to-production)
+- [The commands](#the-commands)
+  - [dev](#dev)
+  - [logs](#logs)
+  - [prod](#prod)
+  - [reset-dev](#reset-dev)
+  - [reset-prod](#reset-prod)
+- [Configuration](#configuration)
+  - [The environment variables in `.env`](#the-environment-variables-in-env)
+  - [The environment variables in `.env-override`](#the-environment-variables-in-env-override)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 ## Develop locally
 
 The local URL is the value of `APP_HOSTS` in `.env-override`. By default Cocotte sets it to the same value as your production URL with the `.local` extension.
