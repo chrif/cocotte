@@ -8,14 +8,14 @@ use Cocotte\Test\Collaborator\DigitalOcean\DnsValidatorActual;
 
 final class DnsValidatorTest extends ApplicationTestCase
 {
-    /**
-     * @doesNotPerformAssertions
-     *
-     * @throws \Exception
-     */
     public function test_it_validates_my_rocks_domain()
     {
         $validator = DnsValidatorActual::get($this->container())->service();
+        $this->expectExceptionMessageRegExp(
+            "#Failed to validate name servers for 'cocotte\.rocks':\n".
+            "'ns-cloud-a[1-4]\.googledomains\.com' is not a Digital Ocean's name server in the form of ".
+            "ns\[0-9\]\.digitalocean\.com#"
+        );
         $validator->validateHost(Hostname::parse('cocotte.rocks'));
     }
 
