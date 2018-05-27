@@ -1,3 +1,3 @@
 # Contributing
 
-Pull requests are welcome. Take a look at the [development documentation](doc/development.md) doc.
+Pull requests are welcome. Take a look at the [development documentation](docs/development.md) doc.

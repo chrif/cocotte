@@ -1,10 +1,8 @@
-# Cocotte 
-
 [![Build Status](https://travis-ci.org/chrif/cocotte.svg?branch=master)](https://travis-ci.org/chrif/cocotte) 
 [![Code Coverage](https://codecov.io/gh/chrif/cocotte/branch/master/graph/badge.svg)](https://codecov.io/gh/chrif/cocotte)
 [![Maintainability](https://api.codeclimate.com/v1/badges/4a2efdec6fce9e6cb1eb/maintainability)](https://codeclimate.com/github/chrif/cocotte/maintainability)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/chrif/cocotte/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/chrif/cocotte/?branch=master)
-[![PayPal](doc/paypal-badge.svg)](https://www.paypal.me/Fecteau)
+[![PayPal](docs/paypal-badge.svg)](https://www.paypal.me/Fecteau)
 
 Cocotte aims at easing the learning curve for web developers starting with cloud hosting and application containerization. You get a basic and [affordable](#pricing) installation, allowing you to focus on your project(s) first, and learn about your infrastructure later:
 
@@ -52,7 +50,7 @@ Cocotte is a free cloud installer for hosting multiple containerized application
 
 As opposed to a solution that would lock you in for further maintenance, Cocotte is just a one-time installer. Once the cloud machine is provisioned, you don't need Cocotte anymore. So you'll need to read the manuals eventually, but when you do, you'll have full control over every aspect of your installation.
 
-Optionally, and in the hope to get you started even faster, Cocotte has a template feature for adding new Docker applications to your infrastructure. It generates deployment scripts for a https web server, in a folder ready for source control. The only template available right now is a static website with Nginx but more templates are coming soon. The intended way of developing and deploying with these application models is [documented](doc/templates.md).
+Optionally, and in the hope to get you started even faster, Cocotte has a template feature for adding new Docker applications to your infrastructure. It generates deployment scripts for a https web server, in a folder ready for source control. The only template available right now is a static website with Nginx but more templates are coming soon. The intended way of developing and deploying with these application models is [documented](docs/templates.md).
 
 Cocotte is fully tested on [Travis CI](https://travis-ci.org/chrif/cocotte), so there is no surprises with tutorials that used to work when they were written but are now outdated. The build itself is the tutorial, and if it passes, you can be confident that Cocotte works.
 
@@ -89,11 +87,11 @@ $ docker run -it --rm chrif/cocotte
 
 ## Reference
 
-* [Console API Reference](installer/doc/console.md)
-* [Developing and deploying applications](doc/templates.md)
-* [The `machine` directory](doc/machine.md)
-* [Frequently asked questions](doc/faq.md)
+* [Console API Reference](installer/docs/console.md)
+* [Developing and deploying applications](docs/templates.md)
+* [The `machine` directory](docs/machine.md)
+* [Frequently asked questions](docs/faq.md)
 
 ## Contributing
 
-Pull requests are welcome. Take a look at the [development documentation](doc/development.md).
+Pull requests are welcome. Take a look at the [development documentation](docs/development.md).
