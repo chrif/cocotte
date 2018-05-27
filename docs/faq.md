@@ -1,6 +1,14 @@
 # Frequently asked questions
 
-[TOC]
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+
+
+- [Why is there no cluster with an orchestrator like Swarm or Kubernetes?](#why-is-there-no-cluster-with-an-orchestrator-like-swarm-or-kubernetes)
+- [Why not pushing images to a Docker Registry and pulling them in production?](#why-not-pushing-images-to-a-docker-registry-and-pulling-them-in-production)
+- [Command fails with an error message beginning with `Failed to validate name servers`](#command-fails-with-an-error-message-beginning-with-failed-to-validate-name-servers)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ## Why is there no cluster with an orchestrator like Swarm or Kubernetes?
 
@@ -24,4 +32,4 @@ For all these reasons, the introduction of an image registry is left to a more a
 
 ## Command fails with an error message beginning with `Failed to validate name servers`
 
-Cocotte uses a third-party library to validate that the name servers of your domain are Digital Ocean's. If you are confident that your domain is valid but the library fails to validate your domain, you can disable DNS validation with the `--skip-dns-validation` option.
+Cocotte uses a third-party library to validate that the name servers of your domain point to Digital Ocean. If you are confident that your name servers are correct but the library fails to validate your domain, you can disable DNS validation with the `--skip-dns-validation` option.

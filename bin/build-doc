@@ -2,4 +2,12 @@
 
 set -eu
 
-docker-compose run --rm bare console build-doc > installer/doc/console.md
+docker-compose run --rm bare console build-doc > installer/docs/console.md
+docker-compose run --rm doctoc \
+	README.md \
+	docs/templates.md \
+	installer/template/static/README.md \
+	installer/template/traefik/README.md \
+	--title "## Table of Contents" \
+	--github
+docker-compose run --rm doctoc docs/faq.md --notitle --github

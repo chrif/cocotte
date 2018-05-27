@@ -21,7 +21,7 @@ class BuildDocCommandTest extends ApplicationTestCase
 
         $tester = $this->assertCommandExecutes($buildDocCommand, [], false);
         $display = $tester->getDisplay();
-        self::assertSame(file_get_contents(__DIR__."/../../../doc/console.md"), $display);
+        self::assertSame(file_get_contents(__DIR__."/../../../docs/console.md"), $display);
     }
 
     public function test_it_guards_env_is_bare()

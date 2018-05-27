@@ -1,16 +1,33 @@
-# Cocotte 
+# Cocotte
 
-[![Build Status](https://travis-ci.org/chrif/cocotte.svg?branch=master)](https://travis-ci.org/chrif/cocotte) 
-[![Code Coverage](https://codecov.io/gh/chrif/cocotte/branch/master/graph/badge.svg)](https://codecov.io/gh/chrif/cocotte)
-[![Maintainability](https://api.codeclimate.com/v1/badges/4a2efdec6fce9e6cb1eb/maintainability)](https://codeclimate.com/github/chrif/cocotte/maintainability)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/chrif/cocotte/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/chrif/cocotte/?branch=master)
-[![PayPal](doc/paypal-badge.svg)](https://www.paypal.me/Fecteau)
+[![Build Status](https://img.shields.io/travis/chrif/cocotte.svg?colorA=155799&colorB=159957)](https://travis-ci.org/chrif/cocotte) 
+[![Code Coverage](https://img.shields.io/codecov/c/github/chrif/cocotte.svg?colorA=155799&colorB=159957)](https://codecov.io/gh/chrif/cocotte)
+[![Maintainability](https://img.shields.io/codeclimate/maintainability/chrif/cocotte.svg?colorA=155799&colorB=159957)](https://codeclimate.com/github/chrif/cocotte/maintainability)
+[![Scrutinizer Code Quality](https://img.shields.io/scrutinizer/g/chrif/cocotte.svg?colorA=155799&colorB=159957)](https://scrutinizer-ci.com/g/chrif/cocotte/?branch=master)
+[![PayPal](docs/paypal-badge.svg)](https://www.paypal.me/Fecteau)
+[![Twitter Follow](https://img.shields.io/twitter/url/http/shields.io.svg?style=social)](https://twitter.com/CocotteRocks)
 
 Cocotte aims at easing the learning curve for web developers starting with cloud hosting and application containerization. You get a basic and [affordable](#pricing) installation, allowing you to focus on your project(s) first, and learn about your infrastructure later:
 
 * [Docker](https://www.docker.com/) containers for all processes.
 * [Digital Ocean](https://www.digitalocean.com/) as the cloud provider.
 * [Traefik](https://traefik.io/) as the reverse proxy for hostname routing and SSL certificates automation.
+
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+## Table of Contents
+
+- [In pseudo-code](#in-pseudo-code)
+- [In details](#in-details)
+- [Pricing](#pricing)
+- [Requirements](#requirements)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Reference](#reference)
+- [Contributing](#contributing)
+- [Support](#support)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ## In pseudo-code
 
@@ -52,7 +69,7 @@ Cocotte is a free cloud installer for hosting multiple containerized application
 
 As opposed to a solution that would lock you in for further maintenance, Cocotte is just a one-time installer. Once the cloud machine is provisioned, you don't need Cocotte anymore. So you'll need to read the manuals eventually, but when you do, you'll have full control over every aspect of your installation.
 
-Optionally, and in the hope to get you started even faster, Cocotte has a template feature for adding new Docker applications to your infrastructure. It generates deployment scripts for a https web server, in a folder ready for source control. The only template available right now is a static website with Nginx but more templates are coming soon. The intended way of developing and deploying with these application models is [documented](doc/templates.md).
+Optionally, and in the hope to get you started even faster, Cocotte has a template feature for adding new Docker applications to your infrastructure. It generates deployment scripts for a https web server, in a folder ready for source control. The only template available right now is a static website with Nginx but more templates are coming soon. The intended way of developing and deploying with these application models is [documented](docs/templates.md).
 
 Cocotte is fully tested on [Travis CI](https://travis-ci.org/chrif/cocotte), so there is no surprises with tutorials that used to work when they were written but are now outdated. The build itself is the tutorial, and if it passes, you can be confident that Cocotte works.
 
@@ -75,7 +92,7 @@ If you already have a Digital Ocean account, then you probably know about cloud 
 
 * Install [Docker Community Edition](https://www.docker.com/community-edition) (including Docker Compose and Docker Machine).
 * If you don't have a Digital Ocean account, create one with [this link](https://m.do.co/c/c25ed78e51c5) and you will get a 10$ credit, allowing you to try Cocotte for free.
-* Generate a [Digital Ocean API token](https://cloud.digitalocean.com/settings/api/tokens).
+* Generate a [Digital Ocean API token](https://cloud.digitalocean.com/settings/api/tokens) with write permissions.
 * Make sur you have a domain whose name servers are set to:
 	 * ns1.digitalocean.com
 	 * ns2.digitalocean.com
@@ -89,11 +106,17 @@ $ docker run -it --rm chrif/cocotte
 
 ## Reference
 
-* [Console API Reference](installer/doc/console.md)
-* [Developing and deploying applications](doc/templates.md)
-* [The `machine` directory](doc/machine.md)
-* [Frequently asked questions](doc/faq.md)
+* [Console API Reference](installer/docs/console.md)
+* [Developing and deploying applications](docs/templates.md)
+* [The `machine` directory](docs/machine.md)
+* [Frequently asked questions](docs/faq.md)
 
 ## Contributing
 
-Pull requests are welcome. Take a look at the [development documentation](doc/development.md).
+Pull requests are welcome. Take a look at the [development documentation](docs/development.md).
+
+## Support
+
+* [Q&A](https://groups.google.com/forum/#!forum/cocotterocks)
+* [Email](mailto:cocotte.rocks@gmail.com)
+* [Issues](https://github.com/chrif/cocotte/issues)

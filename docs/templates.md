@@ -1,7 +1,21 @@
 # Developing and deploying applications
 
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+## Table of Contents
+
+- [Traefik](#traefik)
+- [Application templates](#application-templates)
+  - [Static site](#static-site)
+  - [More templates coming soon](#more-templates-coming-soon)
+- [Useful commands](#useful-commands)
+- [Reference manuals](#reference-manuals)
+- [What should I learn first?](#what-should-i-learn-first)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 ## Traefik
-* When running the [`install`](../installer/doc/console.md#install) command, Cocotte creates a directory named `traefik`. You can commit it to version control. This is yours to modify if and when necessary.
+* When running the [`install`](../installer/docs/console.md#install) command, Cocotte creates a directory named `traefik`. You can commit it to version control. This is yours to modify if and when necessary.
 * Cocotte expects exactly one Traefik container running in your Docker Engine as this is required to route the requests of all your other applications.
 * This is a reverse proxy whose job is to listen to ports needed by more than one container, and route each request to its intended container based on the hostname of the request. 
 * This particular reverse proxy uses Let's Encrypt to automatically generate and renew SSL certificates per hostname.
@@ -10,7 +24,7 @@
 ## Application templates
 
 ### Static site
-* When running the [`static-site`](../installer/doc/console.md#static-site) command, Cocotte creates a directory named after the namespace your chose for your site.
+* When running the [`static-site`](../installer/docs/console.md#static-site) command, Cocotte creates a directory named after the namespace your chose for your site.
 * You can create as many of them as you want.
 * To develop locally, first make sure Traefik is [running locally](../installer/template/traefik/README.md#develop-locally), then hop to the [README](../installer/template/static/README.md).
 
