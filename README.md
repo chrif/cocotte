@@ -112,3 +112,9 @@ $ docker run -it --rm chrif/cocotte
 ## Contributing
 
 Pull requests are welcome. Take a look at the [development documentation](docs/development.md).
+
+## Support
+
+* [Q&A](https://groups.google.com/forum/#!forum/cocotterocks)
+* [Email](mailto:cocotte.rocks@gmail.com)
+* [Issues](https://github.com/chrif/cocotte/issues)
