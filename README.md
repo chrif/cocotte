@@ -1,3 +1,5 @@
+# Cocotte
+
 [![Build Status](https://travis-ci.org/chrif/cocotte.svg?branch=master)](https://travis-ci.org/chrif/cocotte) 
 [![Code Coverage](https://codecov.io/gh/chrif/cocotte/branch/master/graph/badge.svg)](https://codecov.io/gh/chrif/cocotte)
 [![Maintainability](https://api.codeclimate.com/v1/badges/4a2efdec6fce9e6cb1eb/maintainability)](https://codeclimate.com/github/chrif/cocotte/maintainability)
