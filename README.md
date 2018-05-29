@@ -121,4 +121,4 @@ Pull requests are welcome. Take a look at the [development documentation](docs/d
 * Join the Cocotte Slack channel: [![Join the chat at https://slack.cocotte.rocks](https://img.shields.io/badge/style-register-green.svg?style=social&label=Slack)](https://slack.cocotte.rocks)
 * Use [Stack Overflow](https://stackoverflow.com/questions/tagged/cocotte) (using the `cocotte` tag)
 * [Open an issue on GitHub](https://github.com/chrif/cocotte/issues)
-* [Email](mailto:cocotte.rocks@gmail.com)
+* [Send an email](mailto:cocotte.rocks@gmail.com)
