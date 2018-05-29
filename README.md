@@ -27,6 +27,7 @@ Cocotte aims at easing the learning curve for web developers starting with cloud
 - [Reference](#reference)
 - [Contributing](#contributing)
 - [Support](#support)
+- [Feedback](#feedback)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -122,3 +123,7 @@ Pull requests are welcome. Take a look at the [development documentation](docs/d
 * Use [Stack Overflow](https://stackoverflow.com/questions/tagged/cocotte) (using the `cocotte` tag)
 * [Open an issue on GitHub](https://github.com/chrif/cocotte/issues)
 * [Send an email](mailto:cocotte.rocks@gmail.com)
+
+## Feedback
+
+Thank you for trying Cocotte! If you have bugs to report or improvements to suggest, [open an issue on GitHub](https://github.com/chrif/cocotte/issues).
