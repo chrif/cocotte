@@ -1,12 +1,19 @@
 # Cocotte
 
-[![Build Status](https://img.shields.io/travis/chrif/cocotte.svg?colorA=155799&colorB=159957)](https://travis-ci.org/chrif/cocotte) 
-[![Code Coverage](https://img.shields.io/codecov/c/github/chrif/cocotte.svg?colorA=155799&colorB=159957)](https://codecov.io/gh/chrif/cocotte)
-[![Maintainability](https://img.shields.io/codeclimate/maintainability/chrif/cocotte.svg?colorA=155799&colorB=159957)](https://codeclimate.com/github/chrif/cocotte/maintainability)
-[![Scrutinizer Code Quality](https://img.shields.io/scrutinizer/g/chrif/cocotte.svg?colorA=155799&colorB=159957)](https://scrutinizer-ci.com/g/chrif/cocotte/?branch=master)
+[![Build Status](https://travis-ci.org/chrif/cocotte.svg?branch=master)](https://travis-ci.org/chrif/cocotte) 
+[![Code Coverage](https://codecov.io/gh/chrif/cocotte/branch/master/graph/badge.svg)](https://codecov.io/gh/chrif/cocotte)
+[![Maintainability](https://api.codeclimate.com/v1/badges/4a2efdec6fce9e6cb1eb/maintainability)](https://codeclimate.com/github/chrif/cocotte/maintainability)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/chrif/cocotte/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/chrif/cocotte/?branch=master)
 [![PayPal](docs/paypal-badge.svg)](https://www.paypal.me/Fecteau)
 [![Join the chat at https://slack.cocotte.rocks](https://slack.cocotte.rocks/badge.svg?colorA=155799&colorB=159957)](https://slack.cocotte.rocks)
 [![Twitter](https://img.shields.io/twitter/follow/CocotteRocks.svg?style=social)](https://twitter.com/intent/follow?screen_name=CocotteRocks)
+
+<!-- These are nice but slow to render -->
+<!-- https://img.shields.io/travis/chrif/cocotte.svg?colorA=155799&colorB=159957 -->
+<!-- https://img.shields.io/codecov/c/github/chrif/cocotte.svg?colorA=155799&colorB=159957 -->
+<!-- https://img.shields.io/codeclimate/maintainability/chrif/cocotte.svg?colorA=155799&colorB=159957 -->
+<!-- https://img.shields.io/scrutinizer/g/chrif/cocotte.svg?colorA=155799&colorB=159957 -->
+
 
 Cocotte aims at easing the learning curve for web developers starting with cloud hosting and application containerization. You get a basic and [affordable](#pricing) installation, allowing you to focus on your project(s) first, and learn about your infrastructure later:
 
