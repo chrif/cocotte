@@ -67,7 +67,7 @@ class MachineStoragePath implements LazyEnvironmentValue, LazyLoadAware
      */
     private function symLink()
     {
-        // Unlikely but if Cocotte is run from a root /host directory, then_ we don't need a sym link.
+        // Unlikely but if Cocotte is run from a root /host directory, then we don't need a sym link.
         if ($this->pathOnInstaller() === $this->pathOnHostFileSystem()) {
             return;
         }
@@ -109,9 +109,9 @@ class MachineStoragePath implements LazyEnvironmentValue, LazyLoadAware
     {
         if (!$this->filesystem->isLink($this->pathOnHostFileSystem())) {
             throw new \Exception(
-                "Error: cannot symlink '{$this->pathOnInstaller()}' to '{$this->pathOnHostFileSystem()}' because it is a real ".
-                "path on Cocotte filesystem. Start Cocotte from a different directory on your computer. One ".
-                "that does not exist in the Cocotte filesystem.\n"
+                "Error: cannot symlink '{$this->pathOnInstaller()}' to '{$this->pathOnHostFileSystem()}' because ".
+                "it is a real path on Cocotte filesystem. Start Cocotte from a different directory on your computer. ".
+                "One that does not exist in the Cocotte filesystem.\n"
             );
         }
 
