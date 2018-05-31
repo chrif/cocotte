@@ -58,11 +58,13 @@ final class MachineStoragePathTest extends TestCase
         $filesystem->expects(self::once())->method('isAbsolutePath')->with("/Users/tom/cocotte")->willReturn(true);
         $filesystem->expects(self::once())->method('exists')->with("/Users/tom/cocotte")->willReturn(true);
         $filesystem->expects(self::once())->method('isLink')->with("/Users/tom/cocotte")->willReturn(true);
+        $filesystem->expects(self::once())->method('readlink')->with("/Users/tom/cocotte")->willReturn('/foo/bar');
 
         $machineStoragePath = new MachineStoragePath("/Users/tom/cocotte", $filesystem);
 
         $this->expectExceptionMessage(
-            "Error: '/Users/tom/cocotte' is a symlink but it does not resolve to '/host/machine'"
+            "Error: Cannot symlink '/host/machine' to '/Users/tom/cocotte' because ".
+            "it is already symlink which resolves to '/foo/bar'."
         );
         $machineStoragePath->onLazyLoad(new FakeEnv());
     }

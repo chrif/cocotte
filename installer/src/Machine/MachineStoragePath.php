@@ -115,10 +115,11 @@ class MachineStoragePath implements LazyEnvironmentValue, LazyLoadAware
             );
         }
 
-        if ($this->filesystem->readlink($this->pathOnHostFileSystem()) !== $this->pathOnInstaller()) {
+        $readlink = $this->filesystem->readlink($this->pathOnHostFileSystem());
+        if ($readlink !== $this->pathOnInstaller()) {
             throw new \Exception(
-                "Error: '{$this->pathOnHostFileSystem()}' is a symlink but it does not resolve ".
-                "to '{$this->pathOnInstaller()}'"
+                "Error: Cannot symlink '{$this->pathOnInstaller()}' to '{$this->pathOnHostFileSystem()}' because ".
+                "it is already symlink which resolves to '{$readlink}'."
             );
         }
     }
