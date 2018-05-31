@@ -86,6 +86,7 @@ services:
   Cocotte\Host\HostMountRequiredListener:
     tags: ['event.subscriber']
   Cocotte\Host\HostMountFactory: ~
+  Cocotte\Host\InspectMountsProcess: ~
   Cocotte\Host\MountsFactory: ~
 
   # machine

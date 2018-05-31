@@ -5,20 +5,9 @@ namespace Cocotte\Console\Documentation;
 use Cocotte\Console\StyledInputOption;
 use Symfony\Component\Console\Formatter\OutputFormatter;
 use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Output\OutputInterface;
 
 final class OptionDescriber
 {
-
-    /**
-     * @var OutputInterface
-     */
-    private $output;
-
-    public function __construct(OutputInterface $output)
-    {
-        $this->output = $output;
-    }
 
     public function describe(InputOption $option)
     {
@@ -30,14 +19,14 @@ final class OptionDescriber
         $emphasis = $this->optionEmphasis($option);
 
         $description = $this->removeDecoration($option->getDescription());
-        $this->write(
+
+        return
             '#### `'.$name.'`'."\n\n"
             .$this->formatOptionDescription($description, $emphasis)
             .'* Accept value: '.$this->optionValue($option)."\n"
             .'* Is value required: '.$this->optionValueRequired($option)."\n"
             .'* Is multiple: '.$this->optionIsMultiple($option)."\n"
-            .'* Default: `'.str_replace("\n", '', var_export($option->getDefault(), true)).'`'
-        );
+            .'* Default: `'.str_replace("\n", '', var_export($option->getDefault(), true)).'`';
     }
 
     /**
@@ -81,19 +70,6 @@ final class OptionDescriber
         $f = new OutputFormatter();
 
         return $f->format($string);
-    }
-
-    /**
-     * Writes content to output.
-     *
-     * @param string $content
-     * @param bool $decorated
-     */
-    private function write($content, $decorated = false)
-    {
-        $this->output->write($content,
-            false,
-            $decorated ? OutputInterface::OUTPUT_NORMAL : OutputInterface::OUTPUT_RAW);
     }
 
     /**

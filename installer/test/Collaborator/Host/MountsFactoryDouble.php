@@ -45,6 +45,7 @@ final class MountsFactoryDouble
     private function mock(): MockObject
     {
         return $this->testCase->getMockBuilder(MountsFactory::class)
+            ->disableOriginalConstructor()
             ->getMock();
     }
 
