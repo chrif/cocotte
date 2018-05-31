@@ -2,6 +2,11 @@
 
 namespace Cocotte\Filesystem;
 
-final class CocotteFilesystem extends \Symfony\Component\Filesystem\Filesystem implements Filesystem
+class CocotteFilesystem extends \Symfony\Component\Filesystem\Filesystem implements Filesystem
 {
+    public function isLink(string $filename): bool
+    {
+        return is_link($filename);
+    }
+
 }

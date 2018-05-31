@@ -183,9 +183,7 @@ final class InstallCommand extends AbstractCommand implements LazyEnvironment, H
         $this->configureNetworking();
         $this->deployTraefik();
         $this->waitForTraefikReady();
-
-        $this->processRunner->mustRun(new Process('./bin/logs -t', $this->traefikCreator->hostAppPath()));
-
+        $this->echoTraefikLogs();
         $this->style->complete($this->completeMessage());
         $this->style->writeln($this->command());
     }
@@ -265,5 +263,10 @@ EOF;
     {
         $this->style->writeln('Waiting for Traefik to start');
         $this->traefikDeploymentValidator->validate();
+    }
+
+    private function echoTraefikLogs(): void
+    {
+        $this->processRunner->mustRun(new Process('./bin/logs -t', $this->traefikCreator->hostAppPath()));
     }
 }

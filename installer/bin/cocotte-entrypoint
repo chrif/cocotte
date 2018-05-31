@@ -11,14 +11,18 @@ END
 	exit 0
 elif [ "$1" = "help" ] || [ "$1" = "--help" ] || [ "$1" = "-h" ]; then
 	cat <<END
+Cocotte ${COCOTTE_VERSION}
 
-* For the list of available commands run:
+* Run the wizard:
+docker run -it --rm chrif/cocotte wizard
+
+* List available commands:
 docker run -it --rm chrif/cocotte list
 
-* For help on a command, run:
+* Get help on a command:
 docker run -it --rm chrif/cocotte <command> --help
 
-* Cocotte documentation:
+* Read Cocotte documentation:
 https://github.com/chrif/cocotte
 
 END

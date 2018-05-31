@@ -23,24 +23,32 @@ final class TestCompilerPass implements CompilerPassInterface
 
     public function process(ContainerBuilder $container)
     {
+        $this->configureInput($container);
+        $this->configureOutput($container);
+    }
+
+    private function configureInput(ContainerBuilder $container): void
+    {
         // custom input not pre populated with $_SERVER['argv']
-        $definition = $container->getDefinition(InputInterface::class);
-        $definition->setClass(ArrayInput::class);
-        $definition->setArguments([
+        $inputDefinition = $container->getDefinition(InputInterface::class);
+        $inputDefinition->setClass(ArrayInput::class);
+        $inputDefinition->setArguments([
             [],
         ]);
+    }
 
-        // customize output
-        $definition = $container->getDefinition(OutputInterface::class);
+    private function configureOutput(ContainerBuilder $container): void
+    {
+        $outputDefinition = $container->getDefinition(OutputInterface::class);
         if ($this->useConsoleOutput) {
             // we are already using it but output is quiet by default in tests
-            $definition->setArguments([
+            $outputDefinition->setArguments([
                 OutputInterface::VERBOSITY_QUIET,
             ]);
         } else {
             // use memory output with normal verbosity
-            $definition->setClass(StreamOutput::class);
-            $definition->setArguments([
+            $outputDefinition->setClass(StreamOutput::class);
+            $outputDefinition->setArguments([
                 fopen('php://memory', 'w', false),
             ]);
         }

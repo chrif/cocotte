@@ -124,7 +124,6 @@ class MarkdownDocumentation
     private function getInputOptions(InputDefinition $definition)
     {
         $options = $definition->getOptions();
-        $options = $this->filterOptions($options);
         usort($options, $this->sortOptions());
 
         return $options;
@@ -202,21 +201,6 @@ class MarkdownDocumentation
     }
 
     /**
-     * @param $options
-     * @return array
-     */
-    private function filterOptions($options): array
-    {
-        return array_filter($options,
-            function (InputOption $option) {
-                return !in_array(
-                    $option->getName(),
-                    ['help', 'quiet', 'verbose', 'version', 'ansi', 'no-ansi', 'no-interaction']
-                );
-            });
-    }
-
-    /**
      * @return \Closure
      */
     private function sortOptions(): \Closure
@@ -240,11 +224,16 @@ class MarkdownDocumentation
      */
     private function commandUsage(Command $command, $synopsis): string
     {
-        return array_reduce(array_merge(array($synopsis),
-            $command->getAliases(),
-            $command->getUsages()),
+        return array_reduce(
+            array_merge(
+                array($synopsis),
+                ["docker run -it --rm chrif/cocotte {$command->getName()} --help"],
+                $command->getAliases(),
+                $command->getUsages()
+            ),
             function ($carry, $usage) {
                 return $carry.'* `'.$usage.'`'."\n";
-            });
+            }
+        );
     }
 }

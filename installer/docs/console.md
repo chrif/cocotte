@@ -18,6 +18,7 @@ install
 ### Usage
 
 * `docker run -it --rm chrif/cocotte install [options]`
+* `docker run -it --rm chrif/cocotte install --help`
 
 Create a Docker machine on Digital Ocean and install the Traefik reverse proxy on it.
 
@@ -140,6 +141,7 @@ static-site
 ### Usage
 
 * `docker run -it --rm chrif/cocotte static-site [options]`
+* `docker run -it --rm chrif/cocotte static-site --help`
 
 Create a static website and deploy it to your Docker Machine.
 
@@ -261,6 +263,7 @@ uninstall
 ### Usage
 
 * `docker run -it --rm chrif/cocotte uninstall [options]`
+* `docker run -it --rm chrif/cocotte uninstall --help`
 
 Destroy the Docker machine on Digital Ocean and remove the Traefik subdomain.
 
@@ -350,6 +353,7 @@ wizard
 ### Usage
 
 * `docker run -it --rm chrif/cocotte wizard [options]`
+* `docker run -it --rm chrif/cocotte wizard --help`
 
 Interactively build a simple 'install' command for Cocotte.
 
