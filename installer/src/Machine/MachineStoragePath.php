@@ -67,7 +67,7 @@ class MachineStoragePath implements LazyEnvironmentValue, LazyLoadAware
      */
     private function symLink()
     {
-        // Unlikely but if Cocotte is run from a root /host directory, the we don't need a sym link.
+        // Unlikely but if Cocotte is run from a root /host directory, then_ we don't need a sym link.
         if ($this->pathOnInstaller() === $this->pathOnHostFileSystem()) {
             return;
         }
@@ -75,7 +75,7 @@ class MachineStoragePath implements LazyEnvironmentValue, LazyLoadAware
         if (!$this->filesystem->exists($this->pathOnHostFileSystem())) {
             $this->createSymLink();
         } else {
-            $this->guardSymLinkIsNotAUnixStandardPath();
+            $this->guardSymLink();
         }
     }
 
@@ -91,26 +91,34 @@ class MachineStoragePath implements LazyEnvironmentValue, LazyLoadAware
 
     private function createSymLink(): void
     {
-        if (is_dir($this->pathOnInstaller()) && !is_dir("{$this->pathOnInstaller()}/certs")) {
+        $filesystem = $this->filesystem;
+        $pathOnInstaller = $this->pathOnInstaller();
+        $pathOnHostFileSystem = $this->pathOnHostFileSystem();
+
+        if ($filesystem->exists($pathOnInstaller) && !$filesystem->exists("{$pathOnInstaller}/certs")) {
             throw new \Exception(
                 "Error: Tried to create a directory named 'machine' in the directory from where you ".
                 "executed Cocotte but it already exists and it is not a valid docker machine storage path."
             );
         }
-        $this->filesystem->mkdir("{$this->pathOnInstaller()}/certs");
-        $this->filesystem->symlink($this->pathOnInstaller(), $this->pathOnHostFileSystem());
+        $filesystem->mkdir("{$pathOnInstaller}/certs");
+        $filesystem->symlink($pathOnInstaller, $pathOnHostFileSystem);
     }
 
-    private function guardSymLinkIsNotAUnixStandardPath(): void
+    private function guardSymLink(): void
     {
-        if (
-            !is_link($this->pathOnHostFileSystem()) ||
-            $this->filesystem->readlink($this->pathOnHostFileSystem()) !== $this->pathOnInstaller()
-        ) {
+        if (!$this->filesystem->isLink($this->pathOnHostFileSystem())) {
             throw new \Exception(
                 "Error: cannot symlink '{$this->pathOnInstaller()}' to '{$this->pathOnHostFileSystem()}' because it is a real ".
                 "path on Cocotte filesystem. Start Cocotte from a different directory on your computer. One ".
-                "that does not exist in the Filesystem Hierarchy Standard of a UNIX-like operating system\n"
+                "that does not exist in the Cocotte filesystem.\n"
+            );
+        }
+
+        if ($this->filesystem->readlink($this->pathOnHostFileSystem()) !== $this->pathOnInstaller()) {
+            throw new \Exception(
+                "Error: '{$this->pathOnHostFileSystem()}' is a symlink but it does not resolve ".
+                "to '{$this->pathOnInstaller()}'"
             );
         }
     }

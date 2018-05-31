@@ -218,4 +218,6 @@ interface Filesystem
      * @throws IOException If the file is not writable
      */
     public function appendToFile($filename, $content);
+
+    public function isLink(string $filename): bool;
 }
