@@ -28,12 +28,17 @@ class MarkdownDocumentation
      * @var ArgumentDescriber
      */
     private $argumentDescriber;
+    /**
+     * @var LinkConverter
+     */
+    private $linkConverter;
 
     public function __construct(OutputInterface $output)
     {
         $this->output = $output;
-        $this->optionDescriber = new OptionDescriber($output);
-        $this->argumentDescriber = new ArgumentDescriber($output);
+        $this->optionDescriber = new OptionDescriber();
+        $this->argumentDescriber = new ArgumentDescriber();
+        $this->linkConverter = new LinkConverter();
     }
 
     public function document(Application $object)
@@ -54,9 +59,11 @@ class MarkdownDocumentation
      */
     private function write($content, $decorated = false)
     {
-        $this->output->write($content,
+        $this->output->write(
+            $this->linkConverter->convert($content),
             false,
-            $decorated ? OutputInterface::OUTPUT_NORMAL : OutputInterface::OUTPUT_RAW);
+            $decorated ? OutputInterface::OUTPUT_NORMAL : OutputInterface::OUTPUT_RAW
+        );
     }
 
     private function describeInputDefinition(InputDefinition $definition)
@@ -155,7 +162,7 @@ class MarkdownDocumentation
             $this->write('### Options');
             foreach ($inputOptions as $option) {
                 $this->write("\n\n");
-                $this->optionDescriber->describe($option);
+                $this->write($this->optionDescriber->describe($option));
             }
         }
     }
