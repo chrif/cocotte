@@ -14,10 +14,13 @@ abstract class AbstractCommand extends Command implements CommandInterface
         return "docker run -it --rm chrif/cocotte ".parent::getSynopsis($short);
     }
 
-    protected function formatHelp(string $description, string $example, string $interactiveExample = null): string
-    {
+    protected function formatHelp(
+        string $description,
+        string $exampleWithRequiredOptions,
+        string $interactiveExample = null
+    ): string {
         $help = /** @lang text */
-            $description."\n\n<info>Example with required options:</info>\n```\n$ {$example}\n```";
+            $description."\n\n<info>Example with required options:</info>\n```\n$ {$exampleWithRequiredOptions}\n```";
 
         if ($interactiveExample) {
             $help .= /** @lang text */

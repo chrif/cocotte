@@ -109,9 +109,15 @@ If you already have a Digital Ocean account, then you probably know about cloud 
 
 ## Usage
 
-```
-$ docker run -it --rm chrif/cocotte
-```
+* Run the [`wizard`](installer/docs/console.md#wizard).
+	```
+	$ docker run -it --rm chrif/cocotte wizard
+	```
+* Display help for the [`install`](installer/docs/console.md#install) command.
+	```
+	$ docker run -it --rm chrif/cocotte install --help
+	```
+* [More usages](installer/docs/console.md)
 
 ## Reference
 

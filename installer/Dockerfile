@@ -35,4 +35,4 @@ ENV COCOTTE_VERSION ${COCOTTE_VERSION}
 ENV MACHINE_NAME=cocotte
 
 ENTRYPOINT ["cocotte-entrypoint"]
-CMD ["wizard"]
+CMD ["help"]
