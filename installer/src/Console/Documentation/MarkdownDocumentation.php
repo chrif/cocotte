@@ -140,7 +140,7 @@ class MarkdownDocumentation
             $this->write('### Arguments');
             foreach ($definition->getArguments() as $argument) {
                 $this->write("\n\n");
-                $this->argumentDescriber->describe($argument);
+                $this->write($this->argumentDescriber->describe($argument));
             }
         }
 
