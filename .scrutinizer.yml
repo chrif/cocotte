@@ -6,3 +6,4 @@ build:
 filter:
     excluded_paths:
         - 'installer/test/*'
+        - 'installer/vendor/*'
