@@ -1,12 +1,12 @@
 # Cocotte
 
-[![Build Status](https://badge.cocotte.rocks/travis)](https://travis-ci.org/chrif/cocotte) 
-[![Code Coverage](https://badge.cocotte.rocks/codecov)](https://codecov.io/gh/chrif/cocotte)
-[![Maintainability](https://badge.cocotte.rocks/codeclimate)](https://codeclimate.com/github/chrif/cocotte/maintainability)
-[![Scrutinizer Code Quality](https://badge.cocotte.rocks/scrutinizer)](https://scrutinizer-ci.com/g/chrif/cocotte/?branch=master)
+[![Build Status](https://badge.chrif.org/cocotte/travis)](https://travis-ci.org/chrif/cocotte) 
+[![Code Coverage](https://badge.chrif.org/cocotte/codecov)](https://codecov.io/gh/chrif/cocotte)
+[![Maintainability](https://badge.chrif.org/cocotte/codeclimate)](https://codeclimate.com/github/chrif/cocotte/maintainability)
+[![Scrutinizer Code Quality](https://badge.chrif.org/cocotte/scrutinizer)](https://scrutinizer-ci.com/g/chrif/cocotte/?branch=master)
 [![PayPal](docs/images/paypal-badge.svg)](https://www.paypal.me/Fecteau)
-[![Join the chat at https://slack.cocotte.rocks](https://badge.cocotte.rocks/slack)](https://slack.cocotte.rocks)
-[![Twitter](https://badge.cocotte.rocks/twitter)](https://twitter.com/intent/follow?screen_name=CocotteRocks)
+[![Join the chat at https://slack.cocotte.rocks](https://badge.chrif.org/cocotte/slack)](https://slack.cocotte.rocks)
+[![Twitter](https://badge.chrif.org/cocotte/twitter)](https://twitter.com/intent/follow?screen_name=CocotteRocks)
 
 Cocotte aims at easing the learning curve for web developers starting with cloud hosting and application containerization. You get a basic and [affordable](#pricing) installation, allowing you to focus on your project(s) first, and learn about your infrastructure later:
 
