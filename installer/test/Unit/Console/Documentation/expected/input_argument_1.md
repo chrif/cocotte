@@ -11,7 +11,7 @@ single-argument
 
 ### Usage
 
-* `single-argument [<argument_name>]...`
+* `single-argument [<argument_name>...]`
 * `docker run -it --rm chrif/cocotte single-argument --help`
 
 This command has only one argument

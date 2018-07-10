@@ -1,4 +1,4 @@
-FROM chrif/cocotte-base
+FROM chrif/cocotte-base:php7.1.17
 
 # for detection to work in https://github.com/docker/machine/blob/3f20d202a2dad68f3c8d745f99f2439fb79454c9/commands/env.go#L223
 ENV SHELL /bin/sh

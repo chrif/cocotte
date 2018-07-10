@@ -1,7 +1,7 @@
-<!-- https://phpunit.readthedocs.io/en/7.1/configuration.html#appendixes-configuration -->
+<!-- https://github.com/sebastianbergmann/phpunit-documentation-english/blob/7.2/src/configuration.rst -->
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          bootstrap="test/bootstrap.php"
-         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/7.0/phpunit.xsd"
+         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/7.2/phpunit.xsd"
 >
     <filter>
         <whitelist>
