@@ -1,3 +1,7 @@
+<p align="center">
+<img src="docs/images/github.png" alt="Cocotte" title="Cocotte" />
+</p>
+
 # Cocotte
 
 [![Build Status](https://badge.chrif.org/cocotte/travis)](https://travis-ci.org/chrif/cocotte) 
