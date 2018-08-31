@@ -3,6 +3,11 @@
 
 @import "{{ site.theme }}";
 
-h1#cocotte {
+p#cocotte {
   display: none;
+}
+
+h1.cocotte-logo {
+  margin: 0;
+  padding: 0;
 }

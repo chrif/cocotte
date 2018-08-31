@@ -1,4 +1,6 @@
-# Cocotte
+<p style="margin:0;padding:0" id="cocotte" align="center">
+<img width="393" height="314" src="docs/images/logo.png" alt="Cocotte" title="Cocotte" />
+</p>
 
 [![Build Status](https://badge.chrif.org/cocotte/travis)](https://travis-ci.org/chrif/cocotte) 
 [![Code Coverage](https://badge.chrif.org/cocotte/codecov)](https://codecov.io/gh/chrif/cocotte)
