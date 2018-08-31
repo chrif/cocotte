@@ -1,5 +1,5 @@
 <p style="margin:0;padding:0" id="cocotte" align="center">
-<img width="250" height="219" src="docs/images/logo.png" alt="Cocotte" title="Cocotte" />
+<img width="250" height="250" src="docs/images/logo.png" alt="Cocotte" title="Cocotte" />
 </p>
 
 [![Build Status](https://badge.chrif.org/cocotte/travis)](https://travis-ci.org/chrif/cocotte) 
