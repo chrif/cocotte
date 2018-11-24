@@ -6,7 +6,7 @@ dist: trusty
 
 services:
   - docker
-  -
+
 addons:
   apt:
     packages:
