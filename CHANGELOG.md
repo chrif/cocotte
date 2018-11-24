@@ -6,7 +6,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 ### Changed
-- Update Traefik version from 1.5.4 to 1.6.5
+- Update Traefik version from 1.5.4 to 1.7.4
 - Make 'help' the default command instead of 'wizard'
 ### Added
 - Add help usages to Console API documentation.
