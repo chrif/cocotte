@@ -45,8 +45,8 @@ deploy:
     skip_cleanup: true
     script: "echo $DOCKER_PASSWORD | docker login -u chrif --password-stdin && \
             docker tag chrif/cocotte:latest chrif/cocotte:${TRAVIS_TAG} && \
-            docker push chrif/cocotte:latest && \
-            docker push chrif/cocotte:${TRAVIS_TAG}"
+            docker push chrif/cocotte:latest || docker push chrif/cocotte:latest && \
+            docker push chrif/cocotte:${TRAVIS_TAG} || docker push chrif/cocotte:${TRAVIS_TAG}"
     on:
       tags: true
 
@@ -71,7 +71,7 @@ deploy:
     skip_cleanup: true
     script: "echo $DOCKER_PASSWORD | docker login -u chrif --password-stdin && \
             docker tag chrif/cocotte:latest chrif/cocotte:dev-master && \
-            docker push chrif/cocotte:dev-master"
+            docker push chrif/cocotte:dev-master || docker push chrif/cocotte:dev-master"
     on:
       branch: master
 
