@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [0.4.0] - 2018-11-24
 ### Changed
 - Update Traefik version from 1.5.4 to 1.7.4
 - Make 'help' the default command instead of 'wizard'
@@ -32,7 +34,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Initial release.
 - Command line interface for installing, adding a static site, and uninstalling.
 
-[Unreleased]: https://github.com/chrif/cocotte/compare/0.3.1...HEAD
+[Unreleased]: https://github.com/chrif/cocotte/compare/0.4.0...HEAD
+[0.4.0]: https://github.com/chrif/cocotte/compare/0.3.1...0.4.0
 [0.3.1]: https://github.com/chrif/cocotte/compare/0.3.0...0.3.1
 [0.3.0]: https://github.com/chrif/cocotte/compare/0.2.0...0.3.0
 [0.2.0]: https://github.com/chrif/cocotte/compare/0.1.0...0.2.0
