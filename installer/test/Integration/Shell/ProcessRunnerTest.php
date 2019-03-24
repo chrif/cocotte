@@ -15,7 +15,7 @@ final class ProcessRunnerTest extends ApplicationTestCase
     public function testProgress()
     {
         $processRunner = ProcessRunnerActual::get($this->container())->service();
-        $processRunner->run($process = new Process('true'), true);
+        $processRunner->run($process = Process::fromShellCommandline('true'), true);
         self::assertSame(
             '[░░░░░░░░░░░░░░░░░░░░░░░░░░░░] ',
             OutputActual::get($this->container())->getDisplay()
@@ -25,7 +25,7 @@ final class ProcessRunnerTest extends ApplicationTestCase
     public function testDisplayProgressText()
     {
         $processRunner = ProcessRunnerActual::get($this->container())->service();
-        $processRunner->run($process = new Process('printf ok'), true);
+        $processRunner->run($process = Process::fromShellCommandline('printf ok'), true);
         self::assertSame(
             "[░░░░░░░░░░░░░░░░░░░░░░░░░░░░] \n[▓░░░░░░░░░░░░░░░░░░░░░░░░░░░] ok",
             OutputActual::get($this->container())->getDisplay()
@@ -49,7 +49,7 @@ Output:
 Error Output:
 ================
 ');
-        $processRunner->mustRun($process = new Process('exit 1'), true);
+        $processRunner->mustRun($process = Process::fromShellCommandline('exit 1'), true);
     }
 
     /**

@@ -16,7 +16,7 @@ class MachineIp implements LazyEnvironmentValue
 
     public static function fromMachine(ProcessRunner $processRunner): self
     {
-        $process = new Process(
+        $process = Process::fromShellCommandline(
             'docker-machine inspect '.
             '--format=\'{{.Driver.IPAddress}}\' "${MACHINE_NAME}"'
         );

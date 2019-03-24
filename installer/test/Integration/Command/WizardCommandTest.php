@@ -69,7 +69,7 @@ final class WizardCommandTest extends ApplicationTestCase
         $command = str_replace(' -it ', ' ', $command);
         $command .= " --dry-run";
 
-        $process = new Process($command);
+        $process = Process::fromShellCommandline($command);
         $process->mustRun();
         self::assertContains(
             "Would have created a Docker machine named 'cocotte' on Digital Ocean.",
@@ -88,7 +88,7 @@ final class WizardCommandTest extends ApplicationTestCase
     private function formatExpectedDisplay(): string
     {
         // substitute env variables
-        $process = new Process('envsubst');
+        $process = Process::fromShellCommandline('envsubst');
         $process->setInput(file_get_contents(__DIR__.'/wizard_expected_display.txt'));
         $process->mustRun();
 

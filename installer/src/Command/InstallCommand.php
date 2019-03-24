@@ -256,7 +256,7 @@ EOF;
     {
         $this->style->writeln('Deploying Traefik to cloud machine');
 //        $this->processRunner->run(new Process('./bin/reset-prod 2>/dev/stdout', $this->traefikCreator->hostAppPath()));
-        $this->processRunner->mustRun(new Process('./bin/prod 2>/dev/stdout', $this->traefikCreator->hostAppPath()));
+        $this->processRunner->mustRun(Process::fromShellCommandline('./bin/prod 2>/dev/stdout', $this->traefikCreator->hostAppPath()));
     }
 
     private function waitForTraefikReady(): void
@@ -267,6 +267,6 @@ EOF;
 
     private function echoTraefikLogs(): void
     {
-        $this->processRunner->mustRun(new Process('./bin/logs -t', $this->traefikCreator->hostAppPath()));
+        $this->processRunner->mustRun(Process::fromShellCommandline('./bin/logs -t', $this->traefikCreator->hostAppPath()));
     }
 }

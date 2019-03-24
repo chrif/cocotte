@@ -10,7 +10,7 @@ final class ConsoleRunnerTest extends TestCase
 
     public function test_it_runs()
     {
-        $process = new Process(__DIR__.'/../../bin/console');
+        $process = Process::fromShellCommandline(__DIR__.'/../../bin/console');
         $process->run();
         self::assertTrue($process->isSuccessful());
     }

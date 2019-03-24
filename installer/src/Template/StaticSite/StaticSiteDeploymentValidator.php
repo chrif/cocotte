@@ -44,7 +44,7 @@ final class StaticSiteDeploymentValidator
     public function validate()
     {
         // wait for ping, try 6 times
-        $process = new Process("ping-app {$this->staticSiteHostname->toString()} 6 2> /dev/stdout");
+        $process = Process::fromShellCommandline("ping-app {$this->staticSiteHostname->toString()} 6 2> /dev/stdout");
         $this->processRunner->mustRun($process);
 
         // check cert if DNS is up to date

@@ -27,7 +27,7 @@ class ApplicationTestCase extends TestCase
 
     public static function assertEnvInString($expected, $actual)
     {
-        $process = new Process('envsubst');
+        $process = Process::fromShellCommandline('envsubst');
         $process->setInput($expected);
         $process->mustRun();
         self::assertSame($process->getOutput(), $actual);
