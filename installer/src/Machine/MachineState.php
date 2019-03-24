@@ -18,7 +18,7 @@ class MachineState
 
     public function exists(): bool
     {
-        $process = new Process('docker-machine ls -q --filter="name=${MACHINE_NAME}"');
+        $process = Process::fromShellCommandline('docker-machine ls -q --filter="name=${MACHINE_NAME}"');
         $process->run();
         if ($process->isSuccessful()) {
             return $this->machineName->toString() === trim($process->getOutput());
@@ -29,7 +29,7 @@ class MachineState
 
     public function isRunning(): bool
     {
-        $process = new Process(
+        $process = Process::fromShellCommandline(
             'docker-machine ls -q --filter="state=running" --filter="name=${MACHINE_NAME}"'
         );
         $process->run();

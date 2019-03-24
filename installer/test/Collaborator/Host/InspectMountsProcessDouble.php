@@ -31,6 +31,7 @@ final class InspectMountsProcessDouble
     public function mock(): MockObject
     {
         return $this->testCase->getMockBuilder(InspectMountsProcess::class)
+            ->disableOriginalConstructor()
             ->getMock();
     }
 

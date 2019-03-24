@@ -124,7 +124,7 @@ final class UninstallCommand extends AbstractCommand implements LazyEnvironment,
         if (!$this->machineState->exists()) {
             $this->style->verbose("Machine '{$this->machineName->toString()}' did not exist");
         } else {
-            $this->processRunner->mustRun(new Process('docker-machine rm -f "${MACHINE_NAME}"'));
+            $this->processRunner->mustRun(Process::fromShellCommandline('docker-machine rm -f "${MACHINE_NAME}"'));
         }
         $this->style->complete("Machine is uninstalled and domain record is removed.");
     }

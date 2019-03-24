@@ -27,7 +27,7 @@ final class CertificateChecker
     {
         $ip = gethostbyname($hostname);
         if ($ip === $expectedIp) {
-            $this->processRunner->mustRun(new Process(
+            $this->processRunner->mustRun(Process::fromShellCommandline(
                 'if [ "${ACME_ENABLED:-true}" = true ]; then '.
                 "check-certificate $hostname 6; ".
                 'else echo "Skipping SSL verification"; fi'

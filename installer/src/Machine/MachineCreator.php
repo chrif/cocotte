@@ -67,7 +67,7 @@ final class MachineCreator
 
     private function createProcess(): Process
     {
-        return new Process(
+        return Process::fromShellCommandline(
             <<<'TAG'
 docker-machine create \
     --driver digitalocean \

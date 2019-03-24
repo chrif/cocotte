@@ -6,8 +6,8 @@ use Symfony\Component\Process\Process;
 
 class InspectMountsProcess extends Process
 {
-    public function __construct()
+    public static function factory(): InspectMountsProcess
     {
-        parent::__construct('docker inspect --format="{{json .Mounts}}" $HOSTNAME');
+        return self::fromShellCommandline('docker inspect --format="{{json .Mounts}}" $HOSTNAME');
     }
 }

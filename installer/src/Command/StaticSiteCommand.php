@@ -230,7 +230,7 @@ final class StaticSiteCommand extends AbstractCommand implements
             $this->style->writeln('Deploying created site to cloud machine');
 
             $this->processRunner->mustRun(
-                new Process('./bin/prod 2>/dev/stdout',
+                Process::fromShellCommandline('./bin/prod 2>/dev/stdout',
                     $this->staticSiteCreator->hostAppPath())
             );
 
@@ -238,7 +238,7 @@ final class StaticSiteCommand extends AbstractCommand implements
 
             $this->staticSiteDeploymentValidator->validate();
 
-            $this->processRunner->mustRun(new Process('./bin/logs -t', $this->staticSiteCreator->hostAppPath()));
+            $this->processRunner->mustRun(Process::fromShellCommandline('./bin/logs -t', $this->staticSiteCreator->hostAppPath()));
 
             $this->style->complete($this->completeMessage());
         } else {

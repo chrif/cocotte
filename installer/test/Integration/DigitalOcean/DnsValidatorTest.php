@@ -23,8 +23,7 @@ final class DnsValidatorTest extends ApplicationTestCase
     {
         $validator = DnsValidatorActual::get($this->container())->service();
         $this->expectExceptionMessage(
-            "Failed to validate name servers for 'huemor.rocks':\n".
-            "fsockopen(): php_network_getaddresses: getaddrinfo failed: Name does not resolve"
+            "jean.ns.cloudflare.com' is a domain with more than 3 levels."
         );
         $validator->validateHost(Hostname::parse('huemor.rocks'));
     }
