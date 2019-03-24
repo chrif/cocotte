@@ -67,8 +67,11 @@ git fetch -p -P
 ./bin/build-doc
 ```
 ## Create a release
+1. Create a branch `release/<version>`
+1. Update `CHANGELOG.md`
+1. Merge PR
 1. Unset `ACME_ENABLED=false` and `SYSTEM_TEST_VERBOSITY=16` in Travis repo settings.
-2. Tag release
+1. Tag release
 	```
 	git checkout master
 	git pull

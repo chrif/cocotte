@@ -5,8 +5,12 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [0.4.1] - 2019-03-24
 ### Changed
 - Update Traefik version from 1.7.4 to 1.7.9
+### Fixed
+- DNS validator exception: Failed to validate name servers
 
 ## [0.4.0] - 2018-11-24
 ### Changed
@@ -36,7 +40,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Initial release.
 - Command line interface for installing, adding a static site, and uninstalling.
 
-[Unreleased]: https://github.com/chrif/cocotte/compare/0.4.0...HEAD
+[Unreleased]: https://github.com/chrif/cocotte/compare/0.4.1...HEAD
+[0.4.1]: https://github.com/chrif/cocotte/compare/0.4.0...0.4.1
 [0.4.0]: https://github.com/chrif/cocotte/compare/0.3.1...0.4.0
 [0.3.1]: https://github.com/chrif/cocotte/compare/0.3.0...0.3.1
 [0.3.0]: https://github.com/chrif/cocotte/compare/0.2.0...0.3.0
