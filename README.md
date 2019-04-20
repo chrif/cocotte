@@ -7,7 +7,7 @@
 [![Maintainability](https://badge.chrif.org/cocotte/codeclimate)](https://codeclimate.com/github/chrif/cocotte/maintainability)
 [![Scrutinizer Code Quality](https://badge.chrif.org/cocotte/scrutinizer)](https://scrutinizer-ci.com/g/chrif/cocotte/?branch=master)
 [![PayPal](docs/images/paypal-badge.svg)](https://www.paypal.me/Fecteau)
-[![Join the chat at https://slack.cocotte.rocks](https://badge.chrif.org/cocotte/slack)](https://slack.cocotte.rocks)
+[![Join the chat at https://slack.cocotte.rocks](https://badge.chrif.org/cocotte/slack)](https://join.slack.com/t/cocotterocks/shared_invite/enQtNjA3Nzg0MTg5ODQxLTZjZTdiNzJiNTM1ODBmZDIxMWQ5MmY0NjA2NmFhMDUzYzIxMDFhNjdmN2E3ZDNkYTE5MDZiZTFjOTlkMGYwZmU)
 [![Twitter](https://badge.chrif.org/cocotte/twitter)](https://twitter.com/intent/follow?screen_name=CocotteRocks)
 
 Cocotte aims at easing the learning curve for web developers starting with cloud hosting and application containerization. You get a basic and [affordable](#pricing) installation, allowing you to focus on your project(s) first, and learn about your infrastructure later:
@@ -127,7 +127,7 @@ Pull requests are welcome. Take a look at the [development documentation](docs/d
 
 ## Support
 
-* Join the [Cocotte Slack channel](https://slack.cocotte.rocks).
+* Join the [Cocotte Slack channel](https://join.slack.com/t/cocotterocks/shared_invite/enQtNjA3Nzg0MTg5ODQxLTZjZTdiNzJiNTM1ODBmZDIxMWQ5MmY0NjA2NmFhMDUzYzIxMDFhNjdmN2E3ZDNkYTE5MDZiZTFjOTlkMGYwZmU).
 * Use [Stack Overflow](https://stackoverflow.com/questions/tagged/cocotte) (using the `cocotte` tag).
 * [Open an issue on GitHub](https://github.com/chrif/cocotte/issues).
 * [Send an email](mailto:cocotte.rocks@gmail.com).
