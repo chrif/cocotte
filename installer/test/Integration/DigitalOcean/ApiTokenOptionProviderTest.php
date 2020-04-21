@@ -12,9 +12,8 @@ final class ApiTokenOptionProviderTest extends TestCase
     public function testValidate()
     {
         $provider = new ApiTokenOptionProvider(StyleDouble::create($this)->mock());
-        $this->expectExceptionMessage(
-            "Failed to validate that the Digital Ocean token has 'write' permissions. ".
-            "Error message was:\nRequest not processed."
+        $this->expectExceptionMessageRegExp(
+            "/Failed to validate that the Digital Ocean token has 'write' permissions/"
         );
         $provider->validate('foobar');
     }
