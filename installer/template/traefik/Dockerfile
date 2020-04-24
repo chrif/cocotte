@@ -1,4 +1,4 @@
-FROM traefik:v1.7.9-alpine
+FROM traefik:v1.7.21-alpine
 
 RUN mkdir -p 	/opt/ssl/acme/ && \
 	touch 		/opt/ssl/acme/acme.json && \
