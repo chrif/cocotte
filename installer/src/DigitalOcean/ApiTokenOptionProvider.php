@@ -39,7 +39,7 @@ class ApiTokenOptionProvider implements OptionProvider
         return $this->style->optionHelp(
             "Digital Ocean API Token",
             [
-                "If you don't have a Digital Ocean account yet, get one with a 10$ credit at\n".
+                "If you don't have a Digital Ocean account yet, get one with a 100$ credit at\n".
                 $this->style->link('https://m.do.co/c/c25ed78e51c5'),
                 "Then generate a token at ".$this->style->link('https://cloud.digitalocean.com/settings/api/tokens'),
                 "Cocotte will make a call to Digital Ocean's API to validate the token.",

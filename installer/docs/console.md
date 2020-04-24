@@ -50,7 +50,7 @@ This command requires 2 volumes:
 #### `--digital-ocean-api-token`
 
 ##### Digital Ocean API Token
-If you don't have a Digital Ocean account yet, get one with a 10$ credit at
+If you don't have a Digital Ocean account yet, get one with a 100$ credit at
 [https://m.do.co/c/c25ed78e51c5](https://m.do.co/c/c25ed78e51c5) 🔗
 Then generate a token at [https://cloud.digitalocean.com/settings/api/tokens](https://cloud.digitalocean.com/settings/api/tokens) 🔗
 Cocotte will make a call to Digital Ocean's API to validate the token.
@@ -203,7 +203,7 @@ changed, you can expect a propagation time up to 24 hours.
 #### `--digital-ocean-api-token`
 
 ##### Digital Ocean API Token
-If you don't have a Digital Ocean account yet, get one with a 10$ credit at
+If you don't have a Digital Ocean account yet, get one with a 100$ credit at
 [https://m.do.co/c/c25ed78e51c5](https://m.do.co/c/c25ed78e51c5) 🔗
 Then generate a token at [https://cloud.digitalocean.com/settings/api/tokens](https://cloud.digitalocean.com/settings/api/tokens) 🔗
 Cocotte will make a call to Digital Ocean's API to validate the token.
@@ -293,7 +293,7 @@ This command requires 2 volumes:
 #### `--digital-ocean-api-token`
 
 ##### Digital Ocean API Token
-If you don't have a Digital Ocean account yet, get one with a 10$ credit at
+If you don't have a Digital Ocean account yet, get one with a 100$ credit at
 [https://m.do.co/c/c25ed78e51c5](https://m.do.co/c/c25ed78e51c5) 🔗
 Then generate a token at [https://cloud.digitalocean.com/settings/api/tokens](https://cloud.digitalocean.com/settings/api/tokens) 🔗
 Cocotte will make a call to Digital Ocean's API to validate the token.

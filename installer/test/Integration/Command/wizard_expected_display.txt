@@ -1,60 +1,60 @@
 
- [HELP] Cocotte Wizard                                                                                                  
-        This wizard helps you build a simple 'install' command for Cocotte.                                             
-        It assumes that you own a domain name and can change its name servers.                                          
-        Cocotte documentation: https://github.com/chrif/cocotte 🔗                                                       
-                                                                                                                        
+ [HELP] Cocotte Wizard
+        This wizard helps you build a simple 'install' command for Cocotte.
+        It assumes that you own a domain name and can change its name servers.
+        Cocotte documentation: https://github.com/chrif/cocotte 🔗
+
 
  Press ENTER to continue or press CTRL+D to quit:
- > 
- [HELP] Digital Ocean API Token                                                                                         
-        If you don't have a Digital Ocean account yet, get one with a 10$ credit at                                     
-        https://m.do.co/c/c25ed78e51c5 🔗                                                                                
-        Then generate a token at https://cloud.digitalocean.com/settings/api/tokens 🔗                                   
-        Cocotte will make a call to Digital Ocean's API to validate the token.                                          
-                                                                                                                        
+ >
+ [HELP] Digital Ocean API Token
+        If you don't have a Digital Ocean account yet, get one with a 100$ credit at
+        https://m.do.co/c/c25ed78e51c5 🔗
+        Then generate a token at https://cloud.digitalocean.com/settings/api/tokens 🔗
+        Cocotte will make a call to Digital Ocean's API to validate the token.
+
 
  Enter your Digital Ocean API token or press CTRL+D to quit:
- > 
+ >
 
  [OK] Token '${DIGITAL_OCEAN_API_TOKEN}' is valid
 
  Press ENTER to continue or press CTRL+D to quit:
- > 
+ >
 
- [HELP] Traefik UI hostname                                                                                             
-        This the fully qualified domain name for your Traefik UI.                                                       
-        It has to be with a subdomain like in 'traefik.mydomain.com', in which case                                     
-        'mydomain.com' must point to the name servers of Digital Ocean, and Cocotte                                     
-        will create and configure the 'traefik' subdomain for you.                                                      
-        Cocotte validates that the name servers of the domain you enter are Digital                                     
-        Ocean's. How to point to Digital Ocean name servers: https://goo.gl/SJnw2c 🔗                                    
-        Please note that when a domain is newly registered, or the name servers are                                     
-        changed, you can expect a propagation time up to 24 hours.                                                      
-                                                                                                                        
+ [HELP] Traefik UI hostname
+        This the fully qualified domain name for your Traefik UI.
+        It has to be with a subdomain like in 'traefik.mydomain.com', in which case
+        'mydomain.com' must point to the name servers of Digital Ocean, and Cocotte
+        will create and configure the 'traefik' subdomain for you.
+        Cocotte validates that the name servers of the domain you enter are Digital
+        Ocean's. How to point to Digital Ocean name servers: https://goo.gl/SJnw2c 🔗
+        Please note that when a domain is newly registered, or the name servers are
+        changed, you can expect a propagation time up to 24 hours.
+
 
  Enter the Traefik UI hostname (e.g., traefik.mydomain.com) or press CTRL+D to quit:
- > 
+ >
 
  [OK] Traefik UI hostname '${TRAEFIK_UI_HOSTNAME}' is valid.
 
  Press ENTER to continue or press CTRL+D to quit:
- > 
+ >
 
- [HELP] Traefik UI username                                                                                             
-        Alphanumeric characters. Must match /^[a-zA-Z0-9]+$/                                                            
-                                                                                                                        
+ [HELP] Traefik UI username
+        Alphanumeric characters. Must match /^[a-zA-Z0-9]+$/
+
 
  Choose a username for your Traefik UI or press CTRL+D to quit [admin]:
- > 
- [HELP] Traefik UI password                                                                                             
-        Alphanumeric and some special characters. Must match /^[a-zA-Z0-9_@#%?&*+=!-]+$/                                
-                                                                                                                        
+ >
+ [HELP] Traefik UI password
+        Alphanumeric and some special characters. Must match /^[a-zA-Z0-9_@#%?&*+=!-]+$/
+
 
  Choose a password for your Traefik UI or press CTRL+D to quit:
- > 
- [COMPLETE] A command will be printed to the terminal.                                                                  
-                                                                                                                        
+ >
+ [COMPLETE] A command will be printed to the terminal.
+
             Run the command from a location on your computer where you usually put
             new project code.
 
@@ -65,11 +65,11 @@
 
             2. A 'traefik' directory that you can edit all you want and which is
                ready for version control. This is your new Traefik project.
-                                                                                                                        
-            Thank you for trying Cocotte!                                                                               
+
+            Thank you for trying Cocotte!
 
  Press ENTER to continue or press CTRL+D to quit:
- > 
+ >
 Run this command:
 docker run -it --rm \
     -v "$(pwd)":/host \

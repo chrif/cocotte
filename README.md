@@ -58,7 +58,7 @@ These applications/websites are:
 * each using a valid SSL certificate
 * each running on a different operating system
 
-The cost for all this is only 5$ a month, assuming the cheapest cloud machine, and that all these apps can share 1GB memory and 20GB disk, which they can, thanks to application containerization.
+The cost for all this is only 5$ a month, assuming the cheapest cloud machine, and that all these apps can share 1GB memory and 25GB disk, which they can, thanks to application containerization.
 
 ## In details
 
@@ -79,7 +79,7 @@ Cocotte is fully tested on [Travis CI](https://travis-ci.org/chrif/cocotte), so 
 
 ## Pricing
 
-Trying out Cocotte is completely free if you don't have a Digital Ocean account and create one with [this link](https://m.do.co/c/c25ed78e51c5) which gives you a 10$ credit (2 months of hosting).
+Trying out Cocotte is completely free if you don't have a Digital Ocean account and create one with [this link](https://m.do.co/c/c25ed78e51c5) which gives you a 100$ credit (20 months of hosting).
 
 If you already have a Digital Ocean account, then you probably know about cloud pricing. For those who don't, you are charged $0.007/hour by Digital Ocean for the machine that Cocotte creates. So just testing Cocotte and then destroying the machine costs less than 1 cent. Keeping the machine online for a month costs 5$. 
 
@@ -88,14 +88,16 @@ If you already have a Digital Ocean account, then you probably know about cloud 
 ## Requirements
 
 * A Mac or Linux operating system.
-* Docker Community Edition (including Docker Compose and Docker Machine).
+* Docker (including Docker Compose and Docker Machine).
 * A Digital Ocean account.
 * A domain name using the name servers of Digital Ocean.
 
 ## Installation
 
-* Install [Docker Community Edition](https://docs.docker.com/install/) (including Docker Compose and Docker Machine).
-* If you don't have a Digital Ocean account, create one with [this link](https://m.do.co/c/c25ed78e51c5) and you will get a 10$ credit, allowing you to try Cocotte for free.
+* Install [Docker](https://docs.docker.com/install/).
+* Linux only: install [Docker Compose](https://docs.docker.com/compose/install/).
+* Install [Docker Machine](https://github.com/docker/machine/releases).
+* If you don't have a Digital Ocean account, create one with [this link](https://m.do.co/c/c25ed78e51c5) and you will get a 100$ credit, allowing you to try Cocotte for free.
 * Generate a [Digital Ocean API token](https://cloud.digitalocean.com/settings/api/tokens) with write permissions.
 * Make sur you have a domain whose name servers are set to:
 	 * ns1.digitalocean.com
