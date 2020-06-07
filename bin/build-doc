@@ -4,7 +4,6 @@ set -eu
 
 docker-compose run --rm bare console build-doc > installer/docs/console.md
 docker-compose run --rm doctoc \
-	README.md \
 	installer/template/static/README.md \
 	installer/template/traefik/README.md \
 	--title "## Table of Contents" \

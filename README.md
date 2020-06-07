@@ -13,27 +13,6 @@ Cocotte aims at easing the learning curve for web developers starting with cloud
 * [Digital Ocean](https://www.digitalocean.com/) as the cloud provider.
 * [Traefik](https://traefik.io/) as the reverse proxy for hostname routing and SSL certificates automation.
 
-<!-- START doctoc generated TOC please keep comment here to allow auto update -->
-<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-## Table of Contents
-
-- [Pricing](#pricing)
-- [Requirements](#requirements)
-- [Installation](#installation)
-- [Usage](#usage)
-- [Reference](#reference)
-
-<!-- END doctoc generated TOC please keep comment here to allow auto update -->
-
-## Pricing
-
-Trying out Cocotte is completely free if you don't have a Digital Ocean account and create one with [this link](https://m.do.co/c/c25ed78e51c5) which gives you a 100$ credit (20 months of hosting).
-
-If you already have a Digital Ocean account, then you probably know about cloud pricing. For those who don't, you are charged $0.007/hour by Digital Ocean for the machine that Cocotte creates. So just testing Cocotte and then destroying the machine costs less than 1 cent. Keeping the machine online for a month costs 5$. 
-
-[Read about Digital Ocean pricing](https://www.digitalocean.com/pricing/).
-
-
 ## Requirements
 
 * A Mac or Linux operating system.
@@ -69,3 +48,11 @@ If you already have a Digital Ocean account, then you probably know about cloud 
 
 * [Console API Reference](installer/docs/console.md)
 * [The `machine` directory](docs/machine.md)
+
+## Pricing
+
+Trying out Cocotte is completely free if you don't have a Digital Ocean account and create one with [this link](https://m.do.co/c/c25ed78e51c5) which gives you a 100$ credit (20 months of hosting).
+
+If you already have a Digital Ocean account, then you probably know about cloud pricing. For those who don't, you are charged $0.007/hour by Digital Ocean for the machine that Cocotte creates. So just testing Cocotte and then destroying the machine costs less than 1 cent. Keeping the machine online for a month costs 5$. 
+
+[Read about Digital Ocean pricing](https://www.digitalocean.com/pricing/).
