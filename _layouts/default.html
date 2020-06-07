@@ -29,11 +29,6 @@
               src="{{ '/assets/img/logo.png?v=' | append: site.github.build_revision | relative_url }}"
               alt="Cocotte" title="Cocotte" /></h1>
       <h2 class="project-tagline">{{ site.description | default: site.github.project_tagline }}</h2>
-      <a href="/" class="btn">Home</a>
-      <a href="/#installation" class="btn">Installation</a>
-      <a href="/#usage" class="btn">Usage</a>
-      <a href="/#reference" class="btn">Reference</a>
-      <a href="/#support" class="btn">Support</a>
       {% if site.github.is_project_page %}
         <a href="{{ site.github.repository_url }}" class="btn">View on GitHub</a>
       {% endif %}
