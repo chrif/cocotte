@@ -75,6 +75,7 @@ docker-machine create \
     --engine-opt log-driver="json-file" \
     --engine-opt log-opt="max-size=1m" \
     --engine-opt log-opt="max-file=10" \
+    --engine-install-url "https://releases.rancher.com/install-docker/19.03.9.sh" \
     "${MACHINE_NAME}"
 TAG
         );
