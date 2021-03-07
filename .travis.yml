@@ -26,6 +26,7 @@ before_install:
 
 install:
   - chmod +x bin/* ./.travis/*
+  - echo $DOCKER_PASSWORD | docker login -u chrif --password-stdin
   - docker pull chrif/cocotte || true # reuse layers if possible
   - docker-compose build cocotte
   - docker images | grep chrif/cocotte
