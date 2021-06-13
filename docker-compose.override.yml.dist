@@ -83,13 +83,6 @@ services:
       PHP_IDE_CONFIG: "serverName=cocotte"
       XDEBUG_CONFIG: "remote_host=${HOST_IP}"
 
-  travis:
-    image: chrif/travis-cli
-    volumes:
-      - .:/opt/project
-    environment:
-      TRAVIS_TOKEN: ${TRAVIS_TOKEN}
-
   doctoc:
     build: docker/doctoc
     volumes:

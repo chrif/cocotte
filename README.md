@@ -2,7 +2,6 @@
 <img width="250" height="250" src="docs/images/logo.png" alt="Cocotte" title="Cocotte" />
 </p>
 
-[![Build Status](https://badge.chrif.org/cocotte/travis)](https://travis-ci.org/chrif/cocotte) 
 [![Code Coverage](https://badge.chrif.org/cocotte/codecov)](https://codecov.io/gh/chrif/cocotte)
 [![Maintainability](https://badge.chrif.org/cocotte/codeclimate)](https://codeclimate.com/github/chrif/cocotte/maintainability)
 [![Scrutinizer Code Quality](https://badge.chrif.org/cocotte/scrutinizer)](https://scrutinizer-ci.com/g/chrif/cocotte/?branch=master)
